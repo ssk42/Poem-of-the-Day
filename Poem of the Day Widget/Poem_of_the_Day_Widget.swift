@@ -6,7 +6,7 @@ struct Poem_Of_The_Day_WidgetEntry: TimelineEntry {
     let date: Date
     let poem: Poem
 }
-// 
+//
 
 struct Provider: TimelineProvider {
     func placeholder(in context: Context) -> Poem_Of_The_Day_WidgetEntry {
@@ -19,11 +19,11 @@ struct Provider: TimelineProvider {
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<Poem_Of_The_Day_WidgetEntry>) -> Void) {
-        let sharedDefaults = UserDefaults(suiteName: "group.com.stevereitz.poemoftheday")
+        guard let sharedDefaults = UserDefaults(suiteName: "group.com.stevereitz.poemoftheday") else { return }
         var poem: Poem? = nil
         
-        if let title = sharedDefaults?.string(forKey: "poemTitle"),
-           let content = sharedDefaults?.string(forKey: "poemContent") {
+        if let title = sharedDefaults.string(forKey: "poemTitle"),
+           let content = sharedDefaults.string(forKey: "poemContent") {
             poem = Poem(title: title, lines: content.components(separatedBy: "\n"))
             if let finalPoem = poem {
                 createTimeline(with: finalPoem, completion: completion)
@@ -42,9 +42,13 @@ struct Provider: TimelineProvider {
             if let data = data, let poems = try? JSONDecoder().decode([PoemResponse].self, from: data), let firstPoem = poems.first {
                 let fetchedPoem = firstPoem.toPoem()
                 poem = fetchedPoem
-                // Save poem to shared UserDefaults for the app
-                sharedDefaults?.set(poem?.title, forKey: "poemTitle")
-                sharedDefaults?.set(poem?.content, forKey: "poemContent")
+                
+                // Access UserDefaults on the main queue
+                DispatchQueue.main.async {
+                guard let sharedDefaults = UserDefaults(suiteName: "group.com.stevereitz.poemoftheday") else { return }
+                sharedDefaults.set(poem?.title ?? "", forKey: "poemTitle")
+                sharedDefaults.set(poem?.content ?? "", forKey: "poemContent")
+            }
             } else {
                 poem = Poem(title: "Error Fetching Poem", lines: ["Unable to fetch the poem at this time."])
             }
@@ -53,6 +57,7 @@ struct Provider: TimelineProvider {
                 createTimeline(with: finalPoem, completion: completion)
             }
         }.resume()
+
     }
 
     private func createTimeline(with poem: Poem, completion: @escaping (Timeline<Poem_Of_The_Day_WidgetEntry>) -> Void) {
