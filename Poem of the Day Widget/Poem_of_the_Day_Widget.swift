@@ -6,7 +6,6 @@ struct Poem_Of_The_Day_WidgetEntry: TimelineEntry {
     let date: Date
     let poem: Poem
 }
-//
 
 struct Provider: TimelineProvider {
     func placeholder(in context: Context) -> Poem_Of_The_Day_WidgetEntry {
@@ -19,45 +18,40 @@ struct Provider: TimelineProvider {
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<Poem_Of_The_Day_WidgetEntry>) -> Void) {
-        guard let sharedDefaults = UserDefaults(suiteName: "group.com.stevereitz.poemoftheday") else { return }
+        let sharedDefaults = UserDefaults(suiteName: "group.com.stevereitz.poemoftheday")
         var poem: Poem? = nil
-        
-        if let title = sharedDefaults.string(forKey: "poemTitle"),
-           let content = sharedDefaults.string(forKey: "poemContent") {
+
+        if let title = sharedDefaults?.string(forKey: "poemTitle"),
+           let content = sharedDefaults?.string(forKey: "poemContent") {
             poem = Poem(title: title, lines: content.components(separatedBy: "\n"))
             if let finalPoem = poem {
                 createTimeline(with: finalPoem, completion: completion)
                 return
             }
         }
-        
-        // If no poem is found in shared storage, fetch a new one
+
+        // Fetch poem from PoetryDB
+        fetchPoemFromPoetryDB { fetchedPoem in
+            if let finalPoem = fetchedPoem {
+                createTimeline(with: finalPoem, completion: completion)
+            }
+        }
+    }
+
+    private func fetchPoemFromPoetryDB(completion: @escaping (Poem?) -> Void) {
         guard let url = URL(string: "https://poetrydb.org/random") else {
-            let placeholderPoem = Poem(title: "Placeholder Poem", lines: ["This is a placeholder poem."])
-            createTimeline(with: placeholderPoem, completion: completion)
+            completion(nil)
             return
         }
 
         URLSession.shared.dataTask(with: url) { data, response, error in
             if let data = data, let poems = try? JSONDecoder().decode([PoemResponse].self, from: data), let firstPoem = poems.first {
                 let fetchedPoem = firstPoem.toPoem()
-                poem = fetchedPoem
-                
-                // Access UserDefaults on the main queue
-                DispatchQueue.main.async {
-                guard let sharedDefaults = UserDefaults(suiteName: "group.com.stevereitz.poemoftheday") else { return }
-                sharedDefaults.set(poem?.title ?? "", forKey: "poemTitle")
-                sharedDefaults.set(poem?.content ?? "", forKey: "poemContent")
-            }
+                completion(fetchedPoem)
             } else {
-                poem = Poem(title: "Error Fetching Poem", lines: ["Unable to fetch the poem at this time."])
-            }
-            
-            if let finalPoem = poem {
-                createTimeline(with: finalPoem, completion: completion)
+                completion(nil)
             }
         }.resume()
-
     }
 
     private func createTimeline(with poem: Poem, completion: @escaping (Timeline<Poem_Of_The_Day_WidgetEntry>) -> Void) {
@@ -104,3 +98,4 @@ struct Poem_Of_The_Day_Widget: Widget {
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
 }
+
