@@ -9,11 +9,11 @@ struct Poem_Of_The_Day_WidgetEntry: TimelineEntry {
 
 struct Provider: TimelineProvider {
     func placeholder(in context: Context) -> Poem_Of_The_Day_WidgetEntry {
-        Poem_Of_The_Day_WidgetEntry(date: Date(), poem: Poem(title: "Placeholder Poem", lines: ["This is a placeholder poem."]))
+        Poem_Of_The_Day_WidgetEntry(date: Date(), poem: Poem(id: UUID(), title: "Placeholder Poem", lines: ["This is a placeholder poem."], author: "Widget"))
     }
 
     func getSnapshot(in context: Context, completion: @escaping (Poem_Of_The_Day_WidgetEntry) -> Void) {
-        let entry = Poem_Of_The_Day_WidgetEntry(date: Date(), poem: Poem(title: "Snapshot Poem", lines: ["This is a snapshot poem."]))
+        let entry = Poem_Of_The_Day_WidgetEntry(date: Date(), poem: Poem(id: UUID(), title: "Snapshot Poem", lines: ["This is a snapshot poem."], author: "Widget"))
         completion(entry)
     }
 
@@ -22,8 +22,9 @@ struct Provider: TimelineProvider {
         var poem: Poem? = nil
 
         if let title = sharedDefaults?.string(forKey: "poemTitle"),
-           let content = sharedDefaults?.string(forKey: "poemContent") {
-            poem = Poem(title: title, lines: content.components(separatedBy: "\n"))
+           let content = sharedDefaults?.string(forKey: "poemContent"),
+           let author = sharedDefaults?.string(forKey: "poemAuthor") {
+            poem = Poem(id: UUID(), title: title, lines: content.components(separatedBy: "\n"), author: author)
             if let finalPoem = poem {
                 createTimeline(with: finalPoem, completion: completion)
                 return
@@ -34,6 +35,10 @@ struct Provider: TimelineProvider {
         fetchPoemFromPoetryDB { fetchedPoem in
             if let finalPoem = fetchedPoem {
                 createTimeline(with: finalPoem, completion: completion)
+            } else {
+                // Provide a default poem if we couldn't fetch one
+                let defaultPoem = Poem(id: UUID(), title: "Default Poem", lines: ["Check the app for a new poem!"], author: "Widget")
+                createTimeline(with: defaultPoem, completion: completion)
             }
         }
     }
@@ -72,17 +77,45 @@ struct Provider: TimelineProvider {
 
 struct Poem_Of_The_Day_WidgetView: View {
     var entry: Provider.Entry
+    @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
-        VStack(alignment: .leading) {
-            Text(entry.poem.title)
-                .font(.headline)
-                .padding(.bottom, 5)
-            Text(entry.poem.content)
-                .font(.body)
-                .lineLimit(3)
+        ZStack {
+            // Background gradient
+            LinearGradient(
+                gradient: Gradient(colors: [
+                    colorScheme == .dark ? Color(red: 0.1, green: 0.1, blue: 0.2) : Color(red: 0.9, green: 0.95, blue: 1.0),
+                    colorScheme == .dark ? Color(red: 0.2, green: 0.2, blue: 0.3) : Color(red: 0.8, green: 0.9, blue: 1.0)
+                ]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            
+            VStack(alignment: .leading, spacing: 8) {
+                Text(entry.poem.title)
+                    .font(.headline)
+                    .lineLimit(1)
+                    .padding(.bottom, 2)
+                
+                Text(entry.poem.content)
+                    .font(.system(size: 14, weight: .regular, design: .serif))
+                    .lineLimit(6)
+                    .lineSpacing(2)
+                
+                Spacer()
+                
+                if let author = entry.poem.author, !author.isEmpty {
+                    HStack {
+                        Spacer()
+                        Text("— \(author)")
+                            .font(.caption2)
+                            .italic()
+                            .foregroundColor(.secondary)
+                    }
+                }
+            }
+            .padding()
         }
-        .padding()
     }
 }
 
@@ -99,3 +132,27 @@ struct Poem_Of_The_Day_Widget: Widget {
     }
 }
 
+// Structs needed by the widget
+struct Poem: Identifiable, Codable {
+    let id: UUID?
+    let title: String
+    let content: String
+    let author: String?
+
+    init(id: UUID? = UUID(), title: String, lines: [String], author: String = "Unknown") {
+        self.id = id
+        self.title = title
+        self.content = lines.joined(separator: "\n")
+        self.author = author
+    }
+}
+
+struct PoemResponse: Codable {
+    let title: String
+    let lines: [String]
+    let author: String
+    
+    func toPoem() -> Poem {
+        return Poem(id: UUID(), title: title, lines: lines, author: author)
+    }
+}

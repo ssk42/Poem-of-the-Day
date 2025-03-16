@@ -3,108 +3,331 @@ import WidgetKit
 import Combine
 
 struct ContentView: View {
+    // This is the original line from your paste.txt
     @StateObject private var viewModel = PoemViewModel()
     @State private var showFavorites = false
-
+    @State private var isRefreshing = false
+    @Environment(\.colorScheme) private var colorScheme
+    
     var body: some View {
-        VStack {
-            Spacer()
-            Button(action: {
-                viewModel.fetchPoemOfTheDay()
-                WidgetCenter.shared.reloadAllTimelines() // Notify the widget to update
-            }) {
-                Text("Fetch New Poem")
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-            }
-            .padding()
-
-            Text("Poem of the Day")
-                .font(.largeTitle)
-                .padding()
-
-            if let poem = viewModel.poemOfTheDay {
-                Text(poem.title)
-                    .font(.title)
-                    .padding(.top, 20)
+        NavigationView {
+            ZStack {
+                backgroundGradient
+                    .ignoresSafeArea()
                 
-                if let author = poem.author {
-                    Text("by \(author)")
-                        .font(.subheadline)
-                        .padding(.bottom, 10)
-                }
-
                 ScrollView {
-                    VStack(alignment: .leading) {
-                        Text(poem.content)
-                            .padding(.top, 10)
-                            .padding(.horizontal)
+                    VStack(spacing: 20) {
+                        headerView
+                        
+                        if let poem = viewModel.poemOfTheDay {
+                            poemCard(poem: poem)
+                        } else {
+                            loadingView
+                        }
+                        
+                        controlButtons
                     }
-                }
-                .frame(maxHeight: .infinity)
-
-                Button(action: {
-                    viewModel.toggleFavorite(poem: poem)
-                }) {
-                    HStack {
-                        Image(systemName: viewModel.isFavorite(poem: poem) ? "heart.fill" : "heart")
-                            .foregroundColor(viewModel.isFavorite(poem: poem) ? .red : .gray)
-                        Text(viewModel.isFavorite(poem: poem) ? "Unfavorite" : "Favorite")
-                    }
-                }
-                .padding()
-            } else {
-                ProgressView("Loading...")
-            }
-
-            Button(action: {
-                showFavorites = true
-            }) {
-                Text("View Favorites")
                     .padding()
-                    .background(Color.green)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
+                }
+                .refreshable {
+                    isRefreshing = true
+                    viewModel.fetchPoemOfTheDay()
+                    WidgetCenter.shared.reloadAllTimelines()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        isRefreshing = false
+                    }
+                }
             }
-            .padding()
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        showFavorites = true
+                    }) {
+                        Label("Favorites", systemImage: "heart.fill")
+                            .foregroundColor(.red)
+                    }
+                }
+            }
             .sheet(isPresented: $showFavorites) {
                 FavoritesView(favorites: viewModel.favorites)
             }
+            .alert(isPresented: $viewModel.showAlert) {
+                Alert(title: Text("Error"), message: Text(viewModel.alertMessage), dismissButton: .default(Text("OK")))
+            }
+        }
+    }
+    
+    // MARK: - UI Components
+    
+    private var backgroundGradient: some View {
+        LinearGradient(
+            gradient: Gradient(colors: [
+                colorScheme == .dark ? Color(red: 0.1, green: 0.1, blue: 0.2) : Color(red: 0.9, green: 0.95, blue: 1.0),
+                colorScheme == .dark ? Color(red: 0.2, green: 0.2, blue: 0.3) : Color(red: 0.8, green: 0.9, blue: 1.0)
+            ]),
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+    }
+    
+    private var headerView: some View {
+        VStack(spacing: 8) {
+            Text("Poem of the Day")
+                .font(.system(size: 32, weight: .bold, design: .serif))
+                .foregroundColor(colorScheme == .dark ? .white : .black)
+            
+            Text(formattedDate)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+        }
+        .padding(.vertical)
+    }
+    
+    private var formattedDate: String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long
+        return formatter.string(from: Date())
+    }
+    
+    private func poemCard(poem: Poem) -> some View {
+        VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: 8) {
+                Text(poem.title)
+                    .font(.system(size: 24, weight: .semibold, design: .serif))
+                    .foregroundColor(colorScheme == .dark ? .white : .black)
+                
+                if let author = poem.author {
+                    Text("by \(author)")
+                        .font(.system(size: 16, weight: .medium, design: .serif))
+                        .foregroundColor(.secondary)
+                }
+            }
+            
+            Divider()
+            
+            Text(poem.content)
+                .font(.system(size: 16, weight: .regular, design: .serif))
+                .lineSpacing(8)
+                .padding(.vertical, 8)
+            
+            HStack {
+                Spacer()
+                
+                Button(action: {
+                    viewModel.toggleFavorite(poem: poem)
+                }) {
+                    Label(
+                        viewModel.isFavorite(poem: poem) ? "Unfavorite" : "Favorite",
+                        systemImage: viewModel.isFavorite(poem: poem) ? "heart.fill" : "heart"
+                    )
+                    .foregroundColor(viewModel.isFavorite(poem: poem) ? .red : .primary)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(
+                        Capsule()
+                            .strokeBorder(viewModel.isFavorite(poem: poem) ? Color.red : Color.primary, lineWidth: 1)
+                    )
+                }
+            }
+            .padding(.top, 8)
         }
         .padding()
-        .alert(isPresented: $viewModel.showAlert) {
-            Alert(title: Text("Error"), message: Text(viewModel.alertMessage), dismissButton: .default(Text("OK")))
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(colorScheme == .dark ? Color(red: 0.2, green: 0.2, blue: 0.3) : Color.white)
+                .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
+        )
+        .transition(.opacity)
+    }
+    
+    private var loadingView: some View {
+        VStack(spacing: 20) {
+            ProgressView()
+                .scaleEffect(1.5)
+                .padding()
+            
+            Text("Loading your poem...")
+                .font(.system(size: 16, weight: .medium, design: .serif))
+                .foregroundColor(.secondary)
+        }
+        .frame(height: 300)
+        .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(colorScheme == .dark ? Color(red: 0.2, green: 0.2, blue: 0.3) : Color.white)
+                .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
+        )
+    }
+    
+    private var controlButtons: some View {
+        Button(action: {
+            viewModel.fetchPoemOfTheDay()
+            WidgetCenter.shared.reloadAllTimelines()
+        }) {
+            Label("Get New Poem", systemImage: "arrow.clockwise")
+                .font(.headline)
+                .foregroundColor(.white)
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(
+                    LinearGradient(
+                        gradient: Gradient(colors: [Color.blue, Color.blue.opacity(0.8)]),
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+                .clipShape(Capsule())
+                .shadow(color: Color.blue.opacity(0.3), radius: 5, x: 0, y: 3)
         }
     }
 }
+
+// MARK: - Favorites View
 
 struct FavoritesView: View {
     let favorites: [Poem]
-
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) private var colorScheme
+    
     var body: some View {
         NavigationView {
-            List(favorites) { poem in
-                VStack(alignment: .leading) {
-                    Text(poem.title)
-                        .font(.headline)
-                    if let author = poem.author {
-                        Text("by \(author)")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
+            ZStack {
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        colorScheme == .dark ? Color(red: 0.1, green: 0.1, blue: 0.2) : Color(red: 0.9, green: 0.95, blue: 1.0),
+                        colorScheme == .dark ? Color(red: 0.2, green: 0.2, blue: 0.3) : Color(red: 0.8, green: 0.9, blue: 1.0)
+                    ]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
+                
+                if favorites.isEmpty {
+                    emptyStateView
+                } else {
+                    List {
+                        ForEach(favorites) { poem in
+                            NavigationLink(destination: FavoritePoemDetailView(poem: poem)) {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text(poem.title)
+                                        .font(.headline)
+                                    
+                                    if let author = poem.author {
+                                        Text("by \(author)")
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
+                                    }
+                                    
+                                    Text(poem.content)
+                                        .font(.body)
+                                        .lineLimit(2)
+                                        .foregroundColor(.secondary)
+                                }
+                                .padding(.vertical, 8)
+                            }
+                            .listRowBackground(
+                                colorScheme == .dark ? Color(red: 0.2, green: 0.2, blue: 0.3) : Color.white
+                            )
+                        }
                     }
-                    Text(poem.content)
-                        .font(.body)
-                        .lineLimit(3)
-                        .padding(.top, 5)
+                    .listStyle(InsetGroupedListStyle())
                 }
             }
             .navigationTitle("Favorite Poems")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
+    
+    private var emptyStateView: some View {
+        VStack(spacing: 20) {
+            Image(systemName: "heart.slash")
+                .font(.system(size: 70))
+                .foregroundColor(.gray)
+            
+            Text("No Favorite Poems Yet")
+                .font(.title2)
+                .fontWeight(.bold)
+            
+            Text("Your favorite poems will appear here.")
+                .foregroundColor(.secondary)
+            
+            Button("Done") {
+                dismiss()
+            }
+            .padding(.horizontal, 24)
+            .padding(.vertical, 12)
+            .background(Capsule().fill(Color.blue))
+            .foregroundColor(.white)
+            .padding(.top, 16)
         }
     }
 }
 
+// MARK: - Favorite Poem Detail View
+
+struct FavoritePoemDetailView: View {
+    let poem: Poem
+    @Environment(\.colorScheme) private var colorScheme
+    
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                Text(poem.title)
+                    .font(.system(size: 28, weight: .bold, design: .serif))
+                
+                if let author = poem.author {
+                    Text("by \(author)")
+                        .font(.system(size: 18, weight: .medium, design: .serif))
+                        .foregroundColor(.secondary)
+                }
+                
+                Divider()
+                
+                Text(poem.content)
+                    .font(.system(size: 18, weight: .regular, design: .serif))
+                    .lineSpacing(8)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .background(
+            LinearGradient(
+                gradient: Gradient(colors: [
+                    colorScheme == .dark ? Color(red: 0.1, green: 0.1, blue: 0.2) : Color(red: 0.9, green: 0.95, blue: 1.0),
+                    colorScheme == .dark ? Color(red: 0.2, green: 0.2, blue: 0.3) : Color(red: 0.8, green: 0.9, blue: 1.0)
+                ]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
+        )
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+// For SwiftUI Preview
+#if DEBUG
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+            .preferredColorScheme(.light)
+        
+        ContentView()
+            .preferredColorScheme(.dark)
+    }
+}
+#endif
+
+// Make sure to include this class in your ContentView.swift file or create a separate file for it
 class PoemViewModel: ObservableObject {
     private let sharedDefaults = UserDefaults(suiteName: "group.com.stevereitz.poemoftheday")
     @Published var showAlert: Bool = false
