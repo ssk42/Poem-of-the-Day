@@ -21,22 +21,51 @@ struct Provider: TimelineProvider {
         let sharedDefaults = UserDefaults(suiteName: "group.com.stevereitz.poemoftheday")
         var poem: Poem? = nil
 
+        // Load poem from shared defaults
         if let title = sharedDefaults?.string(forKey: "poemTitle"),
            let content = sharedDefaults?.string(forKey: "poemContent"),
            let author = sharedDefaults?.string(forKey: "poemAuthor") {
             poem = Poem(id: UUID(), title: title, lines: content.components(separatedBy: "\n"), author: author)
-            if let finalPoem = poem {
-                createTimeline(with: finalPoem, completion: completion)
-                return
+        }
+        
+        // Check if we should fetch a new poem based on date
+        let calendar = Calendar.current
+        let now = Date()
+        var shouldFetchNewPoem = false
+        
+        if let lastFetchDate = sharedDefaults?.object(forKey: "lastPoemFetchDate") as? Date {
+            // Check if the last fetch is from a previous day
+            if !calendar.isDate(lastFetchDate, inSameDayAs: now) {
+                shouldFetchNewPoem = true
             }
+        } else {
+            // No last fetch date, should fetch
+            shouldFetchNewPoem = true
+        }
+        
+        if poem != nil && !shouldFetchNewPoem {
+            // We have a poem and don't need to fetch a new one
+            createTimeline(with: poem!, completion: completion)
+            return
         }
 
-        // Fetch poem from PoetryDB
+        // Fetch a new poem from PoetryDB if needed
         fetchPoemFromPoetryDB { fetchedPoem in
             if let finalPoem = fetchedPoem {
+                // Save the fetched poem
+                sharedDefaults?.set(finalPoem.title, forKey: "poemTitle")
+                sharedDefaults?.set(finalPoem.content, forKey: "poemContent")
+                sharedDefaults?.set(finalPoem.author ?? "", forKey: "poemAuthor")
+                
+                // Save current date as fetch date
+                sharedDefaults?.set(Date(), forKey: "lastPoemFetchDate")
+                
                 createTimeline(with: finalPoem, completion: completion)
+            } else if let existingPoem = poem {
+                // Use existing poem if fetch failed
+                createTimeline(with: existingPoem, completion: completion)
             } else {
-                // Provide a default poem if we couldn't fetch one
+                // Provide a default poem if we have no poem at all
                 let defaultPoem = Poem(id: UUID(), title: "Default Poem", lines: ["Check the app for a new poem!"], author: "Widget")
                 createTimeline(with: defaultPoem, completion: completion)
             }
@@ -60,16 +89,23 @@ struct Provider: TimelineProvider {
     }
 
     private func createTimeline(with poem: Poem, completion: @escaping (Timeline<Poem_Of_The_Day_WidgetEntry>) -> Void) {
+        let calendar = Calendar.current
         let currentDate = Date()
         var entries: [Poem_Of_The_Day_WidgetEntry] = []
 
-        for offset in 0..<7 {
-            if let entryDate = Calendar.current.date(byAdding: .day, value: offset, to: currentDate) {
-                let entry = Poem_Of_The_Day_WidgetEntry(date: entryDate, poem: poem)
-                entries.append(entry)
-            }
+        // Create an entry for today
+        let todayEntry = Poem_Of_The_Day_WidgetEntry(date: currentDate, poem: poem)
+        entries.append(todayEntry)
+        
+        // Calculate midnight of the next day
+        let midnight = calendar.startOfDay(for: currentDate)
+        if let nextMidnight = calendar.date(byAdding: .day, value: 1, to: midnight) {
+            // Create an entry that triggers exactly at midnight
+            let nextDayEntry = Poem_Of_The_Day_WidgetEntry(date: nextMidnight, poem: poem)
+            entries.append(nextDayEntry)
         }
 
+        // Set the timeline to update at midnight
         let timeline = Timeline(entries: entries, policy: .atEnd)
         completion(timeline)
     }

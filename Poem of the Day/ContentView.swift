@@ -327,7 +327,6 @@ struct ContentView_Previews: PreviewProvider {
 }
 #endif
 
-// Make sure to include this class in your ContentView.swift file or create a separate file for it
 class PoemViewModel: ObservableObject {
     private let sharedDefaults = UserDefaults(suiteName: "group.com.stevereitz.poemoftheday")
     @Published var showAlert: Bool = false
@@ -337,9 +336,27 @@ class PoemViewModel: ObservableObject {
     private var cancellable: AnyCancellable?
 
     init() {
-        loadPoemFromSharedStorage()
         loadFavorites()
-        if poemOfTheDay == nil {
+        checkAndUpdateDailyPoem()
+    }
+    
+    // Check if we need a new poem based on the date
+    private func checkAndUpdateDailyPoem() {
+        // Check if we have a stored poem
+        loadPoemFromSharedStorage()
+        
+        // Check when the last poem was fetched
+        let calendar = Calendar.current
+        let now = Date()
+        
+        if let lastFetchDate = sharedDefaults?.object(forKey: "lastPoemFetchDate") as? Date {
+            // Check if the last fetch date is from a previous day
+            if !calendar.isDate(lastFetchDate, inSameDayAs: now) {
+                // It's a new day, fetch a new poem
+                fetchPoemOfTheDay()
+            }
+        } else {
+            // No fetch date stored, this is first run or data was cleared
             fetchPoemOfTheDay()
         }
     }
@@ -352,8 +369,21 @@ class PoemViewModel: ObservableObject {
         }
     }
 
-    func fetchPoemOfTheDay() {
-        loadPoemFromSharedStorage() // Load the saved poem first, if available
+    func fetchPoemOfTheDay(force: Bool = false) {
+        // Check if we should fetch a new poem
+        if !force {
+            let calendar = Calendar.current
+            let now = Date()
+            
+            if let lastFetchDate = sharedDefaults?.object(forKey: "lastPoemFetchDate") as? Date,
+               calendar.isDate(lastFetchDate, inSameDayAs: now) {
+                // Already fetched a poem today, just load from storage
+                loadPoemFromSharedStorage()
+                return
+            }
+        }
+        
+        // Proceed with fetching a new poem
         let urlString = "https://poetrydb.org/random"
         guard let url = URL(string: urlString) else {
             print("Invalid URL")
@@ -418,6 +448,9 @@ class PoemViewModel: ObservableObject {
                 sharedDefaults?.set(poem.title, forKey: "poemTitle")
                 sharedDefaults?.set(poem.content, forKey: "poemContent")
                 sharedDefaults?.set(poem.author ?? "", forKey: "poemAuthor")
+                
+                // Save the current date as the fetch date
+                sharedDefaults?.set(Date(), forKey: "lastPoemFetchDate")
 
                 // Notify widget to reload
                 WidgetCenter.shared.reloadAllTimelines()
