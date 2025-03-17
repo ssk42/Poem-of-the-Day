@@ -160,9 +160,11 @@ struct ContentView: View {
         )
     }
     
+    // Update the controlButtons variable in ContentView.swift
     private var controlButtons: some View {
         Button(action: {
-            viewModel.fetchPoemOfTheDay()
+            // Force a new poem fetch regardless of when the last one was fetched
+            viewModel.fetchPoemOfTheDay(force: true)
             WidgetCenter.shared.reloadAllTimelines()
         }) {
             Label("Get New Poem", systemImage: "arrow.clockwise")
