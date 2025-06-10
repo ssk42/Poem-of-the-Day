@@ -11,7 +11,17 @@ import Testing
 struct Poem_of_the_DayTests {
 
     @Test func example() async throws {
-        // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+        let response = PoemResponse(
+            title: "Test Title",
+            lines: ["Line one", "Line two"],
+            author: "Test Author"
+        )
+
+        let poem = response.toPoem()
+
+        #expect(poem.title == "Test Title")
+        #expect(poem.content == "Line one\nLine two")
+        #expect(poem.author == "Test Author")
     }
 
 }
