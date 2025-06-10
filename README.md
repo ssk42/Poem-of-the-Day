@@ -25,7 +25,7 @@
 2. Open the project in Xcode.
    ```bash
    cd poem-of-the-day-widget
-   open PoemOfTheDay.xcodeproj
+   open 'Poem of the Day.xcodeproj'
    ```
 3. Run the app using the iOS Simulator or a physical device.
 
