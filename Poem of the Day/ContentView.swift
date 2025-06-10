@@ -429,9 +429,16 @@ class PoemViewModel: ObservableObject {
             .catch { [weak self] error -> AnyPublisher<Poem, Never> in
                 DispatchQueue.main.async {
                     self?.showAlert = true
-                    self?.alertMessage = "The poem could not be found (404 error). Please try again later."
+                    if let urlError = error as? URLError,
+                       urlError.code == .fileDoesNotExist {
+                        self?.alertMessage = "The poem could not be found (404 error). Please try again later."
+                    } else {
+                        self?.alertMessage = "Failed to fetch poem. Please try again later."
+                    }
                 }
-                return Just(Poem(id: UUID(), title: "Default Poem", lines: ["This is a default poem content."])).eraseToAnyPublisher()
+                return Just(
+                    Poem(id: UUID(), title: "Default Poem", lines: ["This is a default poem content."])
+                ).eraseToAnyPublisher()
             }
             
             .sink(receiveCompletion: { [weak self] completion in
