@@ -1,0 +1,17 @@
+# Xcode build products and intermediate files
+Build/
+DerivedData/
+
+# User data
+**/xcuserdata/
+*.xcuserdatad
+*.xcuserstate
+
+# Xcode workspace scheme management
+*.xcscmblueprint
+
+# Swift Package Manager build directory
+.build/
+
+# macOS Finder and other system files
+.DS_Store
