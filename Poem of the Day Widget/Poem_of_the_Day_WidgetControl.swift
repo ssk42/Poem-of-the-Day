@@ -26,7 +26,7 @@ struct Poem_of_the_Day_WidgetControl: ControlWidget {
             }
         }
         .displayName("Timer")
-        .description("A an example control that runs a timer.")
+        .description("An example control that runs a timer.")
     }
 }
 
