@@ -271,6 +271,85 @@ struct ContentView: View {
             }
             .accessibilityLabel("Get a new poem")
             
+            // AI generation buttons (only show if available)
+            if viewModel.isAIGenerationAvailable {
+                HStack(spacing: 12) {
+                    Button(action: {
+                        viewModel.showVibeGeneration = true
+                    }) {
+                        VStack(spacing: 4) {
+                            HStack {
+                                Text(viewModel.currentVibe?.vibe.emoji ?? "🎭")
+                                    .font(.title3)
+                                Image(systemName: "brain.head.profile")
+                                    .font(.subheadline)
+                            }
+                            Text("Vibe Poem")
+                                .font(.caption)
+                                .fontWeight(.medium)
+                        }
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+                        .background(
+                            LinearGradient(
+                                gradient: Gradient(colors: [Color.purple, Color.purple.opacity(0.8)]),
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .clipShape(Capsule())
+                        .shadow(color: Color.purple.opacity(0.3), radius: 3, x: 0, y: 2)
+                    }
+                    .accessibilityLabel("Generate poem based on today's news vibe")
+                    
+                    Button(action: {
+                        viewModel.showCustomPrompt = true
+                    }) {
+                        VStack(spacing: 4) {
+                            Image(systemName: "pencil.and.outline")
+                                .font(.title3)
+                            Text("Custom")
+                                .font(.caption)
+                                .fontWeight(.medium)
+                        }
+                        .foregroundColor(.purple)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+                        .background(
+                            Capsule()
+                                .strokeBorder(Color.purple, lineWidth: 2)
+                                .background(Capsule().fill(Color.clear))
+                        )
+                    }
+                    .accessibilityLabel("Write custom AI poem")
+                }
+            }
+            
+        }
+        .sheet(isPresented: $viewModel.showVibeGeneration) {
+            if let vibe = viewModel.currentVibe {
+                VibeGenerationView(
+                    vibeAnalysis: vibe,
+                    onGeneratePoem: {
+                        viewModel.showVibeGeneration = false
+                        Task {
+                            await viewModel.generateVibeBasedPoem()
+                        }
+                    },
+                    onCustomPrompt: {
+                        viewModel.showVibeGeneration = false
+                        viewModel.showCustomPrompt = true
+                    }
+                )
+            }
+        }
+        .sheet(isPresented: $viewModel.showCustomPrompt) {
+            CustomPromptView { prompt in
+                Task {
+                    await viewModel.generateCustomPoem(prompt: prompt)
+                }
+            }
         }
     }
 }

@@ -12,21 +12,58 @@ final class DependencyContainer: ObservableObject {
     static let shared = DependencyContainer()
     
     private let networkService: NetworkServiceProtocol
+    private let newsService: NewsServiceProtocol
+    private let vibeAnalyzer: VibeAnalyzerProtocol
+    private let aiService: PoemGenerationServiceProtocol?
     private let repository: PoemRepositoryProtocol
     
     private init() {
         self.networkService = NetworkService()
-        self.repository = PoemRepository(networkService: networkService)
+        self.newsService = NewsService()
+        self.vibeAnalyzer = VibeAnalyzer()
+        
+        // Initialize AI service if available (iOS 18.1+)
+        if #available(iOS 18.1, *) {
+            self.aiService = PoemGenerationService()
+        } else {
+            self.aiService = nil
+        }
+        
+        self.repository = PoemRepository(
+            networkService: networkService,
+            newsService: newsService,
+            vibeAnalyzer: vibeAnalyzer,
+            aiService: aiService
+        )
     }
     
     // For testing
-    init(networkService: NetworkServiceProtocol, repository: PoemRepositoryProtocol) {
+    init(networkService: NetworkServiceProtocol, 
+         newsService: NewsServiceProtocol,
+         vibeAnalyzer: VibeAnalyzerProtocol,
+         aiService: PoemGenerationServiceProtocol?,
+         repository: PoemRepositoryProtocol) {
         self.networkService = networkService
+        self.newsService = newsService
+        self.vibeAnalyzer = vibeAnalyzer
+        self.aiService = aiService
         self.repository = repository
     }
     
     func makeNetworkService() -> NetworkServiceProtocol {
         return networkService
+    }
+    
+    func makeNewsService() -> NewsServiceProtocol {
+        return newsService
+    }
+    
+    func makeVibeAnalyzer() -> VibeAnalyzerProtocol {
+        return vibeAnalyzer
+    }
+    
+    func makeAIService() -> PoemGenerationServiceProtocol? {
+        return aiService
     }
     
     
