@@ -51,15 +51,7 @@ actor NetworkService: NetworkServiceProtocol {
                 throw PoemError.noPoems
             }
             
-            let basePoem = firstResponse.toPoem()
-            // Create poem with API source
-            return Poem(
-                id: basePoem.id,
-                title: basePoem.title,
-                lines: basePoem.content.components(separatedBy: "\n"),
-                author: basePoem.author,
-                source: .api
-            )
+            return firstResponse.toPoem()
             
         } catch is DecodingError {
             throw PoemError.decodingFailed
