@@ -23,8 +23,8 @@ struct Provider: TimelineProvider {
 
         // Load poem from shared defaults
         if let title = sharedDefaults?.string(forKey: "poemTitle"),
-           let content = sharedDefaults?.string(forKey: "poemContent"),
-           let author = sharedDefaults?.string(forKey: "poemAuthor") {
+           let content = sharedDefaults?.string(forKey: "poemContent") {
+            let author = sharedDefaults?.string(forKey: "poemAuthor")
             poem = WidgetPoem(id: UUID(), title: title, lines: content.components(separatedBy: "\n"), author: author)
         }
         
