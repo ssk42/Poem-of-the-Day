@@ -12,19 +12,16 @@ final class DependencyContainer: ObservableObject {
     static let shared = DependencyContainer()
     
     private let networkService: NetworkServiceProtocol
-    private let aiService: PoemGenerationServiceProtocol
     private let repository: PoemRepositoryProtocol
     
     private init() {
         self.networkService = NetworkService()
-        self.aiService = PoemGenerationService()
-        self.repository = PoemRepository(networkService: networkService, aiService: aiService)
+        self.repository = PoemRepository(networkService: networkService)
     }
     
     // For testing
-    init(networkService: NetworkServiceProtocol, aiService: PoemGenerationServiceProtocol, repository: PoemRepositoryProtocol) {
+    init(networkService: NetworkServiceProtocol, repository: PoemRepositoryProtocol) {
         self.networkService = networkService
-        self.aiService = aiService
         self.repository = repository
     }
     
@@ -32,9 +29,6 @@ final class DependencyContainer: ObservableObject {
         return networkService
     }
     
-    func makeAIService() -> PoemGenerationServiceProtocol {
-        return aiService
-    }
     
     func makeRepository() -> PoemRepositoryProtocol {
         return repository

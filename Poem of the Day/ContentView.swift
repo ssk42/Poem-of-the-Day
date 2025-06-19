@@ -128,20 +128,6 @@ struct ContentView: View {
                     
                     Spacer()
                     
-                    HStack(spacing: 4) {
-                        Image(systemName: poem.source == .aiGenerated ? "brain.head.profile" : "book.fill")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                        Text(poem.source.displayName)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(
-                        Capsule()
-                            .fill(colorScheme == .dark ? Color(red: 0.3, green: 0.3, blue: 0.4) : Color(red: 0.95, green: 0.95, blue: 0.97))
-                    )
                 }
             }
             
@@ -285,56 +271,6 @@ struct ContentView: View {
             }
             .accessibilityLabel("Get a new poem")
             
-            // AI generation buttons (only show if available)
-            if viewModel.isAIGenerationAvailable {
-                HStack(spacing: 12) {
-                    Button(action: {
-                        Task {
-                            await viewModel.generateAIPoem()
-                        }
-                    }) {
-                        Label("AI Poem", systemImage: "brain.head.profile")
-                            .font(.subheadline)
-                            .foregroundColor(.white)
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 12)
-                            .background(
-                                LinearGradient(
-                                    gradient: Gradient(colors: [Color.purple, Color.purple.opacity(0.8)]),
-                                    startPoint: .leading,
-                                    endPoint: .trailing
-                                )
-                            )
-                            .clipShape(Capsule())
-                            .shadow(color: Color.purple.opacity(0.3), radius: 3, x: 0, y: 2)
-                    }
-                    .accessibilityLabel("Generate AI poem")
-                    
-                    Button(action: {
-                        viewModel.showThemeSelector = true
-                    }) {
-                        Label("Choose Theme", systemImage: "paintbrush.fill")
-                            .font(.subheadline)
-                            .foregroundColor(.purple)
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 12)
-                            .background(
-                                Capsule()
-                                    .strokeBorder(Color.purple, lineWidth: 2)
-                                    .background(Capsule().fill(Color.clear))
-                            )
-                    }
-                    .accessibilityLabel("Choose AI poem theme")
-                }
-            }
-        }
-        .sheet(isPresented: $viewModel.showThemeSelector) {
-            ThemeSelectorView { theme in
-                Task {
-                    await viewModel.generateAIPoem(theme: theme)
-                }
-                viewModel.showThemeSelector = false
-            }
         }
     }
 }

@@ -15,8 +15,6 @@ final class PoemViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
     @Published var showErrorAlert = false
-    @Published var isAIGenerationAvailable = false
-    @Published var showThemeSelector = false
     
     private let repository: PoemRepositoryProtocol
     
@@ -33,11 +31,9 @@ final class PoemViewModel: ObservableObject {
         
         async let poemTask = loadDailyPoem()
         async let favoritesTask = loadFavorites()
-        async let aiAvailabilityTask = checkAIAvailability()
         
         await poemTask
         await favoritesTask
-        await aiAvailabilityTask
         
         isLoading = false
     }
@@ -66,17 +62,6 @@ final class PoemViewModel: ObservableObject {
         await loadFavorites()
     }
     
-    func generateAIPoem(theme: PoemTheme? = nil) async {
-        isLoading = true
-        
-        do {
-            poemOfTheDay = try await repository.generateAIPoem(theme: theme)
-        } catch {
-            await handleError(error)
-        }
-        
-        isLoading = false
-    }
     
     func isFavorite(poem: Poem) -> Bool {
         favorites.contains { $0.id == poem.id }
@@ -96,9 +81,6 @@ final class PoemViewModel: ObservableObject {
         favorites = await repository.getFavorites()
     }
     
-    private func checkAIAvailability() async {
-        isAIGenerationAvailable = await repository.isAIGenerationAvailable()
-    }
     
     private func handleError(_ error: Error) async {
         if let poemError = error as? PoemError {

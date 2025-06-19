@@ -11,21 +11,18 @@ import XCTest
 final class PoemRepositoryTests: XCTestCase {
     var sut: PoemRepository!
     var mockNetworkService: MockNetworkService!
-    var mockAIService: MockPoemGenerationService!
     var mockUserDefaults: UserDefaults!
     
     override func setUp() async throws {
         mockNetworkService = MockNetworkService()
-        mockAIService = MockPoemGenerationService()
         mockUserDefaults = UserDefaults(suiteName: "test.poem.repository")!
-        sut = PoemRepository(networkService: mockNetworkService, aiService: mockAIService, userDefaults: mockUserDefaults)
+        sut = PoemRepository(networkService: mockNetworkService, userDefaults: mockUserDefaults)
     }
     
     override func tearDown() async throws {
         mockUserDefaults.removePersistentDomain(forName: "test.poem.repository")
         sut = nil
         mockNetworkService = nil
-        mockAIService = nil
         mockUserDefaults = nil
     }
     
@@ -144,67 +141,8 @@ final class PoemRepositoryTests: XCTestCase {
         XCTAssertFalse(isNotFavorite)
     }
     
-    func testGenerateAIPoem_WithTheme_ReturnsAIPoem() async throws {
-        // Given
-        let theme = PoemTheme.nature
-        let expectedPoem = Poem(title: "AI Nature Poem", lines: ["AI generated content"], author: "Mock AI", source: .aiGenerated)
-        mockAIService.mockPoem = expectedPoem
-        
-        // When
-        let poem = try await sut.generateAIPoem(theme: theme)
-        
-        // Then
-        XCTAssertEqual(poem.title, expectedPoem.title)
-        XCTAssertEqual(poem.source, .aiGenerated)
-    }
-    
-    func testGenerateAIPoem_WithoutTheme_ReturnsRandomAIPoem() async throws {
-        // Given
-        let expectedPoem = Poem(title: "Random AI Poem", lines: ["Random AI content"], author: "Mock AI", source: .aiGenerated)
-        mockAIService.mockPoem = expectedPoem
-        
-        // When
-        let poem = try await sut.generateAIPoem(theme: nil)
-        
-        // Then
-        XCTAssertNotNil(poem)
-        XCTAssertEqual(poem.source, .aiGenerated)
-    }
-    
-    func testIsAIGenerationAvailable_ReturnsCorrectStatus() async {
-        // Given
-        mockAIService.mockAvailable = true
-        
-        // When
-        let isAvailable = await sut.isAIGenerationAvailable()
-        
-        // Then
-        XCTAssertTrue(isAvailable)
-        
-        // Given
-        mockAIService.mockAvailable = false
-        
-        // When
-        let isNotAvailable = await sut.isAIGenerationAvailable()
-        
-        // Then
-        XCTAssertFalse(isNotAvailable)
-    }
 }
 
-// MARK: - Enhanced Mock AI Service
-
-extension MockPoemGenerationService {
-    var mockPoem: Poem? {
-        get { nil }
-        set {
-            // Store the mock poem for generation
-            if let poem = newValue {
-                mockError = nil
-            }
-        }
-    }
-}
 
 // MARK: - Mock Network Service
 

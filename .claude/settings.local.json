@@ -7,7 +7,11 @@
       "Bash(git pull:*)",
       "Bash(git commit:*)",
       "Bash(git rm:*)",
-      "WebFetch(domain:developer.apple.com)"
+      "WebFetch(domain:developer.apple.com)",
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(rm:*)",
+      "Bash(xcrun simctl delete:*)"
     ],
     "deny": []
   }

@@ -11,27 +11,22 @@ import WidgetKit
 protocol PoemRepositoryProtocol: Sendable {
     func getDailyPoem() async throws -> Poem
     func refreshDailyPoem() async throws -> Poem
-    func generateAIPoem(theme: PoemTheme?) async throws -> Poem
     func getFavorites() async -> [Poem]
     func addToFavorites(_ poem: Poem) async
     func removeFromFavorites(_ poem: Poem) async
     func isFavorite(_ poem: Poem) async -> Bool
-    func isAIGenerationAvailable() async -> Bool
 }
 
 actor PoemRepository: PoemRepositoryProtocol {
     private let networkService: NetworkServiceProtocol
-    private let aiService: PoemGenerationServiceProtocol
     private let userDefaults: UserDefaults
     
     private var cachedFavorites: [Poem] = []
     private var favoritesLoaded = false
     
-    init(networkService: NetworkServiceProtocol = NetworkService(), 
-         aiService: PoemGenerationServiceProtocol = PoemGenerationService(),
+    init(networkService: NetworkServiceProtocol = NetworkService(),
          userDefaults: UserDefaults = UserDefaults(suiteName: "group.com.stevereitz.poemoftheday") ?? .standard) {
         self.networkService = networkService
-        self.aiService = aiService
         self.userDefaults = userDefaults
     }
     
@@ -49,17 +44,6 @@ actor PoemRepository: PoemRepositoryProtocol {
         return try await fetchAndCachePoem()
     }
     
-    func generateAIPoem(theme: PoemTheme?) async throws -> Poem {
-        if let theme = theme {
-            return try await aiService.generatePoem(theme: theme)
-        } else {
-            return try await aiService.generateRandomPoem()
-        }
-    }
-    
-    func isAIGenerationAvailable() async -> Bool {
-        return await aiService.isAvailable()
-    }
     
     func getFavorites() async -> [Poem] {
         if !favoritesLoaded {
@@ -116,7 +100,6 @@ actor PoemRepository: PoemRepositoryProtocol {
         userDefaults.set(poem.title, forKey: "poemTitle")
         userDefaults.set(poem.content, forKey: "poemContent")
         userDefaults.set(poem.author ?? "", forKey: "poemAuthor")
-        userDefaults.set(poem.source.rawValue, forKey: "poemSource")
         userDefaults.set(Date(), forKey: "lastPoemFetchDate")
     }
     
@@ -127,14 +110,10 @@ actor PoemRepository: PoemRepositoryProtocol {
         }
         
         let author = userDefaults.string(forKey: "poemAuthor")
-        let sourceRaw = userDefaults.string(forKey: "poemSource") ?? "api"
-        let source = PoemSource(rawValue: sourceRaw) ?? .api
-        
         return Poem(
             title: title, 
             lines: content.components(separatedBy: "\n"), 
-            author: author?.isEmpty == true ? nil : author,
-            source: source
+            author: author?.isEmpty == true ? nil : author
         )
     }
     
