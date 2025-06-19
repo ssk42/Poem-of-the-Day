@@ -191,18 +191,4 @@ struct SentimentScore: Codable {
     }
 }
 
-// MARK: - Enhanced Poem Model
-
-extension Poem {
-    var vibe: DailyVibe? {
-        // This could be stored as metadata in the future
-        return nil
-    }
-    
-    init(title: String, lines: [String], author: String? = nil, vibe: DailyVibe? = nil) {
-        self.id = UUID()
-        self.title = title
-        self.content = lines.joined(separator: "\n")
-        self.author = author?.isEmpty == true ? nil : author
-    }
-}
+// Note: Poem model with vibe support is defined in Poem.swift

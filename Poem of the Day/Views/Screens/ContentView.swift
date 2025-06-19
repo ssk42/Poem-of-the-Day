@@ -128,6 +128,22 @@ struct ContentView: View {
                     
                     Spacer()
                     
+                    // Show vibe indicator if this is an AI-generated poem
+                    if let vibe = poem.vibe {
+                        HStack(spacing: 4) {
+                            Text(vibe.emoji)
+                                .font(.caption)
+                            Text("Today's \(vibe.displayName) Vibe")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(
+                            Capsule()
+                                .fill(colorScheme == .dark ? Color(red: 0.3, green: 0.3, blue: 0.4) : Color(red: 0.95, green: 0.95, blue: 0.97))
+                        )
+                    }
                 }
             }
             

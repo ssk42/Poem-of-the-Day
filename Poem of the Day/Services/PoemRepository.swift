@@ -51,16 +51,16 @@ actor PoemRepository: PoemRepositoryProtocol {
     
     func getDailyPoem() async throws -> Poem {
         if shouldFetchNewPoem() {
-            return try await fetchAndCachePoem()
+            return try await fetchAndCacheDailyPoem()
         } else if let cachedPoem = loadCachedPoem() {
             return cachedPoem
         } else {
-            return try await fetchAndCachePoem()
+            return try await fetchAndCacheDailyPoem()
         }
     }
     
     func refreshDailyPoem() async throws -> Poem {
-        return try await fetchAndCachePoem()
+        return try await fetchAndCacheDailyPoem()
     }
     
     func generateVibeBasedPoem() async throws -> Poem {
@@ -146,6 +146,27 @@ actor PoemRepository: PoemRepositoryProtocol {
         return !Calendar.current.isDate(lastFetchDate, inSameDayAs: Date())
     }
     
+    private func fetchAndCacheDailyPoem() async throws -> Poem {
+        // Try to generate vibe-based poem first if AI is available
+        if await isAIGenerationAvailable() {
+            do {
+                let vibePoem = try await generateVibeBasedPoem()
+                await cachePoemWithVibe(vibePoem)
+                WidgetCenter.shared.reloadAllTimelines()
+                return vibePoem
+            } catch {
+                // Fall back to API poem if AI generation fails
+                print("AI poem generation failed, falling back to API: \(error)")
+            }
+        }
+        
+        // Use traditional API poem as fallback
+        let poem = try await networkService.fetchRandomPoem()
+        await cachePoem(poem)
+        WidgetCenter.shared.reloadAllTimelines()
+        return poem
+    }
+    
     private func fetchAndCachePoem() async throws -> Poem {
         let poem = try await networkService.fetchRandomPoem()
         await cachePoem(poem)
@@ -157,6 +178,22 @@ actor PoemRepository: PoemRepositoryProtocol {
         userDefaults.set(poem.title, forKey: "poemTitle")
         userDefaults.set(poem.content, forKey: "poemContent")
         userDefaults.set(poem.author ?? "", forKey: "poemAuthor")
+        userDefaults.set("api", forKey: "poemSource")
+        userDefaults.removeObject(forKey: "poemVibe") // Clear vibe for API poems
+        userDefaults.set(Date(), forKey: "lastPoemFetchDate")
+    }
+    
+    private func cachePoemWithVibe(_ poem: Poem) async {
+        userDefaults.set(poem.title, forKey: "poemTitle")
+        userDefaults.set(poem.content, forKey: "poemContent")
+        userDefaults.set(poem.author ?? "", forKey: "poemAuthor")
+        userDefaults.set("ai_generated", forKey: "poemSource")
+        
+        // Cache the vibe information if available
+        if let vibe = poem.vibe {
+            userDefaults.set(vibe.rawValue, forKey: "poemVibe")
+        }
+        
         userDefaults.set(Date(), forKey: "lastPoemFetchDate")
     }
     
@@ -184,10 +221,14 @@ actor PoemRepository: PoemRepositoryProtocol {
         }
         
         let author = userDefaults.string(forKey: "poemAuthor")
+        let vibeRawValue = userDefaults.string(forKey: "poemVibe")
+        let vibe = vibeRawValue.flatMap { DailyVibe(rawValue: $0) }
+        
         return Poem(
             title: title, 
             lines: content.components(separatedBy: "\n"), 
-            author: author?.isEmpty == true ? nil : author
+            author: author?.isEmpty == true ? nil : author,
+            vibe: vibe
         )
     }
     

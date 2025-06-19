@@ -23,12 +23,14 @@ struct Poem: Identifiable, Codable, Equatable {
     let title: String
     let content: String
     let author: String?
+    let vibe: DailyVibe?
 
-    init(id: UUID = UUID(), title: String, lines: [String], author: String? = nil) {
+    init(id: UUID = UUID(), title: String, lines: [String], author: String? = nil, vibe: DailyVibe? = nil) {
         self.id = id
         self.title = title
         self.content = lines.joined(separator: "\n")
         self.author = author?.isEmpty == true ? nil : author
+        self.vibe = vibe
     }
     
     var shareText: String {

@@ -12,7 +12,9 @@
       "Bash(ls:*)",
       "Bash(rm:*)",
       "Bash(xcrun simctl delete:*)",
-      "WebFetch(domain:www.linkedin.com)"
+      "WebFetch(domain:www.linkedin.com)",
+      "Bash(mkdir:*)",
+      "Bash(mv:*)"
     ],
     "deny": []
   }

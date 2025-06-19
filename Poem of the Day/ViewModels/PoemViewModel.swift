@@ -119,7 +119,10 @@ final class PoemViewModel: ObservableObject {
     
     private func loadDailyVibe() async {
         do {
-            currentVibe = try await repository.getVibeOfTheDay()
+            // Always try to load vibe analysis if AI is available
+            if await repository.isAIGenerationAvailable() {
+                currentVibe = try await repository.getVibeOfTheDay()
+            }
         } catch {
             // Don't show error for vibe loading failure
             print("Failed to load daily vibe: \(error)")

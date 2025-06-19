@@ -174,12 +174,14 @@ struct WidgetPoem: Identifiable, Codable {
     let title: String
     let content: String
     let author: String?
+    let vibeEmoji: String?
 
-    init(id: UUID = UUID(), title: String, lines: [String], author: String? = nil) {
+    init(id: UUID = UUID(), title: String, lines: [String], author: String? = nil, vibeEmoji: String? = nil) {
         self.id = id
         self.title = title
         self.content = lines.joined(separator: "\n")
         self.author = author?.isEmpty == true ? nil : author
+        self.vibeEmoji = vibeEmoji
     }
 }
 
