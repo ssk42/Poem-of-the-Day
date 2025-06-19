@@ -7,10 +7,6 @@
 
 import Foundation
 
-protocol NewsServiceProtocol: Sendable {
-    func fetchDailyNews() async throws -> [NewsArticle]
-}
-
 // RSS Feed Sources - Free and reliable
 struct RSSSource {
     let name: String

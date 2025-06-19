@@ -7,10 +7,6 @@
 
 import Foundation
 
-protocol NetworkServiceProtocol: Sendable {
-    func fetchRandomPoem() async throws -> Poem
-}
-
 actor NetworkService: NetworkServiceProtocol {
     private let session: URLSession
     private let decoder: JSONDecoder

@@ -14,7 +14,26 @@
       "Bash(xcrun simctl delete:*)",
       "WebFetch(domain:www.linkedin.com)",
       "Bash(mkdir:*)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "Bash(compaudit)",
+      "Bash(sudo chmod:*)",
+      "Bash(sudo chown:*)",
+      "Bash(source:*)",
+      "Bash(xcrun simctl list:*)",
+      "Bash(grep:*)",
+      "Bash(sed:*)",
+      "Bash(xcodebuild:*)",
+      "Bash(xcodebuild -workspace:*)",
+      "Bash(xcodebuild -project:*)",
+      "Bash(xcodebuild -scheme:*)",
+      "Bash(xcodebuild -destination:*)",
+      "Bash(xcodebuild -configuration:*)",
+      "Bash(xcodebuild -sdk:*)",
+      "Bash(xcodebuild -arch:*)",
+      "Bash(xcodebuild -verbose:*)",
+      "Bash(xcodebuild -showBuildSettings:*)",
+      "Bash(rg:*)",
+      "Bash"
     ],
     "deny": []
   }

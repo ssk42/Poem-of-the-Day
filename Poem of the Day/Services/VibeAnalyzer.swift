@@ -7,10 +7,6 @@
 
 import Foundation
 
-protocol VibeAnalyzerProtocol: Sendable {
-    func analyzeVibe(from articles: [NewsArticle]) async -> VibeAnalysis
-}
-
 actor VibeAnalyzer: VibeAnalyzerProtocol {
     
     // MARK: - Keyword Dictionaries
@@ -205,11 +201,11 @@ actor VibeAnalyzer: VibeAnalyzerProtocol {
         let energyDescription: String
         switch sentiment.energy {
         case 0.0..<0.3:
-            sentimentDescription = "calm, steady news"
+            energyDescription = "calm, steady news"
         case 0.3..<0.7:
-            sentimentDescription = "moderate activity"
+            energyDescription = "moderate activity"
         default:
-            sentimentDescription = "high-energy events"
+            energyDescription = "high-energy events"
         }
         
         return "Today's news reflects a \(vibe.displayName.lowercased()) mood based on \(sentimentDescription) and \(energyDescription). Key themes include: \(keyThemes.joined(separator: ", ")). Headlines suggest \(vibe.description.lowercased())."

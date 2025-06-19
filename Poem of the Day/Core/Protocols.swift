@@ -119,14 +119,7 @@ protocol ConfigurationProviding {
 
 // MARK: - Default Implementations
 
-extension ShareableContent where Self: Poem {
-    var shareTitle: String? { title }
-    var shareURL: URL? { nil }
-}
-
-extension FavoriteContent where Self: Poem {
-    var isFavorited: Bool { false } // This would be determined by the repository
-}
+// These extensions will be implemented directly in the Poem struct
 
 extension AnalyticsTrackable {
     var analyticsParameters: [String: Any] { [:] }

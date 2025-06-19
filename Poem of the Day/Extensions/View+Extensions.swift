@@ -67,6 +67,7 @@ extension View {
     }
     
     /// Add shimmer loading effect
+    @ViewBuilder
     func shimmer(when isLoading: Bool) -> some View {
         if isLoading {
             self.overlay(

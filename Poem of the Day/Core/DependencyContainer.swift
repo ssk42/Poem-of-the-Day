@@ -22,8 +22,8 @@ final class DependencyContainer: ObservableObject {
         self.newsService = NewsService()
         self.vibeAnalyzer = VibeAnalyzer()
         
-        // Initialize AI service if available (iOS 18.1+)
-        if #available(iOS 18.1, *) {
+        // Initialize AI service if available (iOS 26+)
+        if #available(iOS 26, *) {
             self.aiService = PoemGenerationService()
         } else {
             self.aiService = nil

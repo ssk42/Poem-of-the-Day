@@ -8,16 +8,9 @@
 import Foundation
 
 // Only import FoundationModels if running on iOS 26+
-@available(iOS 26, *)
+#if canImport(FoundationModels)
 import FoundationModels
-
-// MARK: - Protocols
-
-protocol PoemGenerationServiceProtocol: Sendable {
-    func generatePoemFromVibe(_ vibeAnalysis: VibeAnalysis) async throws -> Poem
-    func generatePoemWithCustomPrompt(_ prompt: String) async throws -> Poem
-    func isAvailable() async -> Bool
-}
+#endif
 
 // MARK: - Errors
 
@@ -70,7 +63,7 @@ enum PoemGenerationError: Error, LocalizedError {
 
 // MARK: - Foundation Models Service
 
-// Only define the FoundationModels-based actor on iOS 26+
+// FoundationModels implementation for iOS 26+
 @available(iOS 26, *)
 actor PoemGenerationService: PoemGenerationServiceProtocol {
     
@@ -126,7 +119,9 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
     
     func isAvailable() async -> Bool {
         // For iOS 26 FoundationModels, check device capabilities
-        return await checkDeviceSupport() && await checkModelAvailability()
+        let deviceSupported = await checkDeviceSupport()
+        let modelAvailable = await checkModelAvailability()
+        return deviceSupported && modelAvailable
     }
     
     // MARK: - Private Methods
@@ -165,9 +160,211 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
         let basePrompt = vibeAnalysis.vibe.poemPrompt
         let context = buildContextFromAnalysis(vibeAnalysis)
         
-        return \"\"\"\n        \\(basePrompt)\n        \n        Context: Today's news suggests \\(context). \n        \n        Please write a poem that captures this \\(vibeAnalysis.vibe.displayName.lowercased()) feeling while being:\n        - Original and creative\n        - Appropriate for all audiences\n        - 12-20 lines long\n        - Emotionally resonant\n        - Well-structured with clear rhythm\n        \n        Format the response as:\n        Title: [Poem Title]\n        Author: AI Poet\n        \n        [Poem content with line breaks]\n        \"\"\"\n    }\n    \n    private func buildContextFromAnalysis(_ analysis: VibeAnalysis) -> String {\n        let sentimentDesc = describeSentiment(analysis.sentiment)\n        let keywords = analysis.keywords.prefix(3).joined(separator: \", \")\n        \n        return \"a \\(analysis.vibe.displayName.lowercased()) atmosphere with \\(sentimentDesc). Key themes include: \\(keywords)\"\n    }\n    \n    private func describeSentiment(_ sentiment: SentimentScore) -> String {\n        switch (sentiment.positivity, sentiment.energy) {\n        case (0.7..., 0.7...):\n            return \"high positivity and energy\"\n        case (0.7..., _):\n            return \"positive but calm energy\"\n        case (_, 0.7...):\n            return \"high energy with mixed emotions\"\n        case (...0.3, ...):\n            return \"challenging but thoughtful themes\"\n        default:\n            return \"balanced emotional tones\"\n        }\n    }\n    \n    private func enhanceCustomPrompt(_ prompt: String) -> String {\n        return \"\"\"\n        Write a beautiful poem based on this request: \"\\(prompt)\"\n        \n        Please ensure the poem is:\n        - Original and creative\n        - Appropriate for all audiences\n        - 12-20 lines long\n        - Well-structured with clear rhythm\n        - Emotionally engaging\n        \n        Format the response as:\n        Title: [Poem Title]\n        Author: AI Poet\n        \n        [Poem content with line breaks]\n        \"\"\"\n    }\n    \n    private func generateContent(prompt: String) async throws -> String {\n        // This is where we would use the actual FoundationModels API\n        // For iOS 26, this might look something like:\n        /*\n        import FoundationModels\n        \n        let model = try await FoundationModel.textGeneration()\n        let request = TextGenerationRequest(\n            prompt: prompt,\n            maxTokens: 500,\n            temperature: 0.8,\n            topP: 0.9\n        )\n        \n        let response = try await model.generate(request)\n        return response.text\n        */\n        \n        // For now, we'll simulate the API call with mock generation\n        try await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds\n        \n        // Check for content filtering\n        if containsInappropriateContent(prompt) {\n            throw PoemGenerationError.contentFiltered\n        }\n        \n        // Return a mock poem for demonstration\n        return await generateMockPoem(based: prompt)\n    }\n    \n    private func generateMockPoem(based prompt: String) async -> String {\n        // This is a simple mock implementation\n        // In reality, this would be handled by FoundationModels\n        let mockPoems = [\n            \"\"\"\n            Title: Morning's Promise\n            Author: AI Poet\n            \n            In the quiet dawn, hope whispers soft,\n            Through golden rays that lift hearts aloft,\n            Each new day brings a chance to grow,\n            To find the light that helps us glow.\n            \n            The world awakens with gentle grace,\n            And peace settles in this sacred space,\n            Where dreams and reality softly meet,\n            And life's rhythm finds its beat.\n            \n            So let us cherish this moment here,\n            Where love casts out all trace of fear,\n            For in this dawn, we clearly see\n            The beauty of what we're meant to be.\n            \"\"\",\n            \n            \"\"\"\n            Title: Winds of Change\n            Author: AI Poet\n            \n            The winds of change blow fierce and free,\n            Across the landscape of our destiny,\n            They carry stories from afar,\n            Of those who've wished upon a star.\n            \n            Through trials faced and lessons learned,\n            We find the bridges we have burned\n            Were merely paths that led us here,\n            To face tomorrow without fear.\n            \n            The storms may rage, the thunder roll,\n            But deep within lives a peaceful soul,\n            That knows beyond the clouded sky,\n            The sun still shines for you and I.\n            \"\"\",\n            \n            \"\"\"\n            Title: Quiet Reflections\n            Author: AI Poet\n            \n            In moments of silence, wisdom speaks,\n            To hearts that listen, souls that seek\n            The deeper truths that life can show\n            Through seasons of both joy and woe.\n            \n            The gentle rain upon the earth\n            Reminds us of our sacred worth,\n            Each drop a gift, each moment blessed\n            With opportunities to rest.\n            \n            And in this stillness, we can find\n            The peace that calms both heart and mind,\n            Where gratitude and wonder meet\n            To make our journey feel complete.\n            \"\"\"\n        ]\n        \n        return mockPoems.randomElement() ?? mockPoems[0]\n    }\n    \n    private func containsInappropriateContent(_ prompt: String) -> Bool {\n        // Simple content filtering - in reality would be more sophisticated\n        let inappropriateWords = [\"violence\", \"hate\", \"harm\", \"explicit\"]\n        let lowercasePrompt = prompt.lowercased()\n        return inappropriateWords.contains { lowercasePrompt.contains($0) }\n    }\n    \n    private func parseGeneratedPoem(_ content: String, vibe: DailyVibe?) throws -> Poem {\n        let lines = content.components(separatedBy: .newlines)\n        \n        var title = \"Generated Poem\"\n        var author = \"AI Poet\"\n        var poemLines: [String] = []\n        \n        var parsingPoem = false\n        \n        for line in lines {\n            let trimmedLine = line.trimmingCharacters(in: .whitespacesAndNewlines)\n            \n            if trimmedLine.hasPrefix(\"Title:\") {\n                title = String(trimmedLine.dropFirst(6)).trimmingCharacters(in: .whitespacesAndNewlines)\n            } else if trimmedLine.hasPrefix(\"Author:\") {\n                author = String(trimmedLine.dropFirst(7)).trimmingCharacters(in: .whitespacesAndNewlines)\n            } else if !trimmedLine.isEmpty && !trimmedLine.hasPrefix(\"Title:\") && !trimmedLine.hasPrefix(\"Author:\") {\n                parsingPoem = true\n            }\n            \n            if parsingPoem && !trimmedLine.isEmpty {\n                poemLines.append(trimmedLine)\n            }\n        }\n        \n        if poemLines.isEmpty {\n            throw PoemGenerationError.generationFailed\n        }\n        \n        return Poem(\n            title: title,\n            lines: poemLines,\n            author: author,\n            vibe: vibe\n        )\n    }\n    \n    private func incrementDailyCount() async {\n        dailyGenerationCount += 1\n        userDefaults.set(dailyGenerationCount, forKey: \"dailyGenerationCount\")\n    }\n}
-
-// For iOS <26, provide a fallback mock implementation
-actor PoemGenerationService: PoemGenerationServiceProtocol {
-    // ... existing code for mock/fallback ...
+        return """
+        \(basePrompt)
+        
+        Context: Today's news suggests \(context).
+        
+        Please write a poem that captures this \(vibeAnalysis.vibe.displayName.lowercased()) feeling while being:
+        - Original and creative
+        - Appropriate for all audiences
+        - 12-20 lines long
+        - Emotionally resonant
+        - Well-structured with clear rhythm
+        
+        Format the response as:
+        Title: [Poem Title]
+        Author: AI Poet
+        
+        [Poem content with line breaks]
+        """
+    }
+    
+    private func buildContextFromAnalysis(_ analysis: VibeAnalysis) -> String {
+        let sentimentDesc = describeSentiment(analysis.sentiment)
+        let keywords = analysis.keywords.prefix(3).joined(separator: ", ")
+        
+        return "a \(analysis.vibe.displayName.lowercased()) atmosphere with \(sentimentDesc). Key themes include: \(keywords)"
+    }
+    
+    private func describeSentiment(_ sentiment: SentimentScore) -> String {
+        switch (sentiment.positivity, sentiment.energy) {
+        case (0.7..., 0.7...):
+            return "high positivity and energy"
+        case (0.7..., _):
+            return "positive but calm energy"
+        case (_, 0.7...):
+            return "high energy with mixed emotions"
+        case (...0.3, _):
+            return "challenging but thoughtful themes"
+        default:
+            return "balanced emotional tones"
+        }
+    }
+    
+    private func enhanceCustomPrompt(_ prompt: String) -> String {
+        return """
+        Write a beautiful poem based on this request: "\(prompt)"
+        
+        Please ensure the poem is:
+        - Original and creative
+        - Appropriate for all audiences
+        - 12-20 lines long
+        - Well-structured with clear rhythm
+        - Emotionally engaging
+        
+        Format the response as:
+        Title: [Poem Title]
+        Author: AI Poet
+        
+        [Poem content with line breaks]
+        """
+    }
+    
+    private func generateContent(prompt: String) async throws -> String {
+        // This is where we would use the actual FoundationModels API
+        // For iOS 26, this might look something like:
+        /*
+        import FoundationModels
+        
+        let model = try await FoundationModel.textGeneration()
+        let request = TextGenerationRequest(
+            prompt: prompt,
+            maxTokens: 500,
+            temperature: 0.8,
+            topP: 0.9
+        )
+        
+        let response = try await model.generate(request)
+        return response.text
+        */
+        
+        // For now, we'll simulate the API call with mock generation
+        try await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
+        
+        // Check for content filtering
+        if containsInappropriateContent(prompt) {
+            throw PoemGenerationError.contentFiltered
+        }
+        
+        // Return a mock poem for demonstration
+        return await generateMockPoem(based: prompt)
+    }
+    
+    private func generateMockPoem(based prompt: String) async -> String {
+        // This is a simple mock implementation
+        // In reality, this would be handled by FoundationModels
+        let mockPoems = [
+            """
+            Title: Morning's Promise
+            Author: AI Poet
+            
+            In the quiet dawn, hope whispers soft,
+            Through golden rays that lift hearts aloft,
+            Each new day brings a chance to grow,
+            To find the light that helps us glow.
+            
+            The world awakens with gentle grace,
+            And peace settles in this sacred space,
+            Where dreams and reality softly meet,
+            And life's rhythm finds its beat.
+            
+            So let us cherish this moment here,
+            Where love casts out all trace of fear,
+            For in this dawn, we clearly see
+            The beauty of what we're meant to be.
+            """,
+            
+            """
+            Title: Winds of Change
+            Author: AI Poet
+            
+            The winds of change blow fierce and free,
+            Across the landscape of our destiny,
+            They carry stories from afar,
+            Of those who've wished upon a star.
+            
+            Through trials faced and lessons learned,
+            We find the bridges we have burned
+            Were merely paths that led us here,
+            To face tomorrow without fear.
+            
+            The storms may rage, the thunder roll,
+            But deep within lives a peaceful soul,
+            That knows beyond the clouded sky,
+            The sun still shines for you and I.
+            """,
+            
+            """
+            Title: Quiet Reflections
+            Author: AI Poet
+            
+            In moments of silence, wisdom speaks,
+            To hearts that listen, souls that seek
+            The deeper truths that life can show
+            Through seasons of both joy and woe.
+            
+            The gentle rain upon the earth
+            Reminds us of our sacred worth,
+            Each drop a gift, each moment blessed
+            With opportunities to rest.
+            
+            And in this stillness, we can find
+            The peace that calms both heart and mind,
+            Where gratitude and wonder meet
+            To make our journey feel complete.
+            """
+        ]
+        
+        return mockPoems.randomElement() ?? mockPoems[0]
+    }
+    
+    private func containsInappropriateContent(_ prompt: String) -> Bool {
+        // Simple content filtering - in reality would be more sophisticated
+        let inappropriateWords = ["violence", "hate", "harm", "explicit"]
+        let lowercasePrompt = prompt.lowercased()
+        return inappropriateWords.contains { lowercasePrompt.contains($0) }
+    }
+    
+    private func parseGeneratedPoem(_ content: String, vibe: DailyVibe?) throws -> Poem {
+        let lines = content.components(separatedBy: .newlines)
+        
+        var title = "Generated Poem"
+        var author = "AI Poet"
+        var poemLines: [String] = []
+        
+        var parsingPoem = false
+        
+        for line in lines {
+            let trimmedLine = line.trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            if trimmedLine.hasPrefix("Title:") {
+                title = String(trimmedLine.dropFirst(6)).trimmingCharacters(in: .whitespacesAndNewlines)
+            } else if trimmedLine.hasPrefix("Author:") {
+                author = String(trimmedLine.dropFirst(7)).trimmingCharacters(in: .whitespacesAndNewlines)
+            } else if !trimmedLine.isEmpty && !trimmedLine.hasPrefix("Title:") && !trimmedLine.hasPrefix("Author:") {
+                parsingPoem = true
+            }
+            
+            if parsingPoem && !trimmedLine.isEmpty {
+                poemLines.append(trimmedLine)
+            }
+        }
+        
+        if poemLines.isEmpty {
+            throw PoemGenerationError.generationFailed
+        }
+        
+        return Poem(
+            title: title,
+            lines: poemLines,
+            author: author,
+            vibe: vibe
+        )
+    }
+    
+    private func incrementDailyCount() async {
+        dailyGenerationCount += 1
+        userDefaults.set(dailyGenerationCount, forKey: "dailyGenerationCount")
+    }
 }

@@ -8,19 +8,6 @@
 import Foundation
 import WidgetKit
 
-protocol PoemRepositoryProtocol: Sendable {
-    func getDailyPoem() async throws -> Poem
-    func refreshDailyPoem() async throws -> Poem
-    func generateVibeBasedPoem() async throws -> Poem
-    func generateCustomPoem(prompt: String) async throws -> Poem
-    func getVibeOfTheDay() async throws -> VibeAnalysis
-    func isAIGenerationAvailable() async -> Bool
-    func getFavorites() async -> [Poem]
-    func addToFavorites(_ poem: Poem) async
-    func removeFromFavorites(_ poem: Poem) async
-    func isFavorite(_ poem: Poem) async -> Bool
-}
-
 actor PoemRepository: PoemRepositoryProtocol {
     private let networkService: NetworkServiceProtocol
     private let newsService: NewsServiceProtocol

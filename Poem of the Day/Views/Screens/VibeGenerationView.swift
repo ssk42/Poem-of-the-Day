@@ -96,7 +96,7 @@ struct VibeGenerationView: View {
                         GridItem(.flexible()),
                         GridItem(.flexible())
                     ], spacing: 8) {
-                        ForEach(vibeAnalysis.keywords.prefix(6), id: \\.self) { keyword in
+                        ForEach(vibeAnalysis.keywords.prefix(6), id: \.self) { keyword in
                             Text(keyword)
                                 .font(.caption)
                                 .padding(.horizontal, 8)
