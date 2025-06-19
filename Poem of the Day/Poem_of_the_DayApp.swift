@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct Poem_of_the_DayApp: App {
+    @StateObject private var dependencies = DependencyContainer.shared
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(dependencies)
         }
     }
 }

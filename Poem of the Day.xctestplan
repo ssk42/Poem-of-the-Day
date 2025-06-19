@@ -1,0 +1,36 @@
+{
+  "configurations" : [
+    {
+      "id" : "036103EE-64F5-4A52-8F10-7BC48D788DE4",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Poem of the Day.xcodeproj",
+      "identifier" : "9109EAE42CE6F481005F1C09",
+      "name" : "Poem of the Day"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Poem of the Day.xcodeproj",
+        "identifier" : "9109EAF42CE6F483005F1C09",
+        "name" : "Poem of the DayTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Poem of the Day.xcodeproj",
+        "identifier" : "9109EAFE2CE6F483005F1C09",
+        "name" : "Poem of the DayUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

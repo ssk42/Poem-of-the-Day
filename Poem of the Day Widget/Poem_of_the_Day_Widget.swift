@@ -4,28 +4,28 @@ import Combine
 
 struct Poem_Of_The_Day_WidgetEntry: TimelineEntry {
     let date: Date
-    let poem: Poem
+    let poem: WidgetPoem
 }
 
 struct Provider: TimelineProvider {
     func placeholder(in context: Context) -> Poem_Of_The_Day_WidgetEntry {
-        Poem_Of_The_Day_WidgetEntry(date: Date(), poem: Poem(id: UUID(), title: "Placeholder Poem", lines: ["This is a placeholder poem."], author: "Widget"))
+        Poem_Of_The_Day_WidgetEntry(date: Date(), poem: WidgetPoem(id: UUID(), title: "Placeholder Poem", lines: ["This is a placeholder poem."], author: "Widget"))
     }
 
     func getSnapshot(in context: Context, completion: @escaping (Poem_Of_The_Day_WidgetEntry) -> Void) {
-        let entry = Poem_Of_The_Day_WidgetEntry(date: Date(), poem: Poem(id: UUID(), title: "Snapshot Poem", lines: ["This is a snapshot poem."], author: "Widget"))
+        let entry = Poem_Of_The_Day_WidgetEntry(date: Date(), poem: WidgetPoem(id: UUID(), title: "Snapshot Poem", lines: ["This is a snapshot poem."], author: "Widget"))
         completion(entry)
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<Poem_Of_The_Day_WidgetEntry>) -> Void) {
         let sharedDefaults = UserDefaults(suiteName: "group.com.stevereitz.poemoftheday")
-        var poem: Poem? = nil
+        var poem: WidgetPoem? = nil
 
         // Load poem from shared defaults
         if let title = sharedDefaults?.string(forKey: "poemTitle"),
            let content = sharedDefaults?.string(forKey: "poemContent"),
            let author = sharedDefaults?.string(forKey: "poemAuthor") {
-            poem = Poem(id: UUID(), title: title, lines: content.components(separatedBy: "\n"), author: author)
+            poem = WidgetPoem(id: UUID(), title: title, lines: content.components(separatedBy: "\n"), author: author)
         }
         
         // Check if we should fetch a new poem based on date
@@ -66,20 +66,20 @@ struct Provider: TimelineProvider {
                 createTimeline(with: existingPoem, completion: completion)
             } else {
                 // Provide a default poem if we have no poem at all
-                let defaultPoem = Poem(id: UUID(), title: "Default Poem", lines: ["Check the app for a new poem!"], author: "Widget")
+                let defaultPoem = WidgetPoem(id: UUID(), title: "Default Poem", lines: ["Check the app for a new poem!"], author: "Widget")
                 createTimeline(with: defaultPoem, completion: completion)
             }
         }
     }
 
-    private func fetchPoemFromPoetryDB(completion: @escaping (Poem?) -> Void) {
+    private func fetchPoemFromPoetryDB(completion: @escaping (WidgetPoem?) -> Void) {
         guard let url = URL(string: "https://poetrydb.org/random") else {
             completion(nil)
             return
         }
 
         URLSession.shared.dataTask(with: url) { data, response, error in
-            if let data = data, let poems = try? JSONDecoder().decode([PoemResponse].self, from: data), let firstPoem = poems.first {
+            if let data = data, let poems = try? JSONDecoder().decode([WidgetPoemResponse].self, from: data), let firstPoem = poems.first {
                 let fetchedPoem = firstPoem.toPoem()
                 completion(fetchedPoem)
             } else {
@@ -88,7 +88,7 @@ struct Provider: TimelineProvider {
         }.resume()
     }
 
-    private func createTimeline(with poem: Poem, completion: @escaping (Timeline<Poem_Of_The_Day_WidgetEntry>) -> Void) {
+    private func createTimeline(with poem: WidgetPoem, completion: @escaping (Timeline<Poem_Of_The_Day_WidgetEntry>) -> Void) {
         let calendar = Calendar.current
         let currentDate = Date()
         var entries: [Poem_Of_The_Day_WidgetEntry] = []
@@ -168,27 +168,27 @@ struct Poem_Of_The_Day_Widget: Widget {
     }
 }
 
-// Structs needed by the widget
-struct Poem: Identifiable, Codable {
-    let id: UUID?
+// Widget-specific data models (duplicated for widget target isolation)
+struct WidgetPoem: Identifiable, Codable {
+    let id: UUID
     let title: String
     let content: String
     let author: String?
 
-    init(id: UUID? = UUID(), title: String, lines: [String], author: String = "Unknown") {
+    init(id: UUID = UUID(), title: String, lines: [String], author: String? = nil) {
         self.id = id
         self.title = title
         self.content = lines.joined(separator: "\n")
-        self.author = author
+        self.author = author?.isEmpty == true ? nil : author
     }
 }
 
-struct PoemResponse: Codable {
+struct WidgetPoemResponse: Codable {
     let title: String
     let lines: [String]
     let author: String
     
-    func toPoem() -> Poem {
-        return Poem(id: UUID(), title: title, lines: lines, author: author)
+    func toPoem() -> WidgetPoem {
+        return WidgetPoem(id: UUID(), title: title, lines: lines, author: author)
     }
 }

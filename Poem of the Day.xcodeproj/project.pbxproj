@@ -10,6 +10,7 @@
 		9109EB192CE70172005F1C09 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9109EB182CE70172005F1C09 /* WidgetKit.framework */; };
 		9109EB1B2CE70172005F1C09 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9109EB1A2CE70172005F1C09 /* SwiftUI.framework */; };
 		9109EB2C2CE70174005F1C09 /* Poem of the Day WidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 9109EB162CE70172005F1C09 /* Poem of the Day WidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		911A8ED02DEB882300C72055 /* TestPlan.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 911A8ECF2DEB882300C72055 /* TestPlan.xctestplan */; };
 		91A69DC92CECCBBC00E2AC19 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 91A69DC72CECCBB500E2AC19 /* README.md */; };
 /* End PBXBuildFile section */
 
@@ -59,7 +60,9 @@
 		9109EB182CE70172005F1C09 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		9109EB1A2CE70172005F1C09 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		9109EB392CE793ED005F1C09 /* Poem of the Day WidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Poem of the Day WidgetExtension.entitlements"; sourceTree = "<group>"; };
+		911A8ECF2DEB882300C72055 /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
 		91A69DC72CECCBB500E2AC19 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		91E4ECFF2DEB8894006154BA /* Poem of the Day.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Poem of the Day.xctestplan"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -135,6 +138,8 @@
 		9109EADC2CE6F481005F1C09 = {
 			isa = PBXGroup;
 			children = (
+				91E4ECFF2DEB8894006154BA /* Poem of the Day.xctestplan */,
+				911A8ECF2DEB882300C72055 /* TestPlan.xctestplan */,
 				9109EB392CE793ED005F1C09 /* Poem of the Day WidgetExtension.entitlements */,
 				9109EAE72CE6F481005F1C09 /* Poem of the Day */,
 				9109EAF82CE6F483005F1C09 /* Poem of the DayTests */,
@@ -314,6 +319,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				911A8ED02DEB882300C72055 /* TestPlan.xctestplan in Resources */,
 				91A69DC92CECCBBC00E2AC19 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -591,6 +597,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = J4QUKKF6V3;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
 				MARKETING_VERSION = 1.0;
@@ -609,6 +616,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = J4QUKKF6V3;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
 				MARKETING_VERSION = 1.0;
@@ -626,6 +634,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = J4QUKKF6V3;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "Stevereitz.Poem-of-the-DayUITests";
@@ -642,6 +651,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = J4QUKKF6V3;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "Stevereitz.Poem-of-the-DayUITests";

@@ -1,16 +1,20 @@
 import SwiftUI
 import WidgetKit
-import Combine
 
 struct ContentView: View {
-    // This is the original line from your paste.txt
-    @StateObject private var viewModel = PoemViewModel()
+    @EnvironmentObject private var dependencies: DependencyContainer
+    @StateObject private var viewModel: PoemViewModel
     @State private var showFavorites = false
-    @State private var isRefreshing = false
+    @State private var showShareSheet = false
     @Environment(\.colorScheme) private var colorScheme
     
+    init() {
+        let container = DependencyContainer.shared
+        self._viewModel = StateObject(wrappedValue: container.makePoemViewModel())
+    }
+    
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
                 backgroundGradient
                     .ignoresSafeArea()
@@ -19,10 +23,12 @@ struct ContentView: View {
                     VStack(spacing: 20) {
                         headerView
                         
-                        if let poem = viewModel.poemOfTheDay {
-                            poemCard(poem: poem)
-                        } else {
+                        if viewModel.isLoading {
                             loadingView
+                        } else if let poem = viewModel.poemOfTheDay {
+                            poemCard(poem: poem)
+                        } else if viewModel.errorMessage != nil {
+                            errorView
                         }
                         
                         controlButtons
@@ -30,12 +36,7 @@ struct ContentView: View {
                     .padding()
                 }
                 .refreshable {
-                    isRefreshing = true
-                    viewModel.fetchPoemOfTheDay()
-                    WidgetCenter.shared.reloadAllTimelines()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        isRefreshing = false
-                    }
+                    await viewModel.refreshPoem()
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
@@ -46,16 +47,35 @@ struct ContentView: View {
                     }) {
                         Label("Favorites", systemImage: "heart.fill")
                             .foregroundColor(.red)
+                            .accessibilityLabel("View Favorite Poems")
                     }
                 }
             }
             .sheet(isPresented: $showFavorites) {
                 FavoritesView(favorites: viewModel.favorites)
             }
-            .alert(isPresented: $viewModel.showAlert) {
-                Alert(title: Text("Error"), message: Text(viewModel.alertMessage), dismissButton: .default(Text("OK")))
+            .sheet(isPresented: $showShareSheet) {
+                if let poem = viewModel.poemOfTheDay {
+                    ShareSheet(items: [poem.shareText])
+                }
+            }
+            .alert("Error", isPresented: $viewModel.showErrorAlert) {
+                Button("OK", role: .cancel) { }
+                Button("Retry") {
+                    Task {
+                        await viewModel.refreshPoem()
+                    }
+                }
+            } message: {
+                Text(viewModel.errorMessage ?? "An error occurred")
             }
         }
+    }
+    
+    private func provideFeedback(success: Bool) {
+        let generator = UINotificationFeedbackGenerator()
+        generator.prepare()
+        generator.notificationOccurred(success ? .success : .error)
     }
     
     // MARK: - UI Components
@@ -76,6 +96,7 @@ struct ContentView: View {
             Text("Poem of the Day")
                 .font(.system(size: 32, weight: .bold, design: .serif))
                 .foregroundColor(colorScheme == .dark ? .white : .black)
+                .accessibilityAddTraits(.isHeader)
             
             Text(formattedDate)
                 .font(.subheadline)
@@ -96,6 +117,7 @@ struct ContentView: View {
                 Text(poem.title)
                     .font(.system(size: 24, weight: .semibold, design: .serif))
                     .foregroundColor(colorScheme == .dark ? .white : .black)
+                    .accessibilityAddTraits(.isHeader)
                 
                 if let author = poem.author {
                     Text("by \(author)")
@@ -112,10 +134,12 @@ struct ContentView: View {
                 .padding(.vertical, 8)
             
             HStack {
-                Spacer()
-                
                 Button(action: {
-                    viewModel.toggleFavorite(poem: poem)
+                    Task {
+                        await viewModel.toggleFavorite(poem: poem)
+                        let generator = UIImpactFeedbackGenerator(style: .medium)
+                        generator.impactOccurred()
+                    }
                 }) {
                     Label(
                         viewModel.isFavorite(poem: poem) ? "Unfavorite" : "Favorite",
@@ -129,6 +153,23 @@ struct ContentView: View {
                             .strokeBorder(viewModel.isFavorite(poem: poem) ? Color.red : Color.primary, lineWidth: 1)
                     )
                 }
+                .accessibilityLabel(viewModel.isFavorite(poem: poem) ? "Remove from favorites" : "Add to favorites")
+                
+                Spacer()
+                
+                Button(action: {
+                    showShareSheet = true
+                }) {
+                    Label("Share", systemImage: "square.and.arrow.up")
+                        .foregroundColor(.primary)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(
+                            Capsule()
+                                .strokeBorder(Color.primary, lineWidth: 1)
+                        )
+                }
+                .accessibilityLabel("Share poem")
             }
             .padding(.top, 8)
         }
@@ -158,14 +199,53 @@ struct ContentView: View {
                 .fill(colorScheme == .dark ? Color(red: 0.2, green: 0.2, blue: 0.3) : Color.white)
                 .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
         )
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Loading poem")
     }
     
-    // Update the controlButtons variable in ContentView.swift
+    private var errorView: some View {
+        VStack(spacing: 20) {
+            Image(systemName: "exclamationmark.triangle")
+                .font(.system(size: 50))
+                .foregroundColor(.orange)
+            
+            Text("Unable to load poem")
+                .font(.headline)
+            
+            Text("Please try again later")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+            
+            Button(action: {
+                Task {
+                    await viewModel.refreshPoem()
+                }
+            }) {
+                Text("Retry")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color.blue)
+                    .cornerRadius(10)
+            }
+        }
+        .padding()
+        .frame(height: 300)
+        .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(colorScheme == .dark ? Color(red: 0.2, green: 0.2, blue: 0.3) : Color.white)
+                .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
+        )
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Error loading poem. Tap to retry")
+    }
+    
     private var controlButtons: some View {
         Button(action: {
-            // Force a new poem fetch regardless of when the last one was fetched
-            viewModel.fetchPoemOfTheDay(force: true)
-            WidgetCenter.shared.reloadAllTimelines()
+            Task {
+                await viewModel.refreshPoem()
+            }
         }) {
             Label("Get New Poem", systemImage: "arrow.clockwise")
                 .font(.headline)
@@ -182,7 +262,20 @@ struct ContentView: View {
                 .clipShape(Capsule())
                 .shadow(color: Color.blue.opacity(0.3), radius: 5, x: 0, y: 3)
         }
+        .accessibilityLabel("Get a new poem")
     }
+}
+
+// MARK: - Share Sheet
+
+struct ShareSheet: UIViewControllerRepresentable {
+    let items: [Any]
+    
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: items, applicationActivities: nil)
+    }
+    
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
 
 // MARK: - Favorites View
@@ -193,7 +286,7 @@ struct FavoritesView: View {
     @Environment(\.colorScheme) private var colorScheme
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
                 LinearGradient(
                     gradient: Gradient(colors: [
@@ -329,159 +422,3 @@ struct ContentView_Previews: PreviewProvider {
 }
 #endif
 
-class PoemViewModel: ObservableObject {
-    private let sharedDefaults = UserDefaults(suiteName: "group.com.stevereitz.poemoftheday")
-    @Published var showAlert: Bool = false
-    @Published var alertMessage: String = ""
-    @Published var poemOfTheDay: Poem?
-    @Published var favorites: [Poem] = []
-    private var cancellable: AnyCancellable?
-
-    init() {
-        loadFavorites()
-        checkAndUpdateDailyPoem()
-    }
-    
-    // Check if we need a new poem based on the date
-    private func checkAndUpdateDailyPoem() {
-        // Check if we have a stored poem
-        loadPoemFromSharedStorage()
-        
-        // Check when the last poem was fetched
-        let calendar = Calendar.current
-        let now = Date()
-        
-        if let lastFetchDate = sharedDefaults?.object(forKey: "lastPoemFetchDate") as? Date {
-            // Check if the last fetch date is from a previous day
-            if !calendar.isDate(lastFetchDate, inSameDayAs: now) {
-                // It's a new day, fetch a new poem
-                fetchPoemOfTheDay()
-            }
-        } else {
-            // No fetch date stored, this is first run or data was cleared
-            fetchPoemOfTheDay()
-        }
-    }
-
-    func loadPoemFromSharedStorage() {
-        if let title = sharedDefaults?.string(forKey: "poemTitle"),
-           let content = sharedDefaults?.string(forKey: "poemContent"),
-           let author = sharedDefaults?.string(forKey: "poemAuthor") {
-            self.poemOfTheDay = Poem(title: title, lines: content.components(separatedBy: "\n"), author: author)
-        }
-    }
-
-    func fetchPoemOfTheDay(force: Bool = false) {
-        // Check if we should fetch a new poem
-        if !force {
-            let calendar = Calendar.current
-            let now = Date()
-            
-            if let lastFetchDate = sharedDefaults?.object(forKey: "lastPoemFetchDate") as? Date,
-               calendar.isDate(lastFetchDate, inSameDayAs: now) {
-                // Already fetched a poem today, just load from storage
-                loadPoemFromSharedStorage()
-                return
-            }
-        }
-        
-        // Proceed with fetching a new poem
-        let urlString = "https://poetrydb.org/random"
-        guard let url = URL(string: urlString) else {
-            print("Invalid URL")
-            return
-        }
-
-        cancellable = URLSession.shared.dataTaskPublisher(for: url)
-            .tryMap { output -> Data in
-                guard let httpResponse = output.response as? HTTPURLResponse else {
-                    throw URLError(.badServerResponse)
-                }
-                print("HTTP Status Code: \(httpResponse.statusCode)")
-                guard (200...299).contains(httpResponse.statusCode) else {
-                    if httpResponse.statusCode == 404 {
-                        throw URLError(.fileDoesNotExist)
-                    } else {
-                        throw URLError(.init(rawValue: httpResponse.statusCode))
-                    }
-                }
-                return output.data
-            }
-            .receive(on: DispatchQueue.main)
-            .retry(2) // Retry twice before failing
-            .handleEvents(receiveSubscription: { _ in print("Fetching poem...") },
-                          receiveOutput: { data in
-                              if let jsonString = String(data: data, encoding: .utf8) {
-                                  print("Received JSON: \(jsonString)")
-                              }
-                          },
-                          receiveCompletion: { completion in
-                              switch completion {
-                              case .finished:
-                                  print("Finished successfully")
-                              case .failure(let error):
-                                  print("Error during completion: \(error.localizedDescription)")
-                              }
-                          },
-                          receiveCancel: { print("Cancelled") })
-            .decode(type: [PoemResponse].self, decoder: JSONDecoder())
-            .compactMap { $0.first?.toPoem() }  // Convert PoemResponse to Poem
-            .catch { [weak self] error -> AnyPublisher<Poem, Never> in
-                DispatchQueue.main.async {
-                    self?.showAlert = true
-                    self?.alertMessage = "The poem could not be found (404 error). Please try again later."
-                }
-                return Just(Poem(id: UUID(), title: "Default Poem", lines: ["This is a default poem content."])).eraseToAnyPublisher()
-            }
-            
-            .sink(receiveCompletion: { [weak self] completion in
-                if case .failure(let error) = completion {
-                    DispatchQueue.main.async {
-                        self?.showAlert = true
-                        self?.alertMessage = "Failed to load the poem of the day. Please try again later."
-                    }
-                    print("Sink received failure: \(error.localizedDescription)")
-                }
-            }, receiveValue: { [weak self] poem in
-                self?.poemOfTheDay = poem
-
-                // Save poem to shared UserDefaults for the widget
-                let sharedDefaults = UserDefaults(suiteName: "group.com.stevereitz.poemoftheday")
-                sharedDefaults?.set(poem.title, forKey: "poemTitle")
-                sharedDefaults?.set(poem.content, forKey: "poemContent")
-                sharedDefaults?.set(poem.author ?? "", forKey: "poemAuthor")
-                
-                // Save the current date as the fetch date
-                sharedDefaults?.set(Date(), forKey: "lastPoemFetchDate")
-
-                // Notify widget to reload
-                WidgetCenter.shared.reloadAllTimelines()
-            })
-    }
-
-    func toggleFavorite(poem: Poem) {
-        if let index = favorites.firstIndex(where: { $0.id == poem.id }) {
-            favorites.remove(at: index)
-        } else {
-            favorites.append(poem)
-        }
-        saveFavorites()
-    }
-
-    func isFavorite(poem: Poem) -> Bool {
-        return favorites.contains(where: { $0.id == poem.id })
-    }
-
-    private func loadFavorites() {
-        if let data = sharedDefaults?.data(forKey: "favoritePoems"),
-           let savedFavorites = try? JSONDecoder().decode([Poem].self, from: data) {
-            self.favorites = savedFavorites
-        }
-    }
-
-    private func saveFavorites() {
-        if let data = try? JSONEncoder().encode(favorites) {
-            sharedDefaults?.set(data, forKey: "favoritePoems")
-        }
-    }
-}

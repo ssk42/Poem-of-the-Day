@@ -18,17 +18,26 @@ struct PoemResponse: Codable {
     }
 }
 
-struct Poem: Identifiable, Codable {
-    let id: UUID?
+struct Poem: Identifiable, Codable, Equatable {
+    let id: UUID
     let title: String
     let content: String
     let author: String?
 
-    init(id: UUID? = UUID(), title: String, lines: [String], author: String = "Unknown") {
+    init(id: UUID = UUID(), title: String, lines: [String], author: String? = nil) {
         self.id = id
         self.title = title
         self.content = lines.joined(separator: "\n")
-        self.author = author
+        self.author = author?.isEmpty == true ? nil : author
+    }
+    
+    var shareText: String {
+        var text = title
+        if let author = author {
+            text += "\nby \(author)"
+        }
+        text += "\n\n\(content)"
+        return text
     }
 }
 
