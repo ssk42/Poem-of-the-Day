@@ -252,7 +252,6 @@ final class PoemUITests: XCTestCase {
 
 extension XCUIElement {
     var hasValidAccessibilityLabel: Bool {
-        guard let label = self.label else { return false }
-        return !label.isEmpty
+        return !self.label.isEmpty
     }
 } 
