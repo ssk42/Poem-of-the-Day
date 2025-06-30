@@ -6,8 +6,17 @@ class TelemetryConsoleLogger {
     private let telemetryService: TelemetryServiceProtocol
     
     private init() {
-        self.telemetryService = DependencyContainer.shared.makeTelemetryService()
+        _telemetryService = Task {
+            await DependencyContainer.shared.makeTelemetryService()
+        }
     }
+    
+    private var telemetryService: TelemetryServiceProtocol {
+        get async {
+            await _telemetryService.value
+        }
+    }
+    private let _telemetryService: Task<TelemetryServiceProtocol, Never>
     
     /// Print telemetry summary to console
     func logSummaryToConsole() {

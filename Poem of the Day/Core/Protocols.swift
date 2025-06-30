@@ -117,6 +117,19 @@ protocol ConfigurationProviding {
     func setValue(_ value: Any?, for key: String)
 }
 
+// MARK: - Telemetry Service Protocol
+
+protocol TelemetryServiceProtocol: Sendable {
+    func track(_ event: TelemetryEvent) async
+    func flush() async
+    func configure(with configuration: TelemetryConfiguration) async
+    func isEnabled() async -> Bool
+    func getEventCount() async -> Int
+    func getEventSummary() async -> TelemetryEventSummary
+    func exportAllEvents() async -> [AnyTelemetryEvent]
+    func exportEventsAsJSON() async -> String?
+}
+
 // MARK: - Default Implementations
 
 // These extensions will be implemented directly in the Poem struct
