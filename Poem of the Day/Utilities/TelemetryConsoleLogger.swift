@@ -1,4 +1,6 @@
 import Foundation
+import OSLog
+import Poem_of_the_Day
 
 /// A simple console logger for telemetry data during development
 class TelemetryConsoleLogger {
@@ -6,17 +8,8 @@ class TelemetryConsoleLogger {
     private let telemetryService: TelemetryServiceProtocol
     
     private init() {
-        _telemetryService = Task {
-            await DependencyContainer.shared.makeTelemetryService()
-        }
+        self.telemetryService = await DependencyContainer.shared.makeTelemetryService()
     }
-    
-    private var telemetryService: TelemetryServiceProtocol {
-        get async {
-            await _telemetryService.value
-        }
-    }
-    private let _telemetryService: Task<TelemetryServiceProtocol, Never>
     
     /// Print telemetry summary to console
     func logSummaryToConsole() {

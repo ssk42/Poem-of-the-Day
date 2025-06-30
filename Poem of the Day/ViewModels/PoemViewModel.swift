@@ -111,7 +111,7 @@ final class PoemViewModel: ObservableObject {
     }
     
     func sharePoem(_ poem: Poem) async {
-        let event = ShareEvent(
+        let event = Poem_of_the_Day.ShareEvent(
             timestamp: Date(),
             source: .mainApp,
             poemSource: poem.vibe != nil ? "ai_generated" : "api"

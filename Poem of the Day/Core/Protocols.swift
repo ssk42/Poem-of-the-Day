@@ -117,6 +117,99 @@ protocol ConfigurationProviding {
     func setValue(_ value: Any?, for key: String)
 }
 
+// MARK: - Telemetry Event Protocol
+
+protocol TelemetryEvent: Codable, Sendable {
+    var eventName: String { get }
+    var timestamp: Date { get }
+    var parameters: [String: TelemetryValue] { get }
+    var source: TelemetrySource { get }
+}
+
+enum TelemetrySource: String, Codable, Sendable {
+    case mainApp = "main_app"
+    case widget = "widget"
+}
+
+enum TelemetryValue: Codable, Sendable {
+    case string(String)
+    case int(Int)
+    case double(Double)
+    case bool(Bool)
+    case date(Date)
+    
+    var value: Any {
+        switch self {
+        case .string(let value): return value
+        case .int(let value): return value
+        case .double(let value): return value
+        case .bool(let value): return value
+        case .date(let value): return value
+        }
+    }
+}
+
+// MARK: - Type-Erased Event Wrapper
+
+struct AnyTelemetryEvent: Codable {
+    let eventName: String
+    let timestamp: Date
+    let parameters: [String: TelemetryValue]
+    let source: TelemetrySource
+    
+    init(_ event: TelemetryEvent) {
+        self.eventName = event.eventName
+        self.timestamp = event.timestamp
+        self.parameters = event.parameters
+        self.source = event.source
+    }
+}
+
+// MARK: - Telemetry Summary
+
+struct TelemetryEventSummary {
+    var totalEvents: Int = 0
+    var eventCounts: [String: Int] = [:]
+    var sourceBreakdown: [String: Int] = [:]
+    var dateRange: (start: Date, end: Date)?
+    
+    var mostCommonEvent: String? {
+        eventCounts.max(by: { $0.value < $1.value })?.key
+    }
+    
+    var averageEventsPerDay: Double {
+        guard let dateRange = dateRange else { return 0 }
+        let days = Calendar.current.dateComponents([.day], from: dateRange.start, to: dateRange.end).day ?? 1
+        return Double(totalEvents) / Double(max(days, 1))
+    }
+}
+
+// MARK: - Telemetry Configuration
+
+struct TelemetryConfiguration: Codable, Sendable {
+    let isEnabled: Bool
+    let batchSize: Int
+    let flushInterval: TimeInterval
+    let retentionDays: Int
+    let enabledCategories: Set<String>
+    
+    static let `default` = TelemetryConfiguration(
+        isEnabled: !AppConfiguration.Debug.isDebugMode,
+        batchSize: 50,
+        flushInterval: 300, // 5 minutes
+        retentionDays: 30,
+        enabledCategories: [
+            "poem_fetch", 
+            "favorite_action", 
+            "share_action",
+            "ai_generation", 
+            "app_launch", 
+            "widget_interaction", 
+            "error_occurred"
+        ]
+    )
+}
+
 // MARK: - Telemetry Service Protocol
 
 protocol TelemetryServiceProtocol: Sendable {

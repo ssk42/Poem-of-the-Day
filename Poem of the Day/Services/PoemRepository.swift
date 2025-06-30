@@ -23,7 +23,7 @@ actor PoemRepository: PoemRepositoryProtocol {
          newsService: NewsServiceProtocol = NewsService(),
          vibeAnalyzer: VibeAnalyzerProtocol = VibeAnalyzer(),
          aiService: PoemGenerationServiceProtocol? = nil,
-         telemetryService: TelemetryServiceProtocol = TelemetryService(),
+         telemetryService: TelemetryServiceProtocol = Poem_of_the_Day.TelemetryService(),
          userDefaults: UserDefaults = UserDefaults(suiteName: "group.com.stevereitz.poemoftheday") ?? .standard) {
         self.networkService = networkService
         self.newsService = newsService
@@ -214,7 +214,7 @@ actor PoemRepository: PoemRepositoryProtocol {
             WidgetCenter.shared.reloadAllTimelines()
             success = true
             
-            let event = PoemFetchEvent(
+            let event = Poem_of_the_Day.PoemFetchEvent(
                 timestamp: Date(),
                 source: .mainApp,
                 poemSource: "api",
@@ -229,7 +229,7 @@ actor PoemRepository: PoemRepositoryProtocol {
         } catch {
             errorType = (error as? PoemError)?.localizedDescription ?? error.localizedDescription
             
-            let event = PoemFetchEvent(
+            let event = Poem_of_the_Day.PoemFetchEvent(
                 timestamp: Date(),
                 source: .mainApp,
                 poemSource: "api",

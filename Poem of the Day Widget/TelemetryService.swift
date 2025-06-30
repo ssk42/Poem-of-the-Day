@@ -36,9 +36,9 @@ enum TelemetryValue: Codable, Sendable {
 // MARK: - Specific Event Types
 
 struct PoemFetchEvent: TelemetryEvent {
-    let eventName: String = "poem_fetch"
+    var eventName: String = "poem_fetch"
     let timestamp: Date
-    let source: TelemetrySource
+    var source: TelemetrySource
     let poemSource: String
     let duration: TimeInterval
     let success: Bool
@@ -65,9 +65,9 @@ struct PoemFetchEvent: TelemetryEvent {
 }
 
 struct FavoriteActionEvent: TelemetryEvent {
-    let eventName: String = "favorite_action"
+    var eventName: String = "favorite_action"
     let timestamp: Date
-    let source: TelemetrySource
+    var source: TelemetrySource
     let action: FavoriteAction
     let poemSource: String
     
@@ -85,9 +85,9 @@ struct FavoriteActionEvent: TelemetryEvent {
 }
 
 struct ShareEvent: TelemetryEvent {
-    let eventName: String = "share_action"
+    var eventName: String = "share_action"
     let timestamp: Date
-    let source: TelemetrySource
+    var source: TelemetrySource
     let poemSource: String
     
     var parameters: [String: TelemetryValue] {
@@ -98,9 +98,9 @@ struct ShareEvent: TelemetryEvent {
 }
 
 struct AIGenerationEvent: TelemetryEvent {
-    let eventName: String = "ai_generation"
+    var eventName: String = "ai_generation"
     let timestamp: Date
-    let source: TelemetrySource
+    var source: TelemetrySource
     let generationType: AIGenerationType
     let duration: TimeInterval
     let success: Bool
@@ -133,9 +133,9 @@ struct AIGenerationEvent: TelemetryEvent {
 }
 
 struct AppLaunchEvent: TelemetryEvent {
-    let eventName: String = "app_launch"
+    var eventName: String = "app_launch"
     let timestamp: Date
-    let source: TelemetrySource = .mainApp
+    var source: TelemetrySource = .mainApp
     let launchType: LaunchType
     let coldStart: Bool
     let aiAvailable: Bool
@@ -156,9 +156,9 @@ struct AppLaunchEvent: TelemetryEvent {
 }
 
 struct WidgetInteractionEvent: TelemetryEvent {
-    let eventName: String = "widget_interaction"
+    var eventName: String = "widget_interaction"
     let timestamp: Date
-    let source: TelemetrySource = .widget
+    var source: TelemetrySource = .widget
     let interactionType: WidgetInteraction
     let widgetFamily: String
     
@@ -177,9 +177,9 @@ struct WidgetInteractionEvent: TelemetryEvent {
 }
 
 struct ErrorEvent: TelemetryEvent {
-    let eventName: String = "error_occurred"
+    var eventName: String = "error_occurred"
     let timestamp: Date
-    let source: TelemetrySource
+    var source: TelemetrySource
     let errorType: String
     let errorCode: String?
     let context: String
@@ -214,6 +214,25 @@ struct AnyTelemetryEvent: Codable {
     }
 }
 
+// MARK: - Telemetry Summary
+
+struct TelemetryEventSummary {
+    var totalEvents: Int = 0
+    var eventCounts: [String: Int] = [:]
+    var sourceBreakdown: [String: Int] = [:]
+    var dateRange: (start: Date, end: Date)?
+    
+    var mostCommonEvent: String? {
+        eventCounts.max(by: { $0.value < $1.value })?.key
+    }
+    
+    var averageEventsPerDay: Double {
+        guard let dateRange = dateRange else { return 0 }
+        let days = Calendar.current.dateComponents([.day], from: dateRange.start, to: dateRange.end).day ?? 1
+        return Double(totalEvents) / Double(max(days, 1))
+    }
+}
+
 // MARK: - Telemetry Configuration
 
 struct TelemetryConfiguration: Codable, Sendable {
@@ -224,17 +243,17 @@ struct TelemetryConfiguration: Codable, Sendable {
     let enabledCategories: Set<String>
     
     static let `default` = TelemetryConfiguration(
-        isEnabled: !AppConfiguration.Debug.isDebugMode,
+        isEnabled: true, // Assuming debug mode is handled elsewhere for widget
         batchSize: 50,
         flushInterval: 300, // 5 minutes
         retentionDays: 30,
         enabledCategories: [
-            "poem_fetch", 
-            "favorite_action", 
+            "poem_fetch",
+            "favorite_action",
             "share_action",
-            "ai_generation", 
-            "app_launch", 
-            "widget_interaction", 
+            "ai_generation",
+            "app_launch",
+            "widget_interaction",
             "error_occurred"
         ]
     )
@@ -248,6 +267,9 @@ protocol TelemetryServiceProtocol: Sendable {
     func configure(with configuration: TelemetryConfiguration) async
     func isEnabled() async -> Bool
     func getEventCount() async -> Int
+    func getEventSummary() async -> TelemetryEventSummary
+    func exportAllEvents() async -> [AnyTelemetryEvent]
+    func exportEventsAsJSON() async -> String?
 }
 
 // MARK: - Telemetry Service Actor
@@ -256,32 +278,32 @@ actor TelemetryService: TelemetryServiceProtocol {
     private var configuration: TelemetryConfiguration
     private var eventQueue: [TelemetryEvent] = []
     private let userDefaults: UserDefaults
-    private let logger: AppLogger
+    private let logger: OSLog
     private var lastFlushDate: Date = Date()
-    private var flushTimer: Timer?
+    private var flushTask: Task<Void, Never>?
     
     init(
         configuration: TelemetryConfiguration = .default,
-        userDefaults: UserDefaults = UserDefaults(suiteName: AppConfiguration.Storage.appGroupIdentifier) ?? .standard,
-        logger: AppLogger = .shared
+        userDefaults: UserDefaults = UserDefaults(suiteName: "group.com.stevereitz.poemoftheday") ?? .standard,
+        logger: OSLog = OSLog(subsystem: "com.stevereitz.poemoftheday", category: "Telemetry")
     ) {
         self.configuration = configuration
         self.userDefaults = userDefaults
         self.logger = logger
         
-        Task {
+        self.flushTask = Task {
             await loadPersistedEvents()
             await schedulePeriodicFlush()
         }
     }
     
     deinit {
-        flushTimer?.invalidate()
+        flushTask?.cancel()
     }
     
     func configure(with configuration: TelemetryConfiguration) async {
         self.configuration = configuration
-        logger.info("Telemetry configuration updated", category: .general)
+        os_log("Telemetry configuration updated", log: logger, type: .info)
         
         if !configuration.isEnabled {
             await clearAllEvents()
@@ -296,12 +318,55 @@ actor TelemetryService: TelemetryServiceProtocol {
         return eventQueue.count
     }
     
+    func exportAllEvents() async -> [AnyTelemetryEvent] {
+        // Get queued events
+        var allEvents = eventQueue.map { AnyTelemetryEvent($0) }
+        
+        // Get persisted events
+        if let eventDataArray = userDefaults.array(forKey: "telemetry_events") as? [Data] {
+            let persistedEvents = eventDataArray.compactMap { data in
+                try? JSONDecoder().decode(AnyTelemetryEvent.self, from: data)
+            }
+            allEvents.append(contentsOf: persistedEvents)
+        }
+        
+        // Sort by timestamp
+        return allEvents.sorted { $0.timestamp < $1.timestamp }
+    }
+    
+    func exportEventsAsJSON() async -> String? {
+        let events = await exportAllEvents()
+        guard let jsonData = try? JSONEncoder().encode(events) else { return nil }
+        return String(data: jsonData, encoding: .utf8)
+    }
+    
+    func getEventSummary() async -> TelemetryEventSummary {
+        let events = await exportAllEvents()
+        
+        var summary = TelemetryEventSummary()
+        
+        for event in events {
+            summary.totalEvents += 1
+            summary.eventCounts[event.eventName, default: 0] += 1
+            
+            // Track source breakdown
+            summary.sourceBreakdown[event.source.rawValue, default: 0] += 1
+        }
+        
+        summary.dateRange = events.isEmpty ? nil : (
+            start: events.first?.timestamp ?? Date(),
+            end: events.last?.timestamp ?? Date()
+        )
+        
+        return summary
+    }
+    
     func track(_ event: TelemetryEvent) async {
         guard configuration.isEnabled else { return }
         guard configuration.enabledCategories.contains(event.eventName) else { return }
         
         eventQueue.append(event)
-        logger.debug("Tracked event: \(event.eventName)", category: .telemetry)
+        os_log("Tracked event: %{public}@", log: logger, type: .debug, event.eventName)
         
         if eventQueue.count >= configuration.batchSize {
             await flush()
@@ -318,7 +383,7 @@ actor TelemetryService: TelemetryServiceProtocol {
         await cleanupOldEvents()
         
         lastFlushDate = Date()
-        logger.info("Flushed \(eventsToFlush.count) telemetry events", category: .telemetry)
+        os_log("Flushed %d telemetry events", log: logger, type: .info, eventsToFlush.count)
     }
     
     private func persistEvents(_ events: [TelemetryEvent]) async {
@@ -339,7 +404,7 @@ actor TelemetryService: TelemetryServiceProtocol {
             try? JSONDecoder().decode(AnyTelemetryEvent.self, from: data)
         }
         
-        logger.info("Loaded \(events.count) persisted telemetry events", category: .telemetry)
+        os_log("Loaded %d persisted telemetry events", log: logger, type: .info, events.count)
     }
     
     private func cleanupOldEvents() async {
@@ -356,21 +421,28 @@ actor TelemetryService: TelemetryServiceProtocol {
         
         let removedCount = eventDataArray.count - filteredEvents.count
         if removedCount > 0 {
-            logger.info("Cleaned up \(removedCount) old telemetry events", category: .telemetry)
+            os_log("Cleaned up %d old telemetry events", log: logger, type: .info, removedCount)
         }
     }
     
     private func clearAllEvents() async {
         eventQueue.removeAll()
         userDefaults.removeObject(forKey: "telemetry_events")
-        logger.info("All telemetry events cleared", category: .telemetry)
+        os_log("All telemetry events cleared", log: logger, type: .info)
     }
     
     private func schedulePeriodicFlush() async {
-        DispatchQueue.main.async { [weak self] in
-            self?.flushTimer = Timer.scheduledTimer(withTimeInterval: self?.configuration.flushInterval ?? 300, repeats: true) { _ in
-                Task { [weak self] in
-                    await self?.flush()
+        flushTask?.cancel() // Cancel any previous task before starting a new one
+
+        flushTask = Task {
+            while !Task.isCancelled {
+                do {
+                    try await Task.sleep(for: .seconds(configuration.flushInterval))
+                    await flush()
+                } catch {
+                    // Task was cancelled or other error
+                    os_log("Telemetry flush task interrupted: %{public}@", log: logger, type: .error, error.localizedDescription)
+                    break
                 }
             }
         }
@@ -401,6 +473,18 @@ final class MockTelemetryService: TelemetryServiceProtocol, @unchecked Sendable 
     
     func getEventCount() async -> Int {
         return trackedEvents.count
+    }
+    
+    func getEventSummary() async -> TelemetryEventSummary {
+        return TelemetryEventSummary() // Mock implementation
+    }
+    
+    func exportAllEvents() async -> [AnyTelemetryEvent] {
+        return [] // Mock implementation
+    }
+    
+    func exportEventsAsJSON() async -> String? {
+        return nil // Mock implementation
     }
     
     // Test helper methods
