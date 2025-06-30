@@ -4,6 +4,7 @@ import WidgetKit
 struct ContentView: View {
     @EnvironmentObject private var dependencies: DependencyContainer
     @StateObject private var viewModel: PoemViewModel
+    @State private var isPoemLoading = false
     @State private var showFavorites = false
     @State private var showShareSheet = false
     @Environment(\.colorScheme) private var colorScheme
@@ -23,7 +24,7 @@ struct ContentView: View {
                     VStack(spacing: 20) {
                         headerView
                         
-                        if viewModel.isLoading {
+                        if isPoemLoading {
                             loadingView
                         } else if let poem = viewModel.poemOfTheDay {
                             poemCard(poem: poem)
@@ -36,7 +37,9 @@ struct ContentView: View {
                     .padding()
                 }
                 .refreshable {
+                    isPoemLoading = true
                     await viewModel.refreshPoem()
+                    isPoemLoading = false
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
@@ -179,6 +182,9 @@ struct ContentView: View {
                 Spacer()
                 
                 Button(action: {
+                    Task {
+                        await viewModel.sharePoem(poem)
+                    }
                     showShareSheet = true
                 }) {
                     Label("Share", systemImage: "square.and.arrow.up")
@@ -267,7 +273,9 @@ struct ContentView: View {
             // Regular poem refresh
             Button(action: {
                 Task {
+                    isPoemLoading = true
                     await viewModel.refreshPoem()
+                    isPoemLoading = false
                 }
             }) {
                 Label("Get New Poem", systemImage: "arrow.clockwise")
@@ -292,6 +300,11 @@ struct ContentView: View {
                 HStack(spacing: 12) {
                     Button(action: {
                         viewModel.showVibeGeneration = true
+                        Task {
+                            isPoemLoading = true
+                            await viewModel.generateVibeBasedPoem()
+                            isPoemLoading = false
+                        }
                     }) {
                         VStack(spacing: 4) {
                             HStack {
@@ -350,7 +363,9 @@ struct ContentView: View {
                     onGeneratePoem: {
                         viewModel.showVibeGeneration = false
                         Task {
+                            isPoemLoading = true
                             await viewModel.generateVibeBasedPoem()
+                            isPoemLoading = false
                         }
                     },
                     onCustomPrompt: {

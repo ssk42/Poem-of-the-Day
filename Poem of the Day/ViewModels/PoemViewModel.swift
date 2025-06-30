@@ -21,9 +21,11 @@ final class PoemViewModel: ObservableObject {
     @Published var showCustomPrompt = false
     
     private let repository: PoemRepositoryProtocol
+    private let telemetryService: TelemetryServiceProtocol
     
-    init(repository: PoemRepositoryProtocol = PoemRepository()) {
+    init(repository: PoemRepositoryProtocol = PoemRepository(), telemetryService: TelemetryServiceProtocol = TelemetryService()) {
         self.repository = repository
+        self.telemetryService = telemetryService
         
         Task {
             await loadInitialData()
@@ -32,6 +34,15 @@ final class PoemViewModel: ObservableObject {
     
     func loadInitialData() async {
         isLoading = true
+        
+        // Track app launch
+        let appLaunchEvent = AppLaunchEvent(
+            timestamp: Date(),
+            launchType: .normal,
+            coldStart: true,
+            aiAvailable: false // Will be updated after AI check
+        )
+        await telemetryService.track(appLaunchEvent)
         
         async let poemTask = loadDailyPoem()
         async let favoritesTask = loadFavorites()
@@ -99,6 +110,15 @@ final class PoemViewModel: ObservableObject {
         favorites.contains { $0.id == poem.id }
     }
     
+    func sharePoem(_ poem: Poem) async {
+        let event = ShareEvent(
+            timestamp: Date(),
+            source: .mainApp,
+            poemSource: poem.vibe != nil ? "ai_generated" : "api"
+        )
+        await telemetryService.track(event)
+    }
+    
     // MARK: - Private Methods
     
     private func loadDailyPoem() async {
@@ -133,6 +153,8 @@ final class PoemViewModel: ObservableObject {
     private func handleError(_ error: Error) async {
         if let poemError = error as? PoemError {
             errorMessage = poemError.localizedDescription
+        } else if let generationError = error as? PoemGenerationError {
+            errorMessage = generationError.localizedDescription
         } else {
             errorMessage = "An unexpected error occurred"
         }

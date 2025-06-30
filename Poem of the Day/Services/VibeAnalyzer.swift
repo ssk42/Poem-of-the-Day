@@ -11,58 +11,32 @@ actor VibeAnalyzer: VibeAnalyzerProtocol {
     
     // MARK: - Keyword Dictionaries
     
-    private let vibeKeywords: [DailyVibe: [String]] = [
-        .hopeful: [
-            "breakthrough", "discovery", "progress", "success", "achievement", "improvement", 
-            "recovery", "growth", "positive", "advance", "solution", "innovation", "hope",
-            "promising", "bright", "optimistic", "future", "opportunity", "healing"
-        ],
-        .contemplative: [
-            "study", "research", "analysis", "report", "findings", "investigation",
-            "examination", "review", "consideration", "reflection", "thought", "meditation",
-            "philosophy", "wisdom", "understanding", "insight", "depth", "meaning"
-        ],
-        .energetic: [
-            "launch", "start", "begin", "action", "movement", "fast", "rapid", "quick",
-            "energy", "power", "dynamic", "active", "vibrant", "exciting", "thrilling",
-            "passionate", "intense", "vigorous", "lively", "enthusiastic"
-        ],
-        .peaceful: [
-            "agreement", "peace", "calm", "quiet", "serene", "harmony", "balance",
-            "resolution", "settled", "tranquil", "still", "gentle", "cooperation",
-            "collaboration", "unity", "accord", "reconciliation", "mediation"
-        ],
-        .melancholic: [
-            "loss", "death", "mourning", "grief", "sad", "tragedy", "decline", "ending",
-            "farewell", "memorial", "remembrance", "nostalgia", "bittersweet", "longing",
-            "missing", "departed", "past", "memory", "regret", "sorrow"
-        ],
-        .inspiring: [
-            "hero", "brave", "courage", "overcome", "triumph", "victory", "inspire",
-            "motivate", "encourage", "uplift", "empower", "strength", "resilience",
-            "perseverance", "determination", "achievement", "excellence", "outstanding"
-        ],
-        .uncertain: [
-            "unclear", "unknown", "uncertain", "doubt", "question", "mystery", "puzzle",
-            "confusion", "ambiguous", "unclear", "unsure", "debate", "speculation",
-            "possibility", "maybe", "perhaps", "investigation", "pending", "waiting"
-        ],
-        .celebratory: [
-            "celebration", "festival", "party", "joy", "happiness", "success", "win",
-            "victory", "achievement", "milestone", "anniversary", "honor", "award",
-            "recognition", "congratulations", "cheers", "festive", "jubilant", "triumphant"
-        ],
-        .reflective: [
-            "looking back", "history", "past", "lessons", "learned", "experience",
-            "retrospective", "memorial", "remembering", "tradition", "heritage",
-            "legacy", "wisdom", "knowledge", "understanding", "perspective", "insight"
-        ],
-        .determined: [
-            "commitment", "dedication", "focus", "goal", "target", "mission", "purpose",
-            "resolve", "determination", "persistence", "effort", "work", "strive",
-            "push", "drive", "ambition", "will", "strength", "fight", "struggle"
-        ]
-    ]
+    private let vibeKeywords: [DailyVibe: [String]]
+    
+    init() {
+        self.vibeKeywords = VibeAnalyzer.loadVibeKeywords()
+    }
+
+    private static func loadVibeKeywords() -> [DailyVibe: [String]] {
+        guard let url = Bundle.main.url(forResource: "VibeKeywords", withExtension: "json") else {
+            fatalError("VibeKeywords.json not found")
+        }
+        
+        do {
+            let data = try Data(contentsOf: url)
+            let keywords = try JSONDecoder().decode([String: [String]].self, from: data)
+            
+            var vibeKeywords: [DailyVibe: [String]] = [:]
+            for (key, value) in keywords {
+                if let vibe = DailyVibe(rawValue: key) {
+                    vibeKeywords[vibe] = value
+                }
+            }
+            return vibeKeywords
+        } catch {
+            fatalError("Failed to decode VibeKeywords.json: \(error)")
+        }
+    }
     
     private let positiveWords = [
         "good", "great", "excellent", "amazing", "wonderful", "fantastic", "positive",

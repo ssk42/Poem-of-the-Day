@@ -92,29 +92,43 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
     // MARK: - Public Methods
     
     func generatePoemFromVibe(_ vibeAnalysis: VibeAnalysis) async throws -> Poem {
-        try await checkAvailabilityAndQuota()
-        
-        let prompt = buildVibePrompt(from: vibeAnalysis)
-        let poemContent = try await generateContent(prompt: prompt)
-        let poem = try parseGeneratedPoem(poemContent, vibe: vibeAnalysis.vibe)
-        
-        await incrementDailyCount()
-        return poem
+        do {
+            try await checkAvailabilityAndQuota()
+            
+            let prompt = buildVibePrompt(from: vibeAnalysis)
+            let poemContent = try await generateContent(prompt: prompt)
+            let poem = try parseGeneratedPoem(poemContent, vibe: vibeAnalysis.vibe)
+            
+            await incrementDailyCount()
+            return poem
+        } catch PoemGenerationError.deviceNotSupported {
+            // Fallback to local generation if AI is not supported
+            return generateLocalPoem(vibe: vibeAnalysis.vibe)
+        } catch {
+            throw error
+        }
     }
     
     func generatePoemWithCustomPrompt(_ prompt: String) async throws -> Poem {
-        try await checkAvailabilityAndQuota()
-        
-        guard !prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            throw PoemGenerationError.invalidPrompt
+        do {
+            try await checkAvailabilityAndQuota()
+            
+            guard !prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                throw PoemGenerationError.invalidPrompt
+            }
+            
+            let enhancedPrompt = enhanceCustomPrompt(prompt)
+            let poemContent = try await generateContent(prompt: enhancedPrompt)
+            let poem = try parseGeneratedPoem(poemContent, vibe: nil)
+            
+            await incrementDailyCount()
+            return poem
+        } catch PoemGenerationError.deviceNotSupported {
+            // Fallback to local generation for custom prompts when AI is not supported
+            return generateLocalPoem(prompt: prompt)
+        } catch {
+            throw error
         }
-        
-        let enhancedPrompt = enhanceCustomPrompt(prompt)
-        let poemContent = try await generateContent(prompt: enhancedPrompt)
-        let poem = try parseGeneratedPoem(poemContent, vibe: nil)
-        
-        await incrementDailyCount()
-        return poem
     }
     
     func isAvailable() async -> Bool {
@@ -366,5 +380,21 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
     private func incrementDailyCount() async {
         dailyGenerationCount += 1
         userDefaults.set(dailyGenerationCount, forKey: "dailyGenerationCount")
+    }
+    
+    private func generateLocalPoem(vibe: DailyVibe? = nil, prompt: String? = nil) -> Poem {
+        let title = vibe?.displayName ?? "A Simple Poem"
+        let author = "Local Poet"
+        
+        let lines = [
+            "When AI sleeps, and models rest,",
+            "A local verse is put to the test.",
+            "No complex thoughts, no grand design,",
+            "Just simple words, in a simple line.",
+            "A poem born from code, not art,",
+            "A humble offering, from the heart."
+        ]
+        
+        return Poem(title: title, lines: lines, author: author, vibe: vibe)
     }
 }

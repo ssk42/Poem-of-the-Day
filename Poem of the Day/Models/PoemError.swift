@@ -15,6 +15,7 @@ enum PoemError: LocalizedError, Equatable {
     case rateLimited
     case serverError(Int)
     case unsupportedOperation
+    case localGenerationFailed
     case unknownError
     
     var errorDescription: String? {
@@ -33,6 +34,8 @@ enum PoemError: LocalizedError, Equatable {
             return "Server error (\(code)). Please try again later."
         case .unsupportedOperation:
             return "This feature is not available on your device."
+        case .localGenerationFailed:
+            return "Failed to generate a local poem."
         case .unknownError:
             return "An unexpected error occurred."
         }
@@ -52,6 +55,8 @@ enum PoemError: LocalizedError, Equatable {
             return "The service may be temporarily unavailable. Try again later."
         case .unsupportedOperation:
             return "AI poem generation requires iOS 18.1 or later with Neural Engine support."
+        case .localGenerationFailed:
+            return "Please try again."
         case .unknownError:
             return "Try restarting the app or contact support if the problem persists."
         }

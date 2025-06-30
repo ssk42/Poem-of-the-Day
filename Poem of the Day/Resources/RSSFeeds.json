@@ -1,0 +1,27 @@
+[
+    {
+        "name": "BBC News",
+        "url": "https://feeds.bbci.co.uk/news/rss.xml",
+        "category": "general"
+    },
+    {
+        "name": "NPR News",
+        "url": "https://feeds.npr.org/1001/rss.xml",
+        "category": "general"
+    },
+    {
+        "name": "Associated Press",
+        "url": "https://feeds.apnews.com/rss/apf-topnews",
+        "category": "general"
+    },
+    {
+        "name": "Reuters World",
+        "url": "https://feeds.reuters.com/reuters/worldNews",
+        "category": "world"
+    },
+    {
+        "name": "CNN Top Stories",
+        "url": "http://rss.cnn.com/rss/edition.rss",
+        "category": "general"
+    }
+]

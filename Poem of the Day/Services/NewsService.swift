@@ -8,18 +8,24 @@
 import Foundation
 
 // RSS Feed Sources - Free and reliable
-struct RSSSource {
+struct RSSSource: Decodable {
     let name: String
     let url: URL
     let category: String
     
-    static let sources: [RSSSource] = [
-        RSSSource(name: "BBC News", url: URL(string: "https://feeds.bbci.co.uk/news/rss.xml")!, category: "general"),
-        RSSSource(name: "NPR News", url: URL(string: "https://feeds.npr.org/1001/rss.xml")!, category: "general"),
-        RSSSource(name: "Associated Press", url: URL(string: "https://feeds.apnews.com/rss/apf-topnews")!, category: "general"),
-        RSSSource(name: "Reuters World", url: URL(string: "https://feeds.reuters.com/reuters/worldNews")!, category: "world"),
-        RSSSource(name: "CNN Top Stories", url: URL(string: "http://rss.cnn.com/rss/edition.rss")!, category: "general")
-    ]
+    static func loadSources() -> [RSSSource] {
+        guard let url = Bundle.main.url(forResource: "RSSFeeds", withExtension: "json") else {
+            fatalError("RSSFeeds.json not found")
+        }
+        
+        do {
+            let data = try Data(contentsOf: url)
+            let sources = try JSONDecoder().decode([RSSSource].self, from: data)
+            return sources
+        } catch {
+            fatalError("Failed to decode RSSFeeds.json: \(error)")
+        }
+    }
 }
 
 enum NewsError: Error, LocalizedError {
@@ -74,10 +80,11 @@ actor NewsService: NewsServiceProtocol {
     
     func fetchDailyNews() async throws -> [NewsArticle] {
         var allArticles: [NewsArticle] = []
+        let sources = RSSSource.loadSources()
         
         // Fetch from multiple RSS sources concurrently
         await withTaskGroup(of: [NewsArticle].self) { group in
-            for source in RSSSource.sources {
+            for source in sources {
                 group.addTask {
                     do {
                         return try await self.fetchRSSFeed(from: source)

@@ -31,6 +31,7 @@ final class AppLogger {
         case vibe = "VibeAnalysis"
         case error = "Error"
         case performance = "Performance"
+        case telemetry = "Telemetry"
     }
     
     // MARK: - Log Levels

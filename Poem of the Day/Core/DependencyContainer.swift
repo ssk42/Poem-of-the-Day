@@ -15,12 +15,14 @@ final class DependencyContainer: ObservableObject {
     private let newsService: NewsServiceProtocol
     private let vibeAnalyzer: VibeAnalyzerProtocol
     private let aiService: PoemGenerationServiceProtocol?
+    private let telemetryService: TelemetryServiceProtocol
     private let repository: PoemRepositoryProtocol
     
     private init() {
         self.networkService = NetworkService()
         self.newsService = NewsService()
         self.vibeAnalyzer = VibeAnalyzer()
+        self.telemetryService = TelemetryService()
         
         // Initialize AI service if available (iOS 26+)
         if #available(iOS 26, *) {
@@ -33,7 +35,8 @@ final class DependencyContainer: ObservableObject {
             networkService: networkService,
             newsService: newsService,
             vibeAnalyzer: vibeAnalyzer,
-            aiService: aiService
+            aiService: aiService,
+            telemetryService: telemetryService
         )
     }
     
@@ -42,11 +45,13 @@ final class DependencyContainer: ObservableObject {
          newsService: NewsServiceProtocol,
          vibeAnalyzer: VibeAnalyzerProtocol,
          aiService: PoemGenerationServiceProtocol?,
+         telemetryService: TelemetryServiceProtocol,
          repository: PoemRepositoryProtocol) {
         self.networkService = networkService
         self.newsService = newsService
         self.vibeAnalyzer = vibeAnalyzer
         self.aiService = aiService
+        self.telemetryService = telemetryService
         self.repository = repository
     }
     
@@ -66,12 +71,15 @@ final class DependencyContainer: ObservableObject {
         return aiService
     }
     
+    func makeTelemetryService() -> TelemetryServiceProtocol {
+        return telemetryService
+    }
     
     func makeRepository() -> PoemRepositoryProtocol {
         return repository
     }
     
     func makePoemViewModel() -> PoemViewModel {
-        return PoemViewModel(repository: repository)
+        return PoemViewModel(repository: repository, telemetryService: telemetryService)
     }
 }
