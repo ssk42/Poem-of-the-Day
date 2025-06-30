@@ -291,10 +291,15 @@ actor TelemetryService: TelemetryServiceProtocol {
         self.userDefaults = userDefaults
         self.logger = logger
         
-        self.flushTask = Task {
-            await loadPersistedEvents()
-            await schedulePeriodicFlush()
+        // Initialize the task after the actor is fully initialized
+        Task {
+            await self.startPeriodicFlush()
         }
+    }
+    
+    private func startPeriodicFlush() async {
+        await loadPersistedEvents()
+        await schedulePeriodicFlush()
     }
     
     deinit {

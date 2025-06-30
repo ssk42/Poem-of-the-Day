@@ -90,6 +90,12 @@ extension WidgetFamily {
             return "large"
         case .systemExtraLarge:
             return "extra_large"
+        case .accessoryCircular:
+            return "accessory_circular"
+        case .accessoryRectangular:
+            return "accessory_rectangular"
+        case .accessoryInline:
+            return "accessory_inline"
         @unknown default:
             return "unknown"
         }
