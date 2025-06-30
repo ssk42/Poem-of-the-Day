@@ -214,6 +214,25 @@ struct AnyTelemetryEvent: Codable {
     }
 }
 
+// MARK: - Telemetry Summary
+
+struct TelemetryEventSummary {
+    var totalEvents: Int = 0
+    var eventCounts: [String: Int] = [:]
+    var sourceBreakdown: [String: Int] = [:]
+    var dateRange: (start: Date, end: Date)?
+    
+    var mostCommonEvent: String? {
+        eventCounts.max(by: { $0.value < $1.value })?.key
+    }
+    
+    var averageEventsPerDay: Double {
+        guard let dateRange = dateRange else { return 0 }
+        let days = Calendar.current.dateComponents([.day], from: dateRange.start, to: dateRange.end).day ?? 1
+        return Double(totalEvents) / Double(max(days, 1))
+    }
+}
+
 // MARK: - Telemetry Configuration
 
 struct TelemetryConfiguration: Codable, Sendable {
@@ -294,6 +313,49 @@ actor TelemetryService: TelemetryServiceProtocol {
     
     func getEventCount() async -> Int {
         return eventQueue.count
+    }
+    
+    func exportAllEvents() async -> [AnyTelemetryEvent] {
+        // Get queued events
+        var allEvents = eventQueue.map { AnyTelemetryEvent($0) }
+        
+        // Get persisted events
+        if let eventDataArray = userDefaults.array(forKey: "telemetry_events") as? [Data] {
+            let persistedEvents = eventDataArray.compactMap { data in
+                try? JSONDecoder().decode(AnyTelemetryEvent.self, from: data)
+            }
+            allEvents.append(contentsOf: persistedEvents)
+        }
+        
+        // Sort by timestamp
+        return allEvents.sorted { $0.timestamp < $1.timestamp }
+    }
+    
+    func exportEventsAsJSON() async -> String? {
+        let events = await exportAllEvents()
+        guard let jsonData = try? JSONEncoder().encode(events) else { return nil }
+        return String(data: jsonData, encoding: .utf8)
+    }
+    
+    func getEventSummary() async -> TelemetryEventSummary {
+        let events = await exportAllEvents()
+        
+        var summary = TelemetryEventSummary()
+        
+        for event in events {
+            summary.totalEvents += 1
+            summary.eventCounts[event.eventName, default: 0] += 1
+            
+            // Track source breakdown
+            summary.sourceBreakdown[event.source.rawValue, default: 0] += 1
+        }
+        
+        summary.dateRange = events.isEmpty ? nil : (
+            start: events.first?.timestamp ?? Date(),
+            end: events.last?.timestamp ?? Date()
+        )
+        
+        return summary
     }
     
     func track(_ event: TelemetryEvent) async {

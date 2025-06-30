@@ -7,6 +7,7 @@ struct ContentView: View {
     @State private var isPoemLoading = false
     @State private var showFavorites = false
     @State private var showShareSheet = false
+    @State private var showTelemetryDebug = false
     @Environment(\.colorScheme) private var colorScheme
     
     init() {
@@ -62,6 +63,9 @@ struct ContentView: View {
                     ShareSheet(items: [poem.shareText])
                 }
             }
+            .sheet(isPresented: $showTelemetryDebug) {
+                TelemetryDebugView()
+            }
             .alert("Error", isPresented: $viewModel.showErrorAlert) {
                 Button("OK", role: .cancel) { }
                 Button("Retry") {
@@ -100,6 +104,9 @@ struct ContentView: View {
                 .font(.system(size: 32, weight: .bold, design: .serif))
                 .foregroundColor(colorScheme == .dark ? .white : .black)
                 .accessibilityAddTraits(.isHeader)
+                .onLongPressGesture(minimumDuration: 2.0) {
+                    showTelemetryDebug = true
+                }
             
             Text(formattedDate)
                 .font(.subheadline)
