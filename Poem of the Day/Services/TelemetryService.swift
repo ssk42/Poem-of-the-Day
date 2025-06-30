@@ -161,11 +161,13 @@ actor TelemetryService: TelemetryServiceProtocol {
     }
     
     private func schedulePeriodicFlush() async {
-        DispatchQueue.main.async { [weak self] in
-            self?.flushTimer = Timer.scheduledTimer(withTimeInterval: self?.configuration.flushInterval ?? 300, repeats: true) { _ in
-                Task { [weak self] in
-                    await self?.flush()
-                }
+        flushTimer?.invalidate()
+        
+        // Use a periodic task instead of Timer to avoid main actor issues
+        Task { [weak self] in
+            while !Task.isCancelled {
+                try? await Task.sleep(nanoseconds: UInt64(self?.configuration.flushInterval ?? 300) * 1_000_000_000)
+                await self?.flush()
             }
         }
     }
@@ -211,13 +213,6 @@ final class MockTelemetryService: TelemetryServiceProtocol, @unchecked Sendable 
                 start: trackedEvents.first?.timestamp ?? Date(),
                 end: trackedEvents.last?.timestamp ?? Date()
             )
-        }
-        
-        summary.mostCommonEvent = summary.eventCounts.max(by: { $0.value < $1.value })?.key
-        
-        if let dateRange = summary.dateRange {
-            let daysDiff = max(1, Calendar.current.dateComponents([.day], from: dateRange.start, to: dateRange.end).day ?? 1)
-            summary.averageEventsPerDay = Double(summary.totalEvents) / Double(daysDiff)
         }
         
         return summary

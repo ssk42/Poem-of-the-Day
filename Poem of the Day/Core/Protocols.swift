@@ -245,3 +245,147 @@ typealias UIStateManaging = LoadingStateView & ErrorStateView
 
 /// Combined protocol for content management
 typealias ContentManaging = ShareableContent & FavoriteContent
+
+// MARK: - Specific Event Types
+
+struct PoemFetchEvent: TelemetryEvent {
+    var eventName: String = "poem_fetch"
+    let timestamp: Date
+    var source: TelemetrySource
+    let poemSource: String
+    let duration: TimeInterval
+    let success: Bool
+    let errorType: String?
+    let vibeType: String?
+    
+    var parameters: [String: TelemetryValue] {
+        var params: [String: TelemetryValue] = [
+            "poem_source": .string(poemSource),
+            "duration": .double(duration),
+            "success": .bool(success)
+        ]
+        
+        if let errorType = errorType {
+            params["error_type"] = .string(errorType)
+        }
+        
+        if let vibeType = vibeType {
+            params["vibe_type"] = .string(vibeType)
+        }
+        
+        return params
+    }
+}
+
+struct FavoriteActionEvent: TelemetryEvent {
+    var eventName: String = "favorite_action"
+    let timestamp: Date
+    var source: TelemetrySource
+    let action: FavoriteAction
+    let poemSource: String
+    
+    enum FavoriteAction: String, Codable {
+        case add = "add"
+        case remove = "remove"
+    }
+    
+    var parameters: [String: TelemetryValue] {
+        [
+            "action": .string(action.rawValue),
+            "poem_source": .string(poemSource)
+        ]
+    }
+}
+
+struct ShareEvent: TelemetryEvent {
+    var eventName: String = "share_action"
+    let timestamp: Date
+    var source: TelemetrySource
+    let poemSource: String
+    
+    var parameters: [String: TelemetryValue] {
+        [
+            "poem_source": .string(poemSource)
+        ]
+    }
+}
+
+struct AIGenerationEvent: TelemetryEvent {
+    var eventName: String = "ai_generation"
+    let timestamp: Date
+    var source: TelemetrySource
+    let generationType: AIGenerationType
+    let duration: TimeInterval
+    let success: Bool
+    let errorType: String?
+    let vibeScore: Double?
+    
+    enum AIGenerationType: String, Codable {
+        case vibeBasedPoem = "vibe_based_poem"
+        case customPrompt = "custom_prompt"
+        case vibeAnalysis = "vibe_analysis"
+    }
+    
+    var parameters: [String: TelemetryValue] {
+        var params: [String: TelemetryValue] = [
+            "generation_type": .string(generationType.rawValue),
+            "duration": .double(duration),
+            "success": .bool(success)
+        ]
+        
+        if let errorType = errorType {
+            params["error_type"] = .string(errorType)
+        }
+        
+        if let vibeScore = vibeScore {
+            params["vibe_score"] = .double(vibeScore)
+        }
+        
+        return params
+    }
+}
+
+struct AppLaunchEvent: TelemetryEvent {
+    var eventName: String = "app_launch"
+    let timestamp: Date
+    var source: TelemetrySource = .mainApp
+    let launchType: LaunchType
+    let coldStart: Bool
+    let aiAvailable: Bool
+    
+    enum LaunchType: String, Codable {
+        case normal = "normal"
+        case background = "background"
+        case fromWidget = "from_widget"
+    }
+    
+    var parameters: [String: TelemetryValue] {
+        [
+            "launch_type": .string(launchType.rawValue),
+            "cold_start": .bool(coldStart),
+            "ai_available": .bool(aiAvailable)
+        ]
+    }
+}
+
+struct ErrorEvent: TelemetryEvent {
+    var eventName: String = "error_occurred"
+    let timestamp: Date
+    var source: TelemetrySource
+    let errorType: String
+    let errorCode: String?
+    let context: String
+    
+    var parameters: [String: TelemetryValue] {
+        var params: [String: TelemetryValue] = [
+            "error_type": .string(errorType),
+            "context": .string(context)
+        ]
+        
+        if let errorCode = errorCode {
+            params["error_code"] = .string(errorCode)
+        }
+        
+        return params
+    }
+}
