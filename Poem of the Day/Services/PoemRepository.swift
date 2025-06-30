@@ -65,7 +65,7 @@ actor PoemRepository: PoemRepositoryProtocol {
             }
             
             let vibeAnalysis = try await getVibeOfTheDay()
-            vibeScore = vibeAnalysis.intensity
+            vibeScore = vibeAnalysis.confidence
             let poem = try await aiService.generatePoemFromVibe(vibeAnalysis)
             success = true
             
