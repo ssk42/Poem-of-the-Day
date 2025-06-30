@@ -1,19 +1,31 @@
 import Foundation
 import OSLog
-import Poem_of_the_Day
 
 /// A simple console logger for telemetry data during development
 class TelemetryConsoleLogger {
     static let shared = TelemetryConsoleLogger()
-    private let telemetryService: TelemetryServiceProtocol
+    private var telemetryService: TelemetryServiceProtocol?
     
     private init() {
-        self.telemetryService = await DependencyContainer.shared.makeTelemetryService()
+        // Initialize telemetry service asynchronously
+        Task {
+            await initializeTelemetryService()
+        }
+    }
+    
+    @MainActor
+    private func initializeTelemetryService() async {
+        self.telemetryService = DependencyContainer.shared.makeTelemetryService()
     }
     
     /// Print telemetry summary to console
     func logSummaryToConsole() {
         Task {
+            guard let telemetryService = telemetryService else {
+                print("⚠️ Telemetry service not initialized yet")
+                return
+            }
+            
             let summary = await telemetryService.getEventSummary()
             
             print("\n📊 TELEMETRY SUMMARY")
@@ -49,6 +61,11 @@ class TelemetryConsoleLogger {
     /// Print all events to console (useful for debugging)
     func logAllEventsToConsole() {
         Task {
+            guard let telemetryService = telemetryService else {
+                print("⚠️ Telemetry service not initialized yet")
+                return
+            }
+            
             let events = await telemetryService.exportAllEvents()
             
             print("\n📋 ALL TELEMETRY EVENTS (\(events.count) total)")
@@ -77,6 +94,11 @@ class TelemetryConsoleLogger {
     /// Export telemetry data as JSON string to console
     func exportToConsole() {
         Task {
+            guard let telemetryService = telemetryService else {
+                print("⚠️ Telemetry service not initialized yet")
+                return
+            }
+            
             if let jsonString = await telemetryService.exportEventsAsJSON() {
                 print("\n📄 TELEMETRY JSON EXPORT")
                 print("=" * 30)

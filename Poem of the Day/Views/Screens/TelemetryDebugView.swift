@@ -9,8 +9,9 @@ struct TelemetryDebugView: View {
     
     private let telemetryService: TelemetryServiceProtocol
     
-    init(telemetryService: TelemetryServiceProtocol = DependencyContainer.shared.makeTelemetryService()) {
-        self.telemetryService = telemetryService
+    @MainActor
+    init(telemetryService: TelemetryServiceProtocol? = nil) {
+        self.telemetryService = telemetryService ?? DependencyContainer.shared.makeTelemetryService()
     }
     
     var body: some View {
@@ -129,15 +130,7 @@ struct TelemetryDebugView: View {
     }
 }
 
-struct ShareSheet: UIViewControllerRepresentable {
-    let items: [Any]
-    
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(activityItems: items, applicationActivities: nil)
-    }
-    
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
-}
+// ShareSheet is defined in ContentView.swift
 
 #Preview {
     TelemetryDebugView(telemetryService: MockTelemetryService())

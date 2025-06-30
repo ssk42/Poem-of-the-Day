@@ -1,6 +1,5 @@
 import Foundation
 import OSLog
-import Poem_of_the_Day
 
 // MARK: - Telemetry Service Actor
 
@@ -196,6 +195,42 @@ final class MockTelemetryService: TelemetryServiceProtocol, @unchecked Sendable 
     
     func getEventCount() async -> Int {
         return trackedEvents.count
+    }
+    
+    func getEventSummary() async -> TelemetryEventSummary {
+        var summary = TelemetryEventSummary()
+        summary.totalEvents = trackedEvents.count
+        
+        for event in trackedEvents {
+            summary.eventCounts[event.eventName, default: 0] += 1
+            summary.sourceBreakdown[event.source.rawValue, default: 0] += 1
+        }
+        
+        if !trackedEvents.isEmpty {
+            summary.dateRange = (
+                start: trackedEvents.first?.timestamp ?? Date(),
+                end: trackedEvents.last?.timestamp ?? Date()
+            )
+        }
+        
+        summary.mostCommonEvent = summary.eventCounts.max(by: { $0.value < $1.value })?.key
+        
+        if let dateRange = summary.dateRange {
+            let daysDiff = max(1, Calendar.current.dateComponents([.day], from: dateRange.start, to: dateRange.end).day ?? 1)
+            summary.averageEventsPerDay = Double(summary.totalEvents) / Double(daysDiff)
+        }
+        
+        return summary
+    }
+    
+    func exportAllEvents() async -> [AnyTelemetryEvent] {
+        return trackedEvents.map { AnyTelemetryEvent($0) }
+    }
+    
+    func exportEventsAsJSON() async -> String? {
+        let events = await exportAllEvents()
+        guard let jsonData = try? JSONEncoder().encode(events) else { return nil }
+        return String(data: jsonData, encoding: .utf8)
     }
     
     // Test helper methods
