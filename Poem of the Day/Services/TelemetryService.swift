@@ -262,7 +262,7 @@ actor TelemetryService: TelemetryServiceProtocol {
     
     init(
         configuration: TelemetryConfiguration = .default,
-        userDefaults: UserDefaults = UserDefaults(suiteName: AppConfiguration.appGroupIdentifier) ?? .standard,
+        userDefaults: UserDefaults = UserDefaults(suiteName: AppConfiguration.Storage.appGroupIdentifier) ?? .standard,
         logger: AppLogger = .shared
     ) {
         self.configuration = configuration
