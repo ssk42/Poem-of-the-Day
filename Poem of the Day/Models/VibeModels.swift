@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 // MARK: - Daily Vibe System
 
@@ -90,6 +91,74 @@ enum DailyVibe: String, Codable, CaseIterable {
         case .determined: return "💪"
         }
     }
+    
+    /// Returns the background color gradient for this vibe in light mode
+    var lightModeBackgroundColors: [Color] {
+        switch self {
+        case .hopeful:
+            return [Color(red: 1.0, green: 0.95, blue: 0.8), Color(red: 1.0, green: 0.9, blue: 0.7)] // Warm sunrise yellow/orange
+        case .contemplative:
+            return [Color(red: 0.85, green: 0.9, blue: 1.0), Color(red: 0.8, green: 0.85, blue: 0.95)] // Soft blue-gray
+        case .energetic:
+            return [Color(red: 1.0, green: 0.7, blue: 0.3), Color(red: 0.9, green: 0.6, blue: 0.2)] // Vibrant orange
+        case .peaceful:
+            return [Color(red: 0.9, green: 1.0, blue: 0.9), Color(red: 0.8, green: 0.95, blue: 0.8)] // Gentle green
+        case .melancholic:
+            return [Color(red: 0.9, green: 0.9, blue: 1.0), Color(red: 0.8, green: 0.8, blue: 0.95)] // Soft purple-gray
+        case .inspiring:
+            return [Color(red: 1.0, green: 0.9, blue: 1.0), Color(red: 0.95, green: 0.8, blue: 0.95)] // Light magenta/pink
+        case .uncertain:
+            return [Color(red: 0.95, green: 0.95, blue: 0.95), Color(red: 0.9, green: 0.9, blue: 0.9)] // Neutral gray
+        case .celebratory:
+            return [Color(red: 1.0, green: 0.8, blue: 0.6), Color(red: 1.0, green: 0.7, blue: 0.5)] // Golden celebration
+        case .reflective:
+            return [Color(red: 0.9, green: 0.95, blue: 1.0), Color(red: 0.85, green: 0.9, blue: 0.95)] // Calm blue
+        case .determined:
+            return [Color(red: 0.8, green: 0.9, blue: 1.0), Color(red: 0.7, green: 0.8, blue: 0.95)] // Strong blue
+        }
+    }
+    
+    /// Returns the background color gradient for this vibe in dark mode
+    var darkModeBackgroundColors: [Color] {
+        switch self {
+        case .hopeful:
+            return [Color(red: 0.3, green: 0.25, blue: 0.1), Color(red: 0.4, green: 0.3, blue: 0.15)] // Deep warm brown/gold
+        case .contemplative:
+            return [Color(red: 0.1, green: 0.15, blue: 0.3), Color(red: 0.15, green: 0.2, blue: 0.35)] // Deep blue-gray
+        case .energetic:
+            return [Color(red: 0.4, green: 0.2, blue: 0.1), Color(red: 0.5, green: 0.25, blue: 0.1)] // Dark orange
+        case .peaceful:
+            return [Color(red: 0.1, green: 0.3, blue: 0.15), Color(red: 0.15, green: 0.35, blue: 0.2)] // Deep forest green
+        case .melancholic:
+            return [Color(red: 0.2, green: 0.15, blue: 0.3), Color(red: 0.25, green: 0.2, blue: 0.35)] // Deep purple
+        case .inspiring:
+            return [Color(red: 0.3, green: 0.1, blue: 0.3), Color(red: 0.35, green: 0.15, blue: 0.35)] // Deep magenta
+        case .uncertain:
+            return [Color(red: 0.2, green: 0.2, blue: 0.25), Color(red: 0.25, green: 0.25, blue: 0.3)] // Dark gray
+        case .celebratory:
+            return [Color(red: 0.4, green: 0.3, blue: 0.1), Color(red: 0.45, green: 0.35, blue: 0.15)] // Rich gold
+        case .reflective:
+            return [Color(red: 0.1, green: 0.2, blue: 0.3), Color(red: 0.15, green: 0.25, blue: 0.35)] // Deep blue
+        case .determined:
+            return [Color(red: 0.1, green: 0.2, blue: 0.4), Color(red: 0.15, green: 0.25, blue: 0.45)] // Strong dark blue
+        }
+    }
+    
+    /// Returns the appropriate background gradient for the current color scheme
+    func backgroundGradient(for colorScheme: ColorScheme) -> LinearGradient {
+        let colors = colorScheme == .dark ? darkModeBackgroundColors : lightModeBackgroundColors
+        return LinearGradient(
+            gradient: Gradient(colors: colors),
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+    }
+    
+    /// Returns the primary background color (first color in gradient) for the current color scheme
+    func primaryBackgroundColor(for colorScheme: ColorScheme) -> Color {
+        let colors = colorScheme == .dark ? darkModeBackgroundColors : lightModeBackgroundColors
+        return colors.first ?? (colorScheme == .dark ? Color(red: 0.1, green: 0.1, blue: 0.2) : Color(red: 0.9, green: 0.95, blue: 1.0))
+    }
 }
 
 // MARK: - News Data Models
@@ -168,14 +237,53 @@ struct VibeAnalysis: Codable {
     let keywords: [String]
     let sentiment: SentimentScore
     let analysisDate: Date
+    let backgroundColorInfo: VibeBackgroundColorInfo
     
-    init(vibe: DailyVibe, confidence: Double, reasoning: String, keywords: [String], sentiment: SentimentScore) {
+    init(vibe: DailyVibe, confidence: Double, reasoning: String, keywords: [String], sentiment: SentimentScore, backgroundColorIntensity: Double = 0.8) {
         self.vibe = vibe
         self.confidence = confidence
         self.reasoning = reasoning
         self.keywords = keywords
         self.sentiment = sentiment
         self.analysisDate = Date()
+        self.backgroundColorInfo = VibeBackgroundColorInfo(vibe: vibe, intensity: backgroundColorIntensity)
+    }
+}
+
+struct VibeBackgroundColorInfo: Codable {
+    let vibe: DailyVibe
+    let colorDescription: String
+    let intensity: Double // 0.0 to 1.0, based on confidence
+    
+    init(vibe: DailyVibe, intensity: Double = 0.8) {
+        self.vibe = vibe
+        self.intensity = max(0.0, min(1.0, intensity))
+        self.colorDescription = Self.generateColorDescription(for: vibe)
+    }
+    
+    private static func generateColorDescription(for vibe: DailyVibe) -> String {
+        switch vibe {
+        case .hopeful:
+            return "Warm sunrise colors with golden and amber tones that evoke optimism and new beginnings"
+        case .contemplative:
+            return "Soft blue-gray hues that inspire deep thought and peaceful reflection"
+        case .energetic:
+            return "Vibrant orange and warm colors that pulse with life and dynamic energy"
+        case .peaceful:
+            return "Gentle green tones reminiscent of serene nature and tranquil moments"
+        case .melancholic:
+            return "Soft purple-gray colors that capture the beauty of bittersweet emotions"
+        case .inspiring:
+            return "Light magenta and pink hues that uplift the spirit and encourage dreams"
+        case .uncertain:
+            return "Neutral gray tones that provide calm stability during unclear times"
+        case .celebratory:
+            return "Golden celebration colors that sparkle with joy and achievement"
+        case .reflective:
+            return "Calm blue shades that encourage quiet introspection and wisdom"
+        case .determined:
+            return "Strong blue colors that convey resolve, focus, and unwavering strength"
+        }
     }
 }
 

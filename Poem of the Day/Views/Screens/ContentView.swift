@@ -89,14 +89,24 @@ struct ContentView: View {
     // MARK: - UI Components
     
     private var backgroundGradient: some View {
-        LinearGradient(
-            gradient: Gradient(colors: [
-                colorScheme == .dark ? Color(red: 0.1, green: 0.1, blue: 0.2) : Color(red: 0.9, green: 0.95, blue: 1.0),
-                colorScheme == .dark ? Color(red: 0.2, green: 0.2, blue: 0.3) : Color(red: 0.8, green: 0.9, blue: 1.0)
-            ]),
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
+        Group {
+            if let currentVibe = viewModel.currentVibe {
+                // Use vibe-based background colors
+                currentVibe.vibe.backgroundGradient(for: colorScheme)
+                    .opacity(currentVibe.backgroundColorInfo.intensity)
+                    .animation(.easeInOut(duration: 1.0), value: currentVibe.vibe)
+            } else {
+                // Default background gradient
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        colorScheme == .dark ? Color(red: 0.1, green: 0.1, blue: 0.2) : Color(red: 0.9, green: 0.95, blue: 1.0),
+                        colorScheme == .dark ? Color(red: 0.2, green: 0.2, blue: 0.3) : Color(red: 0.8, green: 0.9, blue: 1.0)
+                    ]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            }
+        }
     }
     
     private var headerView: some View {
@@ -108,6 +118,48 @@ struct ContentView: View {
                 .onLongPressGesture(minimumDuration: 2.0) {
                     showTelemetryDebug = true
                 }
+            
+            // Show vibe analysis info if available
+            if let currentVibe = viewModel.currentVibe {
+                HStack(spacing: 8) {
+                    Text(currentVibe.vibe.emoji)
+                        .font(.title3)
+                    
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Today's \(currentVibe.vibe.displayName) Vibe")
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .foregroundColor(colorScheme == .dark ? .white : .black)
+                        
+                        Text(currentVibe.backgroundColorInfo.colorDescription)
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                            .lineLimit(2)
+                    }
+                    
+                    Spacer()
+                    
+                    // Color intensity indicator
+                    Circle()
+                        .fill(currentVibe.vibe.primaryBackgroundColor(for: colorScheme))
+                        .frame(width: 20, height: 20)
+                        .overlay(
+                            Circle()
+                                .strokeBorder(colorScheme == .dark ? Color.white : Color.black, lineWidth: 1)
+                        )
+                        .opacity(currentVibe.backgroundColorInfo.intensity)
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(.regularMaterial)
+                        .opacity(0.8)
+                )
+                .transition(.scale.combined(with: .opacity))
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("Current vibe: \(currentVibe.vibe.displayName)")
+            }
             
             Text(formattedDate)
                 .font(.subheadline)

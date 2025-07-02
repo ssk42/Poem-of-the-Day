@@ -92,7 +92,8 @@ actor VibeAnalyzer: VibeAnalyzerProtocol {
             confidence: min(1.0, confidence),
             reasoning: reasoning,
             keywords: keywords,
-            sentiment: sentiment
+            sentiment: sentiment,
+            backgroundColorIntensity: calculateBackgroundColorIntensity(confidence: confidence, sentiment: sentiment)
         )
     }
     
@@ -230,5 +231,22 @@ actor VibeAnalyzer: VibeAnalyzerProtocol {
             .sorted()
             .prefix(5)
             .map { $0 }
+    }
+    
+    private func calculateBackgroundColorIntensity(confidence: Double, sentiment: SentimentScore) -> Double {
+        // Base intensity from confidence (higher confidence = stronger color)
+        let confidenceContribution = confidence * 0.6
+        
+        // Sentiment contribution to intensity
+        // Higher energy and more extreme positivity/negativity contribute to stronger colors
+        let energyContribution = sentiment.energy * 0.3
+        let emotionalIntensity = abs(sentiment.positivity - 0.5) * 2.0 // 0.5 is neutral, extreme values are stronger
+        let emotionalContribution = emotionalIntensity * 0.1
+        
+        // Combine all factors
+        let totalIntensity = confidenceContribution + energyContribution + emotionalContribution
+        
+        // Ensure intensity is between 0.3 (minimum visibility) and 1.0 (maximum intensity)
+        return max(0.3, min(1.0, totalIntensity))
     }
 }
