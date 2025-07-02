@@ -128,7 +128,7 @@ final class TestUtilities {
         case .aiError:
             mock.isAvailableValue = true
             mock.shouldThrowError = true
-            mock.errorToThrow = .localGenerationFailed
+            mock.errorToThrow = PoemGenerationError.generationFailed
         default:
             break
         }

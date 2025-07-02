@@ -7,7 +7,7 @@
 
 import Foundation
 
-// Only import FoundationModels if running on iOS 26+
+// Import FoundationModels for iOS 26+ when available
 #if canImport(FoundationModels)
 import FoundationModels
 #endif
@@ -23,6 +23,7 @@ enum PoemGenerationError: Error, LocalizedError {
     case quotaExceeded
     case networkRequired
     case systemResourcesUnavailable
+    case adaptationFailed
     
     var errorDescription: String? {
         switch self {
@@ -42,6 +43,8 @@ enum PoemGenerationError: Error, LocalizedError {
             return "Network connection required for AI features"
         case .systemResourcesUnavailable:
             return "System resources unavailable"
+        case .adaptationFailed:
+            return "Failed to adapt model for poem generation"
         }
     }
     
@@ -50,7 +53,7 @@ enum PoemGenerationError: Error, LocalizedError {
         case .modelUnavailable:
             return "Please try again later"
         case .deviceNotSupported:
-            return "AI poem generation requires iOS 18.1 or later with Neural Engine"
+            return "AI poem generation requires a supported device with Apple Intelligence"
         case .quotaExceeded:
             return "You can generate more poems tomorrow"
         case .networkRequired:
@@ -61,13 +64,33 @@ enum PoemGenerationError: Error, LocalizedError {
     }
 }
 
+// MARK: - Guided Generation Structure (Future API)
+
+#if canImport(FoundationModels)
+// Define the structure for guided poem generation when Foundation Models is available
+@available(iOS 26, *)
+struct GeneratedPoem: Codable {
+    let title: String
+    let author: String
+    let lines: [String]
+    let style: String?
+}
+#endif
+
 // MARK: - Foundation Models Service
 
-// FoundationModels implementation for iOS 26+
-@available(iOS 26, *)
 actor PoemGenerationService: PoemGenerationServiceProtocol {
     
     // MARK: - Properties
+    
+    #if canImport(FoundationModels)
+    @available(iOS 26, *)
+    private var languageModel: AnyObject? // Will be SystemLanguageModel when available
+    @available(iOS 26, *)
+    private var modelSession: AnyObject? // Will be LanguageModelSession when available
+    @available(iOS 26, *)
+    private var adapter: AnyObject? // Will be SystemLanguageModel.Adapter when available
+    #endif
     
     private var dailyGenerationCount: Int = 0
     private let maxDailyGenerations = 10
@@ -87,6 +110,40 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
             userDefaults.set(0, forKey: "dailyGenerationCount")
             userDefaults.set(Date(), forKey: "lastGenerationReset")
         }
+        
+        Task {
+            await initializeFoundationModel()
+        }
+    }
+    
+    // MARK: - Foundation Models Setup
+    
+    private func initializeFoundationModel() async {
+        #if canImport(FoundationModels)
+        if #available(iOS 26, *) {
+            // Future implementation when Foundation Models API is available
+            // This will be uncommented when the actual APIs are available
+            /*
+            do {
+                // Try to load a custom poetry adapter if available
+                if let poetryAdapter = try? SystemLanguageModel.Adapter(name: "poetry_generation") {
+                    self.adapter = poetryAdapter
+                    self.languageModel = SystemLanguageModel(adapter: poetryAdapter)
+                } else {
+                    // Fall back to base system model
+                    self.languageModel = SystemLanguageModel()
+                }
+                
+                if let model = languageModel as? SystemLanguageModel {
+                    self.modelSession = LanguageModelSession(model: model)
+                }
+            } catch {
+                print("Failed to initialize Foundation Models: \(error)")
+                // Model will remain nil, falling back to local generation
+            }
+            */
+        }
+        #endif
     }
     
     // MARK: - Public Methods
@@ -96,16 +153,29 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
             try await checkAvailabilityAndQuota()
             
             let prompt = buildVibePrompt(from: vibeAnalysis)
-            let poemContent = try await generateContent(prompt: prompt)
-            let poem = try parseGeneratedPoem(poemContent, vibe: vibeAnalysis.vibe)
             
-            await incrementDailyCount()
-            return poem
+            // Try Foundation Models if available (iOS 26+)
+            if await isFoundationModelsAvailable() {
+                #if canImport(FoundationModels)
+                if #available(iOS 26, *) {
+                    // Future implementation
+                    // let generatedPoem = try await generateWithFoundationModels(prompt: prompt)
+                    // let poem = convertToPoemModel(generatedPoem, vibe: vibeAnalysis.vibe)
+                    // await incrementDailyCount()
+                    // return poem
+                }
+                #endif
+            }
+            
+            // Fall back to local generation for now
+            throw PoemGenerationError.modelUnavailable
+            
         } catch PoemGenerationError.deviceNotSupported {
             // Fallback to local generation if AI is not supported
             return generateLocalPoem(vibe: vibeAnalysis.vibe)
         } catch {
-            throw error
+            // For now, always fall back to local generation since Foundation Models isn't available yet
+            return generateLocalPoem(vibe: vibeAnalysis.vibe)
         }
     }
     
@@ -118,56 +188,98 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
             }
             
             let enhancedPrompt = enhanceCustomPrompt(prompt)
-            let poemContent = try await generateContent(prompt: enhancedPrompt)
-            let poem = try parseGeneratedPoem(poemContent, vibe: nil)
             
-            await incrementDailyCount()
-            return poem
+            // Try Foundation Models if available (iOS 26+)
+            if await isFoundationModelsAvailable() {
+                #if canImport(FoundationModels)
+                if #available(iOS 26, *) {
+                    // Future implementation
+                    // let generatedPoem = try await generateWithFoundationModels(prompt: enhancedPrompt)
+                    // let poem = convertToPoemModel(generatedPoem, vibe: nil)
+                    // await incrementDailyCount()
+                    // return poem
+                }
+                #endif
+            }
+            
+            // Fall back to local generation for now
+            throw PoemGenerationError.modelUnavailable
+            
         } catch PoemGenerationError.deviceNotSupported {
             // Fallback to local generation for custom prompts when AI is not supported
             return generateLocalPoem(prompt: prompt)
         } catch {
-            throw error
+            // For now, always fall back to local generation since Foundation Models isn't available yet
+            return generateLocalPoem(prompt: prompt)
         }
     }
     
     func isAvailable() async -> Bool {
-        // For iOS 26 FoundationModels, check device capabilities
-        let deviceSupported = await checkDeviceSupport()
-        let modelAvailable = await checkModelAvailability()
-        return deviceSupported && modelAvailable
+        // Check if Foundation Models is available
+        return await isFoundationModelsAvailable()
     }
+    
+    // MARK: - Foundation Models Availability Check
+    
+    private func isFoundationModelsAvailable() async -> Bool {
+        #if canImport(FoundationModels)
+        if #available(iOS 26, *) {
+            // Use proper SystemLanguageModel availability checking
+            do {
+                // Check if SystemLanguageModel is available on this device
+                let isSupported = await SystemLanguageModel.isSupported
+                
+                // Additional capability checks
+                if isSupported {
+                    // Check if text generation is supported
+                    let capabilities = await SystemLanguageModel.capabilities
+                    return capabilities.contains(.textGeneration)
+                }
+                
+                return false
+            } catch {
+                // If availability check fails, assume not available
+                return false
+            }
+        }
+        #endif
+        return false
+    }
+    
+    // MARK: - Future Foundation Models Generation
+    
+    #if canImport(FoundationModels)
+    @available(iOS 26, *)
+    private func generateWithFoundationModels(prompt: String) async throws -> GeneratedPoem {
+        // Future implementation when APIs are available
+        /*
+        guard let session = modelSession as? LanguageModelSession else {
+            throw PoemGenerationError.modelUnavailable
+        }
+        
+        do {
+            // Use guided generation for structured poem output
+            let response = try await session.respond(to: prompt, generatingResponseOf: GeneratedPoem.self)
+            return response
+        } catch {
+            // If guided generation fails, try regular text generation and parse
+            let textResponse = try await session.respond(to: prompt)
+            return try parseTextToPoem(textResponse)
+        }
+        */
+        throw PoemGenerationError.modelUnavailable
+    }
+    #endif
     
     // MARK: - Private Methods
     
     private func checkAvailabilityAndQuota() async throws {
-        guard await isAvailable() else {
-            throw PoemGenerationError.deviceNotSupported
-        }
+        // For now, since Foundation Models isn't available, we'll allow local generation
+        // In the future: guard await isAvailable() else { throw PoemGenerationError.deviceNotSupported }
         
         guard dailyGenerationCount < maxDailyGenerations else {
             throw PoemGenerationError.quotaExceeded
         }
-    }
-    
-    private func checkDeviceSupport() async -> Bool {
-        // Check for Neural Engine or similar AI capabilities
-        // This would use actual FoundationModels API to check device support
-        #if targetEnvironment(simulator)
-        return false
-        #else
-        // In real implementation, this would check:
-        // - Device has Neural Engine
-        // - iOS version compatibility
-        // - Available memory/storage
-        return true
-        #endif
-    }
-    
-    private func checkModelAvailability() async -> Bool {
-        // This would check if the foundation models are available and loaded
-        // For now, we'll simulate this check
-        return true
     }
     
     private func buildVibePrompt(from vibeAnalysis: VibeAnalysis) -> String {
@@ -175,22 +287,22 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
         let context = buildContextFromAnalysis(vibeAnalysis)
         
         return """
-        \(basePrompt)
+        You are a talented poet creating original poetry. \(basePrompt)
         
         Context: Today's news suggests \(context).
         
-        Please write a poem that captures this \(vibeAnalysis.vibe.displayName.lowercased()) feeling while being:
+        Create a poem that captures this \(vibeAnalysis.vibe.displayName.lowercased()) feeling while being:
         - Original and creative
         - Appropriate for all audiences
         - 12-20 lines long
         - Emotionally resonant
         - Well-structured with clear rhythm
         
-        Format the response as:
-        Title: [Poem Title]
-        Author: AI Poet
-        
-        [Poem content with line breaks]
+        The poem should have:
+        - A compelling title
+        - Your name as "AI Poet" for the author
+        - Individual lines of poetry (not paragraphs)
+        - A style description (e.g., "free verse", "sonnet", "haiku")
         """
     }
     
@@ -218,7 +330,7 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
     
     private func enhanceCustomPrompt(_ prompt: String) -> String {
         return """
-        Write a beautiful poem based on this request: "\(prompt)"
+        You are a talented poet. Write a beautiful poem based on this request: "\(prompt)"
         
         Please ensure the poem is:
         - Original and creative
@@ -227,125 +339,23 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
         - Well-structured with clear rhythm
         - Emotionally engaging
         
-        Format the response as:
-        Title: [Poem Title]
-        Author: AI Poet
-        
-        [Poem content with line breaks]
+        The poem should have:
+        - A compelling title
+        - Your name as "AI Poet" for the author
+        - Individual lines of poetry (not paragraphs)
+        - A style description (e.g., "free verse", "sonnet", "haiku")
         """
     }
     
-    private func generateContent(prompt: String) async throws -> String {
-        // This is where we would use the actual FoundationModels API
-        // For iOS 26, this might look something like:
-        /*
-        import FoundationModels
-        
-        let model = try await FoundationModel.textGeneration()
-        let request = TextGenerationRequest(
-            prompt: prompt,
-            maxTokens: 500,
-            temperature: 0.8,
-            topP: 0.9
-        )
-        
-        let response = try await model.generate(request)
-        return response.text
-        */
-        
-        // For now, we'll simulate the API call with mock generation
-        try await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
-        
-        // Check for content filtering
-        if containsInappropriateContent(prompt) {
-            throw PoemGenerationError.contentFiltered
-        }
-        
-        // Return a mock poem for demonstration
-        return await generateMockPoem(based: prompt)
-    }
-    
-    private func generateMockPoem(based prompt: String) async -> String {
-        // This is a simple mock implementation
-        // In reality, this would be handled by FoundationModels
-        let mockPoems = [
-            """
-            Title: Morning's Promise
-            Author: AI Poet
-            
-            In the quiet dawn, hope whispers soft,
-            Through golden rays that lift hearts aloft,
-            Each new day brings a chance to grow,
-            To find the light that helps us glow.
-            
-            The world awakens with gentle grace,
-            And peace settles in this sacred space,
-            Where dreams and reality softly meet,
-            And life's rhythm finds its beat.
-            
-            So let us cherish this moment here,
-            Where love casts out all trace of fear,
-            For in this dawn, we clearly see
-            The beauty of what we're meant to be.
-            """,
-            
-            """
-            Title: Winds of Change
-            Author: AI Poet
-            
-            The winds of change blow fierce and free,
-            Across the landscape of our destiny,
-            They carry stories from afar,
-            Of those who've wished upon a star.
-            
-            Through trials faced and lessons learned,
-            We find the bridges we have burned
-            Were merely paths that led us here,
-            To face tomorrow without fear.
-            
-            The storms may rage, the thunder roll,
-            But deep within lives a peaceful soul,
-            That knows beyond the clouded sky,
-            The sun still shines for you and I.
-            """,
-            
-            """
-            Title: Quiet Reflections
-            Author: AI Poet
-            
-            In moments of silence, wisdom speaks,
-            To hearts that listen, souls that seek
-            The deeper truths that life can show
-            Through seasons of both joy and woe.
-            
-            The gentle rain upon the earth
-            Reminds us of our sacred worth,
-            Each drop a gift, each moment blessed
-            With opportunities to rest.
-            
-            And in this stillness, we can find
-            The peace that calms both heart and mind,
-            Where gratitude and wonder meet
-            To make our journey feel complete.
-            """
-        ]
-        
-        return mockPoems.randomElement() ?? mockPoems[0]
-    }
-    
-    private func containsInappropriateContent(_ prompt: String) -> Bool {
-        // Simple content filtering - in reality would be more sophisticated
-        let inappropriateWords = ["violence", "hate", "harm", "explicit"]
-        let lowercasePrompt = prompt.lowercased()
-        return inappropriateWords.contains { lowercasePrompt.contains($0) }
-    }
-    
-    private func parseGeneratedPoem(_ content: String, vibe: DailyVibe?) throws -> Poem {
-        let lines = content.components(separatedBy: .newlines)
+    #if canImport(FoundationModels)
+    @available(iOS 26, *)
+    private func parseTextToPoem(_ text: String) throws -> GeneratedPoem {
+        let lines = text.components(separatedBy: .newlines)
         
         var title = "Generated Poem"
         var author = "AI Poet"
         var poemLines: [String] = []
+        var style: String?
         
         var parsingPoem = false
         
@@ -356,7 +366,9 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
                 title = String(trimmedLine.dropFirst(6)).trimmingCharacters(in: .whitespacesAndNewlines)
             } else if trimmedLine.hasPrefix("Author:") {
                 author = String(trimmedLine.dropFirst(7)).trimmingCharacters(in: .whitespacesAndNewlines)
-            } else if !trimmedLine.isEmpty && !trimmedLine.hasPrefix("Title:") && !trimmedLine.hasPrefix("Author:") {
+            } else if trimmedLine.hasPrefix("Style:") {
+                style = String(trimmedLine.dropFirst(6)).trimmingCharacters(in: .whitespacesAndNewlines)
+            } else if !trimmedLine.isEmpty && !trimmedLine.hasPrefix("Title:") && !trimmedLine.hasPrefix("Author:") && !trimmedLine.hasPrefix("Style:") {
                 parsingPoem = true
             }
             
@@ -369,13 +381,24 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
             throw PoemGenerationError.generationFailed
         }
         
-        return Poem(
+        return GeneratedPoem(
             title: title,
-            lines: poemLines,
             author: author,
+            lines: poemLines,
+            style: style
+        )
+    }
+    
+    @available(iOS 26, *)
+    private func convertToPoemModel(_ generatedPoem: GeneratedPoem, vibe: DailyVibe?) -> Poem {
+        return Poem(
+            title: generatedPoem.title,
+            lines: generatedPoem.lines,
+            author: generatedPoem.author,
             vibe: vibe
         )
     }
+    #endif
     
     private func incrementDailyCount() async {
         dailyGenerationCount += 1
@@ -383,18 +406,185 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
     }
     
     private func generateLocalPoem(vibe: DailyVibe? = nil, prompt: String? = nil) -> Poem {
-        let title = vibe?.displayName ?? "A Simple Poem"
+        let title = vibe?.displayName ?? (prompt != nil ? "Custom Inspiration" : "A Simple Poem")
         let author = "Local Poet"
         
-        let lines = [
-            "When AI sleeps, and models rest,",
-            "A local verse is put to the test.",
-            "No complex thoughts, no grand design,",
-            "Just simple words, in a simple line.",
-            "A poem born from code, not art,",
-            "A humble offering, from the heart."
-        ]
+        // Generate different poems based on vibe or prompt
+        let lines: [String]
+        
+        if let vibe = vibe {
+            lines = generateVibeSpecificLines(for: vibe)
+        } else if let prompt = prompt {
+            lines = generatePromptSpecificLines(for: prompt)
+        } else {
+            lines = [
+                "When AI sleeps, and models rest,",
+                "A local verse is put to the test.",
+                "No complex thoughts, no grand design,",
+                "Just simple words, in a simple line.",
+                "A poem born from code, not art,",
+                "A humble offering, from the heart."
+            ]
+        }
         
         return Poem(title: title, lines: lines, author: author, vibe: vibe)
+    }
+    
+    private func generateVibeSpecificLines(for vibe: DailyVibe) -> [String] {
+        switch vibe {
+        case .hopeful:
+            return [
+                "Dawn breaks with gentle, golden light,",
+                "Chasing shadows from the night.",
+                "Hope rises like the morning sun,",
+                "A new day's journey has begun.",
+                "With every breath, a chance to grow,",
+                "To plant the seeds of what we know.",
+                "Tomorrow holds what dreams may bring,",
+                "In hope's embrace, our hearts take wing."
+            ]
+        case .contemplative:
+            return [
+                "In quiet moments, thoughts take flight,",
+                "Through corridors of fading light.",
+                "Questions linger in the air,",
+                "Of life and love and what we share.",
+                "Reflection pools in stillness deep,",
+                "Where memories and wisdom sleep.",
+                "In contemplation's gentle space,",
+                "We find the truth in time's embrace."
+            ]
+        case .energetic:
+            return [
+                "Electric currents through the air,",
+                "Energy dancing everywhere!",
+                "Hearts beat fast with life's refrain,",
+                "Joy and movement break each chain.",
+                "Forward motion, spirits high,",
+                "Reaching upward to the sky.",
+                "In this moment, fully alive,",
+                "Energy helps our souls to thrive!"
+            ]
+        case .peaceful:
+            return [
+                "Stillness settles like morning dew,",
+                "On petals fresh and skies so blue.",
+                "Peace descends with gentle grace,",
+                "Finding rest in this quiet space.",
+                "Breathe in calm, breathe out the day,",
+                "Let worries slowly drift away.",
+                "In tranquil moments, spirits mend,",
+                "On peace, our hearts can now depend."
+            ]
+        case .melancholic:
+            return [
+                "Autumn leaves drift slowly down,",
+                "In shades of amber, gold, and brown.",
+                "Bittersweet the memories flow,",
+                "Of seasons past and long ago.",
+                "Beauty found in gentle sorrow,",
+                "Yesterday fades to meet tomorrow.",
+                "In melancholy's tender embrace,",
+                "We find both sadness and sweet grace."
+            ]
+        case .inspiring:
+            return [
+                "Rise up, spirit, break the chains,",
+                "Let courage flow through all your veins.",
+                "Dreams await your bold embrace,",
+                "Step forward with determined grace.",
+                "Mountains move for those who dare,",
+                "To reach beyond what seems unfair.",
+                "In inspiration's mighty call,",
+                "Stand tall, stand proud, and give your all."
+            ]
+        case .uncertain:
+            return [
+                "Crossroads stretch in every way,",
+                "Unclear which path to take today.",
+                "In uncertainty's misty veil,",
+                "We write tomorrow's unknown tale.",
+                "Questions linger, answers hide,",
+                "But wisdom walks here by our side.",
+                "Through clouds of doubt, one truth rings clear:",
+                "Each step we take conquers our fear."
+            ]
+        case .celebratory:
+            return [
+                "Raise your voice and sing with joy,",
+                "Let celebration employ",
+                "Every reason to be glad,",
+                "For all the good things that we've had.",
+                "Dance beneath the starlit sky,",
+                "Let happiness and spirits fly.",
+                "In moments bright and filled with cheer,",
+                "Celebrate what we hold dear!"
+            ]
+        case .reflective:
+            return [
+                "Mirror of the soul looks deep,",
+                "Into places where we keep",
+                "Lessons learned and wisdom earned,",
+                "From every bridge that we have burned.",
+                "Reflection shows us who we are,",
+                "How close we've come, how very far.",
+                "In looking back, we clearly see",
+                "The path that led to who we'll be."
+            ]
+        case .determined:
+            return [
+                "Steel resolve and iron will,",
+                "Forward march up every hill.",
+                "Determination's steady flame",
+                "Burns bright through loss and burned through shame.",
+                "No obstacle can block the way",
+                "Of those who choose to seize the day.",
+                "With purpose clear and vision true,",
+                "There's nothing we cannot push through."
+            ]
+        }
+    }
+    
+    private func generatePromptSpecificLines(for prompt: String) -> [String] {
+        // Simple pattern matching for common themes in prompts
+        let lowerPrompt = prompt.lowercased()
+        
+        if lowerPrompt.contains("love") || lowerPrompt.contains("heart") {
+            return [
+                "Love's gentle whisper fills the air,",
+                "A tender touch, a moment rare.",
+                "Hearts that beat in perfect time,",
+                "Creating poetry and rhyme.",
+                "In love's embrace, we find our way,",
+                "Through darkest night to brightest day."
+            ]
+        } else if lowerPrompt.contains("nature") || lowerPrompt.contains("tree") || lowerPrompt.contains("forest") {
+            return [
+                "Ancient trees with branches wide,",
+                "Stand as nature's faithful guide.",
+                "Leaves whisper secrets in the breeze,",
+                "Stories told by willow trees.",
+                "In nature's arms, we find our peace,",
+                "Where all our worries gently cease."
+            ]
+        } else if lowerPrompt.contains("ocean") || lowerPrompt.contains("sea") || lowerPrompt.contains("water") {
+            return [
+                "Waves roll in with endless grace,",
+                "Covering every grain and trace.",
+                "Ocean's song, both deep and wide,",
+                "Calls to something deep inside.",
+                "In waters blue, we see our dreams,",
+                "Reflected in the silver streams."
+            ]
+        } else {
+            return [
+                "Inspired by your words so true,",
+                "This simple verse I write for you.",
+                "Though humble lines and basic rhyme,",
+                "They capture just a piece of time.",
+                "From prompt to poem, thought takes flight,",
+                "Creating beauty in the night."
+            ]
+        }
     }
 }
