@@ -9,7 +9,6 @@ struct TestData {
     
     static let samplePoem = Poem(
         title: "The Road Not Taken",
-        author: "Robert Frost",
         lines: [
             "Two roads diverged in a yellow wood,",
             "And sorry I could not travel both",
@@ -17,39 +16,65 @@ struct TestData {
             "And looked down one as far as I could",
             "To where it bent in the undergrowth;"
         ],
-        linecount: "5"
+        author: "Robert Frost"
     )
     
-    static let samplePoem2 = Poem(
-        title: "Hope",
-        author: "Emily Dickinson",
+    static let vibePoem = Poem(
+        title: "Digital Dreams",
         lines: [
-            "Hope is the thing with feathers",
-            "That perches in the soul,",
-            "And sings the tune without the words,",
-            "And never stops at all."
+            "In circuits bright and screens aglow,",
+            "Where data streams and algorithms flow,",
+            "We find our hearts in silicon,",
+            "A future built, never undone."
         ],
-        linecount: "4"
+        author: "AI Poet",
+        vibe: .hopeful
     )
     
-    static let samplePoem3 = Poem(
-        title: "The Love Song of J. Alfred Prufrock",
-        author: "T.S. Eliot",
+    static let shortPoem = Poem(
+        title: "Haiku",
         lines: [
-            "Let us go then, you and I,",
-            "When the evening is spread out against the sky",
-            "Like a patient etherized upon a table;"
+            "Morning dew glistens",
+            "On petals soft and tender",
+            "Nature's gentle kiss"
         ],
-        linecount: "3"
+        author: "Anonymous"
+    )
+    
+    static let longPoem = Poem(
+        title: "The Journey",
+        lines: [
+            "Life is but a winding path",
+            "Through valleys deep and mountains high",
+            "We walk with hope, we walk with faith",
+            "Beneath the ever-changing sky",
+            "Each step we take, each breath we draw",
+            "Brings wisdom that we never saw",
+            "And in the end, when day is done",
+            "We'll see that all our paths were one"
+        ],
+        author: "Test Author"
+    )
+    
+    static let customPoem = Poem(
+        title: "Custom Creation",
+        lines: [
+            "In response to your prompt:",
+            "Words flow like rivers deep,",
+            "Through valleys of imagination,",
+            "Where thoughts and dreams can leap.",
+            "Yet filled with human prayer."
+        ],
+        author: "AI Generated",
+        vibe: .inspiring
     )
     
     static func sampleAIPoem(vibe: DailyVibe) -> Poem {
         let poemContent = generatePoemForVibe(vibe)
         return Poem(
             title: poemContent.title,
-            author: "AI Generated",
             lines: poemContent.lines,
-            linecount: "\(poemContent.lines.count)",
+            author: "AI Generated",
             vibe: vibe
         )
     }
@@ -57,7 +82,6 @@ struct TestData {
     static func sampleCustomPoem(prompt: String) -> Poem {
         return Poem(
             title: "Custom Creation",
-            author: "AI Generated",
             lines: [
                 "In response to your prompt:",
                 "\"\(prompt)\"",
@@ -65,43 +89,44 @@ struct TestData {
                 "A poem born from digital thought,",
                 "Yet filled with human prayer."
             ],
-            linecount: "5",
+            author: "AI Generated",
             vibe: .inspiring
         )
     }
     
     static let samplePoems: [Poem] = [
         samplePoem,
-        samplePoem2,
-        samplePoem3
+        vibePoem,
+        shortPoem,
+        longPoem
     ]
     
     // MARK: - Sample News Articles
     
-    static let sampleNewsArticles: [NewsArticle] = [
+    static let sampleNewsArticles = [
         NewsArticle(
-            title: "Scientists Discover New Treatment for Rare Disease",
-            description: "Breakthrough research offers hope for patients worldwide",
-            content: "Researchers at a leading university have developed a promising new treatment...",
+            title: "Scientists Discover New Species of Deep-Sea Creature",
+            description: "Researchers have found a previously unknown species in the depths of the Pacific Ocean.",
+            content: "In a groundbreaking discovery, marine biologists have identified a new species of deep-sea creature that exhibits unique bioluminescent properties...",
+            publishedAt: Date(),
+            source: NewsSource(name: "Science Daily", id: "science-daily"),
+            url: URL(string: "https://sciencedaily.com/article1")
+        ),
+        NewsArticle(
+            title: "Local Community Comes Together for Charity Drive",
+            description: "Neighbors unite to support families in need during the holiday season.",
+            content: "The annual charity drive organized by the local community center has exceeded all expectations this year...",
             publishedAt: Date().addingTimeInterval(-3600),
-            source: NewsSource(name: "Science Daily", url: URL(string: "https://sciencedaily.com")!),
-            url: URL(string: "https://sciencedaily.com/breakthrough-treatment")
+            source: NewsSource(name: "Community News", id: "community-news"),
+            url: URL(string: "https://community.news/article2")
         ),
         NewsArticle(
-            title: "Local Community Comes Together to Help Neighbors",
-            description: "Heartwarming story of solidarity during challenging times",
-            content: "In a remarkable display of community spirit, residents have organized...",
+            title: "Breakthrough in Renewable Energy Technology",
+            description: "New solar panel design achieves record efficiency rates.",
+            content: "Engineers at the University of Technology have developed a revolutionary solar panel design that achieves unprecedented efficiency rates...",
             publishedAt: Date().addingTimeInterval(-7200),
-            source: NewsSource(name: "Community News", url: URL(string: "https://community.news")!),
-            url: URL(string: "https://community.news/solidarity-story")
-        ),
-        NewsArticle(
-            title: "Technology Innovation Promises Sustainable Future",
-            description: "New green technology could revolutionize energy production",
-            content: "A startup company has unveiled technology that could significantly reduce...",
-            publishedAt: Date().addingTimeInterval(-10800),
-            source: NewsSource(name: "Tech World", url: URL(string: "https://techworld.com")!),
-            url: URL(string: "https://techworld.com/green-innovation")
+            source: NewsSource(name: "Tech World", id: "tech-world"),
+            url: URL(string: "https://techworld.com/article3")
         )
     ]
     
@@ -110,36 +135,32 @@ struct TestData {
     static let sampleVibeAnalysis = VibeAnalysis(
         vibe: .hopeful,
         confidence: 0.85,
-        reasoning: "The news articles contain positive developments in science, community solidarity, and sustainable technology, indicating an overall hopeful outlook.",
-        keywords: ["breakthrough", "hope", "community", "innovation", "future"],
-        sentiment: SentimentScore(positivity: 0.8, energy: 0.7, complexity: 0.6),
-        analysisDate: Date()
+        reasoning: "The overall tone of today's news reflects positive developments in science and community cooperation.",
+        keywords: ["discovery", "cooperation", "breakthrough", "community"],
+        sentiment: SentimentScore(positivity: 0.8, energy: 0.7, complexity: 0.5)
     )
     
-    static let sampleVibeAnalyses: [VibeAnalysis] = [
+    static let differentVibeAnalyses = [
         VibeAnalysis(
-            vibe: .hopeful,
-            confidence: 0.85,
-            reasoning: "Positive news about scientific breakthroughs and community support",
-            keywords: ["breakthrough", "hope", "community"],
-            sentiment: SentimentScore(positivity: 0.8, energy: 0.7, complexity: 0.6),
-            analysisDate: Date()
-        ),
-        VibeAnalysis(
-            vibe: .contemplative,
-            confidence: 0.72,
-            reasoning: "Complex global issues requiring deep thought and reflection",
-            keywords: ["complex", "reflection", "analysis"],
-            sentiment: SentimentScore(positivity: 0.5, energy: 0.4, complexity: 0.9),
-            analysisDate: Date().addingTimeInterval(-86400)
+            vibe: .reflective,
+            confidence: 0.75,
+            reasoning: "Today's events encourage introspection and thoughtful consideration.",
+            keywords: ["contemplation", "reflection", "thoughtful"],
+            sentiment: SentimentScore(positivity: 0.6, energy: 0.4, complexity: 0.8)
         ),
         VibeAnalysis(
             vibe: .energetic,
-            confidence: 0.91,
-            reasoning: "News of technological innovations and rapid progress",
-            keywords: ["innovation", "progress", "dynamic"],
-            sentiment: SentimentScore(positivity: 0.9, energy: 0.95, complexity: 0.7),
-            analysisDate: Date().addingTimeInterval(-172800)
+            confidence: 0.9,
+            reasoning: "High-energy events and positive developments dominate the news cycle.",
+            keywords: ["energy", "action", "dynamic", "progress"],
+            sentiment: SentimentScore(positivity: 0.9, energy: 0.95, complexity: 0.4)
+        ),
+        VibeAnalysis(
+            vibe: .melancholic,
+            confidence: 0.7,
+            reasoning: "Somber themes and reflective content characterize today's atmosphere.",
+            keywords: ["loss", "reflection", "memory", "change"],
+            sentiment: SentimentScore(positivity: 0.3, energy: 0.2, complexity: 0.9)
         )
     ]
     
@@ -355,6 +376,16 @@ struct TestData {
                     "It turns the darkness into light."
                 ]
             )
+        case .hopeful:
+            return (
+                title: "Digital Dreams",
+                lines: [
+                    "In circuits bright and screens aglow,",
+                    "Where data streams and algorithms flow,",
+                    "We find our hearts in silicon,",
+                    "A future built, never undone."
+                ]
+            )
         }
     }
 }
@@ -370,9 +401,8 @@ extension Poem {
     ) -> Poem {
         return Poem(
             title: title,
-            author: author,
             lines: lines,
-            linecount: "\(lines.count)",
+            author: author,
             vibe: vibe
         )
     }
@@ -388,8 +418,7 @@ extension VibeAnalysis {
             confidence: confidence,
             reasoning: "Test reasoning",
             keywords: ["test", "sample"],
-            sentiment: SentimentScore(positivity: 0.7, energy: 0.6, complexity: 0.5),
-            analysisDate: Date()
+            sentiment: SentimentScore(positivity: 0.7, energy: 0.6, complexity: 0.5)
         )
     }
 }
@@ -405,7 +434,7 @@ extension NewsArticle {
             description: description,
             content: "Test content",
             publishedAt: publishedAt,
-            source: NewsSource(name: "Test Source", url: URL(string: "https://test.com")!),
+            source: NewsSource(name: "Test Source", id: "test-source"),
             url: URL(string: "https://test.com/article")
         )
     }

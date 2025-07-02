@@ -62,6 +62,7 @@ struct VibeGenerationView: View {
                 .font(.title2)
                 .fontWeight(.bold)
                 .foregroundColor(colorScheme == .dark ? .white : .black)
+                .accessibilityIdentifier("current_vibe")
             
             Text(vibeAnalysis.vibe.description)
                 .font(.subheadline)
@@ -190,6 +191,7 @@ struct VibeGenerationView: View {
                 .shadow(color: Color.purple.opacity(0.3), radius: 8, x: 0, y: 4)
             }
             .accessibilityLabel("Generate a poem based on today's vibe")
+            .accessibilityIdentifier("generate_vibe_poem_button")
             
             Button(action: onCustomPrompt) {
                 HStack {
@@ -290,6 +292,7 @@ struct CustomPromptView: View {
                     RoundedRectangle(cornerRadius: 12)
                         .strokeBorder(Color.gray.opacity(0.3), lineWidth: 1)
                 )
+                .accessibilityIdentifier("custom_prompt_text_field")
             
             Text("Examples: \"A poem about friendship\", \"Write about the ocean at sunset\", \"Something inspiring about overcoming challenges\"")
                 .font(.caption)
@@ -323,6 +326,7 @@ struct CustomPromptView: View {
             .clipShape(Capsule())
             .shadow(color: Color.purple.opacity(0.3), radius: 8, x: 0, y: 4)
         }
+        .accessibilityIdentifier("generate_custom_poem_button")
         .disabled(promptText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
         .opacity(promptText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? 0.6 : 1.0)
     }

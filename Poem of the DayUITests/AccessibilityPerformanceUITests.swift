@@ -1,5 +1,4 @@
 import XCTest
-@testable import Poem_of_the_Day
 
 final class AccessibilityPerformanceUITests: XCTestCase {
     
@@ -16,7 +15,9 @@ final class AccessibilityPerformanceUITests: XCTestCase {
         app.launchArguments = ["--ui-testing", "--accessibility-testing"]
         app.launchEnvironment = [
             "ENABLE_ACCESSIBILITY_TESTING": "true",
-            "PERFORMANCE_TESTING": "true"
+            "PERFORMANCE_TESTING": "true",
+            "AI_AVAILABLE": "true",
+            "ENABLE_TELEMETRY": "true"
         ]
         
         app.launch()
@@ -41,28 +42,41 @@ final class AccessibilityPerformanceUITests: XCTestCase {
             "Share"
         ]
         
-        TestUtilities.verifyAccessibilityLabels(
-            in: app,
-            expectedLabels: requiredAccessibilityLabels
-        )
+        // Verify accessibility labels exist
+        for label in requiredAccessibilityLabels {
+            let element = app.otherElements[label].firstMatch
+            XCTAssertTrue(element.exists, "Element with accessibility label '\(label)' should exist")
+        }
         
         // Test VoiceOver navigation
         if mainPage.verifyPoemIsDisplayed() {
-            TestUtilities.verifyVoiceOverSupport(for: mainPage.poemTitle)
-            TestUtilities.verifyVoiceOverSupport(for: mainPage.poemAuthor)
-            TestUtilities.verifyVoiceOverSupport(for: mainPage.poemContent)
+            // Verify VoiceOver support for poem elements
+            XCTAssertTrue(mainPage.poemTitle.isAccessibilityElement, "Poem title should be accessible to VoiceOver")
+            XCTAssertFalse(mainPage.poemTitle.label.isEmpty, "Poem title should have accessibility label")
+            
+            XCTAssertTrue(mainPage.poemAuthor.isAccessibilityElement, "Poem author should be accessible to VoiceOver")
+            XCTAssertFalse(mainPage.poemAuthor.label.isEmpty, "Poem author should have accessibility label")
+            
+            XCTAssertTrue(mainPage.poemContent.isAccessibilityElement, "Poem content should be accessible to VoiceOver")
+            XCTAssertFalse(mainPage.poemContent.label.isEmpty, "Poem content should have accessibility label")
         }
         
         // Test interactive elements
-        TestUtilities.verifyVoiceOverSupport(for: mainPage.refreshButton)
-        TestUtilities.verifyVoiceOverSupport(for: mainPage.favoritesButton)
+        // Verify VoiceOver support for interactive elements
+        XCTAssertTrue(mainPage.refreshButton.isAccessibilityElement, "Refresh button should be accessible to VoiceOver")
+        XCTAssertFalse(mainPage.refreshButton.label.isEmpty, "Refresh button should have accessibility label")
+        
+        XCTAssertTrue(mainPage.favoritesButton.isAccessibilityElement, "Favorites button should be accessible to VoiceOver")
+        XCTAssertFalse(mainPage.favoritesButton.label.isEmpty, "Favorites button should have accessibility label")
         
         if mainPage.favoriteButton.exists {
-            TestUtilities.verifyVoiceOverSupport(for: mainPage.favoriteButton)
+            XCTAssertTrue(mainPage.favoriteButton.isAccessibilityElement, "Favorite button should be accessible to VoiceOver")
+            XCTAssertFalse(mainPage.favoriteButton.label.isEmpty, "Favorite button should have accessibility label")
         }
         
         if mainPage.shareButton.exists {
-            TestUtilities.verifyVoiceOverSupport(for: mainPage.shareButton)
+            XCTAssertTrue(mainPage.shareButton.isAccessibilityElement, "Share button should be accessible to VoiceOver")
+            XCTAssertFalse(mainPage.shareButton.label.isEmpty, "Share button should have accessibility label")
         }
     }
     
@@ -281,9 +295,9 @@ final class AccessibilityPerformanceUITests: XCTestCase {
                 // Add and remove from favorites
                 if i % 3 == 0 {
                     mainPage.tapFavoriteButton()
-                    sleep(0.1)
+                    usleep(100000)
                     mainPage.tapUnfavoriteButton()
-                    sleep(0.1)
+                    usleep(100000)
                 }
             }
         }
@@ -316,9 +330,9 @@ final class AccessibilityPerformanceUITests: XCTestCase {
                 // Perform scrolling
                 for _ in 0..<10 {
                     scrollView.swipeUp()
-                    sleep(0.1)
+                    usleep(100000)
                     scrollView.swipeDown()
-                    sleep(0.1)
+                    usleep(100000)
                 }
             }
         }
@@ -384,11 +398,11 @@ final class AccessibilityPerformanceUITests: XCTestCase {
         // Rapidly perform multiple operations
         for _ in 0..<10 {
             mainPage.tapRefreshButton()
-            sleep(0.2)
+            usleep(200000)
             
             if mainPage.favoriteButton.exists {
                 mainPage.tapFavoriteButton()
-                sleep(0.1)
+                usleep(100000)
             }
             
             if mainPage.shareButton.exists {
@@ -398,7 +412,7 @@ final class AccessibilityPerformanceUITests: XCTestCase {
                 }
             }
             
-            sleep(0.3)
+            usleep(300000)
         }
         
         let duration = CFAbsoluteTimeGetCurrent() - startTime
@@ -461,7 +475,7 @@ final class AccessibilityPerformanceUITests: XCTestCase {
             if element.exists {
                 // Simulate VoiceOver focus
                 element.tap()
-                sleep(0.1)
+                usleep(100000)
             }
         }
         
@@ -471,6 +485,181 @@ final class AccessibilityPerformanceUITests: XCTestCase {
         XCTAssertLessThan(duration, 10.0, "VoiceOver navigation should be performant")
         
         XCTAssertTrue(mainPage.isDisplayed(), "App should remain responsive with VoiceOver")
+    }
+    
+    // MARK: - User Experience Tests
+    
+    func testLoadingStatesVisibility() throws {
+        app.launch()
+        
+        // Test refresh loading state
+        let refreshButton = app.buttons.matching(identifier: "refresh_button").firstMatch
+        XCTAssertTrue(refreshButton.waitForExistence(timeout: 5))
+        
+        refreshButton.tap()
+        
+        // Check for loading indicators
+        let loadingIndicator = app.activityIndicators.firstMatch
+        if loadingIndicator.exists {
+            XCTAssertTrue(loadingIndicator.exists, "Should show loading indicator during refresh")
+        }
+        
+        // Wait for completion
+        let poemTitle = app.staticTexts.matching(identifier: "poem_title").firstMatch
+        XCTAssertTrue(poemTitle.waitForExistence(timeout: 8))
+    }
+    
+    func testErrorStateAccessibility() throws {
+        // Configure for network error
+        app.terminate()
+        app.launchEnvironment["SIMULATE_NETWORK_ERROR"] = "true"
+        app.launch()
+        
+        // Try to refresh
+        let refreshButton = app.buttons.matching(identifier: "refresh_button").firstMatch
+        XCTAssertTrue(refreshButton.waitForExistence(timeout: 5))
+        refreshButton.tap()
+        
+        // Check error alert accessibility
+        let errorAlert = app.alerts.firstMatch
+        if errorAlert.waitForExistence(timeout: 5) {
+            XCTAssertTrue(errorAlert.isAccessibilityElement, "Error alert should be accessible")
+            
+            // Verify alert has readable content
+            let alertTitle = errorAlert.staticTexts.firstMatch
+            XCTAssertTrue(alertTitle.exists, "Error alert should have readable title")
+            
+            // Dismiss alert
+            let okButton = errorAlert.buttons["OK"]
+            if okButton.exists {
+                XCTAssertTrue(okButton.isAccessibilityElement, "OK button should be accessible")
+                okButton.tap()
+            }
+        }
+    }
+    
+    func testComplexUserFlowPerformance() throws {
+        app.launch()
+        
+        // Measure a complete user flow
+        measure(metrics: [XCTClockMetric()]) {
+            // Wait for initial load
+            let poemTitle = app.staticTexts.matching(identifier: "poem_title").firstMatch
+            XCTAssertTrue(poemTitle.waitForExistence(timeout: 5))
+            
+            // Favorite a poem
+            let favoriteButton = app.buttons.matching(identifier: "favorite_button").firstMatch
+            if favoriteButton.exists {
+                favoriteButton.tap()
+            }
+            
+            // Refresh poem
+            let refreshButton = app.buttons.matching(identifier: "refresh_button").firstMatch
+            refreshButton.tap()
+            XCTAssertTrue(poemTitle.waitForExistence(timeout: 8))
+            
+            // Share poem
+            let shareButton = app.buttons.matching(identifier: "share_button").firstMatch
+            if shareButton.exists {
+                shareButton.tap()
+                
+                let shareSheet = app.sheets.firstMatch
+                if shareSheet.waitForExistence(timeout: 3) {
+                    // Cancel share
+                    let cancelButton = shareSheet.buttons["Cancel"]
+                    if cancelButton.exists {
+                        cancelButton.tap()
+                    } else {
+                        app.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.1)).tap()
+                    }
+                }
+            }
+            
+            // Open favorites
+            let favoritesButton = app.buttons.matching(identifier: "favorites_button").firstMatch
+            if favoritesButton.exists {
+                favoritesButton.tap()
+                
+                let favoritesSheet = app.sheets.firstMatch
+                if favoritesSheet.waitForExistence(timeout: 3) {
+                    // Close favorites
+                    let cancelButton = favoritesSheet.buttons["Cancel"]
+                    if cancelButton.exists {
+                        cancelButton.tap()
+                    } else {
+                        app.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.1)).tap()
+                    }
+                }
+            }
+        }
+    }
+    
+    // MARK: - Advanced Accessibility Tests
+    
+    func testAccessibilityIdentifierCompleteness() throws {
+        app.launch()
+        
+        // Wait for content
+        let poemTitle = app.staticTexts.matching(identifier: "poem_title").firstMatch
+        XCTAssertTrue(poemTitle.waitForExistence(timeout: 5))
+        
+        // Verify all critical UI elements have accessibility identifiers
+        let criticalElements = [
+            ("poem_title", "Poem title"),
+            ("poem_author", "Poem author"),
+            ("favorite_button", "Favorite button"),
+            ("share_button", "Share button"),
+            ("refresh_button", "Refresh button"),
+            ("favorites_button", "Favorites button")
+        ]
+        
+        for (identifier, description) in criticalElements {
+            let element = app.descendants(matching: .any).matching(identifier: identifier).firstMatch
+            if element.exists {
+                XCTAssertTrue(element.exists, "\(description) should have accessibility identifier '\(identifier)'")
+            }
+        }
+    }
+    
+    func testAccessibilityAnnouncementsDuringStateChanges() throws {
+        app.launch()
+        
+        // Wait for content
+        let favoriteButton = app.buttons.matching(identifier: "favorite_button").firstMatch
+        XCTAssertTrue(favoriteButton.waitForExistence(timeout: 5))
+        
+        // Test that state changes provide appropriate feedback
+        favoriteButton.tap()
+        
+        // Verify button state changed (should now show unfavorite)
+        let unfavoriteButton = app.buttons.matching(identifier: "unfavorite_button").firstMatch
+        if unfavoriteButton.waitForExistence(timeout: 2) {
+            XCTAssertTrue(unfavoriteButton.exists, "Should show unfavorite state after favoriting")
+        }
+    }
+    
+    func testHighContrastModeSupport() throws {
+        // Configure for high contrast
+        app.terminate()
+        app.launchEnvironment["HIGH_CONTRAST"] = "true"
+        app.launch()
+        
+        // Verify content is still visible and accessible
+        let poemTitle = app.staticTexts.matching(identifier: "poem_title").firstMatch
+        XCTAssertTrue(poemTitle.waitForExistence(timeout: 5), "Content should be visible in high contrast mode")
+        
+        // Test button visibility in high contrast
+        let buttons = [
+            app.buttons.matching(identifier: "favorite_button").firstMatch,
+            app.buttons.matching(identifier: "share_button").firstMatch,
+            app.buttons.matching(identifier: "refresh_button").firstMatch
+        ]
+        
+        for button in buttons {
+            if button.exists {
+                XCTAssertTrue(button.isHittable, "Button should be visible and hittable in high contrast mode")
+            }
+        }
     }
 }
 

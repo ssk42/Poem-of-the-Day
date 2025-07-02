@@ -31,8 +31,8 @@ actor PoemRepository: PoemRepositoryProtocol {
         self.telemetryService = telemetryService
         self.userDefaults = userDefaults
         
-        // Initialize AI service if available (iOS 18.1+)
-        if #available(iOS 18.1, *) {
+        // Initialize AI service if available (iOS 26+)
+        if #available(iOS 26, *) {
             self.aiService = aiService ?? PoemGenerationService()
         } else {
             self.aiService = nil

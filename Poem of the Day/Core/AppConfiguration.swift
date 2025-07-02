@@ -89,6 +89,37 @@ enum AppConfiguration {
         static let useSimulatedData = false
         #endif
     }
+    
+    // MARK: - Testing Configuration
+    
+    enum Testing {
+        static var isUITesting: Bool {
+            ProcessInfo.processInfo.arguments.contains("--ui-testing")
+        }
+        
+        static var isAIAvailable: Bool {
+            if isUITesting {
+                return ProcessInfo.processInfo.environment["AI_AVAILABLE"] != "false"
+            }
+            return FeatureFlags.aiPoemGeneration
+        }
+        
+        static var shouldMockAIResponses: Bool {
+            isUITesting && ProcessInfo.processInfo.environment["MOCK_AI_RESPONSES"] == "true"
+        }
+        
+        static var shouldSimulateNetworkError: Bool {
+            isUITesting && ProcessInfo.processInfo.environment["SIMULATE_NETWORK_ERROR"] == "true"
+        }
+        
+        static var shouldMockAIError: Bool {
+            isUITesting && ProcessInfo.processInfo.environment["MOCK_AI_ERROR"] == "true"
+        }
+        
+        static var enableTelemetryTesting: Bool {
+            isUITesting && ProcessInfo.processInfo.environment["ENABLE_TELEMETRY"] == "true"
+        }
+    }
 }
 
 // MARK: - Environment Detection
@@ -109,5 +140,9 @@ extension AppConfiguration {
     
     static var isTestEnvironment: Bool {
         NSClassFromString("XCTestCase") != nil
+    }
+    
+    static var isUITestEnvironment: Bool {
+        Testing.isUITesting
     }
 }

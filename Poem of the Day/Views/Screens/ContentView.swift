@@ -27,6 +27,7 @@ struct ContentView: View {
                         
                         if isPoemLoading {
                             loadingView
+                                .accessibilityIdentifier("loading_indicator")
                         } else if let poem = viewModel.poemOfTheDay {
                             poemCard(poem: poem)
                         } else if viewModel.errorMessage != nil {
@@ -235,6 +236,7 @@ struct ContentView: View {
         )
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Loading poem")
+        .accessibilityIdentifier("loading_view")
     }
     
     private var errorView: some View {

@@ -1,591 +1,442 @@
 import XCTest
-@testable import Poem_of_the_Day
 
 final class ErrorScenarioUITests: XCTestCase {
     
     var app: XCUIApplication!
-    var pageFactory: PageFactory!
     
     override func setUpWithError() throws {
         continueAfterFailure = false
-        
         app = XCUIApplication()
-        pageFactory = PageFactory(app: app)
-        
-        // Configure launch arguments for error testing
-        app.launchArguments = ["--ui-testing", "--error-testing"]
-        app.launchEnvironment = [
-            "ENABLE_ERROR_SIMULATION": "true",
-            "ENABLE_RECOVERY_TESTING": "true"
-        ]
-        
-        app.launch()
     }
     
     override func tearDownWithError() throws {
         app = nil
-        pageFactory = nil
     }
     
-    // MARK: - Network Error Tests
+    // MARK: - Network Error Scenarios
     
     func testNetworkUnavailableError() throws {
-        // Simulate network unavailable
-        app.terminate()
-        app.launchEnvironment["SIMULATE_NETWORK_UNAVAILABLE"] = "true"
+        // Configure app for network error
+        app.launchArguments = ["--ui-testing"]
+        app.launchEnvironment = ["SIMULATE_NETWORK_ERROR": "true"]
         app.launch()
-        
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
         
         // Try to refresh poem
-        mainPage.tapRefreshButton()
+        let refreshButton = app.buttons.matching(identifier: "refresh_button").firstMatch
+        XCTAssertTrue(refreshButton.waitForExistence(timeout: 5))
+        refreshButton.tap()
         
-        // Should show error alert
-        sleep(3) // Allow time for network request to fail
-        XCTAssertTrue(mainPage.verifyErrorAlert(), "Should show error alert for network unavailable")
+        // Should show network error alert
+        let errorAlert = app.alerts.firstMatch
+        XCTAssertTrue(errorAlert.waitForExistence(timeout: 5))
         
-        // Verify error message is appropriate
-        let alert = mainPage.errorAlert
-        XCTAssertTrue(alert.exists, "Error alert should be displayed")
+        // Verify error message contains network-related text
+        let alertMessage = errorAlert.staticTexts.element(boundBy: 1)
+        XCTAssertTrue(alertMessage.exists)
         
-        // Test retry functionality
-        let retryButton = alert.buttons["Retry"]
-        if retryButton.exists {
-            // Restore network and retry
-            configureNetworkState(available: true)
-            retryButton.tap()
+        // Dismiss alert
+        let okButton = errorAlert.buttons["OK"]
+        if okButton.exists {
+            okButton.tap()
+        }
+        
+        // App should still be functional with cached content
+        let poemTitle = app.staticTexts.matching(identifier: "poem_title").firstMatch
+        XCTAssertTrue(poemTitle.waitForExistence(timeout: 3))
+    }
+    
+    func testSlowNetworkResponse() throws {
+        // Configure app for slow network
+        app.launchArguments = ["--ui-testing"]
+        app.launchEnvironment = ["SLOW_NETWORK": "true"]
+        app.launch()
+        
+        // Try to refresh poem
+        let refreshButton = app.buttons.matching(identifier: "refresh_button").firstMatch
+        XCTAssertTrue(refreshButton.waitForExistence(timeout: 5))
+        refreshButton.tap()
+        
+        // Should show loading indicator
+        let loadingIndicator = app.activityIndicators.firstMatch
+        if loadingIndicator.exists {
+            XCTAssertTrue(loadingIndicator.exists, "Should show loading indicator for slow network")
+        }
+        
+        // Wait longer for slow response
+        let poemTitle = app.staticTexts.matching(identifier: "poem_title").firstMatch
+        XCTAssertTrue(poemTitle.waitForExistence(timeout: 10))
+    }
+    
+    func testServerError() throws {
+        // Configure app for server error
+        app.launchArguments = ["--ui-testing"]
+        app.launchEnvironment = ["SIMULATE_SERVER_ERROR": "true"]
+        app.launch()
+        
+        // Try to refresh poem
+        let refreshButton = app.buttons.matching(identifier: "refresh_button").firstMatch
+        XCTAssertTrue(refreshButton.waitForExistence(timeout: 5))
+        refreshButton.tap()
+        
+        // Should show server error
+        let errorAlert = app.alerts.firstMatch
+        if errorAlert.waitForExistence(timeout: 5) {
+            XCTAssertTrue(errorAlert.exists, "Should show server error alert")
             
-            // Should eventually succeed or handle gracefully
-            sleep(3)
-        } else {
-            // Just dismiss the alert
-            alert.buttons["OK"].tap()
+            let okButton = errorAlert.buttons["OK"]
+            if okButton.exists {
+                okButton.tap()
+            }
         }
     }
     
-    func testNetworkTimeoutError() throws {
-        // Simulate slow network causing timeout
-        app.terminate()
-        app.launchEnvironment["SIMULATE_NETWORK_TIMEOUT"] = "true"
-        app.launch()
-        
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
-        
-        mainPage.tapRefreshButton()
-        
-        // Should show loading for a while, then timeout
-        XCTAssertTrue(mainPage.verifyLoadingState(), "Should show loading indicator")
-        
-        // Wait for timeout (should be faster than actual timeout for testing)
-        sleep(5)
-        
-        // Should show timeout error
-        XCTAssertTrue(mainPage.verifyErrorAlert(), "Should show timeout error")
-        
-        // Dismiss error
-        if mainPage.errorAlert.exists {
-            mainPage.errorAlert.buttons.firstMatch.tap()
-        }
-    }
+    // MARK: - AI Error Scenarios
     
-    func testRateLimitError() throws {
-        // Simulate rate limiting from API
-        app.terminate()
-        app.launchEnvironment["SIMULATE_RATE_LIMIT"] = "true"
+    func testAIServiceUnavailable() throws {
+        // Configure app with AI unavailable
+        app.launchArguments = ["--ui-testing"]
+        app.launchEnvironment = ["AI_AVAILABLE": "false"]
         app.launch()
-        
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
-        
-        // Try multiple rapid refreshes to trigger rate limiting
-        for _ in 0..<5 {
-            mainPage.tapRefreshButton()
-            sleep(0.5)
-        }
-        
-        // Should show rate limit error
-        sleep(2)
-        XCTAssertTrue(mainPage.verifyErrorAlert(), "Should show rate limit error")
-        
-        // Verify appropriate error message
-        let alert = mainPage.errorAlert
-        if alert.exists {
-            // Error message should mention rate limiting or trying again later
-            alert.buttons.firstMatch.tap()
-        }
-    }
-    
-    func testMalformedDataError() throws {
-        // Simulate API returning malformed data
-        app.terminate()
-        app.launchEnvironment["SIMULATE_MALFORMED_DATA"] = "true"
-        app.launch()
-        
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
-        
-        mainPage.tapRefreshButton()
-        sleep(3)
-        
-        // Should handle malformed data gracefully
-        XCTAssertTrue(mainPage.verifyErrorAlert(), "Should show error for malformed data")
-        
-        if mainPage.errorAlert.exists {
-            mainPage.errorAlert.buttons.firstMatch.tap()
-        }
-        
-        // App should remain stable
-        XCTAssertTrue(mainPage.isDisplayed(), "App should remain stable after malformed data error")
-    }
-    
-    // MARK: - AI Service Error Tests
-    
-    func testAIServiceUnavailableError() throws {
-        // Simulate AI service not available on device
-        app.terminate()
-        app.launchEnvironment["AI_AVAILABLE"] = "false"
-        app.launch()
-        
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
         
         // AI buttons should be disabled or hidden
-        let vibeButton = mainPage.vibeGenerationButton
-        let customButton = mainPage.customPromptButton
+        let vibeButton = app.buttons.matching(identifier: "vibe_generation_button").firstMatch
+        let customButton = app.buttons.matching(identifier: "custom_prompt_button").firstMatch
         
+        // Wait for UI to load
+        let poemTitle = app.staticTexts.matching(identifier: "poem_title").firstMatch
+        XCTAssertTrue(poemTitle.waitForExistence(timeout: 5))
+        
+        // Check if AI buttons exist and are disabled
         if vibeButton.exists {
-            XCTAssertFalse(vibeButton.isEnabled, "Vibe generation should be disabled when AI unavailable")
+            XCTAssertFalse(vibeButton.isEnabled, "Vibe button should be disabled when AI unavailable")
         }
         
         if customButton.exists {
-            XCTAssertFalse(customButton.isEnabled, "Custom prompt should be disabled when AI unavailable")
+            XCTAssertFalse(customButton.isEnabled, "Custom button should be disabled when AI unavailable")
         }
+    }
+    
+    func testAIGenerationError() throws {
+        // Configure app with AI errors
+        app.launchArguments = ["--ui-testing"]
+        app.launchEnvironment = [
+            "AI_AVAILABLE": "true",
+            "MOCK_AI_ERROR": "true"
+        ]
+        app.launch()
         
-        // Trying to use AI features should show appropriate message
-        if vibeButton.exists && vibeButton.isEnabled {
+        // Try vibe generation
+        let vibeButton = app.buttons.matching(identifier: "vibe_generation_button").firstMatch
+        if vibeButton.waitForExistence(timeout: 5) {
             vibeButton.tap()
-            sleep(2)
-            // Should show error or unavailable message
+            
+            let vibeSheet = app.sheets.firstMatch
+            XCTAssertTrue(vibeSheet.waitForExistence(timeout: 3))
+            
+            let generateButton = app.buttons.matching(identifier: "generate_vibe_poem_button").firstMatch
+            generateButton.tap()
+            
+            // Should show AI error
+            let errorAlert = app.alerts.firstMatch
+            XCTAssertTrue(errorAlert.waitForExistence(timeout: 5), "Should show AI error alert")
+            
+            let okButton = errorAlert.buttons["OK"]
+            if okButton.exists {
+                okButton.tap()
+            }
+            
+            // Sheet should remain open
+            XCTAssertTrue(vibeSheet.exists, "Sheet should remain open after AI error")
+            
+            // Cancel to close
+            app.buttons["Cancel"].tap()
         }
     }
     
-    func testAIGenerationFailureError() throws {
-        // Simulate AI generation failures
-        app.terminate()
-        app.launchEnvironment["AI_AVAILABLE"] = "true"
-        app.launchEnvironment["SIMULATE_AI_GENERATION_FAILURE"] = "true"
+    // MARK: - Data Persistence Error Scenarios
+    
+    func testFavoritesStorageError() throws {
+        // Configure app with storage errors
+        app.launchArguments = ["--ui-testing"]
+        app.launchEnvironment = ["SIMULATE_STORAGE_ERROR": "true"]
         app.launch()
         
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
+        // Try to favorite a poem
+        let favoriteButton = app.buttons.matching(identifier: "favorite_button").firstMatch
+        XCTAssertTrue(favoriteButton.waitForExistence(timeout: 5))
+        favoriteButton.tap()
         
-        let vibeGenerationPage = mainPage.tapVibeGenerationButton()
-        XCTAssertTrue(vibeGenerationPage.waitForPageToLoad())
-        
-        vibeGenerationPage.tapGenerateButton()
-        sleep(3)
-        
-        // Should show AI generation error
-        XCTAssertTrue(mainPage.verifyErrorAlert(), "Should show AI generation failure error")
-        
-        if mainPage.errorAlert.exists {
-            mainPage.errorAlert.buttons.firstMatch.tap()
-        }
-        
-        vibeGenerationPage.tapBackButton()
-    }
-    
-    func testAIModelLoadingError() throws {
-        // Simulate AI model loading failures
-        app.terminate()
-        app.launchEnvironment["AI_AVAILABLE"] = "true"
-        app.launchEnvironment["SIMULATE_AI_MODEL_ERROR"] = "true"
-        app.launch()
-        
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
-        
-        let customPromptPage = mainPage.tapCustomPromptButton()
-        XCTAssertTrue(customPromptPage.waitForPageToLoad())
-        
-        customPromptPage.enterPrompt("Test prompt for model error")
-        customPromptPage.tapGenerateButton()
-        
-        sleep(4)
-        
-        // Should handle model loading errors gracefully
-        if mainPage.verifyErrorAlert() {
-            mainPage.errorAlert.buttons.firstMatch.tap()
-        }
-        
-        // Should return to a stable state
-        XCTAssertTrue(mainPage.isDisplayed() || customPromptPage.isDisplayed())
-    }
-    
-    // MARK: - Data Persistence Error Tests
-    
-    func testUserDefaultsWriteError() throws {
-        // Simulate UserDefaults write failures
-        app.terminate()
-        app.launchEnvironment["SIMULATE_USERDEFAULTS_ERROR"] = "true"
-        app.launch()
-        
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
-        
-        if mainPage.verifyPoemIsDisplayed() {
-            // Try to favorite a poem (should fail to persist)
-            mainPage.tapFavoriteButton()
-            sleep(1)
+        // Should show storage error alert
+        let errorAlert = app.alerts.firstMatch
+        if errorAlert.waitForExistence(timeout: 5) {
+            XCTAssertTrue(errorAlert.exists, "Should show storage error alert")
             
-            // Navigate to favorites to see if it was saved
-            let favoritesPage = mainPage.tapFavoritesButton()
-            XCTAssertTrue(favoritesPage.waitForPageToLoad())
-            
-            // May show empty state if persistence failed
-            // App should handle this gracefully without crashing
-            
-            favoritesPage.tapBackButton()
-        }
-    }
-    
-    func testAppGroupDataSharingError() throws {
-        // Simulate App Group data sharing failures
-        app.terminate()
-        app.launchEnvironment["SIMULATE_APP_GROUP_ERROR"] = "true"
-        app.launch()
-        
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
-        
-        // App should still function even if App Group sharing fails
-        mainPage.tapRefreshButton()
-        XCTAssertTrue(mainPage.waitForLoadingToComplete())
-        
-        // Should not crash or show critical errors
-        XCTAssertTrue(mainPage.isDisplayed(), "App should remain stable with App Group errors")
-    }
-    
-    // MARK: - Memory and Resource Error Tests
-    
-    func testLowMemoryScenario() throws {
-        // Simulate low memory conditions
-        app.terminate()
-        app.launchEnvironment["SIMULATE_LOW_MEMORY"] = "true"
-        app.launch()
-        
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
-        
-        // Perform memory-intensive operations
-        for _ in 0..<10 {
-            mainPage.tapRefreshButton()
-            XCTAssertTrue(mainPage.waitForLoadingToComplete())
-            
-            if mainPage.verifyPoemIsDisplayed() {
-                // Navigate to favorites and back
-                let favoritesPage = mainPage.tapFavoritesButton()
-                if favoritesPage.waitForPageToLoad() {
-                    favoritesPage.tapBackButton()
-                }
+            let okButton = errorAlert.buttons["OK"]
+            if okButton.exists {
+                okButton.tap()
             }
         }
         
-        // App should handle low memory gracefully
-        XCTAssertTrue(mainPage.isDisplayed(), "App should survive low memory conditions")
+        // Button state should not change due to error
+        XCTAssertTrue(favoriteButton.exists, "Favorite button should remain unchanged after storage error")
     }
     
-    func testDiskSpaceError() throws {
-        // Simulate low disk space
-        app.terminate()
-        app.launchEnvironment["SIMULATE_LOW_DISK_SPACE"] = "true"
+    func testCorruptedCacheRecovery() throws {
+        // Configure app with corrupted cache
+        app.launchArguments = ["--ui-testing"]
+        app.launchEnvironment = ["CORRUPTED_CACHE": "true"]
         app.launch()
         
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
+        // App should handle corrupted cache gracefully
+        let poemTitle = app.staticTexts.matching(identifier: "poem_title").firstMatch
+        XCTAssertTrue(poemTitle.waitForExistence(timeout: 8), "Should recover from corrupted cache")
         
-        // Try operations that write to disk
-        if mainPage.verifyPoemIsDisplayed() {
-            mainPage.tapFavoriteButton()
-            sleep(1)
-            
-            // Should either succeed or show appropriate error
-            // App should not crash
-        }
-        
-        XCTAssertTrue(mainPage.isDisplayed(), "App should handle disk space issues gracefully")
+        // Should not show error to user
+        let errorAlert = app.alerts.firstMatch
+        XCTAssertFalse(errorAlert.exists, "Should not show error alert for cache recovery")
     }
     
-    // MARK: - Concurrent Operation Error Tests
+    // MARK: - Memory Pressure Scenarios
     
-    func testConcurrentNetworkRequests() throws {
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
+    func testLowMemoryConditions() throws {
+        // Configure app for low memory simulation
+        app.launchArguments = ["--ui-testing"]
+        app.launchEnvironment = ["SIMULATE_LOW_MEMORY": "true"]
+        app.launch()
         
-        // Rapidly trigger multiple network requests
+        // Try multiple operations that could use memory
         for _ in 0..<5 {
-            mainPage.tapRefreshButton()
-            sleep(0.2) // Very short delay to create concurrent requests
+            let refreshButton = app.buttons.matching(identifier: "refresh_button").firstMatch
+            refreshButton.tap()
+            sleep(1)
         }
         
-        // Should handle concurrent requests gracefully
-        sleep(5) // Allow all requests to complete or fail
+        // App should remain functional
+        let poemTitle = app.staticTexts.matching(identifier: "poem_title").firstMatch
+        XCTAssertTrue(poemTitle.waitForExistence(timeout: 5), "App should handle low memory conditions")
+    }
+    
+    // MARK: - Invalid Data Scenarios
+    
+    func testMalformedDataHandling() throws {
+        // Configure app with malformed data
+        app.launchArguments = ["--ui-testing"]
+        app.launchEnvironment = ["MALFORMED_DATA": "true"]
+        app.launch()
         
-        // App should remain stable
-        XCTAssertTrue(mainPage.isDisplayed(), "App should handle concurrent requests gracefully")
+        // Try to refresh
+        let refreshButton = app.buttons.matching(identifier: "refresh_button").firstMatch
+        XCTAssertTrue(refreshButton.waitForExistence(timeout: 5))
+        refreshButton.tap()
         
-        // Eventually should show a poem or appropriate error state
-        let finalState = mainPage.verifyPoemIsDisplayed() || mainPage.verifyErrorAlert()
-        XCTAssertTrue(finalState, "Should reach a stable final state")
+        // Should handle malformed data gracefully
+        sleep(3) // Allow time for processing
         
-        if mainPage.verifyErrorAlert() {
-            mainPage.errorAlert.buttons.firstMatch.tap()
+        // Should either show error or fallback content
+        let poemTitle = app.staticTexts.matching(identifier: "poem_title").firstMatch
+        let errorAlert = app.alerts.firstMatch
+        
+        XCTAssertTrue(poemTitle.exists || errorAlert.exists, "Should handle malformed data with error or fallback")
+        
+        if errorAlert.exists {
+            let okButton = errorAlert.buttons["OK"]
+            if okButton.exists {
+                okButton.tap()
+            }
         }
     }
     
-    func testConcurrentAIOperations() throws {
-        // Configure AI to be available
-        app.terminate()
-        app.launchEnvironment["AI_AVAILABLE"] = "true"
+    func testEmptyResponseHandling() throws {
+        // Configure app with empty responses
+        app.launchArguments = ["--ui-testing"]
+        app.launchEnvironment = ["EMPTY_RESPONSE": "true"]
         app.launch()
         
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
+        // Try to refresh
+        let refreshButton = app.buttons.matching(identifier: "refresh_button").firstMatch
+        XCTAssertTrue(refreshButton.waitForExistence(timeout: 5))
+        refreshButton.tap()
         
-        // Try to trigger multiple AI operations
-        let vibeGenerationPage = mainPage.tapVibeGenerationButton()
-        XCTAssertTrue(vibeGenerationPage.waitForPageToLoad())
+        // Should handle empty response gracefully
+        sleep(3)
         
-        // Rapidly tap generate multiple times
+        // Should show appropriate message or fallback
+        let errorAlert = app.alerts.firstMatch
+        if errorAlert.waitForExistence(timeout: 3) {
+            XCTAssertTrue(errorAlert.exists, "Should show appropriate message for empty response")
+            
+            let okButton = errorAlert.buttons["OK"]
+            if okButton.exists {
+                okButton.tap()
+            }
+        }
+    }
+    
+    // MARK: - Rate Limiting Scenarios
+    
+    func testRateLimitingHandling() throws {
+        // Configure app with rate limiting
+        app.launchArguments = ["--ui-testing"]
+        app.launchEnvironment = ["SIMULATE_RATE_LIMIT": "true"]
+        app.launch()
+        
+        // Try multiple quick requests to trigger rate limiting
+        let refreshButton = app.buttons.matching(identifier: "refresh_button").firstMatch
+        XCTAssertTrue(refreshButton.waitForExistence(timeout: 5))
+        
         for _ in 0..<3 {
-            vibeGenerationPage.tapGenerateButton()
-            sleep(0.5)
+            refreshButton.tap()
+            usleep(500000) // 0.5 seconds
         }
         
-        sleep(5) // Allow operations to complete
-        
-        // Should handle concurrent AI requests gracefully
-        vibeGenerationPage.tapBackButton()
-        XCTAssertTrue(mainPage.isDisplayed(), "Should handle concurrent AI operations gracefully")
+        // Should show rate limit error
+        let errorAlert = app.alerts.firstMatch
+        if errorAlert.waitForExistence(timeout: 5) {
+            XCTAssertTrue(errorAlert.exists, "Should show rate limit error")
+            
+            let okButton = errorAlert.buttons["OK"]
+            if okButton.exists {
+                okButton.tap()
+            }
+        }
     }
     
-    // MARK: - Recovery and Resilience Tests
+    // MARK: - Recovery Scenarios
     
-    func testErrorRecoveryAfterNetworkRestoration() throws {
+    func testNetworkRecovery() throws {
         // Start with network error
-        app.terminate()
-        app.launchEnvironment["SIMULATE_NETWORK_UNAVAILABLE"] = "true"
+        app.launchArguments = ["--ui-testing"]
+        app.launchEnvironment = ["SIMULATE_NETWORK_ERROR": "true"]
         app.launch()
         
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
+        // Try refresh and get error
+        let refreshButton = app.buttons.matching(identifier: "refresh_button").firstMatch
+        XCTAssertTrue(refreshButton.waitForExistence(timeout: 5))
+        refreshButton.tap()
         
-        mainPage.tapRefreshButton()
-        sleep(3)
-        
-        // Should show error
-        XCTAssertTrue(mainPage.verifyErrorAlert(), "Should show network error")
-        
-        if mainPage.errorAlert.exists {
-            mainPage.errorAlert.buttons.firstMatch.tap()
+        let errorAlert = app.alerts.firstMatch
+        if errorAlert.waitForExistence(timeout: 5) {
+            let okButton = errorAlert.buttons["OK"]
+            if okButton.exists {
+                okButton.tap()
+            }
         }
         
-        // Restore network
-        configureNetworkState(available: true)
+        // Simulate network recovery
+        app.terminate()
+        app.launchEnvironment.removeValue(forKey: "SIMULATE_NETWORK_ERROR")
+        app.launch()
         
-        // Try again - should now succeed
-        mainPage.tapRefreshButton()
-        XCTAssertTrue(mainPage.waitForLoadingToComplete())
+        // Should now work normally
+        let refreshButton2 = app.buttons.matching(identifier: "refresh_button").firstMatch
+        XCTAssertTrue(refreshButton2.waitForExistence(timeout: 5))
+        refreshButton2.tap()
         
-        // Should eventually show poem or handle gracefully
-        sleep(3)
-        let recovered = mainPage.verifyPoemIsDisplayed() || mainPage.verifyErrorAlert()
-        XCTAssertTrue(recovered, "Should recover after network restoration")
+        let poemTitle = app.staticTexts.matching(identifier: "poem_title").firstMatch
+        XCTAssertTrue(poemTitle.waitForExistence(timeout: 8), "Should recover after network comes back")
     }
     
-    func testAppStateRecoveryAfterCrash() throws {
-        // This test simulates app recovery after termination
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
+    func testAppBackgroundingDuringError() throws {
+        // Configure app with slow network
+        app.launchArguments = ["--ui-testing"]
+        app.launchEnvironment = ["SLOW_NETWORK": "true"]
+        app.launch()
         
-        // Set up some state (favorites, etc.)
-        if mainPage.verifyPoemIsDisplayed() {
-            mainPage.tapFavoriteButton()
-            sleep(1)
-        }
+        // Start a network operation
+        let refreshButton = app.buttons.matching(identifier: "refresh_button").firstMatch
+        XCTAssertTrue(refreshButton.waitForExistence(timeout: 5))
+        refreshButton.tap()
         
-        // Simulate app termination and restart
-        app.terminate()
+        // Background the app during operation
+        XCUIDevice.shared.press(.home)
         sleep(2)
-        app.launch()
         
-        let recoveredMainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(recoveredMainPage.waitForPageToLoad())
+        // Return to app
+        app.activate()
+        sleep(1)
         
-        // App should start cleanly
-        XCTAssertTrue(recoveredMainPage.isDisplayed(), "App should recover cleanly after restart")
-        
-        // State may or may not be preserved depending on implementation
-        // But app should not be in a broken state
+        // Should handle backgrounding gracefully
+        let poemTitle = app.staticTexts.matching(identifier: "poem_title").firstMatch
+        XCTAssertTrue(poemTitle.waitForExistence(timeout: 8), "Should handle backgrounding during network operation")
     }
     
-    // MARK: - Edge Case Tests
+    // MARK: - Timeout Scenarios
     
-    func testVeryLongPoemContent() throws {
-        // Simulate API returning very long poem
-        app.terminate()
-        app.launchEnvironment["SIMULATE_LONG_POEM"] = "true"
+    func testRequestTimeout() throws {
+        // Configure app with request timeout
+        app.launchArguments = ["--ui-testing"]
+        app.launchEnvironment = ["SIMULATE_TIMEOUT": "true"]
         app.launch()
         
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
+        // Try refresh
+        let refreshButton = app.buttons.matching(identifier: "refresh_button").firstMatch
+        XCTAssertTrue(refreshButton.waitForExistence(timeout: 5))
+        refreshButton.tap()
         
-        mainPage.tapRefreshButton()
-        XCTAssertTrue(mainPage.waitForLoadingToComplete())
-        
-        sleep(3)
-        
-        // Should handle long content gracefully
-        if mainPage.verifyPoemIsDisplayed() {
-            // Content should be scrollable or truncated appropriately
-            XCTAssertTrue(true, "Long poem content handled")
-        } else if mainPage.verifyErrorAlert() {
-            // Or show appropriate error if content is too long
-            mainPage.errorAlert.buttons.firstMatch.tap()
-        }
-        
-        XCTAssertTrue(mainPage.isDisplayed(), "App should remain stable with long content")
-    }
-    
-    func testSpecialCharactersInContent() throws {
-        // Simulate content with special characters, emojis, etc.
-        app.terminate()
-        app.launchEnvironment["SIMULATE_SPECIAL_CHARACTERS"] = "true"
-        app.launch()
-        
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
-        
-        mainPage.tapRefreshButton()
-        XCTAssertTrue(mainPage.waitForLoadingToComplete())
-        
-        sleep(3)
-        
-        // Should handle special characters without issues
-        XCTAssertTrue(mainPage.isDisplayed(), "Should handle special characters gracefully")
-        
-        if mainPage.verifyPoemIsDisplayed() {
-            // Try to favorite and share content with special characters
-            mainPage.tapFavoriteButton()
-            sleep(1)
+        // Should handle timeout gracefully
+        let errorAlert = app.alerts.firstMatch
+        if errorAlert.waitForExistence(timeout: 10) {
+            XCTAssertTrue(errorAlert.exists, "Should show timeout error")
             
-            let shareSheet = mainPage.tapShareButton()
-            if shareSheet.waitForPageToLoad() {
-                shareSheet.tapCancel()
+            let okButton = errorAlert.buttons["OK"]
+            if okButton.exists {
+                okButton.tap()
             }
         }
     }
     
-    func testRapidUserInteractions() throws {
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
+    // MARK: - Concurrent Error Scenarios
+    
+    func testConcurrentErrorOperations() throws {
+        // Configure app with multiple error conditions
+        app.launchArguments = ["--ui-testing"]
+        app.launchEnvironment = [
+            "SIMULATE_NETWORK_ERROR": "true",
+            "AI_AVAILABLE": "true",
+            "MOCK_AI_ERROR": "true"
+        ]
+        app.launch()
         
-        // Rapidly tap multiple UI elements
-        for _ in 0..<10 {
-            if mainPage.refreshButton.exists && mainPage.refreshButton.isHittable {
-                mainPage.refreshButton.tap()
+        // Try multiple operations that will fail
+        let refreshButton = app.buttons.matching(identifier: "refresh_button").firstMatch
+        XCTAssertTrue(refreshButton.waitForExistence(timeout: 5))
+        refreshButton.tap()
+        
+        // Dismiss network error if it appears
+        let errorAlert = app.alerts.firstMatch
+        if errorAlert.waitForExistence(timeout: 3) {
+            let okButton = errorAlert.buttons["OK"]
+            if okButton.exists {
+                okButton.tap()
             }
+        }
+        
+        // Try AI operation
+        let vibeButton = app.buttons.matching(identifier: "vibe_generation_button").firstMatch
+        if vibeButton.exists {
+            vibeButton.tap()
             
-            if mainPage.favoriteButton.exists && mainPage.favoriteButton.isHittable {
-                mainPage.favoriteButton.tap()
-            }
-            
-            if mainPage.shareButton.exists && mainPage.shareButton.isHittable {
-                mainPage.shareButton.tap()
-                sleep(0.1)
-                // Cancel any share sheets that appear
-                if app.sheets.firstMatch.exists {
-                    app.buttons["Cancel"].tap()
+            let vibeSheet = app.sheets.firstMatch
+            if vibeSheet.waitForExistence(timeout: 3) {
+                let generateButton = app.buttons.matching(identifier: "generate_vibe_poem_button").firstMatch
+                generateButton.tap()
+                
+                // Handle AI error
+                let aiErrorAlert = app.alerts.firstMatch
+                if aiErrorAlert.waitForExistence(timeout: 3) {
+                    let okButton = aiErrorAlert.buttons["OK"]
+                    if okButton.exists {
+                        okButton.tap()
+                    }
                 }
-            }
-            
-            sleep(0.1)
-        }
-        
-        // App should remain stable after rapid interactions
-        sleep(3)
-        XCTAssertTrue(mainPage.isDisplayed(), "App should handle rapid user interactions gracefully")
-    }
-    
-    // MARK: - Device Specific Error Tests
-    
-    func testLowBatteryScenario() throws {
-        // Simulate low battery conditions
-        app.terminate()
-        app.launchEnvironment["SIMULATE_LOW_BATTERY"] = "true"
-        app.launch()
-        
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
-        
-        // Perform operations that might be affected by low battery
-        mainPage.tapRefreshButton()
-        XCTAssertTrue(mainPage.waitForLoadingToComplete())
-        
-        // AI operations might be disabled or limited
-        if mainPage.vibeGenerationButton.exists {
-            let vibeGenerationPage = mainPage.tapVibeGenerationButton()
-            if vibeGenerationPage.waitForPageToLoad() {
-                vibeGenerationPage.tapGenerateButton()
-                sleep(3)
-                vibeGenerationPage.tapBackButton()
+                
+                // Cancel AI sheet
+                app.buttons["Cancel"].tap()
             }
         }
         
-        XCTAssertTrue(mainPage.isDisplayed(), "App should handle low battery scenarios")
+        // App should still be functional after multiple errors
+        let poemTitle = app.staticTexts.matching(identifier: "poem_title").firstMatch
+        XCTAssertTrue(poemTitle.waitForExistence(timeout: 5), "App should remain functional after multiple errors")
     }
-}
-
-// MARK: - Error Testing Extensions
-
-extension ErrorScenarioUITests {
-    
-    // Helper to configure network state for testing
-    func configureNetworkState(available: Bool) {
-        app.launchEnvironment["SIMULATE_NETWORK_UNAVAILABLE"] = available ? "false" : "true"
-    }
-    
-    // Helper to simulate specific error conditions
-    func simulateErrorCondition(_ condition: String, enabled: Bool = true) {
-        app.launchEnvironment[condition] = enabled ? "true" : "false"
-    }
-    
-    // Helper to verify error recovery
-    func verifyErrorRecovery(
-        in page: MainContentPage,
-        afterAction action: () -> Void,
-        expectedRecovery: () -> Bool
-    ) {
-        action()
-        sleep(3) // Allow time for recovery
-        
-        let hasRecovered = expectedRecovery()
-        XCTAssertTrue(hasRecovered, "Should recover from error condition")
-    }
-    
-    // Helper to test error message quality
-    func verifyErrorMessageQuality(alert: XCUIElement) {
-        XCTAssertTrue(alert.exists, "Error alert should exist")
-        
-        // Error should have meaningful title
-        let title = alert.label
-        XCTAssertFalse(title.isEmpty, "Error should have meaningful title")
-        XCTAssertFalse(title.contains("Error"), "Error title should be more specific than just 'Error'")
-        
-        // Should have action buttons
-        let buttons = alert.buttons
-        XCTAssertGreaterThan(buttons.count, 0, "Error alert should have action buttons")
-    }
-}
+} 

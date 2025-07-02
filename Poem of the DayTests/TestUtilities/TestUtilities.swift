@@ -8,13 +8,14 @@ final class TestUtilities {
     
     // MARK: - Test Environment Setup
     
+    @MainActor
     static func createTestDependencyContainer() -> DependencyContainer {
         let mockNetworkService = MockNetworkService()
         let mockNewsService = MockNewsService()
         let mockVibeAnalyzer = MockVibeAnalyzer()
         let mockAIService = MockPoemGenerationService()
         let mockTelemetryService = MockTelemetryService()
-        let mockUserDefaults = TestData.createTestUserDefaults()
+        _ = TestData.createTestUserDefaults()
         
         let mockRepository = MockPoemRepository()
         
@@ -102,12 +103,12 @@ final class TestUtilities {
         
         switch scenario {
         case .normalOperation:
-            mock.articlesToReturn = TestData.sampleNewsArticles
+            mock.newsToReturn = TestData.sampleNewsArticles
         case .networkError:
             mock.shouldThrowError = true
             mock.errorToThrow = .networkUnavailable
         case .emptyData:
-            mock.articlesToReturn = []
+            mock.newsToReturn = []
         default:
             break
         }
@@ -121,13 +122,13 @@ final class TestUtilities {
         
         switch scenario {
         case .normalOperation:
-            mock.isServiceAvailable = true
+            mock.isAvailableValue = true
         case .aiUnavailable:
-            mock.isServiceAvailable = false
+            mock.isAvailableValue = false
         case .aiError:
-            mock.isServiceAvailable = true
+            mock.isAvailableValue = true
             mock.shouldThrowError = true
-            mock.errorToThrow = .generationFailed
+            mock.errorToThrow = .localGenerationFailed
         default:
             break
         }
@@ -153,7 +154,8 @@ final class TestUtilities {
         }
         
         if let expectedLineCount = lineCount {
-            XCTAssertEqual(poem.lines.count, expectedLineCount, "Poem line count mismatch", file: file, line: line)
+            let actualLineCount = poem.content.components(separatedBy: "\n").count
+            XCTAssertEqual(actualLineCount, expectedLineCount, "Poem line count mismatch", file: file, line: line)
         }
         
         if let expectedVibe = vibe {
@@ -162,8 +164,8 @@ final class TestUtilities {
         
         // Basic validation
         XCTAssertFalse(poem.title.isEmpty, "Poem title should not be empty", file: file, line: line)
-        XCTAssertFalse(poem.author.isEmpty, "Poem author should not be empty", file: file, line: line)
-        XCTAssertFalse(poem.lines.isEmpty, "Poem should have lines", file: file, line: line)
+        XCTAssertFalse(poem.author?.isEmpty == true, "Poem author should not be empty", file: file, line: line)
+        XCTAssertFalse(poem.content.isEmpty, "Poem should have content", file: file, line: line)
     }
     
     static func verifyVibeAnalysis(

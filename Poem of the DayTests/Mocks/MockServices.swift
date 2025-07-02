@@ -7,8 +7,8 @@ import XCTest
 final class MockNetworkService: NetworkServiceProtocol, @unchecked Sendable {
     var shouldThrowError = false
     var errorToThrow: PoemError = .networkUnavailable
-    var delayDuration: TimeInterval = 0
     var poemToReturn: Poem?
+    var delayDuration: TimeInterval = 0
     var callCount = 0
     
     func fetchRandomPoem() async throws -> Poem {
@@ -22,18 +22,18 @@ final class MockNetworkService: NetworkServiceProtocol, @unchecked Sendable {
             throw errorToThrow
         }
         
-        if let poem = poemToReturn {
-            return poem
+        guard let poem = poemToReturn else {
+            throw PoemError.noPoems
         }
         
-        return TestData.samplePoem
+        return poem
     }
     
     func reset() {
         shouldThrowError = false
         errorToThrow = .networkUnavailable
-        delayDuration = 0
         poemToReturn = nil
+        delayDuration = 0
         callCount = 0
     }
 }
@@ -42,28 +42,30 @@ final class MockNetworkService: NetworkServiceProtocol, @unchecked Sendable {
 
 final class MockNewsService: NewsServiceProtocol, @unchecked Sendable {
     var shouldThrowError = false
-    var errorToThrow: NewsError = .networkUnavailable
-    var articlesToReturn: [NewsArticle] = []
+    var errorToThrow: PoemError = .networkUnavailable  // Using PoemError since NewsError doesn't exist
+    var newsToReturn: [NewsArticle] = []
+    var delayDuration: TimeInterval = 0
     var callCount = 0
     
     func fetchDailyNews() async throws -> [NewsArticle] {
         callCount += 1
         
+        if delayDuration > 0 {
+            try await Task.sleep(nanoseconds: UInt64(delayDuration * 1_000_000_000))
+        }
+        
         if shouldThrowError {
             throw errorToThrow
         }
         
-        if !articlesToReturn.isEmpty {
-            return articlesToReturn
-        }
-        
-        return TestData.sampleNewsArticles
+        return newsToReturn
     }
     
     func reset() {
         shouldThrowError = false
         errorToThrow = .networkUnavailable
-        articlesToReturn = []
+        newsToReturn = []
+        delayDuration = 0
         callCount = 0
     }
 }
@@ -71,21 +73,27 @@ final class MockNewsService: NewsServiceProtocol, @unchecked Sendable {
 // MARK: - Mock Vibe Analyzer
 
 final class MockVibeAnalyzer: VibeAnalyzerProtocol, @unchecked Sendable {
-    var vibeToReturn: VibeAnalysis?
+    var analysisToReturn: VibeAnalysis?
     var callCount = 0
     
     func analyzeVibe(from articles: [NewsArticle]) async -> VibeAnalysis {
         callCount += 1
         
-        if let vibe = vibeToReturn {
-            return vibe
+        if let analysis = analysisToReturn {
+            return analysis
         }
         
-        return TestData.sampleVibeAnalysis
+        return VibeAnalysis(
+            vibe: .contemplative,
+            confidence: 0.7,
+            reasoning: "Mock analysis",
+            keywords: ["test", "mock"],
+            sentiment: SentimentScore(positivity: 0.5, energy: 0.5, complexity: 0.5)
+        )
     }
     
     func reset() {
-        vibeToReturn = nil
+        analysisToReturn = nil
         callCount = 0
     }
 }
@@ -93,69 +101,72 @@ final class MockVibeAnalyzer: VibeAnalyzerProtocol, @unchecked Sendable {
 // MARK: - Mock AI Service
 
 final class MockPoemGenerationService: PoemGenerationServiceProtocol, @unchecked Sendable {
-    var isServiceAvailable = true
     var shouldThrowError = false
-    var errorToThrow: PoemGenerationError = .unsupportedDevice
+    var errorToThrow: PoemError = .localGenerationFailed  // Using PoemError since that's what the protocol expects
+    var delayDuration: TimeInterval = 0
     var poemToReturn: Poem?
-    var generationCallCount = 0
-    var customPromptCallCount = 0
-    var availabilityCallCount = 0
+    var isAvailableValue = true
+    var generateFromVibeCallCount = 0
+    var generateWithPromptCallCount = 0
+    var isAvailableCallCount = 0
     
     func generatePoemFromVibe(_ vibeAnalysis: VibeAnalysis) async throws -> Poem {
-        generationCallCount += 1
+        generateFromVibeCallCount += 1
+        
+        if delayDuration > 0 {
+            try await Task.sleep(nanoseconds: UInt64(delayDuration * 1_000_000_000))
+        }
         
         if shouldThrowError {
             throw errorToThrow
         }
         
-        if let poem = poemToReturn {
-            return poem
-        }
-        
-        return TestData.sampleAIPoem(vibe: vibeAnalysis.vibe)
+        return poemToReturn ?? TestData.vibePoem
     }
     
     func generatePoemWithCustomPrompt(_ prompt: String) async throws -> Poem {
-        customPromptCallCount += 1
+        generateWithPromptCallCount += 1
+        
+        if delayDuration > 0 {
+            try await Task.sleep(nanoseconds: UInt64(delayDuration * 1_000_000_000))
+        }
         
         if shouldThrowError {
             throw errorToThrow
         }
         
-        if let poem = poemToReturn {
-            return poem
-        }
-        
-        return TestData.sampleCustomPoem(prompt: prompt)
+        return poemToReturn ?? TestData.customPoem
     }
     
     func isAvailable() async -> Bool {
-        availabilityCallCount += 1
-        return isServiceAvailable
+        isAvailableCallCount += 1
+        return isAvailableValue
     }
     
     func reset() {
-        isServiceAvailable = true
         shouldThrowError = false
-        errorToThrow = .unsupportedDevice
+        errorToThrow = .localGenerationFailed
+        delayDuration = 0
         poemToReturn = nil
-        generationCallCount = 0
-        customPromptCallCount = 0
-        availabilityCallCount = 0
+        isAvailableValue = true
+        generateFromVibeCallCount = 0
+        generateWithPromptCallCount = 0
+        isAvailableCallCount = 0
     }
 }
 
 // MARK: - Mock Poem Repository
 
 final class MockPoemRepository: PoemRepositoryProtocol, @unchecked Sendable {
+    var shouldThrowError = false
+    var errorToThrow: PoemError = .networkUnavailable
     var dailyPoem: Poem?
     var favoritePoems: [Poem] = []
     var vibeAnalysis: VibeAnalysis?
     var isAIAvailable = false
-    var shouldThrowError = false
-    var errorToThrow: PoemError = .networkUnavailable
+    var delayDuration: TimeInterval = 0
     
-    // Call tracking
+    // Call counters
     var getDailyPoemCallCount = 0
     var refreshDailyPoemCallCount = 0
     var generateVibeBasedPoemCallCount = 0
@@ -170,15 +181,15 @@ final class MockPoemRepository: PoemRepositoryProtocol, @unchecked Sendable {
     func getDailyPoem() async throws -> Poem {
         getDailyPoemCallCount += 1
         
+        if delayDuration > 0 {
+            try await Task.sleep(nanoseconds: UInt64(delayDuration * 1_000_000_000))
+        }
+        
         if shouldThrowError {
             throw errorToThrow
         }
         
-        if let poem = dailyPoem {
-            return poem
-        }
-        
-        return TestData.samplePoem
+        return dailyPoem ?? TestData.samplePoem
     }
     
     func refreshDailyPoem() async throws -> Poem {
@@ -188,9 +199,7 @@ final class MockPoemRepository: PoemRepositoryProtocol, @unchecked Sendable {
             throw errorToThrow
         }
         
-        let newPoem = TestData.samplePoem
-        dailyPoem = newPoem
-        return newPoem
+        return dailyPoem ?? TestData.samplePoem
     }
     
     func generateVibeBasedPoem() async throws -> Poem {
@@ -200,11 +209,7 @@ final class MockPoemRepository: PoemRepositoryProtocol, @unchecked Sendable {
             throw errorToThrow
         }
         
-        if !isAIAvailable {
-            throw PoemError.unsupportedOperation
-        }
-        
-        return TestData.sampleAIPoem(vibe: .hopeful)
+        return TestData.vibePoem
     }
     
     func generateCustomPoem(prompt: String) async throws -> Poem {
@@ -214,11 +219,7 @@ final class MockPoemRepository: PoemRepositoryProtocol, @unchecked Sendable {
             throw errorToThrow
         }
         
-        if !isAIAvailable {
-            throw PoemError.unsupportedOperation
-        }
-        
-        return TestData.sampleCustomPoem(prompt: prompt)
+        return TestData.customPoem
     }
     
     func getVibeOfTheDay() async throws -> VibeAnalysis {
@@ -228,11 +229,7 @@ final class MockPoemRepository: PoemRepositoryProtocol, @unchecked Sendable {
             throw errorToThrow
         }
         
-        if let vibe = vibeAnalysis {
-            return vibe
-        }
-        
-        return TestData.sampleVibeAnalysis
+        return vibeAnalysis ?? TestData.sampleVibeAnalysis
     }
     
     func isAIGenerationAvailable() async -> Bool {
@@ -247,9 +244,7 @@ final class MockPoemRepository: PoemRepositoryProtocol, @unchecked Sendable {
     
     func addToFavorites(_ poem: Poem) async {
         addToFavoritesCallCount += 1
-        if !favoritePoems.contains(where: { $0.id == poem.id }) {
-            favoritePoems.append(poem)
-        }
+        favoritePoems.append(poem)
     }
     
     func removeFromFavorites(_ poem: Poem) async {
@@ -270,7 +265,7 @@ final class MockPoemRepository: PoemRepositoryProtocol, @unchecked Sendable {
         shouldThrowError = false
         errorToThrow = .networkUnavailable
         
-        // Reset call counts
+        // Reset call counters
         getDailyPoemCallCount = 0
         refreshDailyPoemCallCount = 0
         generateVibeBasedPoemCallCount = 0
@@ -281,15 +276,15 @@ final class MockPoemRepository: PoemRepositoryProtocol, @unchecked Sendable {
         addToFavoritesCallCount = 0
         removeFromFavoritesCallCount = 0
         isFavoriteCallCount = 0
+        delayDuration = 0
     }
 }
 
 // MARK: - Mock Telemetry Service
 
 final class MockTelemetryService: TelemetryServiceProtocol, @unchecked Sendable {
-    private var trackedEvents: [TelemetryEvent] = []
+    private(set) var trackedEvents: [TelemetryEvent] = []
     private var _isEnabled = true
-    private var _configuration = TelemetryConfiguration.default
     
     func track(_ event: TelemetryEvent) async {
         trackedEvents.append(event)
@@ -300,7 +295,6 @@ final class MockTelemetryService: TelemetryServiceProtocol, @unchecked Sendable 
     }
     
     func configure(with configuration: TelemetryConfiguration) async {
-        _configuration = configuration
         _isEnabled = configuration.isEnabled
     }
     
@@ -310,16 +304,6 @@ final class MockTelemetryService: TelemetryServiceProtocol, @unchecked Sendable 
     
     func getEventCount() async -> Int {
         return trackedEvents.count
-    }
-    
-    func exportAllEvents() async -> [AnyTelemetryEvent] {
-        return trackedEvents.map { AnyTelemetryEvent($0) }
-    }
-    
-    func exportEventsAsJSON() async -> String? {
-        let events = trackedEvents.map { AnyTelemetryEvent($0) }
-        guard let jsonData = try? JSONEncoder().encode(events) else { return nil }
-        return String(data: jsonData, encoding: .utf8)
     }
     
     func getEventSummary() async -> TelemetryEventSummary {
@@ -341,27 +325,19 @@ final class MockTelemetryService: TelemetryServiceProtocol, @unchecked Sendable 
         return summary
     }
     
-    // Test helper methods
-    func getTrackedEvents() -> [TelemetryEvent] {
-        return trackedEvents
+    func exportAllEvents() async -> [AnyTelemetryEvent] {
+        return trackedEvents.map { AnyTelemetryEvent($0) }
     }
     
-    func clearTrackedEvents() {
-        trackedEvents.removeAll()
-    }
-    
-    func getEventsOfType<T: TelemetryEvent>(_ type: T.Type) -> [T] {
-        return trackedEvents.compactMap { $0 as? T }
-    }
-    
-    func getEventsByName(_ eventName: String) -> [TelemetryEvent] {
-        return trackedEvents.filter { $0.eventName == eventName }
+    func exportEventsAsJSON() async -> String? {
+        let events = trackedEvents.map { AnyTelemetryEvent($0) }
+        guard let jsonData = try? JSONEncoder().encode(events) else { return nil }
+        return String(data: jsonData, encoding: .utf8)
     }
     
     func reset() {
         trackedEvents.removeAll()
         _isEnabled = true
-        _configuration = .default
     }
 }
 

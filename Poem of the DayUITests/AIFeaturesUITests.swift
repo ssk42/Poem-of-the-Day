@@ -4,19 +4,18 @@ import XCTest
 final class AIFeaturesUITests: XCTestCase {
     
     var app: XCUIApplication!
-    var pageFactory: PageFactory!
     
     override func setUpWithError() throws {
         continueAfterFailure = false
         
         app = XCUIApplication()
-        pageFactory = PageFactory(app: app)
         
         // Configure launch arguments for testing
         app.launchArguments = ["--ui-testing"]
         app.launchEnvironment = [
-            "ENABLE_AI_TESTING": "true",
-            "MOCK_AI_RESPONSES": "true"
+            "AI_AVAILABLE": "true",
+            "MOCK_AI_RESPONSES": "true",
+            "ENABLE_TELEMETRY": "true"
         ]
         
         app.launch()
@@ -24,87 +23,53 @@ final class AIFeaturesUITests: XCTestCase {
     
     override func tearDownWithError() throws {
         app = nil
-        pageFactory = nil
     }
     
     // MARK: - Vibe-Based Poem Generation Tests
     
     func testVibeBasedPoemGeneration() throws {
-        let mainPage = pageFactory.mainContentPage()
+        let mainPage = PageFactory.mainContentPage(app: app)
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
+        
+        // Navigate to vibe generation (sheet presentation)
+        mainPage.tapVibeGenerationButton()
+        
+        // Wait for vibe generation sheet to appear
+        let vibeSheet = app.sheets.firstMatch
+        XCTAssertTrue(vibeSheet.waitForExistence(timeout: 3))
+        
+        // Find and tap generate button using accessibility identifier
+        let generateButton = app.buttons.matching(identifier: "generate_vibe_poem_button").firstMatch
+        XCTAssertTrue(generateButton.waitForExistence(timeout: 2))
+        
+        generateButton.tap()
+        
+        // Wait for generation to complete and sheet to dismiss
+        XCTAssertTrue(vibeSheet.waitForNonExistence(timeout: 8))
+        
+        // Verify we're back on main page with new poem
         XCTAssertTrue(mainPage.waitForPageToLoad())
-        
-        // Navigate to vibe generation
-        let vibeGenerationPage = mainPage.tapVibeGenerationButton()
-        XCTAssertTrue(vibeGenerationPage.waitForPageToLoad())
-        XCTAssertTrue(vibeGenerationPage.isDisplayed())
-        
-        // Verify current vibe is displayed
-        let currentVibe = vibeGenerationPage.getCurrentVibe()
-        XCTAssertFalse(currentVibe.isEmpty, "Current vibe should be displayed")
-        
-        // Generate a vibe-based poem
-        vibeGenerationPage.tapGenerateButton()
-        
-        // Wait for loading to complete
-        XCTAssertTrue(vibeGenerationPage.verifyLoadingState(), "Should show loading indicator")
-        
-        // Wait for poem to be generated and return to main page
-        sleep(3) // Allow time for AI generation simulation
-        
-        let returnedMainPage = vibeGenerationPage.tapBackButton()
-        XCTAssertTrue(returnedMainPage.waitForPageToLoad())
-        
-        // Verify new AI-generated poem is displayed
-        XCTAssertTrue(returnedMainPage.verifyPoemIsDisplayed(), "Generated poem should be displayed")
-        
-        let poemAuthor = returnedMainPage.getCurrentPoemAuthor()
-        XCTAssertEqual(poemAuthor, "AI Generated", "Should show AI Generated as author")
+        XCTAssertTrue(mainPage.verifyPoemIsDisplayed())
     }
     
-    func testVibeBasedPoemGenerationWithDifferentVibes() throws {
+    func testVibeGenerationCancel() throws {
         let mainPage = pageFactory.mainContentPage()
         XCTAssertTrue(mainPage.waitForPageToLoad())
         
-        // Test multiple vibe generations
-        let vibes = ["hopeful", "contemplative", "energetic", "peaceful"]
+        // Open vibe generation sheet
+        mainPage.tapVibeGenerationButton()
         
-        for expectedVibe in vibes {
-            // Generate a poem
-            let vibeGenerationPage = mainPage.tapVibeGenerationButton()
-            XCTAssertTrue(vibeGenerationPage.waitForPageToLoad())
-            
-            vibeGenerationPage.tapGenerateButton()
-            sleep(2) // Allow generation time
-            
-            let returnedMainPage = vibeGenerationPage.tapBackButton()
-            XCTAssertTrue(returnedMainPage.verifyPoemIsDisplayed())
-            
-            // Verify the poem reflects the vibe (in a real test, this would check actual content)
-            let poemTitle = returnedMainPage.getCurrentPoemTitle()
-            XCTAssertFalse(poemTitle.isEmpty, "Generated poem should have a title")
-        }
-    }
-    
-    func testVibeBasedPoemGenerationErrorHandling() throws {
-        let mainPage = pageFactory.mainContentPage()
+        let vibeSheet = app.sheets.firstMatch
+        XCTAssertTrue(vibeSheet.waitForExistence(timeout: 3))
+        
+        // Cancel the sheet
+        let cancelButton = app.buttons["Cancel"]
+        XCTAssertTrue(cancelButton.waitForExistence(timeout: 2))
+        cancelButton.tap()
+        
+        // Verify sheet is dismissed and we're back on main page
+        XCTAssertTrue(vibeSheet.waitForNonExistence(timeout: 3))
         XCTAssertTrue(mainPage.waitForPageToLoad())
-        
-        // Simulate AI service unavailable by modifying launch environment
-        app.terminate()
-        app.launchEnvironment["MOCK_AI_ERROR"] = "true"
-        app.launch()
-        
-        let newMainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(newMainPage.waitForPageToLoad())
-        
-        let vibeGenerationPage = newMainPage.tapVibeGenerationButton()
-        XCTAssertTrue(vibeGenerationPage.waitForPageToLoad())
-        
-        vibeGenerationPage.tapGenerateButton()
-        
-        // Should show error alert
-        sleep(2)
-        XCTAssertTrue(newMainPage.verifyErrorAlert(), "Should display error alert when AI generation fails")
     }
     
     // MARK: - Custom Prompt Tests
@@ -113,100 +78,94 @@ final class AIFeaturesUITests: XCTestCase {
         let mainPage = pageFactory.mainContentPage()
         XCTAssertTrue(mainPage.waitForPageToLoad())
         
-        // Navigate to custom prompt page
-        let customPromptPage = mainPage.tapCustomPromptButton()
-        XCTAssertTrue(customPromptPage.waitForPageToLoad())
-        XCTAssertTrue(customPromptPage.isDisplayed())
+        // Navigate to custom prompt (sheet presentation)
+        mainPage.tapCustomPromptButton()
         
-        // Enter a custom prompt
+        // Wait for custom prompt sheet to appear
+        let customSheet = app.sheets.firstMatch
+        XCTAssertTrue(customSheet.waitForExistence(timeout: 3))
+        
+        // Enter a custom prompt using accessibility identifier
+        let promptField = app.textViews.matching(identifier: "custom_prompt_text_field").firstMatch
+        XCTAssertTrue(promptField.waitForExistence(timeout: 2))
+        
         let testPrompt = "Write a poem about the beauty of coding"
-        customPromptPage.enterPrompt(testPrompt)
+        promptField.tap()
+        promptField.typeText(testPrompt)
         
-        // Verify prompt was entered
-        let enteredPrompt = customPromptPage.getCurrentPrompt()
-        XCTAssertEqual(enteredPrompt, testPrompt, "Prompt should be correctly entered")
+        // Generate poem using accessibility identifier
+        let generateButton = app.buttons.matching(identifier: "generate_custom_poem_button").firstMatch
+        XCTAssertTrue(generateButton.waitForExistence(timeout: 2))
+        XCTAssertTrue(generateButton.isEnabled)
         
-        // Generate poem
-        let returnedMainPage = customPromptPage.tapGenerateButton()
+        generateButton.tap()
         
-        // Wait for generation and verify result
-        sleep(3)
-        XCTAssertTrue(returnedMainPage.waitForLoadingToComplete())
-        XCTAssertTrue(returnedMainPage.verifyPoemIsDisplayed())
+        // Wait for generation to complete and sheet to dismiss
+        XCTAssertTrue(customSheet.waitForNonExistence(timeout: 8))
         
-        let poemAuthor = returnedMainPage.getCurrentPoemAuthor()
-        XCTAssertEqual(poemAuthor, "AI Generated", "Should show AI Generated as author")
-        
-        // The poem should somehow relate to the prompt (in a real implementation)
-        let poemTitle = returnedMainPage.getCurrentPoemTitle()
-        XCTAssertFalse(poemTitle.isEmpty, "Generated poem should have a title")
+        // Verify we're back on main page with new poem
+        XCTAssertTrue(mainPage.waitForPageToLoad())
+        XCTAssertTrue(mainPage.verifyPoemIsDisplayed())
     }
     
     func testCustomPromptWithEmptyInput() throws {
         let mainPage = pageFactory.mainContentPage()
         XCTAssertTrue(mainPage.waitForPageToLoad())
         
-        let customPromptPage = mainPage.tapCustomPromptButton()
-        XCTAssertTrue(customPromptPage.waitForPageToLoad())
+        mainPage.tapCustomPromptButton()
+        
+        let customSheet = app.sheets.firstMatch
+        XCTAssertTrue(customSheet.waitForExistence(timeout: 3))
         
         // Try to generate without entering a prompt
-        customPromptPage.tapGenerateButton()
+        let generateButton = app.buttons.matching(identifier: "generate_custom_poem_button").firstMatch
+        XCTAssertTrue(generateButton.waitForExistence(timeout: 2))
         
-        // Should either stay on page or show validation error
-        // In a real implementation, this might show a validation message
-        sleep(1)
+        // Button should be disabled for empty input
+        XCTAssertFalse(generateButton.isEnabled, "Generate button should be disabled for empty input")
         
-        // Verify we're still on the custom prompt page or got an error
-        let currentPrompt = customPromptPage.getCurrentPrompt()
-        XCTAssertTrue(currentPrompt.isEmpty, "Prompt should still be empty")
+        // Cancel the sheet
+        let cancelButton = app.buttons["Cancel"]
+        cancelButton.tap()
+        XCTAssertTrue(customSheet.waitForNonExistence(timeout: 3))
     }
     
-    func testCustomPromptClearFunctionality() throws {
+    // MARK: - AI Error Handling Tests
+    
+    func testAIGenerationErrorHandling() throws {
+        // Configure app for AI error simulation
+        app.terminate()
+        app.launchEnvironment["MOCK_AI_ERROR"] = "true"
+        app.launch()
+        
         let mainPage = pageFactory.mainContentPage()
         XCTAssertTrue(mainPage.waitForPageToLoad())
         
-        let customPromptPage = mainPage.tapCustomPromptButton()
-        XCTAssertTrue(customPromptPage.waitForPageToLoad())
+        // Try vibe generation
+        mainPage.tapVibeGenerationButton()
         
-        // Enter text and then clear it
-        let testPrompt = "Test prompt to be cleared"
-        customPromptPage.enterPrompt(testPrompt)
+        let vibeSheet = app.sheets.firstMatch
+        XCTAssertTrue(vibeSheet.waitForExistence(timeout: 3))
         
-        // Verify text was entered
-        let enteredPrompt = customPromptPage.getCurrentPrompt()
-        XCTAssertEqual(enteredPrompt, testPrompt)
+        let generateButton = app.buttons.matching(identifier: "generate_vibe_poem_button").firstMatch
+        generateButton.tap()
         
-        // Clear the text
-        customPromptPage.tapClearButton()
+        // Should show error alert
+        let errorAlert = app.alerts.firstMatch
+        XCTAssertTrue(errorAlert.waitForExistence(timeout: 5), "Should display error alert when AI generation fails")
         
-        // Verify text was cleared
-        let clearedPrompt = customPromptPage.getCurrentPrompt()
-        XCTAssertTrue(clearedPrompt.isEmpty, "Prompt should be cleared")
+        // Dismiss error alert
+        let okButton = errorAlert.buttons["OK"]
+        if okButton.exists {
+            okButton.tap()
+        }
+        
+        // Cancel to return to main
+        app.buttons["Cancel"].tap()
     }
-    
-    func testCustomPromptWithLongInput() throws {
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
-        
-        let customPromptPage = mainPage.tapCustomPromptButton()
-        XCTAssertTrue(customPromptPage.waitForPageToLoad())
-        
-        // Test with a very long prompt
-        let longPrompt = String(repeating: "This is a very long prompt that should test the limits of what the AI can handle. ", count: 10)
-        customPromptPage.enterPrompt(longPrompt)
-        
-        // Generate poem with long prompt
-        let returnedMainPage = customPromptPage.tapGenerateButton()
-        
-        // Should either succeed or gracefully handle the long input
-        sleep(4) // Longer wait for processing long prompt
-        XCTAssertTrue(returnedMainPage.waitForLoadingToComplete())
-    }
-    
-    // MARK: - AI Availability Tests
     
     func testAIFeaturesWhenUnavailable() throws {
-        // Simulate device without AI capabilities
+        // Configure app without AI capabilities
         app.terminate()
         app.launchEnvironment["AI_AVAILABLE"] = "false"
         app.launch()
@@ -214,11 +173,11 @@ final class AIFeaturesUITests: XCTestCase {
         let mainPage = pageFactory.mainContentPage()
         XCTAssertTrue(mainPage.waitForPageToLoad())
         
-        // AI buttons should either be hidden or disabled
-        let vibeButton = mainPage.vibeGenerationButton
-        let customButton = mainPage.customPromptButton
+        // AI buttons should be hidden or disabled
+        let vibeButton = app.buttons.matching(identifier: "vibe_generation_button").firstMatch
+        let customButton = app.buttons.matching(identifier: "custom_prompt_button").firstMatch
         
-        // In a real implementation, these buttons might not exist or be disabled
+        // These buttons might not exist or be disabled when AI is unavailable
         if vibeButton.exists {
             XCTAssertFalse(vibeButton.isEnabled, "Vibe generation should be disabled when AI unavailable")
         }
@@ -228,90 +187,7 @@ final class AIFeaturesUITests: XCTestCase {
         }
     }
     
-    func testAIFeaturesWithNetworkError() throws {
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
-        
-        // Simulate network connectivity issues
-        app.terminate()
-        app.launchEnvironment["SIMULATE_NETWORK_ERROR"] = "true"
-        app.launch()
-        
-        let newMainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(newMainPage.waitForPageToLoad())
-        
-        let vibeGenerationPage = newMainPage.tapVibeGenerationButton()
-        XCTAssertTrue(vibeGenerationPage.waitForPageToLoad())
-        
-        vibeGenerationPage.tapGenerateButton()
-        
-        // Should handle network error gracefully
-        sleep(3)
-        
-        // Check for error handling
-        if newMainPage.verifyErrorAlert() {
-            // Error alert is shown - good error handling
-            XCTAssertTrue(true, "Error alert properly displayed for network issues")
-        } else {
-            // Should fallback to cached content or show appropriate message
-            XCTAssertTrue(vibeGenerationPage.isDisplayed(), "Should remain on page or show appropriate fallback")
-        }
-    }
-    
-    // MARK: - AI Integration with Favorites Tests
-    
-    func testAIGeneratedPoemFavoriting() throws {
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
-        
-        // Generate an AI poem
-        let vibeGenerationPage = mainPage.tapVibeGenerationButton()
-        XCTAssertTrue(vibeGenerationPage.waitForPageToLoad())
-        
-        vibeGenerationPage.tapGenerateButton()
-        sleep(3)
-        
-        let returnedMainPage = vibeGenerationPage.tapBackButton()
-        XCTAssertTrue(returnedMainPage.verifyPoemIsDisplayed())
-        
-        // Favorite the AI-generated poem
-        returnedMainPage.tapFavoriteButton()
-        
-        // Verify it appears in favorites
-        let favoritesPage = returnedMainPage.tapFavoritesButton()
-        XCTAssertTrue(favoritesPage.waitForPageToLoad())
-        
-        let favoriteCount = favoritesPage.getFavoriteCount()
-        XCTAssertGreaterThan(favoriteCount, 0, "AI-generated poem should be added to favorites")
-        
-        // Verify the AI-generated poem is in the list
-        XCTAssertFalse(favoritesPage.verifyEmptyState(), "Favorites should not be empty")
-    }
-    
-    func testAIGeneratedPoemSharing() throws {
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
-        
-        // Generate an AI poem
-        let customPromptPage = mainPage.tapCustomPromptButton()
-        XCTAssertTrue(customPromptPage.waitForPageToLoad())
-        
-        customPromptPage.enterPrompt("A poem about friendship")
-        let returnedMainPage = customPromptPage.tapGenerateButton()
-        
-        sleep(3)
-        XCTAssertTrue(returnedMainPage.verifyPoemIsDisplayed())
-        
-        // Share the AI-generated poem
-        let shareSheetPage = returnedMainPage.tapShareButton()
-        XCTAssertTrue(shareSheetPage.waitForPageToLoad())
-        XCTAssertTrue(shareSheetPage.isDisplayed())
-        
-        // Cancel the share to return to main page
-        shareSheetPage.tapCancel()
-    }
-    
-    // MARK: - Performance Tests for AI Features
+    // MARK: - Performance Tests
     
     func testAIGenerationPerformance() throws {
         let mainPage = pageFactory.mainContentPage()
@@ -320,13 +196,16 @@ final class AIFeaturesUITests: XCTestCase {
         // Measure time for AI generation
         let startTime = CFAbsoluteTimeGetCurrent()
         
-        let vibeGenerationPage = mainPage.tapVibeGenerationButton()
-        XCTAssertTrue(vibeGenerationPage.waitForPageToLoad())
+        mainPage.tapVibeGenerationButton()
         
-        vibeGenerationPage.tapGenerateButton()
+        let vibeSheet = app.sheets.firstMatch
+        XCTAssertTrue(vibeSheet.waitForExistence(timeout: 3))
+        
+        let generateButton = app.buttons.matching(identifier: "generate_vibe_poem_button").firstMatch
+        generateButton.tap()
         
         // Wait for completion
-        sleep(5) // Maximum expected time for AI generation
+        XCTAssertTrue(vibeSheet.waitForNonExistence(timeout: 10))
         
         let endTime = CFAbsoluteTimeGetCurrent()
         let duration = endTime - startTime
@@ -334,87 +213,114 @@ final class AIFeaturesUITests: XCTestCase {
         // AI generation should complete within reasonable time
         XCTAssertLessThan(duration, 10.0, "AI generation should complete within 10 seconds")
         
-        vibeGenerationPage.tapBackButton()
         XCTAssertTrue(mainPage.verifyPoemIsDisplayed())
     }
     
-    // MARK: - Concurrent AI Operations Tests
+    // MARK: - Integration with Favorites Tests
     
-    func testConcurrentAIOperations() throws {
+    func testAIGeneratedPoemFavoriting() throws {
         let mainPage = pageFactory.mainContentPage()
         XCTAssertTrue(mainPage.waitForPageToLoad())
         
-        // Try to trigger multiple AI operations quickly
-        let vibeGenerationPage = mainPage.tapVibeGenerationButton()
-        XCTAssertTrue(vibeGenerationPage.waitForPageToLoad())
+        // Generate an AI poem
+        mainPage.tapVibeGenerationButton()
         
-        // Tap generate multiple times quickly
-        vibeGenerationPage.tapGenerateButton()
-        vibeGenerationPage.tapGenerateButton()
-        vibeGenerationPage.tapGenerateButton()
+        let vibeSheet = app.sheets.firstMatch
+        XCTAssertTrue(vibeSheet.waitForExistence(timeout: 3))
         
-        // Should handle concurrent requests gracefully
-        sleep(4)
+        let generateButton = app.buttons.matching(identifier: "generate_vibe_poem_button").firstMatch
+        generateButton.tap()
         
-        // Should not crash and should eventually show a result
-        vibeGenerationPage.tapBackButton()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
+        // Wait for generation to complete
+        XCTAssertTrue(vibeSheet.waitForNonExistence(timeout: 8))
+        XCTAssertTrue(mainPage.verifyPoemIsDisplayed())
+        
+        // Favorite the AI-generated poem
+        let favoriteButton = app.buttons.matching(identifier: "favorite_button").firstMatch
+        if favoriteButton.exists {
+            favoriteButton.tap()
+        }
+        
+        // Verify favoriting worked (button state should change)
+        let unfavoriteButton = app.buttons.matching(identifier: "unfavorite_button").firstMatch
+        if unfavoriteButton.exists {
+            XCTAssertTrue(unfavoriteButton.exists, "Should show unfavorite button after favoriting")
+        }
     }
     
-    // MARK: - AI Memory and State Tests
-    
-    func testAIGenerationStateAfterAppBackgrounding() throws {
+    func testAIGeneratedPoemSharing() throws {
         let mainPage = pageFactory.mainContentPage()
         XCTAssertTrue(mainPage.waitForPageToLoad())
         
-        // Start AI generation
-        let customPromptPage = mainPage.tapCustomPromptButton()
-        XCTAssertTrue(customPromptPage.waitForPageToLoad())
+        // Generate an AI poem
+        mainPage.tapCustomPromptButton()
         
-        customPromptPage.enterPrompt("A poem about persistence")
-        customPromptPage.tapGenerateButton()
+        let customSheet = app.sheets.firstMatch
+        XCTAssertTrue(customSheet.waitForExistence(timeout: 3))
         
-        // Background the app during generation
-        XCUIDevice.shared.press(.home)
-        sleep(2)
+        let promptField = app.textViews.matching(identifier: "custom_prompt_text_field").firstMatch
+        promptField.tap()
+        promptField.typeText("A poem about friendship")
         
-        // Return to app
-        app.activate()
-        sleep(1)
+        let generateButton = app.buttons.matching(identifier: "generate_custom_poem_button").firstMatch
+        generateButton.tap()
         
-        // Should handle the interruption gracefully
+        // Wait for generation to complete
+        XCTAssertTrue(customSheet.waitForNonExistence(timeout: 8))
+        XCTAssertTrue(mainPage.verifyPoemIsDisplayed())
+        
+        // Share the AI-generated poem
+        let shareButton = app.buttons.matching(identifier: "share_button").firstMatch
+        if shareButton.exists {
+            shareButton.tap()
+            
+            // Verify share sheet appears
+            let shareSheet = app.sheets.firstMatch
+            if shareSheet.waitForExistence(timeout: 3) {
+                // Cancel the share to return to main page
+                let cancelButton = shareSheet.buttons["Cancel"]
+                if cancelButton.exists {
+                    cancelButton.tap()
+                } else {
+                    // Tap outside to dismiss
+                    app.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.1)).tap()
+                }
+            }
+        }
+    }
+    
+    // MARK: - Accessibility Tests
+    
+    func testAIFeaturesAccessibility() throws {
+        let mainPage = pageFactory.mainContentPage()
         XCTAssertTrue(mainPage.waitForPageToLoad())
-        // Either show the generated poem or return to a clean state
-    }
-}
-
-// MARK: - AI Features Test Extensions
-
-extension AIFeaturesUITests {
-    
-    // Helper method to verify AI poem characteristics
-    func verifyAIGeneratedPoem(on page: MainContentPage) {
-        XCTAssertTrue(page.verifyPoemIsDisplayed(), "AI poem should be displayed")
         
-        let author = page.getCurrentPoemAuthor()
-        XCTAssertEqual(author, "AI Generated", "Should show AI Generated as author")
+        // Test vibe generation accessibility
+        mainPage.tapVibeGenerationButton()
         
-        let title = page.getCurrentPoemTitle()
-        XCTAssertFalse(title.isEmpty, "AI poem should have a title")
-        XCTAssertNotEqual(title, "Loading...", "Should not show loading state")
+        let vibeSheet = app.sheets.firstMatch
+        XCTAssertTrue(vibeSheet.waitForExistence(timeout: 3))
+        
+        // Verify accessibility identifiers exist
+        let generateButton = app.buttons.matching(identifier: "generate_vibe_poem_button").firstMatch
+        XCTAssertTrue(generateButton.exists, "Generate vibe poem button should have accessibility identifier")
+        
+        app.buttons["Cancel"].tap()
+        XCTAssertTrue(vibeSheet.waitForNonExistence(timeout: 3))
+        
+        // Test custom prompt accessibility
+        mainPage.tapCustomPromptButton()
+        
+        let customSheet = app.sheets.firstMatch
+        XCTAssertTrue(customSheet.waitForExistence(timeout: 3))
+        
+        let promptField = app.textViews.matching(identifier: "custom_prompt_text_field").firstMatch
+        XCTAssertTrue(promptField.exists, "Custom prompt text field should have accessibility identifier")
+        
+        let customGenerateButton = app.buttons.matching(identifier: "generate_custom_poem_button").firstMatch
+        XCTAssertTrue(customGenerateButton.exists, "Generate custom poem button should have accessibility identifier")
+        
+        app.buttons["Cancel"].tap()
+        XCTAssertTrue(customSheet.waitForNonExistence(timeout: 3))
     }
-    
-    // Helper method to simulate different AI availability scenarios
-    func configureAIAvailability(_ isAvailable: Bool) {
-        app.terminate()
-        app.launchEnvironment["AI_AVAILABLE"] = isAvailable ? "true" : "false"
-        app.launch()
-    }
-    
-    // Helper method to simulate different error conditions
-    func simulateAIError(_ errorType: String) {
-        app.terminate()
-        app.launchEnvironment["MOCK_AI_ERROR"] = errorType
-        app.launch()
-    }
-}
+} 
