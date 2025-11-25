@@ -84,10 +84,19 @@ actor PoemRepository: PoemRepositoryProtocol {
             
             print("🤖 Generating poem from AI...")
             let poem = try await aiService.generatePoemFromVibe(vibeAnalysis)
-            print("✅ Poem generated successfully!")
+            
+            // Check if we got a fallback poem
+            if poem.source == .localFallback {
+                print("⚠️ Received fallback poem instead of AI-generated content")
+                logWarning("AI generation returned fallback poem", category: .ai)
+            } else {
+                print("✅ Poem generated successfully!")
+            }
+            
             print("   Title: \(poem.title)")
             print("   Author: \(poem.author ?? "Unknown")")
             print("   Content length: \(poem.content.count) chars")
+            print("   Source: \(poem.source?.rawValue ?? "unknown")")
             
             success = true
             

@@ -23,5 +23,55 @@
         "name": "CNN Top Stories",
         "url": "http://rss.cnn.com/rss/edition.rss",
         "category": "general"
+    },
+    {
+        "name": "The Guardian World",
+        "url": "https://www.theguardian.com/world/rss",
+        "category": "world"
+    },
+    {
+        "name": "The Guardian US",
+        "url": "https://www.theguardian.com/us-news/rss",
+        "category": "general"
+    },
+    {
+        "name": "Al Jazeera",
+        "url": "https://www.aljazeera.com/xml/rss/all.xml",
+        "category": "world"
+    },
+    {
+        "name": "ABC News",
+        "url": "https://abcnews.go.com/abcnews/topstories",
+        "category": "general"
+    },
+    {
+        "name": "CBS News",
+        "url": "https://www.cbsnews.com/latest/rss/main",
+        "category": "general"
+    },
+    {
+        "name": "NBC News",
+        "url": "https://feeds.nbcnews.com/nbcnews/public/news",
+        "category": "general"
+    },
+    {
+        "name": "Reuters Technology",
+        "url": "https://feeds.reuters.com/reuters/technologyNews",
+        "category": "technology"
+    },
+    {
+        "name": "Reuters Business",
+        "url": "https://feeds.reuters.com/reuters/businessNews",
+        "category": "economy"
+    },
+    {
+        "name": "NPR Science",
+        "url": "https://feeds.npr.org/1007/rss.xml",
+        "category": "science"
+    },
+    {
+        "name": "NPR Health",
+        "url": "https://feeds.npr.org/1128/rss.xml",
+        "category": "health"
     }
 ]

@@ -21,7 +21,6 @@ enum PoemGenerationError: Error, LocalizedError {
     case invalidPrompt
     case deviceNotSupported
     case contentFiltered
-    case quotaExceeded
     case networkRequired
     case systemResourcesUnavailable
     case adaptationFailed
@@ -38,8 +37,6 @@ enum PoemGenerationError: Error, LocalizedError {
             return "Device does not support AI poem generation"
         case .contentFiltered:
             return "Content was filtered for safety"
-        case .quotaExceeded:
-            return "Daily generation limit exceeded"
         case .networkRequired:
             return "Network connection required for AI features"
         case .systemResourcesUnavailable:
@@ -55,8 +52,6 @@ enum PoemGenerationError: Error, LocalizedError {
             return "Please try again later"
         case .deviceNotSupported:
             return "AI poem generation requires a supported device with Apple Intelligence"
-        case .quotaExceeded:
-            return "You can generate more poems tomorrow"
         case .networkRequired:
             return "Connect to the internet to use AI features"
         default:
@@ -99,25 +94,9 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
     private var adapter: Any? // Will be SystemLanguageModel.Adapter when available (struct, so use Any instead of AnyObject)
     #endif
     
-    private var dailyGenerationCount: Int = 0
-    private let maxDailyGenerations = 10
-    private let lastResetDate: Date
-    private let userDefaults: UserDefaults
-    
     // MARK: - Initialization
     
-    init(userDefaults: UserDefaults = .standard) {
-        self.userDefaults = userDefaults
-        self.lastResetDate = userDefaults.object(forKey: "lastGenerationReset") as? Date ?? Date()
-        self.dailyGenerationCount = userDefaults.integer(forKey: "dailyGenerationCount")
-        
-        // Reset daily count if it's a new day
-        if !Calendar.current.isDate(lastResetDate, inSameDayAs: Date()) {
-            self.dailyGenerationCount = 0
-            userDefaults.set(0, forKey: "dailyGenerationCount")
-            userDefaults.set(Date(), forKey: "lastGenerationReset")
-        }
-        
+    init() {
         Task {
             await initializeFoundationModel()
         }
@@ -159,9 +138,6 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
         print("🎨 PoemGenerationService: Generating poem for vibe: \(vibeAnalysis.vibe.displayName)")
         
         do {
-            try await checkAvailabilityAndQuota()
-            print("✅ Quota check passed (\(dailyGenerationCount)/\(maxDailyGenerations))")
-            
             let prompt = buildVibePrompt(from: vibeAnalysis)
             print("📝 Built prompt (\(prompt.count) chars)")
             
@@ -175,7 +151,6 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
                     print("🚀 Attempting AI generation...")
                     let generatedPoem = try await generateWithFoundationModels(prompt: prompt)
                     let poem = convertToPoemModel(generatedPoem, vibe: vibeAnalysis.vibe)
-                    await incrementDailyCount()
                     print("✅ Successfully generated AI poem!")
                     return poem
                 }
@@ -199,38 +174,26 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
     }
     
     func generatePoemWithCustomPrompt(_ prompt: String) async throws -> Poem {
-        do {
-            try await checkAvailabilityAndQuota()
-            
-            guard !prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-                throw PoemGenerationError.invalidPrompt
-            }
-            
-            let enhancedPrompt = enhanceCustomPrompt(prompt)
-            
-            // Try Foundation Models if available (iOS 26+)
-            if await isFoundationModelsAvailable() {
-                #if canImport(FoundationModels)
-                if #available(iOS 26, *) {
-                    // Future implementation
-                    let generatedPoem = try await generateWithFoundationModels(prompt: enhancedPrompt)
-                    let poem = convertToPoemModel(generatedPoem, vibe: nil)
-                    await incrementDailyCount()
-                    return poem
-                }
-                #endif
-            }
-            
-            // Fall back to local generation for now
-            throw PoemGenerationError.modelUnavailable
-            
-        } catch PoemGenerationError.deviceNotSupported {
-            // Fallback to local generation for custom prompts when AI is not supported
-            return generateLocalPoem(prompt: prompt)
-        } catch {
-            // For now, always fall back to local generation since Foundation Models isn't available yet
-            return generateLocalPoem(prompt: prompt)
+        guard !prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            throw PoemGenerationError.invalidPrompt
         }
+        
+        let enhancedPrompt = enhanceCustomPrompt(prompt)
+        
+        // Try Foundation Models if available (iOS 26+)
+        if await isFoundationModelsAvailable() {
+            #if canImport(FoundationModels)
+            if #available(iOS 26, *) {
+                // Future implementation
+                let generatedPoem = try await generateWithFoundationModels(prompt: enhancedPrompt)
+                let poem = convertToPoemModel(generatedPoem, vibe: nil)
+                return poem
+            }
+            #endif
+        }
+        
+        // Fall back to local generation for now
+        throw PoemGenerationError.modelUnavailable
     }
     
     func isAvailable() async -> Bool {
@@ -339,15 +302,6 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
     #endif
     
     // MARK: - Private Methods
-    
-    private func checkAvailabilityAndQuota() async throws {
-        // For now, since Foundation Models isn't available, we'll allow local generation
-        // In the future: guard await isAvailable() else { throw PoemGenerationError.deviceNotSupported }
-        
-        guard dailyGenerationCount < maxDailyGenerations else {
-            throw PoemGenerationError.quotaExceeded
-        }
-    }
     
     private func buildVibePrompt(from vibeAnalysis: VibeAnalysis) -> String {
         let basePrompt = vibeAnalysis.vibe.poemPrompt
@@ -548,11 +502,6 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
         return poem
     }
     #endif
-    
-    private func incrementDailyCount() async {
-        dailyGenerationCount += 1
-        userDefaults.set(dailyGenerationCount, forKey: "dailyGenerationCount")
-    }
     
     private func generateLocalPoem(vibe: DailyVibe? = nil, prompt: String? = nil) -> Poem {
         let title = vibe?.displayName ?? (prompt != nil ? "Custom Inspiration" : "A Simple Poem")
