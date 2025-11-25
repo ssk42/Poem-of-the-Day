@@ -10,20 +10,16 @@ on:
 jobs:
   build-and-test:
     name: Test on ${{ matrix.device }}
-    # Ensure your runner supports macOS Sequoia (15.x) or Tahoe (26.x) required for Xcode 26
     runs-on: macos-latest
-    
     strategy:
       fail-fast: false
       matrix:
-        # Easily add "iPhone SE (4th generation)" or others here
         device: ["iPhone 17 Pro", "iPhone 17"] 
 
     steps:
       - name: Check out code
         uses: actions/checkout@v4
 
-      # Installs a log formatter to make xcodebuild output readable
       - name: Install xcbeautify
         run: brew install xcbeautify
 
@@ -32,15 +28,10 @@ jobs:
         with:
           xcode-version: '26.1'
 
-      # 1. Debugging Step: Print available devices to the log
-      - name: List Available Devices
-        run: xcrun simctl list devices available
-
-      # 2. Adjusted Test Step
       - name: Test
         run: |
-          # 1. Target OS=26.0 (matches the runner's available runtime)
-          # 2. Override IPHONEOS_DEPLOYMENT_TARGET to 26.0 to allow running on this sim
+          # 1. We target OS=26.0 because that is what the runner has.
+          # 2. We pass IPHONEOS_DEPLOYMENT_TARGET=26.0 to OVERRIDE your project file.
           xcodebuild test \
             -scheme "Poem of the Day" \
             -destination "platform=iOS Simulator,name=${{ matrix.device }},OS=26.0" \
