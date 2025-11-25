@@ -24,11 +24,11 @@ jobs:
       - name: List available simulators
         run: xcrun simctl list devices available | grep -i "iPhone 16" || echo "iPhone 16 simulators:"
 
-      - name: Build project
+      - name: Build project (generic destination to avoid runtime mismatch)
         run: |
           xcodebuild clean build \
             -scheme "Poem of the Day" \
-            -destination 'platform=iOS Simulator,name=iPhone 16' \
+            -destination 'generic/platform=iOS Simulator' \
             -sdk iphonesimulator \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO
