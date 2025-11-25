@@ -23,11 +23,12 @@ jobs:
 
       - name: Build and Test
         run: |
-          xcodebuild clean build \
+          xcodebuild build \
             -scheme "Poem of the Day" \
-            -destination "platform=iOS Simulator,name=Any iOS Simulator Device" \
+            -sdk iphonesimulator \
             CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO
+            CODE_SIGNING_REQUIRED=NO \
+            -allowProvisioningUpdates
 
       - name: How to watch this run
         if: always()
