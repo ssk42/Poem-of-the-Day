@@ -24,28 +24,62 @@ jobs:
       - name: Create and Boot Simulator
         id: create_boot_sim
         run: |
-          SIM_NAME="iPhone 15 Pro (CI)"
-          SIM_DEVICE_TYPE="iPhone 15 Pro"
-          SIM_OS_ID="com.apple.CoreSimulator.SimRuntime.iOS-26-0" # Based on available runtimes from logs
+          # List all available runtimes for debugging
+          echo "Available iOS runtimes:"
+          xcrun simctl list runtimes | grep iOS
 
-          # Check if a simulator with this name already exists
-          EXISTING_SIM=$(xcrun simctl list devices --json | jq -r ".devices.\"$SIM_OS_ID\"[] | select(.name == \"$SIM_NAME\") | .udid")
+          # Get the latest iOS runtime (26.0.1 or 26.0)
+          LATEST_IOS_RUNTIME=$(xcrun simctl list runtimes -j | jq -r '[.runtimes[] | select(.name | startswith("iOS")) | select(.version | startswith("26.0"))] | sort_by(.version) | last | .identifier')
 
-          if [ -n "$EXISTING_SIM" ]; then
-            echo "Simulator '$SIM_NAME' already exists with UDID: $EXISTING_SIM"
-            SIM_UDID=$EXISTING_SIM
-          else
-            echo "Creating simulator '$SIM_NAME'..."
-            SIM_UDID=$(xcrun simctl create "$SIM_NAME" "$SIM_DEVICE_TYPE" "$SIM_OS_ID")
-            echo "Created simulator with UDID: $SIM_UDID"
+          if [ -z "$LATEST_IOS_RUNTIME" ]; then
+            echo "Error: No iOS 26.0+ runtime found"
+            xcrun simctl list runtimes
+            exit 1
           fi
 
-          # Ensure the simulator is booted
-          xcrun simctl boot "$SIM_UDID" || echo "Simulator already booted or failed to boot."
+          echo "Using runtime: $LATEST_IOS_RUNTIME"
+
+          # Try iPhone 16 Pro first, fall back to iPhone 15 Pro
+          for DEVICE_TYPE in "iPhone 16 Pro" "iPhone 15 Pro"; do
+            SIM_NAME="${DEVICE_TYPE} (CI)"
+
+            # Check if a simulator with this name already exists
+            EXISTING_SIM=$(xcrun simctl list devices --json | jq -r ".devices.\"$LATEST_IOS_RUNTIME\"[]? | select(.name == \"$SIM_NAME\") | .udid" 2>/dev/null)
+
+            if [ -n "$EXISTING_SIM" ]; then
+              echo "Found existing simulator '$SIM_NAME' with UDID: $EXISTING_SIM"
+              SIM_UDID=$EXISTING_SIM
+              break
+            else
+              echo "Attempting to create simulator '$SIM_NAME' with device type '$DEVICE_TYPE'..."
+              SIM_UDID=$(xcrun simctl create "$SIM_NAME" "$DEVICE_TYPE" "$LATEST_IOS_RUNTIME" 2>&1)
+
+              if [[ $SIM_UDID =~ ^[A-F0-9-]{36}$ ]]; then
+                echo "Successfully created simulator with UDID: $SIM_UDID"
+                break
+              else
+                echo "Failed to create $DEVICE_TYPE: $SIM_UDID"
+                SIM_UDID=""
+              fi
+            fi
+          done
+
+          if [ -z "$SIM_UDID" ]; then
+            echo "Error: Failed to create or find any suitable simulator"
+            exit 1
+          fi
+
+          # Boot the simulator
+          echo "Booting simulator $SIM_UDID..."
+          xcrun simctl boot "$SIM_UDID" || echo "Simulator already booted"
+
+          # Wait for boot to complete
+          xcrun simctl bootstatus "$SIM_UDID" -b
 
           echo "device_udid=$SIM_UDID" >> $GITHUB_OUTPUT
 
-          xcrun simctl list devices # For debugging
+          # Show all devices for debugging
+          xcrun simctl list devices
 
       - name: Build and Test
         run: |
