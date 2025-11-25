@@ -39,12 +39,13 @@ jobs:
       # 2. Adjusted Test Step
       - name: Test
         run: |
-          # Switch to OS=latest to allow fallback to the newest available runtime
-          # Switch to 'iPhone 17' (non-Pro) or a generic name if Pro is missing
+          # 1. Target OS=26.0 (matches the runner's available runtime)
+          # 2. Override IPHONEOS_DEPLOYMENT_TARGET to 26.0 to allow running on this sim
           xcodebuild test \
             -scheme "Poem of the Day" \
-            -destination "platform=iOS Simulator,name=${{ matrix.device }},OS=latest" \
+            -destination "platform=iOS Simulator,name=${{ matrix.device }},OS=26.0" \
             -resultBundlePath TestResults \
+            IPHONEOS_DEPLOYMENT_TARGET=26.0 \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             | xcbeautify
