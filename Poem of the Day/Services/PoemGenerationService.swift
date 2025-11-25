@@ -70,10 +70,18 @@ enum PoemGenerationError: Error, LocalizedError {
 #if canImport(FoundationModels)
 // Define the structure for guided poem generation when Foundation Models is available
 @available(iOS 26, *)
+@Generable(description: "A generated poem with title, author, lines, and style")
 struct GeneratedPoem: Codable {
+    @Guide(description: "The title of the poem")
     let title: String
+    
+    @Guide(description: "The author of the poem (use 'AI Poet')")
     let author: String
+    
+    @Guide(description: "Individual lines of the poem", .count(12...20))
     let lines: [String]
+    
+    @Guide(description: "The style of the poem (e.g., 'free verse', 'sonnet', 'haiku')")
     let style: String?
 }
 #endif
@@ -85,12 +93,10 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
     // MARK: - Properties
     
     #if canImport(FoundationModels)
-    @available(iOS 26, *)
+    // Store as AnyObject to avoid @available on stored properties
     private var languageModel: AnyObject? // Will be SystemLanguageModel when available
-    @available(iOS 26, *)
     private var modelSession: AnyObject? // Will be LanguageModelSession when available
-    @available(iOS 26, *)
-    private var adapter: AnyObject? // Will be SystemLanguageModel.Adapter when available
+    private var adapter: Any? // Will be SystemLanguageModel.Adapter when available (struct, so use Any instead of AnyObject)
     #endif
     
     private var dailyGenerationCount: Int = 0
@@ -124,7 +130,7 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
         if #available(iOS 26, *) {
             // Future implementation when Foundation Models API is available
             // This will be uncommented when the actual APIs are available
-            /*
+            
             do {
                 // Try to load a custom poetry adapter if available
                 if let poetryAdapter = try? SystemLanguageModel.Adapter(name: "poetry_generation") {
@@ -142,7 +148,7 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
                 print("Failed to initialize Foundation Models: \(error)")
                 // Model will remain nil, falling back to local generation
             }
-            */
+            
         }
         #endif
     }
@@ -150,32 +156,44 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
     // MARK: - Public Methods
     
     func generatePoemFromVibe(_ vibeAnalysis: VibeAnalysis) async throws -> Poem {
+        print("🎨 PoemGenerationService: Generating poem for vibe: \(vibeAnalysis.vibe.displayName)")
+        
         do {
             try await checkAvailabilityAndQuota()
+            print("✅ Quota check passed (\(dailyGenerationCount)/\(maxDailyGenerations))")
             
             let prompt = buildVibePrompt(from: vibeAnalysis)
+            print("📝 Built prompt (\(prompt.count) chars)")
             
             // Try Foundation Models if available (iOS 26+)
-            if await isFoundationModelsAvailable() {
+            let isAvailable = await isFoundationModelsAvailable()
+            print("🔍 Foundation Models available: \(isAvailable)")
+            
+            if isAvailable {
                 #if canImport(FoundationModels)
                 if #available(iOS 26, *) {
-                    // Future implementation
-                    // let generatedPoem = try await generateWithFoundationModels(prompt: prompt)
-                    // let poem = convertToPoemModel(generatedPoem, vibe: vibeAnalysis.vibe)
-                    // await incrementDailyCount()
-                    // return poem
+                    print("🚀 Attempting AI generation...")
+                    let generatedPoem = try await generateWithFoundationModels(prompt: prompt)
+                    let poem = convertToPoemModel(generatedPoem, vibe: vibeAnalysis.vibe)
+                    await incrementDailyCount()
+                    print("✅ Successfully generated AI poem!")
+                    return poem
                 }
                 #endif
             }
             
             // Fall back to local generation for now
+            print("⚠️ Foundation Models not available, throwing modelUnavailable error")
             throw PoemGenerationError.modelUnavailable
             
         } catch PoemGenerationError.deviceNotSupported {
-            // Fallback to local generation if AI is not supported
+            print("❌ Device not supported, using local poem")
+            return generateLocalPoem(vibe: vibeAnalysis.vibe)
+        } catch PoemGenerationError.modelUnavailable {
+            print("❌ Model unavailable, using local poem")
             return generateLocalPoem(vibe: vibeAnalysis.vibe)
         } catch {
-            // For now, always fall back to local generation since Foundation Models isn't available yet
+            print("❌ Unexpected error: \(error), using local poem")
             return generateLocalPoem(vibe: vibeAnalysis.vibe)
         }
     }
@@ -195,10 +213,10 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
                 #if canImport(FoundationModels)
                 if #available(iOS 26, *) {
                     // Future implementation
-                    // let generatedPoem = try await generateWithFoundationModels(prompt: enhancedPrompt)
-                    // let poem = convertToPoemModel(generatedPoem, vibe: nil)
-                    // await incrementDailyCount()
-                    // return poem
+                    let generatedPoem = try await generateWithFoundationModels(prompt: enhancedPrompt)
+                    let poem = convertToPoemModel(generatedPoem, vibe: nil)
+                    await incrementDailyCount()
+                    return poem
                 }
                 #endif
             }
@@ -225,21 +243,13 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
     private func isFoundationModelsAvailable() async -> Bool {
         #if canImport(FoundationModels)
         if #available(iOS 26, *) {
-            // Use proper SystemLanguageModel availability checking
-            do {
-                // Check if SystemLanguageModel is available on this device
-                let isSupported = await SystemLanguageModel.isSupported
-                
-                // Additional capability checks
-                if isSupported {
-                    // Check if text generation is supported
-                    let capabilities = await SystemLanguageModel.capabilities
-                    return capabilities.contains(.textGeneration)
-                }
-                
-                return false
-            } catch {
-                // If availability check fails, assume not available
+            // Check if SystemLanguageModel is available on this device
+            let model = SystemLanguageModel.default
+            
+            switch model.availability {
+            case .available:
+                return true
+            case .unavailable:
                 return false
             }
         }
@@ -253,22 +263,78 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
     @available(iOS 26, *)
     private func generateWithFoundationModels(prompt: String) async throws -> GeneratedPoem {
         // Future implementation when APIs are available
-        /*
+        
         guard let session = modelSession as? LanguageModelSession else {
+            print("❌ Model session is not available")
             throw PoemGenerationError.modelUnavailable
         }
         
+        print("🚀 Starting poem generation with Foundation Models")
+        print("📝 Prompt length: \(prompt.count) characters")
+        
         do {
             // Use guided generation for structured poem output
-            let response = try await session.respond(to: prompt, generatingResponseOf: GeneratedPoem.self)
-            return response
+            print("🎯 Attempting guided generation with GeneratedPoem type...")
+            let response = try await session.respond(to: prompt, generating: GeneratedPoem.self)
+            let generatedPoem = response.content
+            
+            // Validate that we got meaningful content
+            guard !generatedPoem.title.isEmpty,
+                  !generatedPoem.author.isEmpty,
+                  !generatedPoem.lines.isEmpty else {
+                print("⚠️ Generated poem has empty fields")
+                print("  - Title empty: \(generatedPoem.title.isEmpty)")
+                print("  - Author empty: \(generatedPoem.author.isEmpty)")
+                print("  - Lines empty: \(generatedPoem.lines.isEmpty)")
+                throw PoemGenerationError.generationFailed
+            }
+            
+            print("✅ Successfully generated poem via guided generation:")
+            print("  - Title: '\(generatedPoem.title)'")
+            print("  - Author: \(generatedPoem.author)")
+            print("  - Lines: \(generatedPoem.lines.count)")
+            print("  - Style: \(generatedPoem.style ?? "none")")
+            return generatedPoem
+            
+        } catch let error as LanguageModelSession.GenerationError {
+            print("❌ Guided generation failed with LanguageModelSession.GenerationError")
+            print("   Error details: \(error)")
+            
+            // Try regular text generation and parse as fallback
+            do {
+                print("🔄 Attempting fallback to regular text generation...")
+                let textResponse = try await session.respond(to: prompt)
+                let textContent = textResponse.content
+                print("📝 Received text response (\(textContent.count) chars)")
+                print("📝 First 300 chars: \(String(textContent.prefix(300)))")
+                
+                let parsed = try parseTextToPoem(textContent)
+                print("✅ Successfully parsed text response into poem")
+                return parsed
+            } catch {
+                print("❌ Fallback text generation also failed: \(error)")
+                throw PoemGenerationError.generationFailed
+            }
+            
         } catch {
-            // If guided generation fails, try regular text generation and parse
-            let textResponse = try await session.respond(to: prompt)
-            return try parseTextToPoem(textResponse)
+            print("❌ Unexpected error during guided generation: \(type(of: error)) - \(error)")
+            
+            // Try regular text generation and parse as fallback
+            do {
+                print("🔄 Attempting fallback to text generation after unexpected error...")
+                let textResponse = try await session.respond(to: prompt)
+                let textContent = textResponse.content
+                print("📝 Received text response (\(textContent.count) chars)")
+                print("📝 First 300 chars: \(String(textContent.prefix(300)))")
+                
+                let parsed = try parseTextToPoem(textContent)
+                print("✅ Successfully parsed text response into poem")
+                return parsed
+            } catch {
+                print("❌ Fallback text generation also failed: \(error)")
+                throw PoemGenerationError.generationFailed
+            }
         }
-        */
-        throw PoemGenerationError.modelUnavailable
     }
     #endif
     
@@ -351,7 +417,52 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
     #if canImport(FoundationModels)
     @available(iOS 26, *)
     private func parseTextToPoem(_ text: String) throws -> GeneratedPoem {
-        let lines = text.components(separatedBy: .newlines)
+        var processedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        print("📥 Raw text to parse (first 200 chars): \(String(processedText.prefix(200)))")
+        
+        // Handle markdown code blocks (```json ... ```)
+        if processedText.hasPrefix("```") {
+            print("🔍 Detected markdown code block, extracting JSON...")
+            
+            // Remove the opening ```json or ``` and closing ```
+            var lines = processedText.components(separatedBy: .newlines)
+            
+            // Remove first line if it's a code fence
+            if lines.first?.hasPrefix("```") == true {
+                lines.removeFirst()
+            }
+            
+            // Remove last line if it's a code fence
+            if lines.last?.trimmingCharacters(in: .whitespacesAndNewlines) == "```" {
+                lines.removeLast()
+            }
+            
+            processedText = lines.joined(separator: "\n").trimmingCharacters(in: .whitespacesAndNewlines)
+            print("📝 Extracted content (first 200 chars): \(String(processedText.prefix(200)))")
+        }
+        
+        // Try to parse as JSON if it looks like JSON
+        if processedText.hasPrefix("{") {
+            print("🔍 Attempting JSON parsing...")
+            if let jsonData = processedText.data(using: .utf8) {
+                do {
+                    let decoded = try JSONDecoder().decode(GeneratedPoem.self, from: jsonData)
+                    print("✅ Successfully decoded JSON into GeneratedPoem")
+                    print("  - Title: \(decoded.title)")
+                    print("  - Lines count: \(decoded.lines.count)")
+                    return decoded
+                } catch {
+                    print("❌ JSON decoding failed: \(error)")
+                    // Continue to text parsing fallback
+                }
+            }
+        }
+        
+        print("🔄 Falling back to text parsing...")
+        
+        // Fall back to text parsing
+        let lines = processedText.components(separatedBy: .newlines)
         
         var title = "Generated Poem"
         var author = "AI Poet"
@@ -359,28 +470,52 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
         var style: String?
         
         var parsingPoem = false
+        var foundMetadata = false
         
         for line in lines {
             let trimmedLine = line.trimmingCharacters(in: .whitespacesAndNewlines)
             
-            if trimmedLine.hasPrefix("Title:") {
-                title = String(trimmedLine.dropFirst(6)).trimmingCharacters(in: .whitespacesAndNewlines)
-            } else if trimmedLine.hasPrefix("Author:") {
-                author = String(trimmedLine.dropFirst(7)).trimmingCharacters(in: .whitespacesAndNewlines)
-            } else if trimmedLine.hasPrefix("Style:") {
-                style = String(trimmedLine.dropFirst(6)).trimmingCharacters(in: .whitespacesAndNewlines)
-            } else if !trimmedLine.isEmpty && !trimmedLine.hasPrefix("Title:") && !trimmedLine.hasPrefix("Author:") && !trimmedLine.hasPrefix("Style:") {
-                parsingPoem = true
+            // Skip empty lines before the poem starts
+            if !parsingPoem && trimmedLine.isEmpty {
+                continue
             }
             
-            if parsingPoem && !trimmedLine.isEmpty {
-                poemLines.append(trimmedLine)
+            // Check for metadata fields
+            if trimmedLine.hasPrefix("Title:") {
+                title = String(trimmedLine.dropFirst(6)).trimmingCharacters(in: .whitespacesAndNewlines)
+                foundMetadata = true
+            } else if trimmedLine.hasPrefix("Author:") {
+                author = String(trimmedLine.dropFirst(7)).trimmingCharacters(in: .whitespacesAndNewlines)
+                foundMetadata = true
+            } else if trimmedLine.hasPrefix("Style:") {
+                style = String(trimmedLine.dropFirst(6)).trimmingCharacters(in: .whitespacesAndNewlines)
+                foundMetadata = true
+            } else if !trimmedLine.isEmpty {
+                // Once we hit non-metadata content, start collecting poem lines
+                if foundMetadata || !parsingPoem {
+                    parsingPoem = true
+                }
+                
+                // Add non-empty lines to the poem
+                if parsingPoem {
+                    poemLines.append(trimmedLine)
+                }
             }
         }
         
+        // If we didn't find metadata and have content, treat all non-empty lines as the poem
+        if !foundMetadata && poemLines.isEmpty {
+            poemLines = lines
+                .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                .filter { !$0.isEmpty }
+        }
+        
         if poemLines.isEmpty {
+            print("❌ No poem lines found after parsing")
             throw PoemGenerationError.generationFailed
         }
+        
+        print("✅ Successfully parsed poem with \(poemLines.count) lines")
         
         return GeneratedPoem(
             title: title,
@@ -392,12 +527,24 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
     
     @available(iOS 26, *)
     private func convertToPoemModel(_ generatedPoem: GeneratedPoem, vibe: DailyVibe?) -> Poem {
-        return Poem(
+        print("🔄 Converting GeneratedPoem to Poem model:")
+        print("  - Title: \(generatedPoem.title)")
+        print("  - Author: \(generatedPoem.author)")
+        print("  - Lines count: \(generatedPoem.lines.count)")
+        print("  - Style: \(generatedPoem.style ?? "none")")
+        print("  - Vibe: \(vibe?.displayName ?? "none")")
+        
+        let poem = Poem(
             title: generatedPoem.title,
             lines: generatedPoem.lines,
             author: generatedPoem.author,
             vibe: vibe
         )
+        
+        print("✅ Created Poem with content length: \(poem.content.count) characters")
+        print("📄 First 100 chars of content: \(String(poem.content.prefix(100)))")
+        
+        return poem
     }
     #endif
     

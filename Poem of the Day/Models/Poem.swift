@@ -19,18 +19,26 @@ struct PoemResponse: Codable {
 }
 
 struct Poem: Identifiable, Codable, Equatable {
+    enum Source: String, Codable {
+        case api
+        case aiGenerated
+        case localFallback
+    }
+    
     let id: UUID
     let title: String
     let content: String
     let author: String?
     let vibe: DailyVibe?
+    let source: Source?
 
-    init(id: UUID = UUID(), title: String, lines: [String], author: String? = nil, vibe: DailyVibe? = nil) {
+    init(id: UUID = UUID(), title: String, lines: [String], author: String? = nil, vibe: DailyVibe? = nil, source: Source? = nil) {
         self.id = id
         self.title = title
         self.content = lines.joined(separator: "\n")
         self.author = author?.isEmpty == true ? nil : author
         self.vibe = vibe
+        self.source = source
     }
     
     var shareText: String {

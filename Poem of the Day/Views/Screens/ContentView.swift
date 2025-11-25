@@ -154,6 +154,56 @@ struct ContentView: View {
                 .accessibilityAddTraits(.isHeader)
                 .accessibilityIdentifier("app_title")
             
+            // Small AI generation buttons at the top
+            if viewModel.isAIGenerationAvailable {
+                HStack(spacing: 8) {
+                    Button(action: {
+                        viewModel.showVibeGeneration = true
+                    }) {
+                        HStack(spacing: 4) {
+                            Text(viewModel.currentVibe?.vibe.emoji ?? "🎭")
+                                .font(.caption)
+                            Image(systemName: "brain.head.profile")
+                                .font(.caption2)
+                            Text("Vibe")
+                                .font(.caption2)
+                                .fontWeight(.medium)
+                        }
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
+                        .background(
+                            Capsule()
+                                .fill(Color.purple)
+                        )
+                    }
+                    .accessibilityLabel("Generate vibe-based poem")
+                    .accessibilityIdentifier("top_vibe_poem_button")
+                    
+                    Button(action: {
+                        viewModel.showCustomPrompt = true
+                    }) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "pencil.and.outline")
+                                .font(.caption2)
+                            Text("Custom")
+                                .font(.caption2)
+                                .fontWeight(.medium)
+                        }
+                        .foregroundColor(.purple)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
+                        .background(
+                            Capsule()
+                                .strokeBorder(Color.purple, lineWidth: 1.5)
+                        )
+                    }
+                    .accessibilityLabel("Create custom poem")
+                    .accessibilityIdentifier("top_custom_poem_button")
+                }
+                .padding(.top, 4)
+            }
+            
             // Show vibe analysis info if available
             if let currentVibe = viewModel.currentVibe {
                 HStack(spacing: 8) {
@@ -444,12 +494,8 @@ struct ContentView: View {
             if viewModel.isAIGenerationAvailable {
                 HStack(spacing: 12) {
                     Button(action: {
+                        // Just show the sheet - generation happens when user taps the button inside
                         viewModel.showVibeGeneration = true
-                        Task {
-                            isPoemLoading = true
-                            await viewModel.generateVibeBasedPoem()
-                            isPoemLoading = false
-                        }
                     }) {
                         VStack(spacing: 4) {
                             HStack {

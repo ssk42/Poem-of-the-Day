@@ -63,14 +63,32 @@ actor PoemRepository: PoemRepositoryProtocol {
         var errorType: String?
         var vibeScore: Double?
         
+        print("🎬 Starting vibe-based poem generation...")
+        
         do {
             guard let aiService = aiService else {
+                print("❌ AI service not available")
                 throw PoemError.unsupportedOperation
             }
             
-            let vibeAnalysis = try await getVibeOfTheDay()
+            print("✅ AI service available, checking availability...")
+            let isAvailable = await aiService.isAvailable()
+            print("   AI Available: \(isAvailable)")
+            
+            // Force refresh vibe analysis to get varied results
+            print("🔄 Getting fresh vibe analysis...")
+            let vibeAnalysis = try await getVibeOfTheDayInternal(forceRefresh: true)
+            print("✅ Vibe analysis complete: \(vibeAnalysis.vibe.displayName)")
+            
             vibeScore = vibeAnalysis.confidence
+            
+            print("🤖 Generating poem from AI...")
             let poem = try await aiService.generatePoemFromVibe(vibeAnalysis)
+            print("✅ Poem generated successfully!")
+            print("   Title: \(poem.title)")
+            print("   Author: \(poem.author ?? "Unknown")")
+            print("   Content length: \(poem.content.count) chars")
+            
             success = true
             
             // Track in history
@@ -90,6 +108,8 @@ actor PoemRepository: PoemRepositoryProtocol {
             return poem
         } catch {
             errorType = (error as? PoemError)?.localizedDescription ?? error.localizedDescription
+            print("❌ Error generating vibe-based poem: \(error)")
+            print("   Error type: \(errorType ?? "Unknown")")
             
             let event = AIGenerationEvent(
                 timestamp: Date(),
@@ -120,14 +140,23 @@ actor PoemRepository: PoemRepositoryProtocol {
     }
     
     func getVibeOfTheDay() async throws -> VibeAnalysis {
-        // Check if we have a cached vibe analysis for today
-        if let cachedVibe = loadCachedVibeAnalysis() {
+        return try await getVibeOfTheDayInternal(forceRefresh: false)
+    }
+    
+    private func getVibeOfTheDayInternal(forceRefresh: Bool) async throws -> VibeAnalysis {
+        // Check if we have a cached vibe analysis for today (unless forcing refresh)
+        if !forceRefresh, let cachedVibe = loadCachedVibeAnalysis() {
+            print("📦 Using cached vibe: \(cachedVibe.vibe.displayName)")
             return cachedVibe
         }
         
+        print("🔄 Fetching fresh news and analyzing vibe...")
         // Fetch fresh news and analyze vibe
         let articles = try await newsService.fetchDailyNews()
+        print("📰 Fetched \(articles.count) news articles")
+        
         let vibeAnalysis = await vibeAnalyzer.analyzeVibe(from: articles)
+        print("✅ Analyzed vibe: \(vibeAnalysis.vibe.displayName) (confidence: \(vibeAnalysis.confidence))")
         
         // Cache the analysis
         await cacheVibeAnalysis(vibeAnalysis)
