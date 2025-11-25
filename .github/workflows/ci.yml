@@ -1,5 +1,3 @@
-# CI workflow for Poem of the Day
-
 name: CI
 
 on:
@@ -11,34 +9,36 @@ on:
 
 jobs:
   build-and-test:
+    name: Test on ${{ matrix.device }}
+    # Ensure your runner supports macOS Sequoia (15.x) or Tahoe (26.x) required for Xcode 26
     runs-on: macos-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        # Easily add "iPhone SE (4th generation)" or others here
+        device: ["iPhone 17 Pro", "iPhone 17"] 
+
     steps:
       - name: Check out code
         uses: actions/checkout@v4
+
+      # Installs a log formatter to make xcodebuild output readable
+      - name: Install xcbeautify
+        run: brew install xcbeautify
 
       - name: Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: '26.1'
 
-      - name: Test on iPhone 17 Pro (iOS 26.1)
+      - name: Test
         run: |
+          # Using OS=26.1 as you correctly requested
           xcodebuild test \
             -scheme "Poem of the Day" \
-            -destination "platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1" \
+            -destination "platform=iOS Simulator,name=${{ matrix.device }},OS=26.1" \
+            -resultBundlePath TestResults \
             CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO
-
-      - name: Test on iPhone 17 (iOS 26.1)
-        run: |
-          xcodebuild test \
-            -scheme "Poem of the Day" \
-            -destination "platform=iOS Simulator,name=iPhone 17,OS=26.1" \
-            CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO
-
-      - name: How to watch this run
-        if: always()
-        run: |
-          echo "You can watch the progress of this run with the GitHub CLI:"
-          echo "gh run watch ${{ github.run_id }}"
+            CODE_SIGNING_REQUIRED=NO \
+            | xcbeautify
