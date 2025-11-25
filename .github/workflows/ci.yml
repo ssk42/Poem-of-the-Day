@@ -28,22 +28,15 @@ jobs:
         with:
           xcode-version: '26.1'
 
-      # FORCE-FIX: Downgrade project settings from 26.1 to 26.0
+      # FORCE-FIX: Inject deployment target 26.0 if missing (defaults to SDK 26.1 otherwise)
       - name: Force Downgrade Deployment Target
         run: |
-          # 1. Debug: Print the count of 26.1 targets found before editing
-          echo "Found $(grep -c "IPHONEOS_DEPLOYMENT_TARGET.*26.1" "Poem of the Day.xcodeproj/project.pbxproj") references to 26.1"
-
-          # 2. Run sed with Extended Regex (-E) to handle tabs/spaces around the '=' sign
-          sed -i '' -E 's/IPHONEOS_DEPLOYMENT_TARGET[[:space:]]*=[[:space:]]*26\.1;/IPHONEOS_DEPLOYMENT_TARGET = 26.0;/g' "Poem of the Day.xcodeproj/project.pbxproj"
-
-          # 3. Verification: Fail the build if any 26.1 references remain
-          if grep -q "IPHONEOS_DEPLOYMENT_TARGET.*26.1" "Poem of the Day.xcodeproj/project.pbxproj"; then
-            echo "::error::Failed to downgrade deployment target! Check file formatting."
-            exit 1
-          fi
+          # This command finds every occurrence of 'buildSettings = {' 
+          # and appends 'IPHONEOS_DEPLOYMENT_TARGET = 26.0;' to it.
+          # This forces the setting to be present for ALL targets.
+          sed -i '' 's/buildSettings = {/buildSettings = { IPHONEOS_DEPLOYMENT_TARGET = 26.0;/g' "Poem of the Day.xcodeproj/project.pbxproj"
           
-          echo "Successfully downgraded project to iOS 26.0"
+          echo "Injected iOS 26.0 deployment target into project configuration."
 
       - name: Test
         run: |
