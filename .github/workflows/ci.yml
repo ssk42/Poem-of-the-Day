@@ -21,33 +21,11 @@ jobs:
         with:
           xcode-version: 'latest-stable'
 
-      - name: Install iOS 26.1 Simulator Runtime
-        run: |
-          echo "Installing iOS 26.1 runtime..."
-          xcodebuild -downloadPlatform iOS
-
-          echo "Available runtimes after download:"
-          xcrun simctl list runtimes
-
-      - name: Show Available Destinations
-        run: |
-          echo "Available runtimes:"
-          xcrun simctl list runtimes
-
-          echo -e "\nAvailable device types:"
-          xcrun simctl list devicetypes | grep -i iphone
-
-          echo -e "\nAll simulators:"
-          xcrun simctl list devices available
-
-          echo -e "\nxcodebuild destinations:"
-          xcodebuild -scheme "Poem of the Day" -showdestinations
-
       - name: Build and Test
         run: |
           xcodebuild clean test \
             -scheme "Poem of the Day" \
-            -destination "platform=iOS Simulator,name=iPhone 16 Pro" \
+            -destination "platform=iOS Simulator,name=iPhone 16 Pro,OS=26.0" \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO
 
