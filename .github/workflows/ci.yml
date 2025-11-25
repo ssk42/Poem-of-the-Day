@@ -21,6 +21,14 @@ jobs:
         with:
           xcode-version: 'latest-stable'
 
+      - name: Install iOS 26.1 Simulator Runtime
+        run: |
+          echo "Installing iOS 26.1 runtime..."
+          xcodebuild -downloadPlatform iOS
+
+          echo "Available runtimes after download:"
+          xcrun simctl list runtimes
+
       - name: Show Available Destinations
         run: |
           echo "Available runtimes:"
