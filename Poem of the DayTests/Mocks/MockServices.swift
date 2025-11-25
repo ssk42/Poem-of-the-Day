@@ -102,7 +102,7 @@ final class MockVibeAnalyzer: VibeAnalyzerProtocol, @unchecked Sendable {
 
 final class MockPoemGenerationService: PoemGenerationServiceProtocol, @unchecked Sendable {
     var shouldThrowError = false
-    var errorToThrow: PoemError = .localGenerationFailed  // Using PoemError since that's what the protocol expects
+    var errorToThrow: Error = PoemGenerationError.generationFailed  // Using PoemGenerationError from new service
     var delayDuration: TimeInterval = 0
     var poemToReturn: Poem?
     var isAvailableValue = true
@@ -145,7 +145,7 @@ final class MockPoemGenerationService: PoemGenerationServiceProtocol, @unchecked
     
     func reset() {
         shouldThrowError = false
-        errorToThrow = .localGenerationFailed
+        errorToThrow = PoemGenerationError.generationFailed
         delayDuration = 0
         poemToReturn = nil
         isAvailableValue = true
