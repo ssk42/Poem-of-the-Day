@@ -26,17 +26,8 @@ jobs:
       - name: Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '26.1'
-
-      # FORCE-FIX: Inject deployment target 26.0 if missing (defaults to SDK 26.1 otherwise)
-      - name: Force Downgrade Deployment Target
-        run: |
-          # This command finds every occurrence of 'buildSettings = {' 
-          # and appends 'IPHONEOS_DEPLOYMENT_TARGET = 26.0;' to it.
-          # This forces the setting to be present for ALL targets.
-          sed -i '' 's/buildSettings = {/buildSettings = { IPHONEOS_DEPLOYMENT_TARGET = 26.0;/g' "Poem of the Day.xcodeproj/project.pbxproj"
-          
-          echo "Injected iOS 26.0 deployment target into project configuration."
+          # Switch to 26.0 to match the available Simulator Runtime
+          xcode-version: '26.0'
 
       - name: Test
         run: |
