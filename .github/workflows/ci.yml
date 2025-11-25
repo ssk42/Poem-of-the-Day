@@ -32,12 +32,18 @@ jobs:
         with:
           xcode-version: '26.1'
 
+      # 1. Debugging Step: Print available devices to the log
+      - name: List Available Devices
+        run: xcrun simctl list devices available
+
+      # 2. Adjusted Test Step
       - name: Test
         run: |
-          # Using OS=26.1 as you correctly requested
+          # Switch to OS=latest to allow fallback to the newest available runtime
+          # Switch to 'iPhone 17' (non-Pro) or a generic name if Pro is missing
           xcodebuild test \
             -scheme "Poem of the Day" \
-            -destination "platform=iOS Simulator,name=${{ matrix.device }},OS=26.1" \
+            -destination "platform=iOS Simulator,name=${{ matrix.device }},OS=latest" \
             -resultBundlePath TestResults \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
