@@ -538,7 +538,8 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
             title: generatedPoem.title,
             lines: generatedPoem.lines,
             author: generatedPoem.author,
-            vibe: vibe
+            vibe: vibe,
+            source: .aiGenerated
         )
         
         print("✅ Created Poem with content length: \(poem.content.count) characters")
