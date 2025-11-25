@@ -24,7 +24,7 @@ jobs:
       - name: List available simulators
         run: xcrun simctl list devices available | grep -i "iPhone 16" || echo "iPhone 16 simulators:"
 
-      - name: Find available iPhone simulator
+      - name: Find and boot iPhone simulator
         id: simulator
         run: |
           # Try to find iPhone 16 first, then any iPhone
@@ -36,6 +36,8 @@ jobs:
           if [ -n "$SIM_DEVICE" ]; then
             echo "device_id=$SIM_DEVICE" >> $GITHUB_OUTPUT
             echo "Found simulator UUID: $SIM_DEVICE"
+            # Boot the simulator to ensure it's available
+            xcrun simctl boot $SIM_DEVICE || echo "Simulator already booted or boot failed"
           else
             echo "No simulator found. Available devices:"
             xcrun simctl list devices available | grep -i "iPhone" | head -5
@@ -44,12 +46,14 @@ jobs:
 
       - name: Build project
         run: |
+          # Build without device-specific asset catalog thinning to avoid runtime mismatch
           xcodebuild clean build \
             -scheme "Poem of the Day" \
             -destination "platform=iOS Simulator,id=${{ steps.simulator.outputs.device_id }}" \
             -sdk iphonesimulator \
             CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO
+            CODE_SIGNING_REQUIRED=NO \
+            ENABLE_ONLY_ACTIVE_ARCH=NO
 
       - name: Run unit tests
         run: |
