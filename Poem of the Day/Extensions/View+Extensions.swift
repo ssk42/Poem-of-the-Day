@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+#if canImport(UIKit)
+import UIKit
+#endif
 
 // MARK: - View Extensions
 
@@ -36,9 +39,11 @@ extension View {
     }
     
     /// Add corner radius with specific corners
+    #if canImport(UIKit)
     func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
         clipShape(RoundedCorner(radius: radius, corners: corners))
     }
+    #endif
     
     /// Add app-standard card styling
     func cardStyle(
@@ -80,11 +85,13 @@ extension View {
     }
     
     /// Add haptic feedback on tap
-    func hapticFeedback(_ style: UIImpactFeedbackGenerator.FeedbackStyle = .medium) -> some View {
+    func hapticFeedback(_ style: HapticFeedbackStyle = .medium) -> some View {
         onTapGesture {
             if AppConfiguration.UI.hapticFeedbackEnabled {
-                let impactFeedback = UIImpactFeedbackGenerator(style: style)
+                #if canImport(UIKit)
+                let impactFeedback = UIImpactFeedbackGenerator(style: style.uiKitStyle)
                 impactFeedback.impactOccurred()
+                #endif
             }
         }
     }
@@ -106,8 +113,31 @@ extension View {
     }
 }
 
+// MARK: - Haptic Feedback Support
+
+enum HapticFeedbackStyle {
+    case light
+    case medium
+    case heavy
+    case soft
+    case rigid
+    
+    #if canImport(UIKit)
+    var uiKitStyle: UIImpactFeedbackGenerator.FeedbackStyle {
+        switch self {
+        case .light: return .light
+        case .medium: return .medium
+        case .heavy: return .heavy
+        case .soft: return .soft
+        case .rigid: return .rigid
+        }
+    }
+    #endif
+}
+
 // MARK: - Custom Shapes
 
+#if canImport(UIKit)
 struct RoundedCorner: Shape {
     var radius: CGFloat = .infinity
     var corners: UIRectCorner = .allCorners
@@ -121,6 +151,7 @@ struct RoundedCorner: Shape {
         return Path(path.cgPath)
     }
 }
+#endif
 
 // MARK: - Shimmer Effect
 

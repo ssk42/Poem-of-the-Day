@@ -1,0 +1,127 @@
+# Error Handling Patterns
+
+## Project Error Types
+This project uses custom error types defined in [PoemError.swift](mdc:Poem of the Day/Models/PoemError.swift).
+
+## Error Hierarchy
+```swift
+enum PoemError: Error, LocalizedError {
+    case networkError(String)
+    case parsingError(String)
+    case noContent
+    case invalidInput
+    case serviceUnavailable
+    
+    var errorDescription: String? {
+        switch self {
+        case .networkError(let message):
+            return "Network error: \(message)"
+        case .parsingError(let message):
+            return "Parsing error: \(message)"
+        case .noContent:
+            return "No content available"
+        case .invalidInput:
+            return "Invalid input provided"
+        case .serviceUnavailable:
+            return "Service is currently unavailable"
+        }
+    }
+}
+```
+
+## Service Error Handling
+```swift
+// In services
+func fetchPoem() async throws -> Poem {
+    do {
+        let data = try await networkService.fetchData()
+        return try parsePoem(from: data)
+    } catch let networkError as NetworkError {
+        throw PoemError.networkError(networkError.localizedDescription)
+    } catch {
+        throw PoemError.parsingError(error.localizedDescription)
+    }
+}
+```
+
+## ViewModel Error Handling
+```swift
+// In ViewModels
+@Published var errorMessage: String?
+@Published var showingError = false
+
+func loadPoem() async {
+    do {
+        let poem = try await poemRepository.fetchPoem()
+        await MainActor.run {
+            self.currentPoem = poem
+            self.errorMessage = nil
+        }
+    } catch let error as PoemError {
+        await MainActor.run {
+            self.errorMessage = error.localizedDescription
+            self.showingError = true
+        }
+    } catch {
+        await MainActor.run {
+            self.errorMessage = "An unexpected error occurred"
+            self.showingError = true
+        }
+    }
+}
+```
+
+## View Error Display
+```swift
+// In Views
+.alert("Error", isPresented: $viewModel.showingError) {
+    Button("Retry") {
+        Task {
+            await viewModel.loadPoem()
+        }
+    }
+    Button("Cancel", role: .cancel) { }
+} message: {
+    Text(viewModel.errorMessage ?? "Unknown error")
+}
+```
+
+## Result Type Usage
+```swift
+// When you need both success and error handling
+func fetchPoemResult() async -> Result<Poem, PoemError> {
+    do {
+        let poem = try await fetchPoem()
+        return .success(poem)
+    } catch let error as PoemError {
+        return .failure(error)
+    } catch {
+        return .failure(.serviceUnavailable)
+    }
+}
+```
+
+## Testing Error Scenarios
+```swift
+// In tests
+func test_loadPoem_whenNetworkFails_thenShowsError() async {
+    // Arrange
+    mockRepository.shouldThrowError = true
+    
+    // Act
+    await viewModel.loadPoem()
+    
+    // Assert
+    XCTAssertTrue(viewModel.showingError)
+    XCTAssertNotNil(viewModel.errorMessage)
+}
+```
+
+## Best Practices
+- **Use specific error types** for different failure scenarios
+- **Provide meaningful error messages** to users
+- **Handle errors at the appropriate level** (service, viewmodel, or view)
+- **Use Result type** when you need to return both success and failure
+- **Test error scenarios** thoroughly
+- **Log errors** for debugging purposes
+- **Don't expose internal error details** to users

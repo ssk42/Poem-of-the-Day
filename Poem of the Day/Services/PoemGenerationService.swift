@@ -7,7 +7,8 @@
 
 import Foundation
 
-// Only import FoundationModels if running on iOS 26+
+// Apple FoundationModels framework for iOS 26+
+// Uses on-device large language model for text generation
 #if canImport(FoundationModels)
 import FoundationModels
 #endif
@@ -132,7 +133,7 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
     }
     
     func isAvailable() async -> Bool {
-        // For iOS 26 FoundationModels, check device capabilities
+        // Check FoundationModels availability for iOS 26+
         let deviceSupported = await checkDeviceSupport()
         let modelAvailable = await checkModelAvailability()
         return deviceSupported && modelAvailable

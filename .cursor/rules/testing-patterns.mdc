@@ -1,0 +1,72 @@
+# Testing Patterns & Conventions
+
+## Test Organization
+- **Unit Tests**: Test individual components in isolation
+- **Integration Tests**: Test component interactions
+- **UI Tests**: Test user interface workflows
+- **Performance Tests**: Test memory usage and speed
+- **Mock Services**: Use protocols for dependency injection
+
+## Test Structure
+- Use `XCTestCase` as base class
+- Follow **Arrange-Act-Assert** pattern
+- Use descriptive test method names: `test_methodName_whenCondition_thenExpectedResult`
+- Group related tests in the same file
+- Use `// MARK: -` to organize test sections
+
+## Mock Objects
+- Create mock implementations of protocols
+- Use `@testable import` to access internal APIs
+- Mock external dependencies (networking, databases)
+- Use dependency injection for testability
+- Verify mock interactions where appropriate
+
+## Async Testing
+- Use `async/await` in test methods
+- Use `XCTestExpectation` for completion testing
+- Test both success and failure scenarios
+- Use `Task` for concurrent operations
+- Test timeout scenarios
+
+## UI Testing Best Practices
+- Use accessibility identifiers for element selection
+- Test critical user flows
+- Use page object pattern for complex screens
+- Test error states and edge cases
+- Verify UI updates after async operations
+- Use `XCUIApplication` for app interaction
+
+## Common Test Patterns
+```swift
+// Async test example
+func test_fetchPoem_whenSuccessful_thenReturnPoem() async {
+    // Arrange
+    let expectedPoem = Poem(title: "Test", content: "Content")
+    mockService.poemToReturn = expectedPoem
+    
+    // Act
+    let result = await viewModel.fetchPoem()
+    
+    // Assert
+    XCTAssertEqual(result, expectedPoem)
+}
+
+// UI test example
+func test_loadingState_whenFetchingPoem_thenShowsLoadingIndicator() {
+    // Arrange
+    let app = XCUIApplication()
+    app.launch()
+    
+    // Act
+    app.buttons["fetchPoemButton"].tap()
+    
+    // Assert
+    XCTAssertTrue(app.activityIndicators["loadingIndicator"].exists)
+}
+```
+
+## Test Data Management
+- Use consistent test data across tests
+- Create test data factories for complex objects
+- Clean up test data after each test
+- Use meaningful test data that reflects real scenarios

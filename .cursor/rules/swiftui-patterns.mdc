@@ -1,0 +1,89 @@
+# SwiftUI Patterns & Conventions
+
+## View Architecture
+- **Keep views focused** - single responsibility principle
+- **Extract subviews** when views become complex
+- **Use ViewBuilder** for conditional content
+- **Prefer composition** over inheritance
+
+## State Management
+- **@State**: Local view state that doesn't need persistence
+- **@StateObject**: Create and own observable objects
+- **@ObservedObject**: Reference passed observable objects
+- **@EnvironmentObject**: Shared objects across view hierarchy
+- **@Binding**: Two-way data binding between parent and child
+
+## MVVM with SwiftUI
+```swift
+struct ContentView: View {
+    @StateObject private var viewModel = PoemViewModel()
+    
+    var body: some View {
+        VStack {
+            if viewModel.isLoading {
+                LoadingView()
+            } else if let poem = viewModel.currentPoem {
+                PoemDisplayView(poem: poem)
+            } else {
+                EmptyStateView()
+            }
+        }
+        .onAppear {
+            await viewModel.loadPoem()
+        }
+    }
+}
+```
+
+## Async Operations
+- **Use async/await** in view models
+- **Handle loading states** in UI
+- **Show error states** to users
+- **Use Task for async operations** in view lifecycle
+
+## View Composition
+```swift
+// Extract complex logic into separate views
+struct PoemDisplayView: View {
+    let poem: Poem
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            PoemTitleView(title: poem.title)
+            PoemContentView(content: poem.content)
+            PoemMetadataView(metadata: poem.metadata)
+        }
+    }
+}
+```
+
+## Navigation
+- **Use NavigationStack** for iOS 16+
+- **Use NavigationLink** for programmatic navigation
+- **Pass data through navigation** explicitly
+- **Handle deep links** in appropriate views
+
+## Performance Optimizations
+- **Use lazy stacks** for large lists
+- **Implement onAppear/onDisappear** carefully
+- **Avoid heavy computations** in view bodies
+- **Use @MainActor** for UI updates
+
+## Accessibility
+- **Add accessibility labels** to all interactive elements
+- **Use accessibility identifiers** for UI testing
+- **Support VoiceOver** navigation
+- **Test with accessibility features** enabled
+
+## Error Handling in Views
+```swift
+@State private var errorMessage: String?
+@State private var showingError = false
+
+// In view body
+.alert("Error", isPresented: $showingError) {
+    Button("OK") { }
+} message: {
+    Text(errorMessage ?? "Unknown error")
+}
+```

@@ -3,6 +3,7 @@
 //  Poem of the Day
 //
 //  Created by Claude Code on 2025-06-19.
+//  Updated with notification and history services
 //
 
 import Foundation
@@ -16,6 +17,8 @@ final class DependencyContainer: ObservableObject {
     private let vibeAnalyzer: VibeAnalyzerProtocol
     private let aiService: PoemGenerationServiceProtocol?
     private let telemetryService: TelemetryServiceProtocol
+    private let notificationService: NotificationServiceProtocol
+    private let historyService: PoemHistoryServiceProtocol
     private let repository: PoemRepositoryProtocol
     
     private init() {
@@ -23,6 +26,8 @@ final class DependencyContainer: ObservableObject {
         self.newsService = NewsService()
         self.vibeAnalyzer = VibeAnalyzer()
         self.telemetryService = TelemetryService()
+        self.notificationService = NotificationService()
+        self.historyService = PoemHistoryService()
         
         // Initialize AI service if available (iOS 26+)
         if #available(iOS 26, *) {
@@ -36,8 +41,14 @@ final class DependencyContainer: ObservableObject {
             newsService: newsService,
             vibeAnalyzer: vibeAnalyzer,
             aiService: aiService,
-            telemetryService: telemetryService
+            telemetryService: telemetryService,
+            historyService: historyService
         )
+        
+        // Register notification categories
+        Task {
+            await (notificationService as? NotificationService)?.registerNotificationCategories()
+        }
     }
     
     // For testing
@@ -46,12 +57,16 @@ final class DependencyContainer: ObservableObject {
          vibeAnalyzer: VibeAnalyzerProtocol,
          aiService: PoemGenerationServiceProtocol?,
          telemetryService: TelemetryServiceProtocol,
+         notificationService: NotificationServiceProtocol,
+         historyService: PoemHistoryServiceProtocol,
          repository: PoemRepositoryProtocol) {
         self.networkService = networkService
         self.newsService = newsService
         self.vibeAnalyzer = vibeAnalyzer
         self.aiService = aiService
         self.telemetryService = telemetryService
+        self.notificationService = notificationService
+        self.historyService = historyService
         self.repository = repository
     }
     
@@ -73,6 +88,14 @@ final class DependencyContainer: ObservableObject {
     
     func makeTelemetryService() -> TelemetryServiceProtocol {
         return telemetryService
+    }
+    
+    func makeNotificationService() -> NotificationServiceProtocol {
+        return notificationService
+    }
+    
+    func makeHistoryService() -> PoemHistoryServiceProtocol {
+        return historyService
     }
     
     func makeRepository() -> PoemRepositoryProtocol {

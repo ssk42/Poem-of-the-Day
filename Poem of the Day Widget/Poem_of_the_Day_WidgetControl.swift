@@ -3,75 +3,80 @@
 //  Poem of the Day Widget
 //
 //  Created by Stephen Reitz on 11/14/24.
+//  Cleaned up - removed unused timer template, added poem-specific controls
 //
 
 import AppIntents
 import SwiftUI
 import WidgetKit
 
+// MARK: - Poem Control Widget
+
+/// Control Center widget for quick poem actions
 struct Poem_of_the_Day_WidgetControl: ControlWidget {
     static let kind: String = "Stevereitz.Poem-of-the-Day.Poem of the Day Widget"
 
     var body: some ControlWidgetConfiguration {
         AppIntentControlConfiguration(
             kind: Self.kind,
-            provider: Provider()
+            provider: PoemControlProvider()
         ) { value in
-            ControlWidgetToggle(
-                "Start Timer",
-                isOn: value.isRunning,
-                action: StartTimerIntent(value.name)
-            ) { isRunning in
-                Label(isRunning ? "On" : "Off", systemImage: "timer")
+            ControlWidgetButton(action: RefreshPoemControlIntent()) {
+                Label {
+                    Text(value.hasNewPoem ? "New Poem!" : "Get Poem")
+                } icon: {
+                    Image(systemName: value.hasNewPoem ? "book.fill" : "book")
+                }
             }
         }
-        .displayName("Timer")
-        .description("A an example control that runs a timer.")
+        .displayName("Daily Poem")
+        .description("Quickly access or refresh your daily poem.")
     }
 }
+
+// MARK: - Control Provider
 
 extension Poem_of_the_Day_WidgetControl {
     struct Value {
-        var isRunning: Bool
-        var name: String
+        var hasNewPoem: Bool
+        var poemTitle: String?
     }
 
-    struct Provider: AppIntentControlValueProvider {
-        func previewValue(configuration: TimerConfiguration) -> Value {
-            Poem_of_the_Day_WidgetControl.Value(isRunning: false, name: configuration.timerName)
+    struct PoemControlProvider: AppIntentControlValueProvider {
+        func previewValue(configuration: PoemControlConfiguration) -> Value {
+            Value(hasNewPoem: false, poemTitle: nil)
         }
 
-        func currentValue(configuration: TimerConfiguration) async throws -> Value {
-            let isRunning = true // Check if the timer is running
-            return Poem_of_the_Day_WidgetControl.Value(isRunning: isRunning, name: configuration.timerName)
+        func currentValue(configuration: PoemControlConfiguration) async throws -> Value {
+            // Check if we have a poem for today
+            let sharedDefaults = UserDefaults(suiteName: "group.com.stevereitz.poemoftheday")
+            let hasPoem = sharedDefaults?.string(forKey: "poemTitle") != nil
+            let poemTitle = sharedDefaults?.string(forKey: "poemTitle")
+            
+            return Value(hasNewPoem: hasPoem, poemTitle: poemTitle)
         }
     }
 }
 
-struct TimerConfiguration: ControlConfigurationIntent {
-    static let title: LocalizedStringResource = "Timer Name Configuration"
+// MARK: - Configuration Intent
 
-    @Parameter(title: "Timer Name", default: "Timer")
-    var timerName: String
+struct PoemControlConfiguration: ControlConfigurationIntent {
+    static let title: LocalizedStringResource = "Poem Control Configuration"
+    
+    // No configuration needed for now, but can be extended
 }
 
-struct StartTimerIntent: SetValueIntent {
-    static let title: LocalizedStringResource = "Start a timer"
+// MARK: - Refresh Control Intent
 
-    @Parameter(title: "Timer Name")
-    var name: String
-
-    @Parameter(title: "Timer is running")
-    var value: Bool
-
-    init() {}
-
-    init(_ name: String) {
-        self.name = name
-    }
+struct RefreshPoemControlIntent: AppIntent {
+    static let title: LocalizedStringResource = "Refresh Daily Poem"
+    static var description: IntentDescription { "Opens the app to show your daily poem." }
+    
+    static var openAppWhenRun: Bool { true }
 
     func perform() async throws -> some IntentResult {
-        // Start the timer…
+        // Trigger widget refresh
+        WidgetCenter.shared.reloadAllTimelines()
         return .result()
     }
 }

@@ -1,0 +1,64 @@
+# Dependency Injection Patterns
+
+## Project Architecture
+This project uses a centralized dependency container pattern with protocol-based abstractions.
+
+## Key Components
+- **Container**: [DependencyContainer.swift](mdc:Poem of the Day/Core/DependencyContainer.swift) - Central service registry
+- **Protocols**: [Protocols.swift](mdc:Poem of the Day/Core/Protocols.swift) - Service abstractions
+- **Services**: Individual service implementations
+
+## Service Registration
+```swift
+// In DependencyContainer
+class DependencyContainer {
+    lazy var networkService: NetworkServiceProtocol = NetworkService()
+    lazy var poemRepository: PoemRepositoryProtocol = PoemRepository(networkService: networkService)
+    lazy var poemGenerationService: PoemGenerationServiceProtocol = PoemGenerationService(networkService: networkService)
+}
+```
+
+## Service Consumption
+```swift
+// In ViewModels
+class PoemViewModel: ObservableObject {
+    private let poemRepository: PoemRepositoryProtocol
+    private let poemGenerationService: PoemGenerationServiceProtocol
+    
+    init(poemRepository: PoemRepositoryProtocol, poemGenerationService: PoemGenerationServiceProtocol) {
+        self.poemRepository = poemRepository
+        self.poemGenerationService = poemGenerationService
+    }
+}
+```
+
+## Testing with DI
+```swift
+// Mock implementations for testing
+class MockPoemRepository: PoemRepositoryProtocol {
+    var poemToReturn: Poem?
+    func fetchPoem() async throws -> Poem {
+        return poemToReturn ?? Poem.samplePoem
+    }
+}
+
+// Test setup
+func setupTestViewModel() -> PoemViewModel {
+    let mockRepository = MockPoemRepository()
+    let mockGenerationService = MockPoemGenerationService()
+    return PoemViewModel(poemRepository: mockRepository, poemGenerationService: mockGenerationService)
+}
+```
+
+## Best Practices
+- **Always inject through initializers** for explicit dependencies
+- **Use protocols** for all service abstractions
+- **Create factory methods** in the container for complex object graphs
+- **Mock all external dependencies** for testing
+- **Keep the container simple** - avoid complex logic in registration
+- **Use lazy properties** for expensive service initialization
+
+## Service Lifecycle
+- **Singleton services** for shared state (NetworkService, TelemetryService)
+- **Instance services** for stateful operations (ViewModels)
+- **Factory services** for short-lived objects

@@ -1,3 +1,11 @@
+//
+//  ContentView.swift
+//  Poem of the Day
+//
+//  Created by Stephen Reitz on 11/14/24.
+//  Updated with history, settings, and accessibility improvements
+//
+
 import SwiftUI
 import WidgetKit
 
@@ -6,9 +14,11 @@ struct ContentView: View {
     @StateObject private var viewModel: PoemViewModel
     @State private var isPoemLoading = false
     @State private var showFavorites = false
+    @State private var showHistory = false
+    @State private var showSettings = false
     @State private var showShareSheet = false
-    @State private var showTelemetryDebug = false
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     
     init() {
         let container = DependencyContainer.shared
@@ -46,26 +56,52 @@ struct ContentView: View {
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Menu {
+                        Button {
+                            showHistory = true
+                        } label: {
+                            Label("History", systemImage: "clock.arrow.circlepath")
+                        }
+                        
+                        Button {
+                            showSettings = true
+                        } label: {
+                            Label("Settings", systemImage: "gearshape")
+                        }
+                    } label: {
+                        Image(systemName: "line.3.horizontal")
+                            .accessibilityLabel("Menu")
+                            .accessibilityHint("Opens menu with history and settings options")
+                    }
+                    .accessibilityIdentifier("menu_button")
+                }
+                
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
                         showFavorites = true
                     }) {
                         Label("Favorites", systemImage: "heart.fill")
                             .foregroundColor(.red)
-                            .accessibilityLabel("View Favorite Poems")
                     }
+                    .accessibilityLabel("Favorite Poems")
+                    .accessibilityHint("View your saved favorite poems")
+                    .accessibilityIdentifier("favorites_button")
                 }
             }
             .sheet(isPresented: $showFavorites) {
                 FavoritesView(favorites: viewModel.favorites)
             }
+            .sheet(isPresented: $showHistory) {
+                PoemHistoryView()
+            }
+            .sheet(isPresented: $showSettings) {
+                SettingsView()
+            }
             .sheet(isPresented: $showShareSheet) {
                 if let poem = viewModel.poemOfTheDay {
                     ShareSheet(items: [poem.shareText])
                 }
-            }
-            .sheet(isPresented: $showTelemetryDebug) {
-                TelemetryDebugView()
             }
             .alert("Error", isPresented: $viewModel.showErrorAlert) {
                 Button("OK", role: .cancel) { }
@@ -107,23 +143,23 @@ struct ContentView: View {
                 )
             }
         }
+        .accessibilityHidden(true)
     }
     
     private var headerView: some View {
         VStack(spacing: 8) {
             Text("Poem of the Day")
-                .font(.system(size: 32, weight: .bold, design: .serif))
+                .font(.system(size: scaledFontSize(32), weight: .bold, design: .serif))
                 .foregroundColor(colorScheme == .dark ? .white : .black)
                 .accessibilityAddTraits(.isHeader)
-                .onLongPressGesture(minimumDuration: 2.0) {
-                    showTelemetryDebug = true
-                }
+                .accessibilityIdentifier("app_title")
             
             // Show vibe analysis info if available
             if let currentVibe = viewModel.currentVibe {
                 HStack(spacing: 8) {
                     Text(currentVibe.vibe.emoji)
                         .font(.title3)
+                        .accessibilityHidden(true)
                     
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Today's \(currentVibe.vibe.displayName) Vibe")
@@ -148,6 +184,7 @@ struct ContentView: View {
                                 .strokeBorder(colorScheme == .dark ? Color.white : Color.black, lineWidth: 1)
                         )
                         .opacity(currentVibe.backgroundColorInfo.intensity)
+                        .accessibilityHidden(true)
                 }
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
@@ -158,12 +195,14 @@ struct ContentView: View {
                 )
                 .transition(.scale.combined(with: .opacity))
                 .accessibilityElement(children: .combine)
-                .accessibilityLabel("Current vibe: \(currentVibe.vibe.displayName)")
+                .accessibilityLabel("Today's vibe is \(currentVibe.vibe.displayName). \(currentVibe.vibe.description)")
+                .accessibilityIdentifier("vibe_indicator")
             }
             
             Text(formattedDate)
                 .font(.subheadline)
                 .foregroundColor(.secondary)
+                .accessibilityLabel("Date: \(formattedDate)")
         }
         .padding(.vertical)
     }
@@ -174,18 +213,48 @@ struct ContentView: View {
         return formatter.string(from: Date())
     }
     
+    /// Scale font size based on dynamic type
+    private func scaledFontSize(_ baseSize: CGFloat) -> CGFloat {
+        switch dynamicTypeSize {
+        case .xSmall, .small:
+            return baseSize * 0.85
+        case .medium:
+            return baseSize * 0.9
+        case .large:
+            return baseSize
+        case .xLarge:
+            return baseSize * 1.1
+        case .xxLarge:
+            return baseSize * 1.2
+        case .xxxLarge:
+            return baseSize * 1.3
+        case .accessibility1:
+            return baseSize * 1.4
+        case .accessibility2:
+            return baseSize * 1.5
+        case .accessibility3:
+            return baseSize * 1.6
+        case .accessibility4:
+            return baseSize * 1.7
+        case .accessibility5:
+            return baseSize * 1.8
+        @unknown default:
+            return baseSize
+        }
+    }
+    
     private func poemCard(poem: Poem) -> some View {
         VStack(alignment: .leading, spacing: 16) {
             VStack(alignment: .leading, spacing: 8) {
                 Text(poem.title)
-                    .font(.system(size: 24, weight: .semibold, design: .serif))
+                    .font(.system(size: scaledFontSize(24), weight: .semibold, design: .serif))
                     .foregroundColor(colorScheme == .dark ? .white : .black)
                     .accessibilityAddTraits(.isHeader)
                 
                 HStack {
                     if let author = poem.author {
                         Text("by \(author)")
-                            .font(.system(size: 16, weight: .medium, design: .serif))
+                            .font(.system(size: scaledFontSize(16), weight: .medium, design: .serif))
                             .foregroundColor(.secondary)
                     }
                     
@@ -196,6 +265,7 @@ struct ContentView: View {
                         HStack(spacing: 4) {
                             Text(vibe.emoji)
                                 .font(.caption)
+                                .accessibilityHidden(true)
                             Text("Today's \(vibe.displayName) Vibe")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
@@ -206,16 +276,19 @@ struct ContentView: View {
                             Capsule()
                                 .fill(colorScheme == .dark ? Color(red: 0.3, green: 0.3, blue: 0.4) : Color(red: 0.95, green: 0.95, blue: 0.97))
                         )
+                        .accessibilityLabel("Generated from \(vibe.displayName) vibe")
                     }
                 }
             }
             
             Divider()
+                .accessibilityHidden(true)
             
             Text(poem.content)
-                .font(.system(size: 16, weight: .regular, design: .serif))
+                .font(.system(size: scaledFontSize(16), weight: .regular, design: .serif))
                 .lineSpacing(8)
                 .padding(.vertical, 8)
+                .accessibilityLabel("Poem content: \(poem.content)")
             
             HStack {
                 Button(action: {
@@ -238,6 +311,8 @@ struct ContentView: View {
                     )
                 }
                 .accessibilityLabel(viewModel.isFavorite(poem: poem) ? "Remove from favorites" : "Add to favorites")
+                .accessibilityHint(viewModel.isFavorite(poem: poem) ? "Double tap to remove this poem from your favorites" : "Double tap to add this poem to your favorites")
+                .accessibilityIdentifier("favorite_button")
                 
                 Spacer()
                 
@@ -257,6 +332,8 @@ struct ContentView: View {
                         )
                 }
                 .accessibilityLabel("Share poem")
+                .accessibilityHint("Double tap to share this poem with others")
+                .accessibilityIdentifier("share_button")
             }
             .padding(.top, 8)
         }
@@ -267,6 +344,8 @@ struct ContentView: View {
                 .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
         )
         .transition(.opacity)
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("poem_card")
     }
     
     private var loadingView: some View {
@@ -276,7 +355,7 @@ struct ContentView: View {
                 .padding()
             
             Text("Loading your poem...")
-                .font(.system(size: 16, weight: .medium, design: .serif))
+                .font(.system(size: scaledFontSize(16), weight: .medium, design: .serif))
                 .foregroundColor(.secondary)
         }
         .frame(height: 300)
@@ -287,7 +366,7 @@ struct ContentView: View {
                 .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
         )
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Loading poem")
+        .accessibilityLabel("Loading poem, please wait")
         .accessibilityIdentifier("loading_view")
     }
     
@@ -296,6 +375,7 @@ struct ContentView: View {
             Image(systemName: "exclamationmark.triangle")
                 .font(.system(size: 50))
                 .foregroundColor(.orange)
+                .accessibilityHidden(true)
             
             Text("Unable to load poem")
                 .font(.headline)
@@ -316,6 +396,7 @@ struct ContentView: View {
                     .background(Color.blue)
                     .cornerRadius(10)
             }
+            .accessibilityHint("Double tap to try loading the poem again")
         }
         .padding()
         .frame(height: 300)
@@ -325,8 +406,9 @@ struct ContentView: View {
                 .fill(colorScheme == .dark ? Color(red: 0.2, green: 0.2, blue: 0.3) : Color.white)
                 .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
         )
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("Error loading poem. Tap to retry")
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("Error loading poem. Tap Retry to try again.")
+        .accessibilityIdentifier("error_view")
     }
     
     private var controlButtons: some View {
@@ -355,6 +437,8 @@ struct ContentView: View {
                     .shadow(color: Color.blue.opacity(0.3), radius: 5, x: 0, y: 3)
             }
             .accessibilityLabel("Get a new poem")
+            .accessibilityHint("Double tap to fetch a new random poem")
+            .accessibilityIdentifier("refresh_button")
             
             // AI generation buttons (only show if available)
             if viewModel.isAIGenerationAvailable {
@@ -371,6 +455,7 @@ struct ContentView: View {
                             HStack {
                                 Text(viewModel.currentVibe?.vibe.emoji ?? "🎭")
                                     .font(.title3)
+                                    .accessibilityHidden(true)
                                 Image(systemName: "brain.head.profile")
                                     .font(.subheadline)
                             }
@@ -391,7 +476,9 @@ struct ContentView: View {
                         .clipShape(Capsule())
                         .shadow(color: Color.purple.opacity(0.3), radius: 3, x: 0, y: 2)
                     }
-                    .accessibilityLabel("Generate poem based on today's news vibe")
+                    .accessibilityLabel("Generate AI poem based on today's news vibe")
+                    .accessibilityHint("Double tap to create a poem inspired by today's mood from the news")
+                    .accessibilityIdentifier("vibe_poem_button")
                     
                     Button(action: {
                         viewModel.showCustomPrompt = true
@@ -412,7 +499,9 @@ struct ContentView: View {
                                 .background(Capsule().fill(Color.clear))
                         )
                     }
-                    .accessibilityLabel("Write custom AI poem")
+                    .accessibilityLabel("Create custom AI poem")
+                    .accessibilityHint("Double tap to write your own prompt for an AI-generated poem")
+                    .accessibilityIdentifier("custom_poem_button")
                 }
             }
             
@@ -500,6 +589,9 @@ struct FavoritesView: View {
                                         .foregroundColor(.secondary)
                                 }
                                 .padding(.vertical, 8)
+                                .accessibilityElement(children: .combine)
+                                .accessibilityLabel("\(poem.title) by \(poem.author ?? "Unknown author")")
+                                .accessibilityHint("Double tap to view full poem")
                             }
                             .listRowBackground(
                                 colorScheme == .dark ? Color(red: 0.2, green: 0.2, blue: 0.3) : Color.white
@@ -507,6 +599,7 @@ struct FavoritesView: View {
                         }
                     }
                     .listStyle(InsetGroupedListStyle())
+                    .scrollContentBackground(.hidden)
                 }
             }
             .navigationTitle("Favorite Poems")
@@ -526,6 +619,7 @@ struct FavoritesView: View {
             Image(systemName: "heart.slash")
                 .font(.system(size: 70))
                 .foregroundColor(.gray)
+                .accessibilityHidden(true)
             
             Text("No Favorite Poems Yet")
                 .font(.title2)
@@ -543,6 +637,8 @@ struct FavoritesView: View {
             .foregroundColor(.white)
             .padding(.top, 16)
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("No favorite poems yet. Your favorite poems will appear here.")
     }
 }
 
@@ -557,6 +653,7 @@ struct FavoritePoemDetailView: View {
             VStack(alignment: .leading, spacing: 20) {
                 Text(poem.title)
                     .font(.system(size: 28, weight: .bold, design: .serif))
+                    .accessibilityAddTraits(.isHeader)
                 
                 if let author = poem.author {
                     Text("by \(author)")
@@ -565,6 +662,7 @@ struct FavoritePoemDetailView: View {
                 }
                 
                 Divider()
+                    .accessibilityHidden(true)
                 
                 Text(poem.content)
                     .font(.system(size: 18, weight: .regular, design: .serif))
@@ -601,4 +699,3 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 #endif
-

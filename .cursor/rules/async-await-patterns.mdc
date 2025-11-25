@@ -1,0 +1,152 @@
+# Async/Await Patterns & Best Practices
+
+## Modern Concurrency Adoption
+This project uses modern Swift concurrency with async/await throughout the codebase.
+
+## Service Layer Patterns
+```swift
+// Services should use async/await for network operations
+protocol NetworkServiceProtocol {
+    func fetchData(from url: URL) async throws -> Data
+}
+
+class NetworkService: NetworkServiceProtocol {
+    func fetchData(from url: URL) async throws -> Data {
+        let (data, response) = try await URLSession.shared.data(from: url)
+        
+        guard let httpResponse = response as? HTTPURLResponse,
+              httpResponse.statusCode == 200 else {
+            throw NetworkError.invalidResponse
+        }
+        
+        return data
+    }
+}
+```
+
+## Repository Patterns
+```swift
+// Repositories coordinate between multiple async services
+class PoemRepository: PoemRepositoryProtocol {
+    private let networkService: NetworkServiceProtocol
+    
+    func fetchPoem() async throws -> Poem {
+        async let newsData = networkService.fetchNews()
+        async let vibeData = analyzeVibe()
+        
+        let (news, vibe) = try await (newsData, vibeData)
+        return generatePoem(from: news, vibe: vibe)
+    }
+}
+```
+
+## ViewModel Integration
+```swift
+// ViewModels handle UI updates with @MainActor
+@MainActor
+class PoemViewModel: ObservableObject {
+    @Published var currentPoem: Poem?
+    @Published var isLoading = false
+    @Published var errorMessage: String?
+    
+    func loadPoem() async {
+        isLoading = true
+        defer { isLoading = false }
+        
+        do {
+            currentPoem = try await poemRepository.fetchPoem()
+            errorMessage = nil
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+}
+```
+
+## SwiftUI Integration
+```swift
+// Views use Task for async operations
+struct ContentView: View {
+    @StateObject private var viewModel = PoemViewModel()
+    
+    var body: some View {
+        NavigationView {
+            PoemDisplayView(poem: viewModel.currentPoem)
+                .task {
+                    await viewModel.loadPoem()
+                }
+                .refreshable {
+                    await viewModel.refreshPoem()
+                }
+        }
+    }
+}
+```
+
+## Task Management
+```swift
+// Use TaskGroup for concurrent operations
+func fetchMultiplePoems() async throws -> [Poem] {
+    return try await withThrowingTaskGroup(of: Poem.self) { group in
+        for source in sources {
+            group.addTask {
+                try await fetchPoem(from: source)
+            }
+        }
+        
+        var poems: [Poem] = []
+        for try await poem in group {
+            poems.append(poem)
+        }
+        return poems
+    }
+}
+```
+
+## Error Handling
+```swift
+// Proper error propagation in async context
+func processPoem() async throws -> ProcessedPoem {
+    do {
+        let poem = try await fetchPoem()
+        let processed = try await processContent(poem)
+        return processed
+    } catch let error as NetworkError {
+        throw PoemError.networkError(error.localizedDescription)
+    } catch {
+        throw PoemError.processingError(error.localizedDescription)
+    }
+}
+```
+
+## Testing Async Code
+```swift
+// Use async test methods
+func test_fetchPoem_whenSuccessful_thenReturnsPoem() async throws {
+    // Arrange
+    let expectedPoem = Poem.sample
+    mockService.poemToReturn = expectedPoem
+    
+    // Act
+    let result = try await repository.fetchPoem()
+    
+    // Assert
+    XCTAssertEqual(result, expectedPoem)
+}
+```
+
+## Best Practices
+- **Use async/await** instead of completion handlers for new code
+- **Mark UI updates** with @MainActor
+- **Use TaskGroup** for concurrent operations
+- **Handle cancellation** appropriately with Task.checkCancellation()
+- **Use async let** for concurrent bindings
+- **Avoid blocking** the main thread in async methods
+- **Use defer** for cleanup in async methods
+- **Test async code** thoroughly with proper async test methods
+
+## Performance Patterns
+- **Use async sequences** for streaming data
+- **Implement proper cancellation** for long-running tasks
+- **Use Task.sleep** instead of blocking sleep
+- **Prefer structured concurrency** over unstructured tasks

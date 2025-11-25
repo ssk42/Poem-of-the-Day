@@ -3,6 +3,7 @@
 //  Poem of the Day
 //
 //  Created by Claude Code on 2025-06-19.
+//  Updated with history and notification protocols
 //
 
 import Foundation
@@ -43,6 +44,9 @@ protocol PoemRepositoryProtocol: Sendable {
     func addToFavorites(_ poem: Poem) async
     func removeFromFavorites(_ poem: Poem) async
     func isFavorite(_ poem: Poem) async -> Bool
+    func getHistory() async -> [PoemHistoryEntry]
+    func getHistoryGroupedByDate() async -> [(date: Date, entries: [PoemHistoryEntry])]
+    func getStreakInfo() async -> StreakInfo
 }
 
 // MARK: - Data Protocols
@@ -205,7 +209,9 @@ struct TelemetryConfiguration: Codable, Sendable {
             "ai_generation", 
             "app_launch", 
             "widget_interaction", 
-            "error_occurred"
+            "error_occurred",
+            "history_view",
+            "notification_scheduled"
         ]
     )
 }
@@ -224,8 +230,6 @@ protocol TelemetryServiceProtocol: Sendable {
 }
 
 // MARK: - Default Implementations
-
-// These extensions will be implemented directly in the Poem struct
 
 extension AnalyticsTrackable {
     var analyticsParameters: [String: Any] { [:] }
@@ -357,6 +361,7 @@ struct AppLaunchEvent: TelemetryEvent {
         case normal = "normal"
         case background = "background"
         case fromWidget = "from_widget"
+        case fromNotification = "from_notification"
     }
     
     var parameters: [String: TelemetryValue] {
@@ -384,6 +389,47 @@ struct ErrorEvent: TelemetryEvent {
         
         if let errorCode = errorCode {
             params["error_code"] = .string(errorCode)
+        }
+        
+        return params
+    }
+}
+
+struct HistoryViewEvent: TelemetryEvent {
+    var eventName: String = "history_view"
+    let timestamp: Date
+    var source: TelemetrySource = .mainApp
+    let entryCount: Int
+    let currentStreak: Int
+    
+    var parameters: [String: TelemetryValue] {
+        [
+            "entry_count": .int(entryCount),
+            "current_streak": .int(currentStreak)
+        ]
+    }
+}
+
+struct NotificationEvent: TelemetryEvent {
+    var eventName: String = "notification_scheduled"
+    let timestamp: Date
+    var source: TelemetrySource = .mainApp
+    let action: NotificationAction
+    let scheduledHour: Int?
+    
+    enum NotificationAction: String, Codable {
+        case enabled = "enabled"
+        case disabled = "disabled"
+        case rescheduled = "rescheduled"
+    }
+    
+    var parameters: [String: TelemetryValue] {
+        var params: [String: TelemetryValue] = [
+            "action": .string(action.rawValue)
+        ]
+        
+        if let hour = scheduledHour {
+            params["scheduled_hour"] = .int(hour)
         }
         
         return params

@@ -3,6 +3,7 @@
 //  Poem of the Day
 //
 //  Created by Claude Code on 2025-06-19.
+//  Updated with history tracking
 //
 
 import Foundation
@@ -14,6 +15,7 @@ actor PoemRepository: PoemRepositoryProtocol {
     private let vibeAnalyzer: VibeAnalyzerProtocol
     private let aiService: PoemGenerationServiceProtocol?
     private let telemetryService: TelemetryServiceProtocol
+    private let historyService: PoemHistoryServiceProtocol
     private let userDefaults: UserDefaults
     
     private var cachedFavorites: [Poem] = []
@@ -24,11 +26,13 @@ actor PoemRepository: PoemRepositoryProtocol {
          vibeAnalyzer: VibeAnalyzerProtocol = VibeAnalyzer(),
          aiService: PoemGenerationServiceProtocol? = nil,
          telemetryService: TelemetryServiceProtocol = TelemetryService(),
+         historyService: PoemHistoryServiceProtocol = PoemHistoryService(),
          userDefaults: UserDefaults = UserDefaults(suiteName: "group.com.stevereitz.poemoftheday") ?? .standard) {
         self.networkService = networkService
         self.newsService = newsService
         self.vibeAnalyzer = vibeAnalyzer
         self.telemetryService = telemetryService
+        self.historyService = historyService
         self.userDefaults = userDefaults
         
         // Initialize AI service if available (iOS 26+)
@@ -69,6 +73,9 @@ actor PoemRepository: PoemRepositoryProtocol {
             let poem = try await aiService.generatePoemFromVibe(vibeAnalysis)
             success = true
             
+            // Track in history
+            await historyService.addEntry(poem, source: .aiGenerated, vibe: vibeAnalysis.vibe)
+            
             let event = AIGenerationEvent(
                 timestamp: Date(),
                 source: .mainApp,
@@ -104,7 +111,12 @@ actor PoemRepository: PoemRepositoryProtocol {
             throw PoemError.unsupportedOperation
         }
         
-        return try await aiService.generatePoemWithCustomPrompt(prompt)
+        let poem = try await aiService.generatePoemWithCustomPrompt(prompt)
+        
+        // Track in history
+        await historyService.addEntry(poem, source: .customPrompt, vibe: nil)
+        
+        return poem
     }
     
     func getVibeOfTheDay() async throws -> VibeAnalysis {
@@ -128,6 +140,7 @@ actor PoemRepository: PoemRepositoryProtocol {
         return await aiService.isAvailable()
     }
     
+    // MARK: - Favorites
     
     func getFavorites() async -> [Poem] {
         if !favoritesLoaded {
@@ -142,6 +155,12 @@ actor PoemRepository: PoemRepositoryProtocol {
         }
         
         guard !cachedFavorites.contains(where: { $0.id == poem.id }) else { return }
+        
+        // Enforce max favorites limit
+        if cachedFavorites.count >= AppConfiguration.Storage.maxFavoritePoems {
+            // Remove oldest favorite
+            cachedFavorites.removeFirst()
+        }
         
         cachedFavorites.append(poem)
         await saveFavorites()
@@ -179,6 +198,20 @@ actor PoemRepository: PoemRepositoryProtocol {
         return cachedFavorites.contains { $0.id == poem.id }
     }
     
+    // MARK: - History Access
+    
+    func getHistory() async -> [PoemHistoryEntry] {
+        return await historyService.getHistory()
+    }
+    
+    func getHistoryGroupedByDate() async -> [(date: Date, entries: [PoemHistoryEntry])] {
+        return await historyService.getHistoryGroupedByDate()
+    }
+    
+    func getStreakInfo() async -> StreakInfo {
+        return await historyService.getStreakInfo()
+    }
+    
     // MARK: - Private Methods
     
     private func shouldFetchNewPoem() -> Bool {
@@ -190,6 +223,13 @@ actor PoemRepository: PoemRepositoryProtocol {
     }
     
     private func fetchAndCacheDailyPoem() async throws -> Poem {
+        var currentVibe: DailyVibe? = nil
+        
+        // Try to get current vibe for history tracking
+        if let cachedVibeAnalysis = loadCachedVibeAnalysis() {
+            currentVibe = cachedVibeAnalysis.vibe
+        }
+        
         // Try to generate vibe-based poem first if AI is available
         if await isAIGenerationAvailable() {
             do {
@@ -199,7 +239,7 @@ actor PoemRepository: PoemRepositoryProtocol {
                 return vibePoem
             } catch {
                 // Fall back to API poem if AI generation fails
-                print("AI poem generation failed, falling back to API: \(error)")
+                logWarning("AI poem generation failed, falling back to API: \(error)", category: .ai)
             }
         }
         
@@ -211,6 +251,10 @@ actor PoemRepository: PoemRepositoryProtocol {
         do {
             let poem = try await networkService.fetchRandomPoem()
             await cachePoem(poem)
+            
+            // Track in history
+            await historyService.addEntry(poem, source: .api, vibe: currentVibe)
+            
             WidgetCenter.shared.reloadAllTimelines()
             success = true
             
@@ -221,7 +265,7 @@ actor PoemRepository: PoemRepositoryProtocol {
                 duration: Date().timeIntervalSince(startTime),
                 success: success,
                 errorType: errorType,
-                vibeType: nil
+                vibeType: currentVibe?.rawValue
             )
             await telemetryService.track(event)
             
@@ -236,19 +280,12 @@ actor PoemRepository: PoemRepositoryProtocol {
                 duration: Date().timeIntervalSince(startTime),
                 success: success,
                 errorType: errorType,
-                vibeType: nil
+                vibeType: currentVibe?.rawValue
             )
             await telemetryService.track(event)
             
             throw error
         }
-    }
-    
-    private func fetchAndCachePoem() async throws -> Poem {
-        let poem = try await networkService.fetchRandomPoem()
-        await cachePoem(poem)
-        WidgetCenter.shared.reloadAllTimelines()
-        return poem
     }
     
     private func cachePoem(_ poem: Poem) async {

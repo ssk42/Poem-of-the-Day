@@ -1,0 +1,52 @@
+---
+alwaysApply: true
+---
+
+# Poem of the Day - Project Structure Guide
+
+## Overview
+This is a Swift iOS app called "Poem of the Day" with comprehensive widget support and extensive testing coverage.
+
+## Main Architecture
+- **MVVM Pattern**: ViewModels manage business logic, Views handle UI
+- **Dependency Injection**: Uses [DependencyContainer.swift](mdc:Poem of the Day/Core/DependencyContainer.swift)
+- **Protocol-Oriented**: Core protocols defined in [Protocols.swift](mdc:Poem of the Day/Core/Protocols.swift)
+- **SwiftUI**: Modern declarative UI framework
+
+## Key Entry Points
+- **Main App**: [Poem_of_the_DayApp.swift](mdc:Poem of the Day/Poem_of_the_DayApp.swift)
+- **Main View**: [ContentView.swift](mdc:Poem of the Day/Views/Screens/ContentView.swift)
+- **Widget Bundle**: [Poem_of_the_Day_WidgetBundle.swift](mdc:Poem of the Day Widget/Poem_of_the_Day_WidgetBundle.swift)
+
+## Core Components
+
+### Models
+- [Poem.swift](mdc:Poem of the Day/Models/Poem.swift) - Main poem data structure
+- [VibeModels.swift](mdc:Poem of the Day/Models/VibeModels.swift) - Vibe analysis models
+- [PoemError.swift](mdc:Poem of the Day/Models/PoemError.swift) - Error handling
+- [PoemHistoryEntry.swift](mdc:Poem of the Day/Models/PoemHistoryEntry.swift) - History tracking
+
+### ViewModels
+- [PoemViewModel.swift](mdc:Poem of the Day/ViewModels/PoemViewModel.swift) - Main poem display logic
+- [PoemHistoryViewModel.swift](mdc:Poem of the Day/ViewModels/PoemHistoryViewModel.swift) - History management
+
+### Services
+- [NetworkService.swift](mdc:Poem of the Day/Services/NetworkService.swift) - HTTP networking
+- [PoemGenerationService.swift](mdc:Poem of the Day/Services/PoemGenerationService.swift) - AI poem generation
+- [PoemRepository.swift](mdc:Poem of the Day/Services/PoemRepository.swift) - Data persistence
+- [VibeAnalyzer.swift](mdc:Poem of the Day/Services/VibeAnalyzer.swift) - Mood analysis
+- [TelemetryService.swift](mdc:Poem of the Day/Services/TelemetryService.swift) - Analytics
+
+### Configuration
+- [AppConfiguration.swift](mdc:Poem of the Day/Core/AppConfiguration.swift) - App settings
+- [RSSFeeds.json](mdc:Poem of the Day/Poem of the Day/RSSFeeds.json) - RSS feed sources
+- [VibeKeywords.json](mdc:Poem of the Day/Poem of the Day/VibeKeywords.json) - Mood keywords
+
+## Testing Structure
+- **Unit Tests**: `Poem of the DayTests/` - Comprehensive service and model tests
+- **UI Tests**: `Poem of the DayUITests/` - End-to-end user interface tests
+- **Integration Tests**: Full workflow testing
+- **Performance Tests**: Memory and speed optimization validation
+
+## Widget Extension
+Separate target with shared models and services for iOS widgets and Live Activities.

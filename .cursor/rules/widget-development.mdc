@@ -1,0 +1,88 @@
+# Widget Development Patterns
+
+## Widget Architecture
+This project includes a comprehensive widget extension with multiple widget types:
+- **Static Widget**: [Poem_of_the_Day_Widget.swift](mdc:Poem of the Day Widget/Poem_of_the_Day_Widget.swift)
+- **Live Activity**: [Poem_of_the_Day_WidgetLiveActivity.swift](mdc:Poem of the Day Widget/Poem_of_the_Day_WidgetLiveActivity.swift)
+- **Control Widget**: [Poem_of_the_Day_WidgetControl.swift](mdc:Poem of the Day Widget/Poem_of_the_Day_WidgetControl.swift)
+- **App Intent**: [AppIntent.swift](mdc:Poem of the Day Widget/AppIntent.swift)
+
+## Widget Best Practices
+- **Keep widgets lightweight** - minimal network calls
+- **Use TimelineProvider** for scheduled updates
+- **Handle different widget sizes** (small, medium, large)
+- **Provide placeholder content** for loading states
+- **Use App Groups** for sharing data between app and widget
+
+## Shared Models
+Widgets share models with the main app:
+- [Poem.swift](mdc:Poem of the Day Widget/Poem.swift) - Widget-specific poem model
+- [VibeModels.swift](mdc:Poem of the Day Widget/VibeModels.swift) - Shared vibe analysis
+
+## Timeline Management
+```swift
+struct PoemTimelineProvider: TimelineProvider {
+    func placeholder(in context: Context) -> PoemEntry {
+        PoemEntry(date: Date(), poem: Poem.placeholder)
+    }
+    
+    func getSnapshot(in context: Context, completion: @escaping (PoemEntry) -> ()) {
+        let entry = PoemEntry(date: Date(), poem: currentPoem)
+        completion(entry)
+    }
+    
+    func getTimeline(in context: Context, completion: @escaping (Timeline<PoemEntry>) -> ()) {
+        let entries = generateEntries()
+        let timeline = Timeline(entries: entries, policy: .atEnd)
+        completion(timeline)
+    }
+}
+```
+
+## Widget Sizes
+```swift
+@main
+struct PoemWidgetBundle: WidgetBundle {
+    var body: some Widget {
+        PoemWidget()
+            .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
+    }
+}
+```
+
+## Widget Configuration
+- **Use App Groups** for data sharing
+- **Configure entitlements** properly
+- **Handle background refresh** appropriately
+- **Test on different devices** and sizes
+
+## App Intents Integration
+```swift
+struct RefreshPoemIntent: AppIntent {
+    static var title: LocalizedStringResource = "Refresh Poem"
+    
+    func perform() async throws -> some IntentResult {
+        // Refresh logic
+        return .result()
+    }
+}
+```
+
+## Data Persistence
+- **Use App Groups** for shared containers
+- **Keep data minimal** in widgets
+- **Handle data synchronization** between app and widget
+- **Use UserDefaults** for simple shared data
+
+## Testing Widgets
+- **Test all widget sizes** on different devices
+- **Test timeline updates** and refresh behavior
+- **Test placeholder states** and loading
+- **Test App Intent functionality**
+- **Test Live Activities** if implemented
+
+## Performance Considerations
+- **Minimize network calls** in widgets
+- **Cache frequently used data** in shared containers
+- **Use efficient timeline policies** to reduce battery usage
+- **Optimize widget view rendering** for smooth updates
