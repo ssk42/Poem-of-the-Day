@@ -196,13 +196,9 @@ final class AIFeaturesUITests: XCTestCase {
             XCTAssertTrue(errorAlert.waitForNonExistence(timeout: 3))
         }
         
-        // Ensure sheet is still present
-        XCTAssertTrue(vibeSheet.exists)
-        
-        // Cancel to return to main
-        let cancelButton = app.buttons["cancel_button"]
-        XCTAssertTrue(cancelButton.waitForExistence(timeout: 5))
-        cancelButton.tap()
+        // Sheet should auto-dismiss on error, verify we're back on main page
+        XCTAssertTrue(vibeSheet.waitForNonExistence(timeout: 3), "Sheet should auto-dismiss after error")
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
     }
     
     func testAIFeaturesWhenUnavailable() throws {
