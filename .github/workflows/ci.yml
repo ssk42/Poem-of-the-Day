@@ -25,18 +25,21 @@ jobs:
 
       - name: Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
-        # with:
-        #   xcode-version: '26.1'
+        with:
+          xcode-version: '26.1'
+
+      # FORCE-FIX: This ensures the project file matches the runner, 
+      # regardless of what is committed in the repo.
+      - name: Force Downgrade Deployment Target
+        run: |
+          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = 26.1;/IPHONEOS_DEPLOYMENT_TARGET = 26.0;/g' "Poem of the Day.xcodeproj/project.pbxproj"
 
       - name: Test
         run: |
-          # 1. We target OS=26.0 because that is what the runner has.
-          # 2. We pass IPHONEOS_DEPLOYMENT_TARGET=26.0 to OVERRIDE your project file.
           xcodebuild test \
             -scheme "Poem of the Day" \
             -destination "platform=iOS Simulator,name=${{ matrix.device }},OS=26.0" \
             -resultBundlePath TestResults \
-            IPHONEOS_DEPLOYMENT_TARGET=26.0 \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             | xcbeautify
