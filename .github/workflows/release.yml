@@ -50,13 +50,11 @@ jobs:
         BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
       run: |
         # Decode the profile from secrets to the location Bazel expects
-        # BUILD.bazel expects "release.mobileprovision" in the root of "Poem of the Day"
-        cd "Poem of the Day"
+        # BUILD.bazel expects "release.mobileprovision" in the root
         echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o release.mobileprovision
 
     - name: Build Release IPA
       run: |
-        cd "Poem of the Day"
         # Build with the 'release' config defined in .bazelrc
         bazelisk build --config=release //:PoemOfTheDay
 
