@@ -151,7 +151,7 @@ final class SecurityInputValidationTests: XCTestCase {
             "CJK: 中文日本語한국어العربية",
             "RTL: עברית العربية فارسی",
             "Control chars: \n\r\t\0",
-            "Quotes: \"'`''""«»‹›",
+            "Quotes: \"'`''\"\"«»‹›",
             "Slashes: /\\|",
             "Brackets: ()[]{}⟨⟩"
         ]

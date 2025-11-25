@@ -275,7 +275,6 @@ actor VibeAnalyzer: VibeAnalyzerProtocol {
     }
     
     private func generateReasoning(for vibe: DailyVibe, from articles: [NewsArticle], sentiment: SentimentScore) -> String {
-        let topTitles = articles.prefix(3).map { $0.title }
         let keyThemes = identifyKeyThemes(from: articles)
         
         let sentimentDescription: String

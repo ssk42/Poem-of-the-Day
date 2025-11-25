@@ -89,7 +89,7 @@ final class EdgeCaseScenarioTests: XCTestCase {
         let specialCases = [
             "🎭🎪🎨🎯🎲🎸🎺🎻🎼🎵🎶🎤🎧🎹", // Musical emojis
             "\\n\\r\\t\\0\\x00\\xFF", // Escape sequences
-            "\"'`''""«»‹›⟨⟩", // Various quotes
+            "\"'`''\"\"«»‹›⟨⟩", // Various quotes
             "∑∏∫∂∆∇√∞≠≤≥±×÷", // Mathematical symbols
             "\u{1F600}\u{1F601}\u{1F602}", // Unicode escape sequences
             "⚠️🚨🔴🟡🟢🔵🟣⚫⚪", // Warning and colored symbols
