@@ -106,26 +106,22 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
     
     private func initializeFoundationModel() async {
         #if canImport(FoundationModels)
-        if #available(iOS 26, *) {
+        if #available(iOS 18, *) {
             // Future implementation when Foundation Models API is available
             // This will be uncommented when the actual APIs are available
             
+            // Try to load a custom poetry adapter if available
             do {
-                // Try to load a custom poetry adapter if available
-                if let poetryAdapter = try? SystemLanguageModel.Adapter(name: "poetry_generation") {
-                    self.adapter = poetryAdapter
-                    self.languageModel = SystemLanguageModel(adapter: poetryAdapter)
-                } else {
-                    // Fall back to base system model
-                    self.languageModel = SystemLanguageModel()
-                }
-                
-                if let model = languageModel as? SystemLanguageModel {
-                    self.modelSession = LanguageModelSession(model: model)
-                }
+                let poetryAdapter = try SystemLanguageModel.Adapter(name: "poetry_generation")
+                self.adapter = poetryAdapter
+                self.languageModel = SystemLanguageModel(adapter: poetryAdapter)
             } catch {
-                print("Failed to initialize Foundation Models: \(error)")
-                // Model will remain nil, falling back to local generation
+                // Fall back to base system model
+                self.languageModel = SystemLanguageModel()
+            }
+            
+            if let model = languageModel as? SystemLanguageModel {
+                self.modelSession = LanguageModelSession(model: model)
             }
             
         }
@@ -135,19 +131,30 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
     // MARK: - Public Methods
     
     func generatePoemFromVibe(_ vibeAnalysis: VibeAnalysis) async throws -> Poem {
+        // Check for mock error
+        if AppConfiguration.Testing.shouldMockAIError {
+            throw PoemGenerationError.generationFailed
+        }
+        
         print("🎨 PoemGenerationService: Generating poem for vibe: \(vibeAnalysis.vibe.displayName)")
         
         do {
             let prompt = buildVibePrompt(from: vibeAnalysis)
             print("📝 Built prompt (\(prompt.count) chars)")
+        
+        // Check for mock responses (UI Testing)
+        if AppConfiguration.Testing.shouldMockAIResponses {
+            print("🧪 Returning mock response for UI testing")
+            return generateLocalPoem(vibe: vibeAnalysis.vibe)
+        }
             
-            // Try Foundation Models if available (iOS 26+)
+        // Try Foundation Models if available (iOS 18+)
             let isAvailable = await isFoundationModelsAvailable()
             print("🔍 Foundation Models available: \(isAvailable)")
             
             if isAvailable {
                 #if canImport(FoundationModels)
-                if #available(iOS 26, *) {
+                if #available(iOS 18, *) {
                     print("🚀 Attempting AI generation...")
                     let generatedPoem = try await generateWithFoundationModels(prompt: prompt)
                     let poem = convertToPoemModel(generatedPoem, vibe: vibeAnalysis.vibe)
@@ -174,16 +181,26 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
     }
     
     func generatePoemWithCustomPrompt(_ prompt: String) async throws -> Poem {
+        // Check for mock error
+        if AppConfiguration.Testing.shouldMockAIError {
+            throw PoemGenerationError.generationFailed
+        }
+        
         guard !prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             throw PoemGenerationError.invalidPrompt
         }
         
         let enhancedPrompt = enhanceCustomPrompt(prompt)
         
-        // Try Foundation Models if available (iOS 26+)
+        // Check for mock responses (UI Testing)
+        if AppConfiguration.Testing.shouldMockAIResponses {
+            return generateLocalPoem(prompt: prompt)
+        }
+        
+        // Try Foundation Models if available (iOS 18+)
         if await isFoundationModelsAvailable() {
             #if canImport(FoundationModels)
-            if #available(iOS 26, *) {
+            if #available(iOS 18, *) {
                 // Future implementation
                 let generatedPoem = try await generateWithFoundationModels(prompt: enhancedPrompt)
                 let poem = convertToPoemModel(generatedPoem, vibe: nil)
@@ -197,6 +214,11 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
     }
     
     func isAvailable() async -> Bool {
+        // In UI tests, respect the environment variable
+        if AppConfiguration.Testing.isUITesting {
+            return AppConfiguration.Testing.isAIAvailable
+        }
+        
         // Check if Foundation Models is available
         return await isFoundationModelsAvailable()
     }
@@ -205,7 +227,7 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
     
     private func isFoundationModelsAvailable() async -> Bool {
         #if canImport(FoundationModels)
-        if #available(iOS 26, *) {
+        if #available(iOS 18, *) {
             // Check if SystemLanguageModel is available on this device
             let model = SystemLanguageModel.default
             
@@ -356,7 +378,6 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
         Please ensure the poem is:
         - Original and creative
         - Appropriate for all audiences
-        - 12-20 lines long
         - Well-structured with clear rhythm
         - Emotionally engaging
         
@@ -504,8 +525,15 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
     #endif
     
     private func generateLocalPoem(vibe: DailyVibe? = nil, prompt: String? = nil) -> Poem {
-        let title = vibe?.displayName ?? (prompt != nil ? "Custom Inspiration" : "A Simple Poem")
-        let author = "Local Poet"
+        var title = vibe?.displayName ?? (prompt != nil ? "Custom Inspiration" : "A Simple Poem")
+        var author = "Local Poet"
+        
+        // For UI Testing: Append timestamp to ensure unique content on each generation
+        if AppConfiguration.Testing.isUITesting {
+            let timestamp = Int(Date().timeIntervalSince1970 * 1000)
+            title = "\(title) \(timestamp)"
+            author = "Test Poet \(timestamp)"
+        }
         
         // Generate different poems based on vibe or prompt
         let lines: [String]

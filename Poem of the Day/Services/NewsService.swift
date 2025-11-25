@@ -79,6 +79,36 @@ actor NewsService: NewsServiceProtocol {
     }
     
     func fetchDailyNews() async throws -> [NewsArticle] {
+        // Return mock data for UI testing
+        if AppConfiguration.Testing.isUITesting {
+            return [
+                NewsArticle(
+                    title: "Technology Advances in AI",
+                    description: "New breakthroughs in artificial intelligence promise a brighter future.",
+                    content: "AI is changing the world...",
+                    publishedAt: Date(),
+                    source: NewsSource(name: "Tech News", id: "tech-news"),
+                    url: URL(string: "https://example.com/ai")
+                ),
+                NewsArticle(
+                    title: "Global Peace Summit Success",
+                    description: "World leaders agree on new peace treaty.",
+                    content: "Peace is on the horizon...",
+                    publishedAt: Date(),
+                    source: NewsSource(name: "World News", id: "world-news"),
+                    url: URL(string: "https://example.com/peace")
+                ),
+                NewsArticle(
+                    title: "Climate Change Solutions",
+                    description: "Scientists discover new way to capture carbon.",
+                    content: "The planet is healing...",
+                    publishedAt: Date(),
+                    source: NewsSource(name: "Science Daily", id: "science-daily"),
+                    url: URL(string: "https://example.com/climate")
+                )
+            ]
+        }
+        
         var allArticles: [NewsArticle] = []
         let sources = RSSSource.loadSources()
         

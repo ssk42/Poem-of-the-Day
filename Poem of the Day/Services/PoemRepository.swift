@@ -35,8 +35,8 @@ actor PoemRepository: PoemRepositoryProtocol {
         self.historyService = historyService
         self.userDefaults = userDefaults
         
-        // Initialize AI service if available (iOS 26+)
-        if #available(iOS 26, *) {
+        // Initialize AI service if available (iOS 18+)
+        if #available(iOS 18, *) {
             self.aiService = aiService ?? PoemGenerationService()
         } else {
             self.aiService = nil
@@ -268,8 +268,16 @@ actor PoemRepository: PoemRepositoryProtocol {
             currentVibe = cachedVibeAnalysis.vibe
         }
         
-        // Try to generate vibe-based poem first if AI is available
-        if await isAIGenerationAvailable() {
+        // Check user preference for poem source (default to "api" / PoetryDB)
+        let preferredSource = userDefaults.string(forKey: "preferredPoemSource") ?? "api"
+        
+        // Only use AI if explicitly preferred AND available
+        var useAI = false
+        if preferredSource == "ai" {
+            useAI = await isAIGenerationAvailable()
+        }
+        
+        if useAI {
             do {
                 let vibePoem = try await generateVibeBasedPoem()
                 await cachePoemWithVibe(vibePoem)

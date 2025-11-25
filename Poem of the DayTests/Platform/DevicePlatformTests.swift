@@ -80,7 +80,7 @@ final class DevicePlatformTests: XCTestCase {
         for i in 0..<maxConcurrentOperations {
             Task {
                 do {
-                    let _ = try await poemRepository.fetchTodaysPoem()
+                    let _ = try await poemRepository.getDailyPoem()
                 } catch {
                     // Expected on low-end devices
                 }
@@ -103,7 +103,7 @@ final class DevicePlatformTests: XCTestCase {
             for i in 0..<maxConcurrentOperations {
                 group.addTask {
                     do {
-                        let _ = try await self.poemRepository.fetchTodaysPoem()
+                        let _ = try await self.poemRepository.getDailyPoem()
                     } catch {
                         // Some failures expected
                     }
@@ -210,7 +210,7 @@ final class DevicePlatformTests: XCTestCase {
         
         // Test accessibility labels
         let titleAccessibilityLabel = "Poem title: \(testPoem.title)"
-        let authorAccessibilityLabel = "By author: \(testPoem.author)"
+        let authorAccessibilityLabel = "By author: \(testPoem.author ?? "Unknown")"
         let contentAccessibilityLabel = "Poem content: \(testPoem.content.prefix(100))..."
         
         XCTAssertFalse(titleAccessibilityLabel.isEmpty, "Should provide title accessibility label")
@@ -286,7 +286,7 @@ final class DevicePlatformTests: XCTestCase {
     private func fulfillment(of expectations: [XCTestExpectation], timeout: TimeInterval) async {
         await withCheckedContinuation { continuation in
             let waiter = XCTWaiter()
-            let result = waiter.wait(for: expectations, timeout: timeout)
+            let _ = waiter.wait(for: expectations, timeout: timeout)
             continuation.resume()
         }
     }

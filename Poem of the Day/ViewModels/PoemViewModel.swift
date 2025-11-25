@@ -33,6 +33,34 @@ final class PoemViewModel: ObservableObject {
     }
     
     func loadInitialData() async {
+        if AppConfiguration.Testing.isUITesting {
+            isLoading = true
+            isAIGenerationAvailable = AppConfiguration.Testing.isAIAvailable
+            
+            // Create mock vibe for testing
+            let mockVibe = DailyVibe.hopeful
+            currentVibe = VibeAnalysis(
+                vibe: mockVibe,
+                confidence: 0.9,
+                reasoning: "Mock reasoning for testing",
+                keywords: ["hope", "test", "future"],
+                sentiment: SentimentScore(positivity: 0.8, energy: 0.7, complexity: 0.5),
+                backgroundColorIntensity: 0.8
+            )
+            
+            // Create mock poem
+            poemOfTheDay = Poem(
+                title: "Test Poem",
+                lines: ["This is a test poem", "For UI testing purposes"],
+                author: "Test Author",
+                vibe: mockVibe,
+                source: .api
+            )
+            
+            isLoading = false
+            return
+        }
+        
         isLoading = true
         
         // Track app launch

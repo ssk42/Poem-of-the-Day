@@ -103,6 +103,32 @@ struct ContentView: View {
                     ShareSheet(items: [poem.shareText])
                 }
             }
+            .sheet(isPresented: $viewModel.showVibeGeneration) {
+                if let vibe = viewModel.currentVibe {
+                    VibeGenerationView(
+                        vibeAnalysis: vibe,
+                        onGeneratePoem: {
+                            viewModel.showVibeGeneration = false
+                            Task {
+                                isPoemLoading = true
+                                await viewModel.generateVibeBasedPoem()
+                                isPoemLoading = false
+                            }
+                        },
+                        onCustomPrompt: {
+                            viewModel.showVibeGeneration = false
+                            viewModel.showCustomPrompt = true
+                        }
+                    )
+                }
+            }
+            .sheet(isPresented: $viewModel.showCustomPrompt) {
+                CustomPromptView { prompt in
+                    Task {
+                        await viewModel.generateCustomPoem(prompt: prompt)
+                    }
+                }
+            }
             .alert("Error", isPresented: $viewModel.showErrorAlert) {
                 Button("OK", role: .cancel) { }
                 Button("Retry") {
@@ -300,12 +326,14 @@ struct ContentView: View {
                     .font(.system(size: scaledFontSize(24), weight: .semibold, design: .serif))
                     .foregroundColor(colorScheme == .dark ? .white : .black)
                     .accessibilityAddTraits(.isHeader)
+                    .accessibilityIdentifier("poem_title")
                 
                 HStack {
                     if let author = poem.author {
                         Text("by \(author)")
                             .font(.system(size: scaledFontSize(16), weight: .medium, design: .serif))
                             .foregroundColor(.secondary)
+                            .accessibilityIdentifier("poem_author")
                     }
                     
                     Spacer()
@@ -339,6 +367,7 @@ struct ContentView: View {
                 .lineSpacing(8)
                 .padding(.vertical, 8)
                 .accessibilityLabel("Poem content: \(poem.content)")
+                .accessibilityIdentifier("poem_content")
             
             HStack {
                 Button(action: {
@@ -551,32 +580,6 @@ struct ContentView: View {
                 }
             }
             
-        }
-        .sheet(isPresented: $viewModel.showVibeGeneration) {
-            if let vibe = viewModel.currentVibe {
-                VibeGenerationView(
-                    vibeAnalysis: vibe,
-                    onGeneratePoem: {
-                        viewModel.showVibeGeneration = false
-                        Task {
-                            isPoemLoading = true
-                            await viewModel.generateVibeBasedPoem()
-                            isPoemLoading = false
-                        }
-                    },
-                    onCustomPrompt: {
-                        viewModel.showVibeGeneration = false
-                        viewModel.showCustomPrompt = true
-                    }
-                )
-            }
-        }
-        .sheet(isPresented: $viewModel.showCustomPrompt) {
-            CustomPromptView { prompt in
-                Task {
-                    await viewModel.generateCustomPoem(prompt: prompt)
-                }
-            }
         }
     }
 }

@@ -508,7 +508,7 @@ extension WidgetUITests {
     
     // Helper to verify widget data availability
     func verifyWidgetDataAvailability() -> Bool {
-        let mainPage = PageFactory(app: app).mainContentPage()
+        let mainPage = PageFactory.mainContentPage(app: app)
         guard mainPage.waitForPageToLoad() else { return false }
         
         return mainPage.verifyPoemIsDisplayed()
@@ -527,7 +527,7 @@ extension WidgetUITests {
         app.launchEnvironment["WIDGET_SIZE"] = size
         app.launch()
         
-        let mainPage = PageFactory(app: app).mainContentPage()
+        let mainPage = PageFactory.mainContentPage(app: app)
         return mainPage.waitForPageToLoad() && mainPage.verifyPoemIsDisplayed()
     }
 }

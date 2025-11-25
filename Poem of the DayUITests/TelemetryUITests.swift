@@ -4,13 +4,13 @@ import XCTest
 final class TelemetryUITests: XCTestCase {
     
     var app: XCUIApplication!
-    var pageFactory: PageFactory!
+
     
     override func setUpWithError() throws {
         continueAfterFailure = false
         
         app = XCUIApplication()
-        pageFactory = PageFactory(app: app)
+
         
         // Configure launch arguments for telemetry testing
         app.launchArguments = ["--ui-testing", "--telemetry-testing"]
@@ -25,7 +25,7 @@ final class TelemetryUITests: XCTestCase {
     
     override func tearDownWithError() throws {
         app = nil
-        pageFactory = nil
+
     }
     
     // MARK: - User Interaction Tracking Tests
@@ -612,9 +612,15 @@ extension TelemetryUITests {
             mainPage.tapFavoriteButton()
             usleep(500000) // 0.5 seconds
             
-            let shareSheet = mainPage.tapShareButton()
-            if shareSheet.waitForPageToLoad() {
-                shareSheet.tapCancel()
+            mainPage.tapShareButton()
+            usleep(500000) // 0.5 seconds
+            
+            let shareSheet = mainPage.app.sheets.firstMatch
+            if shareSheet.waitForExistence(timeout: 5) {
+                let cancelButton = shareSheet.buttons["Cancel"]
+                if cancelButton.exists {
+                    cancelButton.tap()
+                }
             }
         }
     }

@@ -52,29 +52,23 @@ class BasePage {
 
 class MainContentPage: BasePage {
     
-    private let poemTitle: XCUIElement
-    private let poemContent: XCUIElement
-    private let authorLabel: XCUIElement
-    private let favoriteButton: XCUIElement
-    private let shareButton: XCUIElement
-    private let refreshButton: XCUIElement
-    private let favoritesButton: XCUIElement
-    private let vibeGenerationButton: XCUIElement
-    private let customPromptButton: XCUIElement
-    private let loadingIndicator: XCUIElement
+    // Elements
+    var poemTitle: XCUIElement { app.staticTexts["poem_title"] }
+    var poemContent: XCUIElement { app.staticTexts["poem_content"] }
+    var poemAuthor: XCUIElement { app.staticTexts["poem_author"] }
+    var refreshButton: XCUIElement { app.buttons["refresh_button"] }
+    var favoritesButton: XCUIElement { app.buttons["favorites_button"] }
+    var vibeGenerationSheet: XCUIElement { app.staticTexts["current_vibe"] }
+    var customPromptSheet: XCUIElement { app.textViews["custom_prompt_text_field"] }
+    var vibeGenerationButton: XCUIElement { app.buttons["top_vibe_poem_button"] }
+    var customPromptButton: XCUIElement { app.buttons["top_custom_poem_button"] }
+    var favoriteButton: XCUIElement { app.buttons["favorite_button"] }
+    var unfavoriteButton: XCUIElement { app.buttons["unfavorite_button"] }
+    var shareButton: XCUIElement { app.buttons["share_button"] }
+    var loadingIndicator: XCUIElement { app.activityIndicators.firstMatch }
+    var headerTitle: XCUIElement { app.staticTexts["Poem of the Day"] }
     
     override init(app: XCUIApplication) {
-        self.poemTitle = app.staticTexts.matching(identifier: "poem_title").firstMatch
-        self.poemContent = app.staticTexts.matching(identifier: "poem_content").firstMatch
-        self.authorLabel = app.staticTexts.matching(identifier: "poem_author").firstMatch
-        self.favoriteButton = app.buttons.matching(identifier: "favorite_button").firstMatch
-        self.shareButton = app.buttons.matching(identifier: "share_button").firstMatch
-        self.refreshButton = app.buttons.matching(identifier: "refresh_button").firstMatch
-        self.favoritesButton = app.buttons.matching(identifier: "favorites_button").firstMatch
-        self.vibeGenerationButton = app.buttons["Vibe Poem"]
-        self.customPromptButton = app.buttons["Custom"]
-        self.loadingIndicator = app.activityIndicators.firstMatch
-        
         super.init(app: app)
     }
     
@@ -91,6 +85,11 @@ class MainContentPage: BasePage {
     
     func tapFavoriteButton() -> MainContentPage {
         favoriteButton.tap()
+        return self
+    }
+    
+    func tapUnfavoriteButton() -> MainContentPage {
+        unfavoriteButton.tap()
         return self
     }
     
@@ -124,7 +123,7 @@ class MainContentPage: BasePage {
     }
     
     func getAuthorName() -> String {
-        return authorLabel.label
+        return poemAuthor.label
     }
     
     func isFavoriteButtonSelected() -> Bool {
@@ -138,11 +137,29 @@ class MainContentPage: BasePage {
     // MARK: - Verifications
     
     func verifyPoemDisplayed() -> Bool {
-        return poemTitle.exists && poemContent.exists && authorLabel.exists
+        return poemTitle.exists && poemContent.exists && poemAuthor.exists
     }
     
     func verifyNavigationButtonsDisplayed() -> Bool {
         return vibeGenerationButton.exists && customPromptButton.exists && favoritesButton.exists
+    }
+    
+    // MARK: - Missing Methods for Tests
+    
+    func waitForLoadingToComplete(timeout: TimeInterval = 10) -> Bool {
+        return waitForElementToDisappear(loadingIndicator, timeout: timeout)
+    }
+    
+    func verifyPoemIsDisplayed() -> Bool {
+        return verifyPoemDisplayed()
+    }
+    
+    func waitForPageToLoad(timeout: TimeInterval = 5) -> Bool {
+        return waitForPoemToLoad()
+    }
+    
+    func isDisplayed() -> Bool {
+        return verifyPoemDisplayed()
     }
 }
 
@@ -185,6 +202,10 @@ class VibeGenerationPage: BasePage {
     func tapCancelButton() -> MainContentPage {
         cancelButton.tap()
         return MainContentPage(app: app)
+    }
+    
+    func tapBackButton() -> MainContentPage {
+        return tapCancelButton()
     }
     
     func tapGenerateButton() -> MainContentPage {
@@ -260,6 +281,10 @@ class CustomPromptPage: BasePage {
         return MainContentPage(app: app)
     }
     
+    func tapBackButton() -> MainContentPage {
+        return tapCancelButton()
+    }
+    
     func enterPrompt(_ prompt: String) -> CustomPromptPage {
         promptTextField.tap()
         promptTextField.typeText(prompt)
@@ -317,6 +342,10 @@ class FavoritesPage: BasePage {
         app.tables.firstMatch
     }
     
+    var favoritesList: XCUIElement {
+        return favoritesTable
+    }
+    
     var emptyStateMessage: XCUIElement {
         app.staticTexts["No favorite poems yet"]
     }
@@ -348,6 +377,10 @@ class FavoritesPage: BasePage {
     
     func isEmptyStateVisible() -> Bool {
         return emptyStateMessage.exists
+    }
+    
+    func verifyEmptyState() -> Bool {
+        return isEmptyStateVisible()
     }
     
     // MARK: - Verifications
@@ -414,5 +447,9 @@ class TelemetryDebugPage: BasePage {
     
     func verifyPageDisplayed() -> Bool {
         return navigationTitle.exists && eventsList.exists
+    }
+    
+    func verifyEventExists(withName name: String) -> Bool {
+        return eventsList.staticTexts[name].exists
     }
 }

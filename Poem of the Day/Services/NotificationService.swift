@@ -50,7 +50,7 @@ actor NotificationService: NotificationServiceProtocol {
     // MARK: - Properties
     
     private let notificationCenter: UNUserNotificationCenter
-    private let userDefaults: UserDefaults
+    nonisolated private let userDefaults: UserDefaults
     private let notificationIdentifier = "daily_poem_notification"
     
     // MARK: - Initialization

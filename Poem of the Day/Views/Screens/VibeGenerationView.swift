@@ -36,6 +36,7 @@ struct VibeGenerationView: View {
                     Button("Cancel") {
                         dismiss()
                     }
+                    .accessibilityIdentifier("cancel_button")
                 }
             }
         }
@@ -249,6 +250,7 @@ struct CustomPromptView: View {
                     Button("Cancel") {
                         dismiss()
                     }
+                    .accessibilityIdentifier("cancel_button")
                 }
             }
         }

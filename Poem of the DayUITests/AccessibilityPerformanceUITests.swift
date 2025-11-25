@@ -3,13 +3,13 @@ import XCTest
 final class AccessibilityPerformanceUITests: XCTestCase {
     
     var app: XCUIApplication!
-    var pageFactory: PageFactory!
+
     
     override func setUpWithError() throws {
         continueAfterFailure = false
         
         app = XCUIApplication()
-        pageFactory = PageFactory(app: app)
+
         
         // Configure launch arguments for accessibility testing
         app.launchArguments = ["--ui-testing", "--accessibility-testing"]
@@ -25,13 +25,13 @@ final class AccessibilityPerformanceUITests: XCTestCase {
     
     override func tearDownWithError() throws {
         app = nil
-        pageFactory = nil
+
     }
     
     // MARK: - Accessibility Tests
     
     func testVoiceOverSupport() throws {
-        let mainPage = pageFactory.mainContentPage()
+        let mainPage = PageFactory.mainContentPage(app: app)
         XCTAssertTrue(mainPage.waitForPageToLoad())
         
         // Test VoiceOver accessibility labels
@@ -98,7 +98,7 @@ final class AccessibilityPerformanceUITests: XCTestCase {
             app.launchEnvironment["DYNAMIC_TYPE_SIZE"] = typeSize
             app.launch()
             
-            let mainPage = pageFactory.mainContentPage()
+            let mainPage = PageFactory.mainContentPage(app: app)
             XCTAssertTrue(mainPage.waitForPageToLoad(), "Should load with \(typeSize)")
             
             // Verify layout remains functional
@@ -122,7 +122,7 @@ final class AccessibilityPerformanceUITests: XCTestCase {
         app.launchEnvironment["REDUCE_MOTION"] = "true"
         app.launch()
         
-        let mainPage = pageFactory.mainContentPage()
+        let mainPage = PageFactory.mainContentPage(app: app)
         XCTAssertTrue(mainPage.waitForPageToLoad())
         
         // Perform actions that typically involve animations
@@ -138,9 +138,13 @@ final class AccessibilityPerformanceUITests: XCTestCase {
         
         // Share sheet should work
         if mainPage.verifyPoemIsDisplayed() {
-            let shareSheet = mainPage.tapShareButton()
-            if shareSheet.waitForPageToLoad() {
-                shareSheet.tapCancel()
+            mainPage.tapShareButton()
+            let shareSheet = app.sheets.firstMatch
+            if shareSheet.waitForExistence(timeout: 5) {
+                let cancelButton = shareSheet.buttons["Cancel"]
+                if cancelButton.exists {
+                    cancelButton.tap()
+                }
             }
         }
     }
@@ -151,7 +155,7 @@ final class AccessibilityPerformanceUITests: XCTestCase {
         app.launchEnvironment["HIGH_CONTRAST"] = "true"
         app.launch()
         
-        let mainPage = pageFactory.mainContentPage()
+        let mainPage = PageFactory.mainContentPage(app: app)
         XCTAssertTrue(mainPage.waitForPageToLoad())
         
         // Verify all elements are still visible and accessible
@@ -176,7 +180,7 @@ final class AccessibilityPerformanceUITests: XCTestCase {
             app.launchEnvironment["COLOR_BLINDNESS"] = type
             app.launch()
             
-            let mainPage = pageFactory.mainContentPage()
+            let mainPage = PageFactory.mainContentPage(app: app)
             XCTAssertTrue(mainPage.waitForPageToLoad(), "Should load with \(type) simulation")
             
             // Verify functionality doesn't rely solely on color
@@ -201,7 +205,7 @@ final class AccessibilityPerformanceUITests: XCTestCase {
         app.launchEnvironment["KEYBOARD_NAVIGATION"] = "true"
         app.launch()
         
-        let mainPage = pageFactory.mainContentPage()
+        let mainPage = PageFactory.mainContentPage(app: app)
         XCTAssertTrue(mainPage.waitForPageToLoad())
         
         // Test tab navigation through interactive elements
@@ -237,7 +241,7 @@ final class AccessibilityPerformanceUITests: XCTestCase {
             app.terminate()
             app.launch()
             
-            let mainPage = pageFactory.mainContentPage()
+            let mainPage = PageFactory.mainContentPage(app: app)
             _ = mainPage.waitForPageToLoad(timeout: 10.0)
         }
         
@@ -250,7 +254,7 @@ final class AccessibilityPerformanceUITests: XCTestCase {
             let startTime = CFAbsoluteTimeGetCurrent()
             app.launch()
             
-            let mainPage = pageFactory.mainContentPage()
+            let mainPage = PageFactory.mainContentPage(app: app)
             if mainPage.waitForPageToLoad(timeout: 10.0) {
                 let launchTime = CFAbsoluteTimeGetCurrent() - startTime
                 XCTAssertLessThan(launchTime, 5.0, "App should launch within 5 seconds")
@@ -259,7 +263,7 @@ final class AccessibilityPerformanceUITests: XCTestCase {
     }
     
     func testPoemLoadingPerformance() throws {
-        let mainPage = pageFactory.mainContentPage()
+        let mainPage = PageFactory.mainContentPage(app: app)
         XCTAssertTrue(mainPage.waitForPageToLoad())
         
         // Measure poem loading performance
@@ -273,7 +277,7 @@ final class AccessibilityPerformanceUITests: XCTestCase {
     }
     
     func testMemoryPerformance() throws {
-        let mainPage = pageFactory.mainContentPage()
+        let mainPage = PageFactory.mainContentPage(app: app)
         XCTAssertTrue(mainPage.waitForPageToLoad())
         
         // Measure memory usage during typical operations
@@ -312,7 +316,7 @@ final class AccessibilityPerformanceUITests: XCTestCase {
     }
     
     func testScrollingPerformance() throws {
-        let mainPage = pageFactory.mainContentPage()
+        let mainPage = PageFactory.mainContentPage(app: app)
         XCTAssertTrue(mainPage.waitForPageToLoad())
         
         // Test scrolling performance in favorites (if available)
@@ -346,7 +350,7 @@ final class AccessibilityPerformanceUITests: XCTestCase {
         app.launchEnvironment["AI_AVAILABLE"] = "true"
         app.launch()
         
-        let mainPage = pageFactory.mainContentPage()
+        let mainPage = PageFactory.mainContentPage(app: app)
         XCTAssertTrue(mainPage.waitForPageToLoad())
         
         let measureOptions = XCTMeasureOptions()
@@ -370,7 +374,7 @@ final class AccessibilityPerformanceUITests: XCTestCase {
     }
     
     func testNetworkPerformance() throws {
-        let mainPage = pageFactory.mainContentPage()
+        let mainPage = PageFactory.mainContentPage(app: app)
         XCTAssertTrue(mainPage.waitForPageToLoad())
         
         // Measure network request performance
@@ -389,7 +393,7 @@ final class AccessibilityPerformanceUITests: XCTestCase {
     }
     
     func testConcurrentOperationsPerformance() throws {
-        let mainPage = pageFactory.mainContentPage()
+        let mainPage = PageFactory.mainContentPage(app: app)
         XCTAssertTrue(mainPage.waitForPageToLoad())
         
         // Test performance under concurrent operations
@@ -406,9 +410,13 @@ final class AccessibilityPerformanceUITests: XCTestCase {
             }
             
             if mainPage.shareButton.exists {
-                let shareSheet = mainPage.tapShareButton()
-                if shareSheet.waitForPageToLoad() {
-                    shareSheet.tapCancel()
+                mainPage.tapShareButton()
+                let shareSheet = app.sheets.firstMatch
+                if shareSheet.waitForExistence(timeout: 5) {
+                    let cancelButton = shareSheet.buttons["Cancel"]
+                    if cancelButton.exists {
+                        cancelButton.tap()
+                    }
                 }
             }
             
@@ -435,7 +443,7 @@ final class AccessibilityPerformanceUITests: XCTestCase {
             app.launchEnvironment["DYNAMIC_TYPE_SIZE"] = typeSize
             app.launch()
             
-            let mainPage = pageFactory.mainContentPage()
+            let mainPage = PageFactory.mainContentPage(app: app)
             let startTime = CFAbsoluteTimeGetCurrent()
             
             XCTAssertTrue(mainPage.waitForPageToLoad())
@@ -459,7 +467,7 @@ final class AccessibilityPerformanceUITests: XCTestCase {
         app.launchEnvironment["VOICEOVER_ENABLED"] = "true"
         app.launch()
         
-        let mainPage = pageFactory.mainContentPage()
+        let mainPage = PageFactory.mainContentPage(app: app)
         let startTime = CFAbsoluteTimeGetCurrent()
         
         XCTAssertTrue(mainPage.waitForPageToLoad())

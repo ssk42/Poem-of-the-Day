@@ -1,0 +1,789 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild test -scheme "Poem of the Day" -destination "platform=iOS Simulator,name=iPhone 17,OS=latest" "-only-testing:Poem of the DayUITests/AIFeaturesUITests"
+
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (4 targets)
+    Target 'Poem of the DayUITests' in project 'Poem of the Day'
+        ➜ Explicit dependency on target 'Poem of the Day' in project 'Poem of the Day'
+    Target 'Poem of the DayTests' in project 'Poem of the Day'
+        ➜ Explicit dependency on target 'Poem of the Day' in project 'Poem of the Day'
+    Target 'Poem of the Day' in project 'Poem of the Day'
+        ➜ Explicit dependency on target 'Poem of the Day WidgetExtension' in project 'Poem of the Day'
+    Target 'Poem of the Day WidgetExtension' in project 'Poem of the Day' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.1.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --print-asset-tag-combinations --output-format xml1 /Users/stephenreitz/Desktop/Swift-2048-test/Poem of the Day/Poem of the Day/Preview Content/Preview Assets.xcassets /Users/stephenreitz/Desktop/Swift-2048-test/Poem of the Day/Poem of the Day/Assets.xcassets
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: ba56298c44f06f1eeaa29ff2d82795d5
+Build description path: /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/XCBuildData/ba56298c44f06f1eeaa29ff2d82795d5.xcbuilddata
+ProcessProductPackaging /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day\ WidgetExtension.entitlements /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension.appex-Simulated.xcent (in target 'Poem of the Day WidgetExtension' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    
+    Entitlements:
+    
+    {
+    "application-identifier" = "J4QUKKF6V3.Stevereitz.Poem-of-the-Day.Poem-of-the-Day-Widget";
+    "com.apple.security.application-groups" =     (
+        "group.com.stevereitz.poemoftheday"
+    );
+}
+    
+    builtin-productPackagingUtility /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day\ WidgetExtension.entitlements -entitlements -format xml -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension.appex-Simulated.xcent
+
+ProcessProductPackaging /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day\ WidgetExtension.entitlements /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension.appex.xcent (in target 'Poem of the Day WidgetExtension' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    
+    Entitlements:
+    
+    {
+}
+    
+    builtin-productPackagingUtility /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day\ WidgetExtension.entitlements -entitlements -format xml -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension.appex.xcent
+
+ProcessProductPackagingDER /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension.appex-Simulated.xcent /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension.appex-Simulated.xcent.der (in target 'Poem of the Day WidgetExtension' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    /usr/bin/derq query -f xml -i /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension.appex-Simulated.xcent -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension.appex-Simulated.xcent.der --raw
+
+ProcessProductPackagingDER /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension.appex.xcent /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension.appex.xcent.der (in target 'Poem of the Day WidgetExtension' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    /usr/bin/derq query -f xml -i /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension.appex.xcent -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension.appex.xcent.der --raw
+
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.1.sdk /Users/stephenreitz/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.1-23B77-90cf18a4295e390e64c810bc6bd7acbc.sdkstatcache
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.1.sdk -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.1-23B77-90cf18a4295e390e64c810bc6bd7acbc.sdkstatcache
+
+ProcessProductPackaging /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Poem\ of\ the\ Day.entitlements /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day.app.xcent (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    
+    Entitlements:
+    
+    {
+}
+    
+    builtin-productPackagingUtility /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Poem\ of\ the\ Day.entitlements -entitlements -format xml -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day.app.xcent
+
+Ld /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.appex/Poem\ of\ the\ Day\ WidgetExtension.debug.dylib normal (in target 'Poem of the Day WidgetExtension' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios26.0-simulator -dynamiclib -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.1.sdk -O0 -L/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator -L/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator -F/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator -F/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator -filelist /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Objects-normal/arm64/Poem\ of\ the\ Day\ WidgetExtension.LinkFileList -install_name @rpath/Poem\ of\ the\ Day\ WidgetExtension.debug.dylib -Xlinker -rpath -Xlinker @executable_path/Frameworks -Xlinker -rpath -Xlinker @executable_path/../../Frameworks -dead_strip -Xlinker -object_path_lto -Xlinker /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Objects-normal/arm64/Poem\ of\ the\ Day\ WidgetExtension_lto.o -rdynamic -Xlinker -no_deduplicate -Xlinker -objc_abi_version -Xlinker 2 -Xlinker -dependency_info -Xlinker /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Objects-normal/arm64/Poem\ of\ the\ Day\ WidgetExtension_dependency_info.dat -fapplication-extension -fobjc-link-runtime -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Objects-normal/arm64/Poem_of_the_Day_WidgetExtension.swiftmodule @/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Objects-normal/arm64/Poem_of_the_Day_WidgetExtension-linker-args.resp -Xlinker -alias -Xlinker _NSExtensionMain -Xlinker ___debug_main_executable_dylib_entry_point -framework SwiftUI -framework WidgetKit -Xlinker -no_adhoc_codesign -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.appex/Poem\ of\ the\ Day\ WidgetExtension.debug.dylib
+
+ProcessProductPackaging /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Poem\ of\ the\ Day.entitlements /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day.app-Simulated.xcent (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    
+    Entitlements:
+    
+    {
+    "application-identifier" = "J4QUKKF6V3.Stevereitz.Poem-of-the-Day";
+    "com.apple.security.application-groups" =     (
+        "group.com.stevereitz.poemoftheday"
+    );
+}
+    
+    builtin-productPackagingUtility /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Poem\ of\ the\ Day.entitlements -entitlements -format xml -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day.app-Simulated.xcent
+
+ProcessProductPackagingDER /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day.app-Simulated.xcent /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day.app-Simulated.xcent.der (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    /usr/bin/derq query -f xml -i /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day.app-Simulated.xcent -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day.app-Simulated.xcent.der --raw
+
+ProcessProductPackagingDER /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day.app.xcent /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day.app.xcent.der (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    /usr/bin/derq query -f xml -i /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day.app.xcent -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day.app.xcent.der --raw
+
+ProcessInfoPlistFile /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.appex/Info.plist /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day\ Widget/Info.plist (in target 'Poem of the Day WidgetExtension' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    builtin-infoPlistUtility /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day\ Widget/Info.plist -producttype com.apple.product-type.app-extension -expandbuildsettings -format binary -platform iphonesimulator -additionalcontentfile /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/assetcatalog_generated_info.plist -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.appex/Info.plist
+
+ProcessProductPackaging "" /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayUITests.build/Poem\ of\ the\ DayUITests.xctest-Simulated.xcent (in target 'Poem of the DayUITests' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    
+    Entitlements:
+    
+    {
+    "application-identifier" = "J4QUKKF6V3.Stevereitz.Poem-of-the-DayUITests.xctrunner";
+    "keychain-access-groups" =     (
+        "J4QUKKF6V3.Stevereitz.Poem-of-the-DayUITests.xctrunner"
+    );
+}
+    
+    builtin-productPackagingUtility -entitlements -format xml -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayUITests.build/Poem\ of\ the\ DayUITests.xctest-Simulated.xcent
+
+ProcessProductPackagingDER /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayUITests.build/Poem\ of\ the\ DayUITests.xctest-Simulated.xcent /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayUITests.build/Poem\ of\ the\ DayUITests.xctest-Simulated.xcent.der (in target 'Poem of the DayUITests' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    /usr/bin/derq query -f xml -i /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayUITests.build/Poem\ of\ the\ DayUITests.xctest-Simulated.xcent -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayUITests.build/Poem\ of\ the\ DayUITests.xctest-Simulated.xcent.der --raw
+
+ConstructStubExecutorLinkFileList /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension-ExecutorLinkFileList-normal-arm64.txt (in target 'Poem of the Day WidgetExtension' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    construct-stub-executor-link-file-list /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.appex/Poem\ of\ the\ Day\ WidgetExtension.debug.dylib /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libPreviewsJITStubExecutor_no_swift_entry_point.a /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libPreviewsJITStubExecutor.a --output /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension-ExecutorLinkFileList-normal-arm64.txt
+note: Using stub executor library with Swift entry point. (in target 'Poem of the Day WidgetExtension' from project 'Poem of the Day')
+
+Ld /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.appex/Poem\ of\ the\ Day\ WidgetExtension normal (in target 'Poem of the Day WidgetExtension' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios26.0-simulator -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.1.sdk -O0 -L/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator -F/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator -Xlinker -rpath -Xlinker @executable_path -Xlinker -rpath -Xlinker @executable_path/Frameworks -Xlinker -rpath -Xlinker @executable_path/../../Frameworks -rdynamic -Xlinker -no_deduplicate -Xlinker -objc_abi_version -Xlinker 2 -e ___debug_blank_executor_main -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_dylib -Xlinker /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension-DebugDylibPath-normal-arm64.txt -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_entry -Xlinker /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension-DebugEntryPoint-normal-arm64.txt -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_instlnm -Xlinker /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension-DebugDylibInstallName-normal-arm64.txt -Xlinker -filelist -Xlinker /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension-ExecutorLinkFileList-normal-arm64.txt -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __entitlements -Xlinker /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension.appex-Simulated.xcent -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __ents_der -Xlinker /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension.appex-Simulated.xcent.der /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.appex/Poem\ of\ the\ Day\ WidgetExtension.debug.dylib -Xlinker -no_adhoc_codesign -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.appex/Poem\ of\ the\ Day\ WidgetExtension
+
+ExtractAppIntentsMetadata (in target 'Poem of the Day WidgetExtension' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --module-name Poem_of_the_Day_WidgetExtension --sdk-root /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.1.sdk --xcode-version 17B100 --platform-family iOS --deployment-target 26.0 --bundle-identifier Stevereitz.Poem-of-the-Day.Poem-of-the-Day-Widget --output /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.appex --target-triple arm64-apple-ios26.0-simulator --binary-file /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.appex/Poem\ of\ the\ Day\ WidgetExtension --dependency-file /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Objects-normal/arm64/Poem\ of\ the\ Day\ WidgetExtension_dependency_info.dat --stringsdata-file /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Objects-normal/arm64/Poem\ of\ the\ Day\ WidgetExtension.SwiftFileList --metadata-file-list /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension.DependencyMetadataFileList --static-metadata-file-list /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension.DependencyStaticMetadataFileList --swift-const-vals-list /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Objects-normal/arm64/Poem\ of\ the\ Day\ WidgetExtension.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --validate-assistant-intents --no-app-shortcuts-localization
+2025-11-25 12:16:40.356 appintentsmetadataprocessor[43468:13616271] Starting appintentsmetadataprocessor export
+2025-11-25 12:16:40.553 appintentsmetadataprocessor[43468:13616271] Writing Metadata.appintents
+2025-11-25 12:16:40.553 appintentsmetadataprocessor[43468:13616271] Metadata root: /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem of the Day WidgetExtension.appex/Metadata.appintents
+
+CodeSign /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.appex/Poem\ of\ the\ Day\ WidgetExtension.debug.dylib (in target 'Poem of the Day WidgetExtension' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --timestamp\=none --generate-entitlement-der /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.appex/Poem\ of\ the\ Day\ WidgetExtension.debug.dylib
+
+CodeSign /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.appex (in target 'Poem of the Day WidgetExtension' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --entitlements /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension.appex.xcent --timestamp\=none --generate-entitlement-der /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.appex
+
+Ld /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/Poem\ of\ the\ Day.debug.dylib normal (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios26.0-simulator -dynamiclib -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.1.sdk -O0 -L/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator -L/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator -F/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator -F/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator -filelist /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Objects-normal/arm64/Poem\ of\ the\ Day.LinkFileList -install_name @rpath/Poem\ of\ the\ Day.debug.dylib -Xlinker -rpath -Xlinker @executable_path/Frameworks -dead_strip -Xlinker -object_path_lto -Xlinker /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Objects-normal/arm64/Poem\ of\ the\ Day_lto.o -rdynamic -Xlinker -no_deduplicate -Xlinker -objc_abi_version -Xlinker 2 -Xlinker -dependency_info -Xlinker /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Objects-normal/arm64/Poem\ of\ the\ Day_dependency_info.dat -fobjc-link-runtime -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Objects-normal/arm64/Poem_of_the_Day.swiftmodule @/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Objects-normal/arm64/Poem_of_the_Day-linker-args.resp -Xlinker -alias -Xlinker _main -Xlinker ___debug_main_executable_dylib_entry_point -Xlinker -no_adhoc_codesign -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/Poem\ of\ the\ Day.debug.dylib
+
+ConstructStubExecutorLinkFileList /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day-ExecutorLinkFileList-normal-arm64.txt (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    construct-stub-executor-link-file-list /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/Poem\ of\ the\ Day.debug.dylib /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libPreviewsJITStubExecutor_no_swift_entry_point.a /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libPreviewsJITStubExecutor.a --output /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day-ExecutorLinkFileList-normal-arm64.txt
+note: Using stub executor library with Swift entry point. (in target 'Poem of the Day' from project 'Poem of the Day')
+
+Ld /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/Poem\ of\ the\ Day normal (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios26.0-simulator -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.1.sdk -O0 -L/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator -F/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator -Xlinker -rpath -Xlinker @executable_path -Xlinker -rpath -Xlinker @executable_path/Frameworks -rdynamic -Xlinker -no_deduplicate -Xlinker -objc_abi_version -Xlinker 2 -e ___debug_blank_executor_main -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_dylib -Xlinker /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day-DebugDylibPath-normal-arm64.txt -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_instlnm -Xlinker /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day-DebugDylibInstallName-normal-arm64.txt -Xlinker -filelist -Xlinker /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day-ExecutorLinkFileList-normal-arm64.txt -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __entitlements -Xlinker /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day.app-Simulated.xcent -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __ents_der -Xlinker /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day.app-Simulated.xcent.der /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/Poem\ of\ the\ Day.debug.dylib -Xlinker -no_adhoc_codesign -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/Poem\ of\ the\ Day
+
+Copy /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/PlugIns/Poem\ of\ the\ Day\ WidgetExtension.appex /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.appex (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks -remove-static-executable /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day\ WidgetExtension.appex /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/PlugIns
+
+ProcessInfoPlistFile /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/Info.plist /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/empty-Poem\ of\ the\ Day.plist (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    builtin-infoPlistUtility /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/empty-Poem\ of\ the\ Day.plist -producttype com.apple.product-type.application -genpkginfo /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/PkgInfo -expandbuildsettings -format binary -platform iphonesimulator -additionalcontentfile /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/assetcatalog_generated_info.plist -scanforprivacyfile /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/PlugIns/Poem\ of\ the\ Day\ WidgetExtension.appex -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/Info.plist
+
+ExtractAppIntentsMetadata (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --module-name Poem_of_the_Day --sdk-root /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.1.sdk --xcode-version 17B100 --platform-family iOS --deployment-target 26.0 --bundle-identifier Stevereitz.Poem-of-the-Day --output /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app --target-triple arm64-apple-ios26.0-simulator --binary-file /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/Poem\ of\ the\ Day --dependency-file /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Objects-normal/arm64/Poem\ of\ the\ Day_dependency_info.dat --stringsdata-file /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Objects-normal/arm64/Poem\ of\ the\ Day.SwiftFileList --metadata-file-list /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day.DependencyMetadataFileList --static-metadata-file-list /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day.DependencyStaticMetadataFileList --swift-const-vals-list /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Objects-normal/arm64/Poem\ of\ the\ Day.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --validate-assistant-intents --no-app-shortcuts-localization
+2025-11-25 12:16:41.176 appintentsmetadataprocessor[43480:13616344] Starting appintentsmetadataprocessor export
+2025-11-25 12:16:41.314 appintentsmetadataprocessor[43480:13616344] Extracted no relevant App Intents symbols, skipping writing output
+
+CopySwiftLibs /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    builtin-swiftStdLibTool --copy --verbose --sign - --scan-executable /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/Poem\ of\ the\ Day.debug.dylib --scan-folder /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/Frameworks --scan-folder /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/PlugIns --scan-folder /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/SystemExtensions --scan-folder /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/Extensions --platform iphonesimulator --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/Frameworks --strip-bitcode --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+
+Ld /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/PlugIns/Poem\ of\ the\ DayTests.xctest/Poem\ of\ the\ DayTests normal (in target 'Poem of the DayTests' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios26.0-simulator -bundle -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.1.sdk -O0 -L/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator -L/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator -L/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib -F/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator -F/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator -iframework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks -iframework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.1.sdk/Developer/Library/Frameworks -filelist /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayTests.build/Objects-normal/arm64/Poem\ of\ the\ DayTests.LinkFileList -Xlinker -rpath -Xlinker @loader_path/Frameworks -Xlinker -rpath -Xlinker @executable_path/Frameworks -dead_strip -bundle_loader /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/Poem\ of\ the\ Day -Xlinker -object_path_lto -Xlinker /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayTests.build/Objects-normal/arm64/Poem\ of\ the\ DayTests_lto.o -rdynamic -Xlinker -no_deduplicate -Xlinker -objc_abi_version -Xlinker 2 -Xlinker -dependency_info -Xlinker /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayTests.build/Objects-normal/arm64/Poem\ of\ the\ DayTests_dependency_info.dat -fobjc-link-runtime -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayTests.build/Objects-normal/arm64/Poem_of_the_DayTests.swiftmodule @/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayTests.build/Objects-normal/arm64/Poem_of_the_DayTests-linker-args.resp -Xlinker -needed_framework -Xlinker XCTest -framework XCTest -Xlinker -needed-lXCTestSwiftSupport -lXCTestSwiftSupport /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/Poem\ of\ the\ Day.debug.dylib -Xlinker -no_adhoc_codesign -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/PlugIns/Poem\ of\ the\ DayTests.xctest/Poem\ of\ the\ DayTests
+
+ProcessInfoPlistFile /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/PlugIns/Poem\ of\ the\ DayTests.xctest/Info.plist /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayTests.build/empty-Poem\ of\ the\ DayTests.plist (in target 'Poem of the DayTests' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    builtin-infoPlistUtility /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayTests.build/empty-Poem\ of\ the\ DayTests.plist -producttype com.apple.product-type.bundle.unit-test -expandbuildsettings -format binary -platform iphonesimulator -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/PlugIns/Poem\ of\ the\ DayTests.xctest/Info.plist
+
+CopySwiftLibs /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/PlugIns/Poem\ of\ the\ DayTests.xctest (in target 'Poem of the DayTests' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    builtin-swiftStdLibTool --copy --verbose --sign - --scan-executable /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/PlugIns/Poem\ of\ the\ DayTests.xctest/Poem\ of\ the\ DayTests --scan-folder /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/PlugIns/Poem\ of\ the\ DayTests.xctest/Frameworks --scan-folder /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/PlugIns/Poem\ of\ the\ DayTests.xctest/PlugIns --scan-folder /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/PlugIns/Poem\ of\ the\ DayTests.xctest/SystemExtensions --scan-folder /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/PlugIns/Poem\ of\ the\ DayTests.xctest/Extensions --platform iphonesimulator --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/PlugIns/Poem\ of\ the\ DayTests.xctest/Frameworks --strip-bitcode --scan-executable /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestSwiftSupport.dylib --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayTests.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+
+ExtractAppIntentsMetadata (in target 'Poem of the DayTests' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --module-name Poem_of_the_DayTests --sdk-root /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.1.sdk --xcode-version 17B100 --platform-family iOS --deployment-target 26.0 --bundle-identifier Stevereitz.Poem-of-the-DayTests --output /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/PlugIns/Poem\ of\ the\ DayTests.xctest --target-triple arm64-apple-ios26.0-simulator --binary-file /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/PlugIns/Poem\ of\ the\ DayTests.xctest/Poem\ of\ the\ DayTests --dependency-file /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayTests.build/Objects-normal/arm64/Poem\ of\ the\ DayTests_dependency_info.dat --stringsdata-file /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayTests.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayTests.build/Objects-normal/arm64/Poem\ of\ the\ DayTests.SwiftFileList --metadata-file-list /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayTests.build/Poem\ of\ the\ DayTests.DependencyMetadataFileList --static-metadata-file-list /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayTests.build/Poem\ of\ the\ DayTests.DependencyStaticMetadataFileList --swift-const-vals-list /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayTests.build/Objects-normal/arm64/Poem\ of\ the\ DayTests.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --validate-assistant-intents --no-app-shortcuts-localization
+2025-11-25 12:16:41.710 appintentsmetadataprocessor[43483:13616380] Starting appintentsmetadataprocessor export
+2025-11-25 12:16:41.848 appintentsmetadataprocessor[43483:13616380] Extracted no relevant App Intents symbols, skipping writing output
+
+CodeSign /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/PlugIns/Poem\ of\ the\ DayTests.xctest (in target 'Poem of the DayTests' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --timestamp\=none --generate-entitlement-der /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/PlugIns/Poem\ of\ the\ DayTests.xctest
+
+CodeSign /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/Poem\ of\ the\ Day.debug.dylib (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --timestamp\=none --generate-entitlement-der /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/Poem\ of\ the\ Day.debug.dylib
+
+CodeSign /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/__preview.dylib (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --timestamp\=none --generate-entitlement-der /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/__preview.dylib
+/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem of the Day.app/__preview.dylib: replacing existing signature
+
+CodeSign /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --entitlements /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day.app.xcent --timestamp\=none --generate-entitlement-der /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app
+
+ValidateEmbeddedBinary /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/PlugIns/Poem\ of\ the\ Day\ WidgetExtension.appex (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    /Applications/Xcode.app/Contents/Developer/usr/bin/embeddedBinaryValidationUtility /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/PlugIns/Poem\ of\ the\ Day\ WidgetExtension.appex -signing-cert - -info-plist-path /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app/Info.plist
+
+Validate /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    builtin-validationUtility /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ Day.app -shallow-bundle -infoplist-subpath Info.plist
+
+ProcessInfoPlistFile /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ DayUITests-Runner.app/PlugIns/Poem\ of\ the\ DayUITests.xctest/Info.plist /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayUITests.build/empty-Poem\ of\ the\ DayUITests.plist (in target 'Poem of the DayUITests' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    builtin-infoPlistUtility /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayUITests.build/empty-Poem\ of\ the\ DayUITests.plist -producttype com.apple.product-type.bundle.ui-testing -expandbuildsettings -format binary -platform iphonesimulator -additionalcontentfile /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayUITests.build/ProductTypeInfoPlistAdditions.plist -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ DayUITests-Runner.app/PlugIns/Poem\ of\ the\ DayUITests.xctest/Info.plist
+
+Ld /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ DayUITests-Runner.app/PlugIns/Poem\ of\ the\ DayUITests.xctest/Poem\ of\ the\ DayUITests normal (in target 'Poem of the DayUITests' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios26.0-simulator -bundle -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.1.sdk -O0 -L/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator -L/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator -L/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib -F/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator -F/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator -iframework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks -iframework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.1.sdk/Developer/Library/Frameworks -filelist /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayUITests.build/Objects-normal/arm64/Poem\ of\ the\ DayUITests.LinkFileList -Xlinker -rpath -Xlinker @loader_path/Frameworks -dead_strip -Xlinker -object_path_lto -Xlinker /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayUITests.build/Objects-normal/arm64/Poem\ of\ the\ DayUITests_lto.o -rdynamic -Xlinker -no_deduplicate -Xlinker -objc_abi_version -Xlinker 2 -Xlinker -dependency_info -Xlinker /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayUITests.build/Objects-normal/arm64/Poem\ of\ the\ DayUITests_dependency_info.dat -fobjc-link-runtime -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayUITests.build/Objects-normal/arm64/Poem_of_the_DayUITests.swiftmodule @/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayUITests.build/Objects-normal/arm64/Poem_of_the_DayUITests-linker-args.resp -Xlinker -needed_framework -Xlinker XCTest -framework XCTest -Xlinker -needed-lXCTestSwiftSupport -lXCTestSwiftSupport -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __entitlements -Xlinker /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayUITests.build/Poem\ of\ the\ DayUITests.xctest-Simulated.xcent -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __ents_der -Xlinker /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayUITests.build/Poem\ of\ the\ DayUITests.xctest-Simulated.xcent.der -Xlinker -no_adhoc_codesign -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ DayUITests-Runner.app/PlugIns/Poem\ of\ the\ DayUITests.xctest/Poem\ of\ the\ DayUITests
+
+CopySwiftLibs /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ DayUITests-Runner.app/PlugIns/Poem\ of\ the\ DayUITests.xctest (in target 'Poem of the DayUITests' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    builtin-swiftStdLibTool --copy --verbose --sign - --scan-executable /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ DayUITests-Runner.app/PlugIns/Poem\ of\ the\ DayUITests.xctest/Poem\ of\ the\ DayUITests --scan-folder /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ DayUITests-Runner.app/PlugIns/Poem\ of\ the\ DayUITests.xctest/Frameworks --scan-folder /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ DayUITests-Runner.app/PlugIns/Poem\ of\ the\ DayUITests.xctest/PlugIns --scan-folder /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ DayUITests-Runner.app/PlugIns/Poem\ of\ the\ DayUITests.xctest/SystemExtensions --scan-folder /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ DayUITests-Runner.app/PlugIns/Poem\ of\ the\ DayUITests.xctest/Extensions --platform iphonesimulator --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ DayUITests-Runner.app/PlugIns/Poem\ of\ the\ DayUITests.xctest/Frameworks --strip-bitcode --scan-executable /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestSwiftSupport.dylib --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayUITests.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+
+ExtractAppIntentsMetadata (in target 'Poem of the DayUITests' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --module-name Poem_of_the_DayUITests --sdk-root /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.1.sdk --xcode-version 17B100 --platform-family iOS --deployment-target 26.0 --bundle-identifier Stevereitz.Poem-of-the-DayUITests --output /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ DayUITests-Runner.app/PlugIns/Poem\ of\ the\ DayUITests.xctest --target-triple arm64-apple-ios26.0-simulator --binary-file /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ DayUITests-Runner.app/PlugIns/Poem\ of\ the\ DayUITests.xctest/Poem\ of\ the\ DayUITests --dependency-file /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayUITests.build/Objects-normal/arm64/Poem\ of\ the\ DayUITests_dependency_info.dat --stringsdata-file /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayUITests.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayUITests.build/Objects-normal/arm64/Poem\ of\ the\ DayUITests.SwiftFileList --metadata-file-list /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayUITests.build/Poem\ of\ the\ DayUITests.DependencyMetadataFileList --static-metadata-file-list /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayUITests.build/Poem\ of\ the\ DayUITests.DependencyStaticMetadataFileList --swift-const-vals-list /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphonesimulator/Poem\ of\ the\ DayUITests.build/Objects-normal/arm64/Poem\ of\ the\ DayUITests.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --validate-assistant-intents --no-app-shortcuts-localization
+2025-11-25 12:16:43.130 appintentsmetadataprocessor[43493:13616465] Starting appintentsmetadataprocessor export
+2025-11-25 12:16:43.271 appintentsmetadataprocessor[43493:13616465] Extracted no relevant App Intents symbols, skipping writing output
+
+CodeSign /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ DayUITests-Runner.app/PlugIns/Poem\ of\ the\ DayUITests.xctest (in target 'Poem of the DayUITests' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --timestamp\=none --generate-entitlement-der /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphonesimulator/Poem\ of\ the\ DayUITests-Runner.app/PlugIns/Poem\ of\ the\ DayUITests.xctest
+
+2025-11-25 12:16:55.684507-0500 Poem of the DayUITests-Runner[43692:13618662] [Default] Running tests...
+    t =      nans Interface orientation changed to Portrait
+Test Suite 'Selected tests' started at 2025-11-25 12:16:58.092.
+Test Suite 'Poem of the DayUITests.xctest' started at 2025-11-25 12:16:58.093.
+Test Suite 'AIFeaturesUITests' started at 2025-11-25 12:16:58.093.
+Test Case '-[Poem_of_the_DayUITests.AIFeaturesUITests testAIFeaturesAccessibility]' started.
+    t =     0.00s Start Test at 2025-11-25 12:16:58.094
+    t =     0.20s Set Up
+    t =     0.21s     Open Stevereitz.Poem-of-the-Day
+    t =     0.21s         Launch Stevereitz.Poem-of-the-Day
+    t =     1.26s             Setting up automation session
+    t =     2.03s             Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     4.62s Checking `Expect predicate `exists == 1` for object "poem_title" StaticText`
+    t =     4.62s     Checking existence of `"poem_title" StaticText`
+    t =     4.70s Tap "top_vibe_poem_button" Button
+    t =     4.70s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     4.70s     Find the "top_vibe_poem_button" Button
+    t =     4.72s     Check for interrupting elements affecting "top_vibe_poem_button" Button
+    t =     4.75s     Synthesize event
+    t =     5.15s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     5.98s Waiting 3.0s for "current_vibe" StaticText to exist
+    t =     7.06s     Checking `Expect predicate `existsNoRetry == 1` for object "current_vibe" StaticText`
+    t =     7.06s         Checking existence of `"current_vibe" StaticText`
+    t =     7.12s Checking existence of `"generate_vibe_poem_button" Button`
+    t =     7.17s Tap "Cancel" Button
+    t =     7.17s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     7.18s     Find the "Cancel" Button
+    t =     7.21s     Check for interrupting elements affecting "Cancel" Button
+    t =     7.24s     Synthesize event
+    t =     7.53s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     8.19s Waiting 3.0s for "current_vibe" StaticText to not exist
+    t =     9.25s     Checking `Expect predicate `existsNoRetry == 0` for object "current_vibe" StaticText`
+    t =     9.25s         Checking existence of `"current_vibe" StaticText`
+    t =     9.29s Tap "top_custom_poem_button" Button
+    t =     9.29s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     9.29s     Find the "top_custom_poem_button" Button
+    t =     9.36s     Check for interrupting elements affecting "top_custom_poem_button" Button
+    t =     9.39s     Synthesize event
+    t =     9.67s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =    10.40s Waiting 3.0s for "custom_prompt_text_field" TextView to exist
+    t =    11.48s     Checking `Expect predicate `existsNoRetry == 1` for object "custom_prompt_text_field" TextView`
+    t =    11.48s         Checking existence of `"custom_prompt_text_field" TextView`
+    t =    11.54s Checking existence of `"custom_prompt_text_field" TextView`
+    t =    11.57s Checking existence of `"generate_custom_poem_button" Button`
+    t =    11.60s Tap "Cancel" Button
+    t =    11.60s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =    11.60s     Find the "Cancel" Button
+    t =    11.63s     Check for interrupting elements affecting "Cancel" Button
+    t =    11.66s     Synthesize event
+    t =    11.95s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =    12.60s Waiting 3.0s for "custom_prompt_text_field" TextView to not exist
+    t =    13.68s     Checking `Expect predicate `existsNoRetry == 0` for object "custom_prompt_text_field" TextView`
+    t =    13.68s         Checking existence of `"custom_prompt_text_field" TextView`
+    t =    13.71s Tear Down
+Test Case '-[Poem_of_the_DayUITests.AIFeaturesUITests testAIFeaturesAccessibility]' passed (13.975 seconds).
+Test Case '-[Poem_of_the_DayUITests.AIFeaturesUITests testAIFeaturesWhenUnavailable]' started.
+    t =     0.00s Start Test at 2025-11-25 12:17:12.069
+    t =     0.02s Set Up
+    t =     0.02s     Open Stevereitz.Poem-of-the-Day
+    t =     0.02s         Launch Stevereitz.Poem-of-the-Day
+    t =     0.02s             Terminate Stevereitz.Poem-of-the-Day:43722
+    t =     1.26s             Setting up automation session
+    t =     1.88s             Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     3.18s Terminate Stevereitz.Poem-of-the-Day:43750
+    t =     4.25s Open Stevereitz.Poem-of-the-Day
+    t =     4.26s     Launch Stevereitz.Poem-of-the-Day
+    t =     4.47s         Setting up automation session
+    t =     5.04s         Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     7.38s Checking `Expect predicate `exists == 1` for object "poem_title" StaticText`
+    t =     7.38s     Checking existence of `"poem_title" StaticText`
+    t =     7.44s Checking existence of `"vibe_generation_button" Button`
+    t =     7.47s Checking existence of `"custom_prompt_button" Button`
+    t =     7.49s Tear Down
+Test Case '-[Poem_of_the_DayUITests.AIFeaturesUITests testAIFeaturesWhenUnavailable]' passed (7.742 seconds).
+Test Case '-[Poem_of_the_DayUITests.AIFeaturesUITests testAIGeneratedPoemFavoriting]' started.
+    t =     0.00s Start Test at 2025-11-25 12:17:19.811
+    t =     0.02s Set Up
+    t =     0.03s     Open Stevereitz.Poem-of-the-Day
+    t =     0.03s         Launch Stevereitz.Poem-of-the-Day
+    t =     0.03s             Terminate Stevereitz.Poem-of-the-Day:43758
+    t =     1.34s             Setting up automation session
+    t =     1.92s             Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     4.25s Checking `Expect predicate `exists == 1` for object "poem_title" StaticText`
+    t =     4.25s     Checking existence of `"poem_title" StaticText`
+    t =     4.32s Tap "top_vibe_poem_button" Button
+    t =     4.32s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     4.32s     Find the "top_vibe_poem_button" Button
+    t =     4.35s     Check for interrupting elements affecting "top_vibe_poem_button" Button
+    t =     4.36s     Synthesize event
+    t =     4.66s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     5.33s Waiting 3.0s for "current_vibe" StaticText to exist
+    t =     6.41s     Checking `Expect predicate `existsNoRetry == 1` for object "current_vibe" StaticText`
+    t =     6.41s         Checking existence of `"current_vibe" StaticText`
+    t =     6.47s Tap "generate_vibe_poem_button" Button
+    t =     6.47s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     6.47s     Find the "generate_vibe_poem_button" Button
+    t =     6.52s     Check for interrupting elements affecting "generate_vibe_poem_button" Button
+    t =     6.55s     Synthesize event
+    t =     6.84s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     7.22s Waiting 8.0s for "current_vibe" StaticText to not exist
+    t =     8.30s     Checking `Expect predicate `existsNoRetry == 0` for object "current_vibe" StaticText`
+    t =     8.30s         Checking existence of `"current_vibe" StaticText`
+    t =     8.32s Checking existence of `"poem_title" StaticText`
+    t =     8.34s Checking existence of `"poem_content" StaticText`
+    t =     8.36s Checking existence of `"poem_author" StaticText`
+    t =     8.38s Checking existence of `"favorite_button" Button`
+    t =     8.41s Tap "favorite_button" Button
+    t =     8.41s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     8.41s     Find the "favorite_button" Button
+    t =     8.44s     Check for interrupting elements affecting "favorite_button" Button
+    t =     8.46s     Synthesize event
+    t =     8.74s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     8.74s Checking existence of `"unfavorite_button" Button`
+    t =     8.78s Tear Down
+Test Case '-[Poem_of_the_DayUITests.AIFeaturesUITests testAIGeneratedPoemFavoriting]' passed (9.019 seconds).
+Test Case '-[Poem_of_the_DayUITests.AIFeaturesUITests testAIGeneratedPoemSharing]' started.
+    t =     0.00s Start Test at 2025-11-25 12:17:28.830
+    t =     0.02s Set Up
+    t =     0.02s     Open Stevereitz.Poem-of-the-Day
+    t =     0.02s         Launch Stevereitz.Poem-of-the-Day
+    t =     0.02s             Terminate Stevereitz.Poem-of-the-Day:43766
+    t =     1.32s             Setting up automation session
+    t =     1.92s             Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     4.27s Checking `Expect predicate `exists == 1` for object "poem_title" StaticText`
+    t =     4.28s     Checking existence of `"poem_title" StaticText`
+    t =     4.34s Tap "top_custom_poem_button" Button
+    t =     4.34s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     4.34s     Find the "top_custom_poem_button" Button
+    t =     4.36s     Check for interrupting elements affecting "top_custom_poem_button" Button
+    t =     4.38s     Synthesize event
+    t =     4.68s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     5.41s Waiting 3.0s for "custom_prompt_text_field" TextView to exist
+    t =     6.49s     Checking `Expect predicate `existsNoRetry == 1` for object "custom_prompt_text_field" TextView`
+    t =     6.49s         Checking existence of `"custom_prompt_text_field" TextView`
+    t =     6.53s Tap "custom_prompt_text_field" TextView
+    t =     6.53s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     6.53s     Find the "custom_prompt_text_field" TextView
+    t =     6.56s     Check for interrupting elements affecting "custom_prompt_text_field" TextView
+    t =     6.59s     Synthesize event
+    t =     6.88s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     7.02s Type 'A poem about frien...' into "custom_prompt_text_field" TextView
+    t =     7.03s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     7.40s     Find the "custom_prompt_text_field" TextView
+    t =     7.47s     Check for interrupting elements affecting "custom_prompt_text_field" TextView
+    t =     7.50s     Synthesize event
+    t =     8.09s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     8.09s Tap "generate_custom_poem_button" Button
+    t =     8.09s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     8.09s     Find the "generate_custom_poem_button" Button
+    t =     8.16s     Check for interrupting elements affecting "generate_custom_poem_button" Button
+    t =     8.19s     Synthesize event
+    t =     8.48s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     8.85s Waiting 8.0s for "custom_prompt_text_field" TextView to not exist
+    t =     9.90s     Checking `Expect predicate `existsNoRetry == 0` for object "custom_prompt_text_field" TextView`
+    t =     9.90s         Checking existence of `"custom_prompt_text_field" TextView`
+    t =     9.94s Checking existence of `"poem_title" StaticText`
+    t =     9.96s Checking existence of `"poem_content" StaticText`
+    t =     9.98s Checking existence of `"poem_author" StaticText`
+    t =    10.00s Checking existence of `"share_button" Button`
+    t =    10.03s Tap "share_button" Button
+    t =    10.03s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =    10.03s     Find the "share_button" Button
+    t =    10.06s     Check for interrupting elements affecting "share_button" Button
+    t =    10.08s     Synthesize event
+    t =    10.36s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =    10.37s Waiting 3.0s for Sheet (First Match) to exist
+    t =    11.41s     Checking `Expect predicate `existsNoRetry == 1` for object Sheet (First Match)`
+    t =    11.41s         Checking existence of `Sheet (First Match)`
+    t =    11.48s         Capturing element debug description
+    t =    12.44s     Checking `Expect predicate `existsNoRetry == 1` for object Sheet (First Match)`
+    t =    12.44s         Checking existence of `Sheet (First Match)`
+    t =    12.50s         Capturing element debug description
+    t =    13.37s     Checking `Expect predicate `existsNoRetry == 1` for object Sheet (First Match)`
+    t =    13.37s         Checking existence of `Sheet (First Match)`
+    t =    13.43s         Capturing element debug description
+    t =    13.43s     Checking existence of `Sheet (First Match)`
+    t =    13.47s Collecting debug information to assist test failure triage
+    t =    13.47s     Requesting snapshot of accessibility hierarchy for app with pid 43780
+    t =    13.53s Tear Down
+Test Case '-[Poem_of_the_DayUITests.AIFeaturesUITests testAIGeneratedPoemSharing]' passed (13.776 seconds).
+Test Case '-[Poem_of_the_DayUITests.AIFeaturesUITests testAIGenerationErrorHandling]' started.
+    t =     0.00s Start Test at 2025-11-25 12:17:42.608
+    t =     0.03s Set Up
+    t =     0.03s     Open Stevereitz.Poem-of-the-Day
+    t =     0.03s         Launch Stevereitz.Poem-of-the-Day
+    t =     0.03s             Terminate Stevereitz.Poem-of-the-Day:43780
+    t =     1.25s             Setting up automation session
+    t =     1.85s             Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     3.12s Terminate Stevereitz.Poem-of-the-Day:43794
+    t =     4.21s Open Stevereitz.Poem-of-the-Day
+    t =     4.21s     Launch Stevereitz.Poem-of-the-Day
+    t =     4.43s         Setting up automation session
+    t =     5.00s         Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     7.33s Checking `Expect predicate `exists == 1` for object "poem_title" StaticText`
+    t =     7.33s     Checking existence of `"poem_title" StaticText`
+    t =     7.40s Tap "top_vibe_poem_button" Button
+    t =     7.40s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     7.41s     Find the "top_vibe_poem_button" Button
+    t =     7.43s     Check for interrupting elements affecting "top_vibe_poem_button" Button
+    t =     7.45s     Synthesize event
+    t =     7.74s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     8.47s Waiting 3.0s for "current_vibe" StaticText to exist
+    t =     9.54s     Checking `Expect predicate `existsNoRetry == 1` for object "current_vibe" StaticText`
+    t =     9.54s         Checking existence of `"current_vibe" StaticText`
+    t =     9.60s Tap "generate_vibe_poem_button" Button
+    t =     9.60s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     9.60s     Find the "generate_vibe_poem_button" Button
+    t =     9.65s     Check for interrupting elements affecting "generate_vibe_poem_button" Button
+    t =     9.68s     Synthesize event
+    t =     9.97s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =    10.36s Waiting 5.0s for Alert (First Match) to exist
+    t =    11.43s     Checking `Expect predicate `existsNoRetry == 1` for object Alert (First Match)`
+    t =    11.43s         Checking existence of `Alert (First Match)`
+    t =    11.44s Checking existence of `"OK" Button`
+    t =    11.46s Tap "OK" Button
+    t =    11.46s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =    11.46s     Find the "OK" Button
+    t =    11.48s     Check for interrupting elements affecting "OK" Button
+    t =    11.51s     Synthesize event
+    t =    11.80s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =    12.04s Tap "Cancel" Button
+    t =    12.04s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =    12.04s     Find the "Cancel" Button
+    t =    13.07s         Find the "Cancel" Button (retry 1)
+    t =    14.09s         Find the "Cancel" Button (retry 2)
+    t =    14.13s Requesting snapshot of accessibility hierarchy for app with pid 43797
+/Users/stephenreitz/Desktop/Swift-2048-test/Poem of the Day/Poem of the DayUITests/AIFeaturesUITests.swift:199: error: -[Poem_of_the_DayUITests.AIFeaturesUITests testAIGenerationErrorHandling] : Failed to tap "Cancel" Button: No matches found for Elements matching predicate '"Cancel" IN identifiers' from input {(
+    Button, identifier: 'favorites_button', label: 'Favorite Poems',
+    Button, identifier: 'menu_button', label: 'Menu',
+    Button,
+    Button, identifier: 'top_vibe_poem_button', label: 'Generate vibe-based poem',
+    Button, identifier: 'top_custom_poem_button', label: 'Create custom poem',
+    Button, identifier: 'refresh_button', label: 'Get a new poem',
+    Button, identifier: 'vibe_poem_button', label: 'Generate AI poem based on today's news vibe',
+    Button, identifier: 'custom_poem_button', label: 'Create custom AI poem',
+    Button, identifier: 'favorite_button', label: 'Add to favorites',
+    Button, identifier: 'share_button', label: 'Share poem'
+)}
+Possibly caused by runtime issues:
+Automation type mismatch: computed Button from legacy attributes vs PopUpButton from modern attribute. Input attributes and values: {
+    "XC_kAXXCAttributeAutomationType" = 14;
+    "XC_kAXXCAttributeElementBaseType" = UIResponder;
+    "XC_kAXXCAttributeElementType" = "SwiftUI.AccessibilityNode";
+    "XC_kAXXCAttributeTraits" = 1108101562369;
+}
+See test report attachments for more detail.
+    t =    14.43s Tear Down
+Test Case '-[Poem_of_the_DayUITests.AIFeaturesUITests testAIGenerationErrorHandling]' failed (14.673 seconds).
+Test Case '-[Poem_of_the_DayUITests.AIFeaturesUITests testAIGenerationPerformance]' started.
+    t =     0.00s Start Test at 2025-11-25 12:17:57.282
+    t =     0.02s Set Up
+    t =     0.03s     Open Stevereitz.Poem-of-the-Day
+    t =     0.03s         Launch Stevereitz.Poem-of-the-Day
+    t =     0.03s             Terminate Stevereitz.Poem-of-the-Day:43797
+    t =     1.31s             Setting up automation session
+    t =     1.90s             Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     4.30s Checking `Expect predicate `exists == 1` for object "poem_title" StaticText`
+    t =     4.30s     Checking existence of `"poem_title" StaticText`
+    t =     4.37s Tap "top_vibe_poem_button" Button
+    t =     4.37s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     4.37s     Find the "top_vibe_poem_button" Button
+    t =     4.39s     Check for interrupting elements affecting "top_vibe_poem_button" Button
+    t =     4.41s     Synthesize event
+    t =     4.71s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     5.55s Waiting 3.0s for "current_vibe" StaticText to exist
+    t =     6.58s     Checking `Expect predicate `existsNoRetry == 1` for object "current_vibe" StaticText`
+    t =     6.58s         Checking existence of `"current_vibe" StaticText`
+    t =     6.64s Tap "generate_vibe_poem_button" Button
+    t =     6.64s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     6.64s     Find the "generate_vibe_poem_button" Button
+    t =     6.70s     Check for interrupting elements affecting "generate_vibe_poem_button" Button
+    t =     6.73s     Synthesize event
+    t =     7.02s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     7.40s Waiting 10.0s for "current_vibe" StaticText to not exist
+    t =     8.46s     Checking `Expect predicate `existsNoRetry == 0` for object "current_vibe" StaticText`
+    t =     8.46s         Checking existence of `"current_vibe" StaticText`
+    t =     8.48s Checking existence of `"poem_title" StaticText`
+    t =     8.50s Checking existence of `"poem_content" StaticText`
+    t =     8.52s Checking existence of `"poem_author" StaticText`
+    t =     8.54s Tear Down
+Test Case '-[Poem_of_the_DayUITests.AIFeaturesUITests testAIGenerationPerformance]' passed (8.757 seconds).
+Test Case '-[Poem_of_the_DayUITests.AIFeaturesUITests testCustomPromptPoemGeneration]' started.
+    t =     0.00s Start Test at 2025-11-25 12:18:06.040
+    t =     0.02s Set Up
+    t =     0.02s     Open Stevereitz.Poem-of-the-Day
+    t =     0.02s         Launch Stevereitz.Poem-of-the-Day
+    t =     0.02s             Terminate Stevereitz.Poem-of-the-Day:43810
+    t =     1.30s             Setting up automation session
+    t =     1.85s             Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     4.18s Checking `Expect predicate `exists == 1` for object "poem_title" StaticText`
+    t =     4.18s     Checking existence of `"poem_title" StaticText`
+    t =     4.25s Tap "top_custom_poem_button" Button
+    t =     4.25s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     4.25s     Find the "top_custom_poem_button" Button
+    t =     4.27s     Check for interrupting elements affecting "top_custom_poem_button" Button
+    t =     4.29s     Synthesize event
+    t =     4.59s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     5.21s Waiting 3.0s for "custom_prompt_text_field" TextView to exist
+    t =     6.27s     Checking `Expect predicate `existsNoRetry == 1` for object "custom_prompt_text_field" TextView`
+    t =     6.27s         Checking existence of `"custom_prompt_text_field" TextView`
+    t =     6.33s Waiting 2.0s for "custom_prompt_text_field" TextView to exist
+    t =     7.35s     Checking `Expect predicate `existsNoRetry == 1` for object "custom_prompt_text_field" TextView`
+    t =     7.35s         Checking existence of `"custom_prompt_text_field" TextView`
+    t =     7.40s Tap "custom_prompt_text_field" TextView
+    t =     7.40s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     7.40s     Find the "custom_prompt_text_field" TextView
+    t =     7.44s     Check for interrupting elements affecting "custom_prompt_text_field" TextView
+    t =     7.46s     Synthesize event
+    t =     7.75s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     8.11s Type 'Write a poem about...' into "custom_prompt_text_field" TextView
+    t =     8.11s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     8.11s     Find the "custom_prompt_text_field" TextView
+    t =     8.18s     Check for interrupting elements affecting "custom_prompt_text_field" TextView
+    t =     8.22s     Synthesize event
+    t =     9.07s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     9.07s Waiting 2.0s for "generate_custom_poem_button" Button to exist
+    t =    10.13s     Checking `Expect predicate `existsNoRetry == 1` for object "generate_custom_poem_button" Button`
+    t =    10.13s         Checking existence of `"generate_custom_poem_button" Button`
+    t =    10.21s Find the "generate_custom_poem_button" Button
+    t =    10.27s Tap "generate_custom_poem_button" Button
+    t =    10.27s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =    10.27s     Find the "generate_custom_poem_button" Button
+    t =    10.33s     Check for interrupting elements affecting "generate_custom_poem_button" Button
+    t =    10.37s     Synthesize event
+    t =    10.66s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =    11.03s Waiting 8.0s for "custom_prompt_text_field" TextView to not exist
+    t =    12.08s     Checking `Expect predicate `existsNoRetry == 0` for object "custom_prompt_text_field" TextView`
+    t =    12.08s         Checking existence of `"custom_prompt_text_field" TextView`
+    t =    13.19s Checking `Expect predicate `exists == 1` for object "poem_title" StaticText`
+    t =    13.19s     Checking existence of `"poem_title" StaticText`
+    t =    13.23s Checking existence of `"poem_title" StaticText`
+    t =    13.25s Checking existence of `"poem_content" StaticText`
+    t =    13.27s Checking existence of `"poem_author" StaticText`
+    t =    13.29s Tear Down
+Test Case '-[Poem_of_the_DayUITests.AIFeaturesUITests testCustomPromptPoemGeneration]' passed (13.550 seconds).
+Test Case '-[Poem_of_the_DayUITests.AIFeaturesUITests testCustomPromptWithEmptyInput]' started.
+    t =     0.00s Start Test at 2025-11-25 12:18:19.590
+    t =     0.02s Set Up
+    t =     0.02s     Open Stevereitz.Poem-of-the-Day
+    t =     0.02s         Launch Stevereitz.Poem-of-the-Day
+    t =     0.02s             Terminate Stevereitz.Poem-of-the-Day:43815
+    t =     1.31s             Setting up automation session
+    t =     1.89s             Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     4.25s Checking `Expect predicate `exists == 1` for object "poem_title" StaticText`
+    t =     4.25s     Checking existence of `"poem_title" StaticText`
+    t =     4.31s Tap "top_custom_poem_button" Button
+    t =     4.31s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     4.31s     Find the "top_custom_poem_button" Button
+    t =     4.33s     Check for interrupting elements affecting "top_custom_poem_button" Button
+    t =     4.35s     Synthesize event
+    t =     4.65s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     5.41s Waiting 3.0s for "custom_prompt_text_field" TextView to exist
+    t =     6.47s     Checking `Expect predicate `existsNoRetry == 1` for object "custom_prompt_text_field" TextView`
+    t =     6.47s         Checking existence of `"custom_prompt_text_field" TextView`
+    t =     6.53s Waiting 2.0s for "generate_custom_poem_button" Button to exist
+    t =     7.58s     Checking `Expect predicate `existsNoRetry == 1` for object "generate_custom_poem_button" Button`
+    t =     7.58s         Checking existence of `"generate_custom_poem_button" Button`
+    t =     7.64s Find the "generate_custom_poem_button" Button
+    t =     7.67s Tap "Cancel" Button
+    t =     7.67s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     7.67s     Find the "Cancel" Button
+    t =     7.70s     Check for interrupting elements affecting "Cancel" Button
+    t =     7.73s     Synthesize event
+    t =     8.02s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     8.67s Waiting 3.0s for "custom_prompt_text_field" TextView to not exist
+    t =     9.72s     Checking `Expect predicate `existsNoRetry == 0` for object "custom_prompt_text_field" TextView`
+    t =     9.72s         Checking existence of `"custom_prompt_text_field" TextView`
+    t =     9.77s Tear Down
+Test Case '-[Poem_of_the_DayUITests.AIFeaturesUITests testCustomPromptWithEmptyInput]' passed (9.997 seconds).
+Test Case '-[Poem_of_the_DayUITests.AIFeaturesUITests testRepeatedGenerationProducesNewContent]' started.
+    t =     0.00s Start Test at 2025-11-25 12:18:29.588
+    t =     0.02s Set Up
+    t =     0.03s     Open Stevereitz.Poem-of-the-Day
+    t =     0.03s         Launch Stevereitz.Poem-of-the-Day
+    t =     0.03s             Terminate Stevereitz.Poem-of-the-Day:43831
+    t =     1.31s             Setting up automation session
+    t =     1.90s             Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     4.26s Checking `Expect predicate `exists == 1` for object "poem_title" StaticText`
+    t =     4.26s     Checking existence of `"poem_title" StaticText`
+    t =     4.33s Tap "top_vibe_poem_button" Button
+    t =     4.33s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     4.34s     Find the "top_vibe_poem_button" Button
+    t =     4.36s     Check for interrupting elements affecting "top_vibe_poem_button" Button
+    t =     4.38s     Synthesize event
+    t =     4.67s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     5.49s Waiting 3.0s for "current_vibe" StaticText to exist
+    t =     6.55s     Checking `Expect predicate `existsNoRetry == 1` for object "current_vibe" StaticText`
+    t =     6.55s         Checking existence of `"current_vibe" StaticText`
+    t =     6.61s Tap "generate_vibe_poem_button" Button
+    t =     6.61s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     6.61s     Find the "generate_vibe_poem_button" Button
+    t =     6.66s     Check for interrupting elements affecting "generate_vibe_poem_button" Button
+    t =     6.69s     Synthesize event
+    t =     6.97s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     7.33s Waiting 8.0s for "current_vibe" StaticText to not exist
+    t =     8.38s     Checking `Expect predicate `existsNoRetry == 0` for object "current_vibe" StaticText`
+    t =     8.38s         Checking existence of `"current_vibe" StaticText`
+    t =     9.46s Checking `Expect predicate `exists == 1` for object "poem_title" StaticText`
+    t =     9.46s     Checking existence of `"poem_title" StaticText`
+    t =     9.49s Find the "poem_title" StaticText
+    t =     9.52s Find the "poem_author" StaticText
+    t =     9.54s Tap "top_vibe_poem_button" Button
+    t =     9.54s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     9.54s     Find the "top_vibe_poem_button" Button
+    t =     9.56s     Check for interrupting elements affecting "top_vibe_poem_button" Button
+    t =     9.58s     Synthesize event
+    t =     9.87s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =    10.49s Waiting 3.0s for "current_vibe" StaticText to exist
+    t =    11.54s     Checking `Expect predicate `existsNoRetry == 1` for object "current_vibe" StaticText`
+    t =    11.54s         Checking existence of `"current_vibe" StaticText`
+    t =    11.60s Tap "generate_vibe_poem_button" Button
+    t =    11.60s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =    11.60s     Find the "generate_vibe_poem_button" Button
+    t =    11.65s     Check for interrupting elements affecting "generate_vibe_poem_button" Button
+    t =    11.68s     Synthesize event
+    t =    11.97s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =    12.33s Waiting 8.0s for "current_vibe" StaticText to not exist
+    t =    13.39s     Checking `Expect predicate `existsNoRetry == 0` for object "current_vibe" StaticText`
+    t =    13.39s         Checking existence of `"current_vibe" StaticText`
+    t =    14.45s Checking `Expect predicate `exists == 1` for object "poem_title" StaticText`
+    t =    14.45s     Checking existence of `"poem_title" StaticText`
+    t =    14.48s Find the "poem_title" StaticText
+    t =    14.50s Find the "poem_author" StaticText
+    t =    14.52s Tear Down
+Test Case '-[Poem_of_the_DayUITests.AIFeaturesUITests testRepeatedGenerationProducesNewContent]' passed (14.794 seconds).
+Test Case '-[Poem_of_the_DayUITests.AIFeaturesUITests testVibeBasedPoemGeneration]' started.
+    t =     0.00s Start Test at 2025-11-25 12:18:44.383
+    t =     0.02s Set Up
+    t =     0.02s     Open Stevereitz.Poem-of-the-Day
+    t =     0.02s         Launch Stevereitz.Poem-of-the-Day
+    t =     0.02s             Terminate Stevereitz.Poem-of-the-Day:43851
+    t =     1.30s             Setting up automation session
+    t =     1.88s             Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     4.25s Checking `Expect predicate `exists == 1` for object "poem_title" StaticText`
+    t =     4.25s     Checking existence of `"poem_title" StaticText`
+    t =     4.33s Tap "top_vibe_poem_button" Button
+    t =     4.33s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     4.33s     Find the "top_vibe_poem_button" Button
+    t =     4.35s     Check for interrupting elements affecting "top_vibe_poem_button" Button
+    t =     4.37s     Synthesize event
+    t =     4.66s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     5.45s Waiting 3.0s for "current_vibe" StaticText to exist
+    t =     6.49s     Checking `Expect predicate `existsNoRetry == 1` for object "current_vibe" StaticText`
+    t =     6.49s         Checking existence of `"current_vibe" StaticText`
+    t =     6.55s Waiting 2.0s for "generate_vibe_poem_button" Button to exist
+    t =     7.62s     Checking `Expect predicate `existsNoRetry == 1` for object "generate_vibe_poem_button" Button`
+    t =     7.62s         Checking existence of `"generate_vibe_poem_button" Button`
+    t =     7.68s Tap "generate_vibe_poem_button" Button
+    t =     7.68s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     7.68s     Find the "generate_vibe_poem_button" Button
+    t =     7.73s     Check for interrupting elements affecting "generate_vibe_poem_button" Button
+    t =     7.76s     Synthesize event
+    t =     8.05s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     8.43s Waiting 8.0s for "current_vibe" StaticText to not exist
+    t =     9.48s     Checking `Expect predicate `existsNoRetry == 0` for object "current_vibe" StaticText`
+    t =     9.48s         Checking existence of `"current_vibe" StaticText`
+    t =    10.54s Checking `Expect predicate `exists == 1` for object "poem_title" StaticText`
+    t =    10.54s     Checking existence of `"poem_title" StaticText`
+    t =    10.57s Checking existence of `"poem_title" StaticText`
+    t =    10.60s Checking existence of `"poem_content" StaticText`
+    t =    10.62s Checking existence of `"poem_author" StaticText`
+    t =    10.64s Tear Down
+Test Case '-[Poem_of_the_DayUITests.AIFeaturesUITests testVibeBasedPoemGeneration]' passed (10.865 seconds).
+Test Case '-[Poem_of_the_DayUITests.AIFeaturesUITests testVibeGenerationCancel]' started.
+    t =     0.00s Start Test at 2025-11-25 12:18:55.249
+    t =     0.02s Set Up
+    t =     0.02s     Open Stevereitz.Poem-of-the-Day
+    t =     0.02s         Launch Stevereitz.Poem-of-the-Day
+    t =     0.02s             Terminate Stevereitz.Poem-of-the-Day:43882
+    t =     1.31s             Setting up automation session
+    t =     1.89s             Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     4.24s Checking `Expect predicate `exists == 1` for object "poem_title" StaticText`
+    t =     4.24s     Checking existence of `"poem_title" StaticText`
+    t =     4.31s Tap "top_vibe_poem_button" Button
+    t =     4.31s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     4.31s     Find the "top_vibe_poem_button" Button
+    t =     4.33s     Check for interrupting elements affecting "top_vibe_poem_button" Button
+    t =     4.35s     Synthesize event
+    t =     4.65s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     5.33s Waiting 3.0s for "current_vibe" StaticText to exist
+    t =     6.39s     Checking `Expect predicate `existsNoRetry == 1` for object "current_vibe" StaticText`
+    t =     6.39s         Checking existence of `"current_vibe" StaticText`
+    t =     6.43s Waiting 2.0s for "Cancel" Button to exist
+    t =     7.49s     Checking `Expect predicate `existsNoRetry == 1` for object "Cancel" Button`
+    t =     7.49s         Checking existence of `"Cancel" Button`
+    t =     7.54s Tap "Cancel" Button
+    t =     7.54s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     7.54s     Find the "Cancel" Button
+    t =     7.58s     Check for interrupting elements affecting "Cancel" Button
+    t =     7.61s     Synthesize event
+    t =     7.90s     Wait for Stevereitz.Poem-of-the-Day to idle
+    t =     8.65s Waiting 3.0s for "current_vibe" StaticText to not exist
+    t =     9.69s     Checking `Expect predicate `existsNoRetry == 0` for object "current_vibe" StaticText`
+    t =     9.69s         Checking existence of `"current_vibe" StaticText`
+    t =    10.80s Checking `Expect predicate `exists == 1` for object "poem_title" StaticText`
+    t =    10.81s     Checking existence of `"poem_title" StaticText`
+    t =    10.84s Tear Down
+Test Case '-[Poem_of_the_DayUITests.AIFeaturesUITests testVibeGenerationCancel]' passed (11.069 seconds).
+Test Suite 'AIFeaturesUITests' failed at 2025-11-25 12:19:06.318.
+	 Executed 11 tests, with 1 failure (0 unexpected) in 128.218 (128.226) seconds
+Test Suite 'Poem of the DayUITests.xctest' failed at 2025-11-25 12:19:06.319.
+	 Executed 11 tests, with 1 failure (0 unexpected) in 128.218 (128.226) seconds
+Test Suite 'Selected tests' failed at 2025-11-25 12:19:06.320.
+	 Executed 11 tests, with 1 failure (0 unexpected) in 128.218 (128.227) seconds
+2025-11-25 12:19:18.316 xcodebuild[43427:13615836] [MT] IDETestOperationsObserverDebug: 154.985 elapsed -- Testing started completed.
+2025-11-25 12:19:18.316 xcodebuild[43427:13615836] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2025-11-25 12:19:18.316 xcodebuild[43427:13615836] [MT] IDETestOperationsObserverDebug: 154.985 sec, +154.985 sec -- end
+
+Test session results, code coverage, and logs:
+	/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Logs/Test/Test-Poem of the Day-2025.11.25_12-16-35--0500.xcresult
+
+** TEST FAILED **
+
+Testing started

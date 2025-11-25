@@ -35,7 +35,7 @@ final class AIFeaturesUITests: XCTestCase {
         _ = mainPage.tapVibeGenerationButton()
         
         // Wait for vibe generation sheet to appear
-        let vibeSheet = app.sheets.firstMatch
+        let vibeSheet = mainPage.vibeGenerationSheet
         XCTAssertTrue(vibeSheet.waitForExistence(timeout: 3))
         
         // Find and tap generate button using accessibility identifier
@@ -59,17 +59,52 @@ final class AIFeaturesUITests: XCTestCase {
         // Open vibe generation sheet
         mainPage.tapVibeGenerationButton()
         
-        let vibeSheet = app.sheets.firstMatch
+        let vibeSheet = mainPage.vibeGenerationSheet
         XCTAssertTrue(vibeSheet.waitForExistence(timeout: 3))
         
         // Cancel the sheet
-        let cancelButton = app.buttons["Cancel"]
+        let cancelButton = app.buttons["cancel_button"]
         XCTAssertTrue(cancelButton.waitForExistence(timeout: 2))
         cancelButton.tap()
         
         // Verify sheet is dismissed and we're back on main page
         XCTAssertTrue(vibeSheet.waitForNonExistence(timeout: 3))
         XCTAssertTrue(mainPage.waitForPoemToLoad())
+    }
+    
+    func testRepeatedGenerationProducesNewContent() throws {
+        let mainPage = PageFactory.mainContentPage(app: app)
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
+        
+        // 1. Generate first poem
+        mainPage.tapVibeGenerationButton()
+        let vibeSheet = mainPage.vibeGenerationSheet
+        XCTAssertTrue(vibeSheet.waitForExistence(timeout: 3))
+        
+        let generateButton = app.buttons.matching(identifier: "generate_vibe_poem_button").firstMatch
+        generateButton.tap()
+        XCTAssertTrue(vibeSheet.waitForNonExistence(timeout: 8))
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
+        
+        // Capture first poem details
+        let firstTitle = mainPage.poemTitle.label
+        let firstAuthor = mainPage.poemAuthor.label
+        
+        // 2. Generate second poem
+        mainPage.tapVibeGenerationButton()
+        XCTAssertTrue(vibeSheet.waitForExistence(timeout: 3))
+        
+        generateButton.tap()
+        XCTAssertTrue(vibeSheet.waitForNonExistence(timeout: 8))
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
+        
+        // Capture second poem details
+        let secondTitle = mainPage.poemTitle.label
+        let secondAuthor = mainPage.poemAuthor.label
+        
+        // 3. Verify content is different
+        XCTAssertNotEqual(firstTitle, secondTitle, "Subsequent generation should produce a new poem title")
+        XCTAssertNotEqual(firstAuthor, secondAuthor, "Subsequent generation should produce a new poem author (due to timestamp)")
     }
     
     // MARK: - Custom Prompt Tests
@@ -82,7 +117,7 @@ final class AIFeaturesUITests: XCTestCase {
         mainPage.tapCustomPromptButton()
         
         // Wait for custom prompt sheet to appear
-        let customSheet = app.sheets.firstMatch
+        let customSheet = mainPage.customPromptSheet
         XCTAssertTrue(customSheet.waitForExistence(timeout: 3))
         
         // Enter a custom prompt using accessibility identifier
@@ -114,7 +149,7 @@ final class AIFeaturesUITests: XCTestCase {
         
         mainPage.tapCustomPromptButton()
         
-        let customSheet = app.sheets.firstMatch
+        let customSheet = mainPage.customPromptSheet
         XCTAssertTrue(customSheet.waitForExistence(timeout: 3))
         
         // Try to generate without entering a prompt
@@ -125,7 +160,7 @@ final class AIFeaturesUITests: XCTestCase {
         XCTAssertFalse(generateButton.isEnabled, "Generate button should be disabled for empty input")
         
         // Cancel the sheet
-        let cancelButton = app.buttons["Cancel"]
+        let cancelButton = app.buttons["cancel_button"]
         cancelButton.tap()
         XCTAssertTrue(customSheet.waitForNonExistence(timeout: 3))
     }
@@ -144,7 +179,7 @@ final class AIFeaturesUITests: XCTestCase {
         // Try vibe generation
         mainPage.tapVibeGenerationButton()
         
-        let vibeSheet = app.sheets.firstMatch
+        let vibeSheet = mainPage.vibeGenerationSheet
         XCTAssertTrue(vibeSheet.waitForExistence(timeout: 3))
         
         let generateButton = app.buttons.matching(identifier: "generate_vibe_poem_button").firstMatch
@@ -158,10 +193,16 @@ final class AIFeaturesUITests: XCTestCase {
         let okButton = errorAlert.buttons["OK"]
         if okButton.exists {
             okButton.tap()
+            XCTAssertTrue(errorAlert.waitForNonExistence(timeout: 3))
         }
         
+        // Ensure sheet is still present
+        XCTAssertTrue(vibeSheet.exists)
+        
         // Cancel to return to main
-        app.buttons["Cancel"].tap()
+        let cancelButton = app.buttons["cancel_button"]
+        XCTAssertTrue(cancelButton.waitForExistence(timeout: 5))
+        cancelButton.tap()
     }
     
     func testAIFeaturesWhenUnavailable() throws {
@@ -198,7 +239,7 @@ final class AIFeaturesUITests: XCTestCase {
         
         mainPage.tapVibeGenerationButton()
         
-        let vibeSheet = app.sheets.firstMatch
+        let vibeSheet = mainPage.vibeGenerationSheet
         XCTAssertTrue(vibeSheet.waitForExistence(timeout: 3))
         
         let generateButton = app.buttons.matching(identifier: "generate_vibe_poem_button").firstMatch
@@ -225,7 +266,7 @@ final class AIFeaturesUITests: XCTestCase {
         // Generate an AI poem
         mainPage.tapVibeGenerationButton()
         
-        let vibeSheet = app.sheets.firstMatch
+        let vibeSheet = mainPage.vibeGenerationSheet
         XCTAssertTrue(vibeSheet.waitForExistence(timeout: 3))
         
         let generateButton = app.buttons.matching(identifier: "generate_vibe_poem_button").firstMatch
@@ -255,7 +296,7 @@ final class AIFeaturesUITests: XCTestCase {
         // Generate an AI poem
         mainPage.tapCustomPromptButton()
         
-        let customSheet = app.sheets.firstMatch
+        let customSheet = mainPage.customPromptSheet
         XCTAssertTrue(customSheet.waitForExistence(timeout: 3))
         
         let promptField = app.textViews.matching(identifier: "custom_prompt_text_field").firstMatch
@@ -298,20 +339,20 @@ final class AIFeaturesUITests: XCTestCase {
         // Test vibe generation accessibility
         mainPage.tapVibeGenerationButton()
         
-        let vibeSheet = app.sheets.firstMatch
+        let vibeSheet = mainPage.vibeGenerationSheet
         XCTAssertTrue(vibeSheet.waitForExistence(timeout: 3))
         
         // Verify accessibility identifiers exist
         let generateButton = app.buttons.matching(identifier: "generate_vibe_poem_button").firstMatch
         XCTAssertTrue(generateButton.exists, "Generate vibe poem button should have accessibility identifier")
         
-        app.buttons["Cancel"].tap()
+        app.buttons["cancel_button"].tap()
         XCTAssertTrue(vibeSheet.waitForNonExistence(timeout: 3))
         
         // Test custom prompt accessibility
         mainPage.tapCustomPromptButton()
         
-        let customSheet = app.sheets.firstMatch
+        let customSheet = mainPage.customPromptSheet
         XCTAssertTrue(customSheet.waitForExistence(timeout: 3))
         
         let promptField = app.textViews.matching(identifier: "custom_prompt_text_field").firstMatch
@@ -320,7 +361,7 @@ final class AIFeaturesUITests: XCTestCase {
         let customGenerateButton = app.buttons.matching(identifier: "generate_custom_poem_button").firstMatch
         XCTAssertTrue(customGenerateButton.exists, "Generate custom poem button should have accessibility identifier")
         
-        app.buttons["Cancel"].tap()
+        app.buttons["cancel_button"].tap()
         XCTAssertTrue(customSheet.waitForNonExistence(timeout: 3))
     }
 } 

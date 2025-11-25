@@ -25,6 +25,8 @@ final class TestUtilities {
             vibeAnalyzer: mockVibeAnalyzer,
             aiService: mockAIService,
             telemetryService: mockTelemetryService,
+            notificationService: MockNotificationService(),
+            historyService: MockHistoryService(),
             repository: mockRepository
         )
     }

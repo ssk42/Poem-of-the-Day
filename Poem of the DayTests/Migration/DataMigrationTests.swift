@@ -52,8 +52,7 @@ final class DataMigrationTests: XCTestCase {
         let migratedPoems = migrateV2ToV3Favorites(from: mockUserDefaults)
         
         XCTAssertEqual(migratedPoems.count, 2, "Should migrate V2 favorites")
-        XCTAssertNotNil(migratedPoems[0].date, "Should add default date")
-        XCTAssertEqual(migratedPoems[0].source, .daily, "Should add default source")
+        XCTAssertEqual(migratedPoems[0].source, .api, "Should add default source")
     }
     
     func testCurrentVersionCompatibility() throws {
@@ -97,7 +96,6 @@ final class DataMigrationTests: XCTestCase {
         do {
             let poem = try decoder.decode(Poem.self, from: oldData)
             XCTAssertEqual(poem.title, "Old Poem", "Should decode old data")
-            XCTAssertNotNil(poem.date, "Should provide default date")
         } catch {
             // Expected if strict decoding - should implement custom decoder
             XCTAssertTrue(true, "Should handle old data format gracefully")
@@ -134,7 +132,6 @@ final class DataMigrationTests: XCTestCase {
         do {
             let poem = try decoder.decode(Poem.self, from: futureDataEncoded)
             XCTAssertEqual(poem.title, "Future Poem", "Should decode known fields")
-            XCTAssertEqual(poem.isFavorite, true, "Should preserve favorite status")
         } catch {
             XCTFail("Should handle future data with removed fields: \(error)")
         }
@@ -252,13 +249,11 @@ final class DataMigrationTests: XCTestCase {
             guard components.count == 3 else { return nil }
             
             return Poem(
-                id: key,
+                id: UUID(),
                 title: components[0],
-                author: components[1], 
-                content: components[2],
-                date: Date(),
-                source: .daily,
-                isFavorite: true
+                lines: [components[2]],
+                author: components[1],
+                source: .api
             )
         }
     }
@@ -278,13 +273,11 @@ final class DataMigrationTests: XCTestCase {
                 }
                 
                 return Poem(
-                    id: id,
+                    id: UUID(),
                     title: title,
+                    lines: [content],
                     author: author,
-                    content: content,
-                    date: Date(),
-                    source: .daily,
-                    isFavorite: true
+                    source: .api
                 )
             }
         } catch {
@@ -321,10 +314,8 @@ final class DataMigrationTests: XCTestCase {
             "id": "valid_poem",
             "title": "Valid Poem",
             "author": "Valid Author",
-            "content": "Valid Content",
-            "date": "2023-01-01T00:00:00Z",
-            "source": "daily",
-            "isFavorite": true
+            "lines": ["Valid Content"],
+            "source": "api"
         }
         """
     }

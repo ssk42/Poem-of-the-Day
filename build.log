@@ -1,0 +1,212 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild build -scheme "Poem of the Day" -destination generic/platform=iOS
+
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (2 targets)
+    Target 'Poem of the Day' in project 'Poem of the Day'
+        ➜ Explicit dependency on target 'Poem of the Day WidgetExtension' in project 'Poem of the Day'
+    Target 'Poem of the Day WidgetExtension' in project 'Poem of the Day' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.1.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --print-asset-tag-combinations --output-format xml1 /Users/stephenreitz/Desktop/Swift-2048-test/Poem of the Day/Poem of the Day/Preview Content/Preview Assets.xcassets /Users/stephenreitz/Desktop/Swift-2048-test/Poem of the Day/Poem of the Day/Assets.xcassets
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: 204eb845b07f8c580911167c6b6e87c0
+Build description path: /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/XCBuildData/204eb845b07f8c580911167c6b6e87c0.xcbuilddata
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.1.sdk /Users/stephenreitz/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphoneos26.1-23B77-69b33fc7382b27d9b5d46e82a00f8e78.sdkstatcache
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.1.sdk -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphoneos26.1-23B77-69b33fc7382b27d9b5d46e82a00f8e78.sdkstatcache
+
+ProcessProductPackaging /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day\ WidgetExtension.entitlements /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension.appex.xcent (in target 'Poem of the Day WidgetExtension' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    
+    Entitlements:
+    
+    {
+    "application-identifier" = "J4QUKKF6V3.Stevereitz.Poem-of-the-Day.Poem-of-the-Day-Widget";
+    "com.apple.developer.team-identifier" = J4QUKKF6V3;
+    "com.apple.security.application-groups" =     (
+        "group.com.stevereitz.poemoftheday"
+    );
+    "get-task-allow" = 1;
+}
+    
+    builtin-productPackagingUtility /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day\ WidgetExtension.entitlements -entitlements -format xml -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension.appex.xcent
+
+ProcessProductPackagingDER /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension.appex.xcent /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension.appex.xcent.der (in target 'Poem of the Day WidgetExtension' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    /usr/bin/derq query -f xml -i /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension.appex.xcent -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension.appex.xcent.der --raw
+
+ProcessInfoPlistFile /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphoneos/Poem\ of\ the\ Day\ WidgetExtension.appex/Info.plist /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day\ Widget/Info.plist (in target 'Poem of the Day WidgetExtension' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    builtin-infoPlistUtility /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day\ Widget/Info.plist -producttype com.apple.product-type.app-extension -expandbuildsettings -format binary -platform iphoneos -additionalcontentfile /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day\ WidgetExtension.build/assetcatalog_generated_info.plist -requiredArchitecture arm64 -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphoneos/Poem\ of\ the\ Day\ WidgetExtension.appex/Info.plist
+
+ProcessProductPackaging /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Poem\ of\ the\ Day.entitlements /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day.app.xcent (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    
+    Entitlements:
+    
+    {
+    "application-identifier" = "J4QUKKF6V3.Stevereitz.Poem-of-the-Day";
+    "com.apple.developer.team-identifier" = J4QUKKF6V3;
+    "com.apple.security.application-groups" =     (
+        "group.com.stevereitz.poemoftheday"
+    );
+    "get-task-allow" = 1;
+}
+    
+    builtin-productPackagingUtility /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Poem\ of\ the\ Day.entitlements -entitlements -format xml -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day.app.xcent
+
+CodeSign /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphoneos/Poem\ of\ the\ Day\ WidgetExtension.appex (in target 'Poem of the Day WidgetExtension' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    
+    Signing Identity:     "Apple Development: Stephen Reitz (8AQQ27264R)"
+    Provisioning Profile: "iOS Team Provisioning Profile: Stevereitz.Poem-of-the-Day.Poem-of-the-Day-Widget"
+                          (a6ffd9bf-7188-4f67-a9e0-460cb047cbd7)
+    
+    /usr/bin/codesign --force --sign 56E50F80CA921739211BE3A56CA713C7DCCC0CC3 --entitlements /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day\ WidgetExtension.build/Poem\ of\ the\ Day\ WidgetExtension.appex.xcent --timestamp\=none --generate-entitlement-der /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphoneos/Poem\ of\ the\ Day\ WidgetExtension.appex
+/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphoneos/Poem of the Day WidgetExtension.appex: replacing existing signature
+
+ProcessProductPackagingDER /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day.app.xcent /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day.app.xcent.der (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    /usr/bin/derq query -f xml -i /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day.app.xcent -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day.app.xcent.der --raw
+
+SwiftDriver Poem\ of\ the\ Day normal arm64 com.apple.xcode.tools.swift.compiler (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name Poem_of_the_Day -Onone -enforce-exclusivity\=checked @/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Objects-normal/arm64/Poem\ of\ the\ Day.SwiftFileList -DDEBUG -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.1.sdk -target arm64-apple-ios26.0 -g -module-cache-path /Users/stephenreitz/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Index.noindex/DataStore -enable-library-evolution -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphoneos -F /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphoneos -emit-localized-strings -emit-localized-strings-path /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Objects-normal/arm64 -c -j12 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/stephenreitz/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphoneos26.1-23B77-69b33fc7382b27d9b5d46e82a00f8e78.sdkstatcache -output-file-map /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Objects-normal/arm64/Poem\ of\ the\ Day-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/stephenreitz/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/stephenreitz/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Objects-normal/arm64/Poem_of_the_Day.swiftmodule -emit-module-interface-path /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Objects-normal/arm64/Poem_of_the_Day.swiftinterface -emit-private-module-interface-path /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Objects-normal/arm64/Poem_of_the_Day.private.swiftinterface -validate-clang-modules-once -clang-build-session-file /Users/stephenreitz/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Objects-normal/arm64/Poem\ of\ the\ Day_const_extract_protocols.json -Xcc -iquote -Xcc /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day-generated-files.hmap -Xcc -I/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day-own-target-headers.hmap -Xcc -I/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day-all-target-headers.hmap -Xcc -iquote -Xcc /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day-project-headers.hmap -Xcc -I/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphoneos/include -Xcc -I/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/DerivedSources-normal/arm64 -Xcc -I/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/DerivedSources/arm64 -Xcc -I/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Objects-normal/arm64/Poem_of_the_Day-Swift.h -working-directory /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day -experimental-emit-module-separately -disable-cmo
+
+Touch /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphoneos/Poem\ of\ the\ Day\ WidgetExtension.appex (in target 'Poem of the Day WidgetExtension' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    /usr/bin/touch -c /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphoneos/Poem\ of\ the\ Day\ WidgetExtension.appex
+
+Ld /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphoneos/Poem\ of\ the\ Day.app/__preview.dylib normal (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios26.0 -dynamiclib -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.1.sdk -O0 -L/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphoneos -F/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphoneos -install_name @rpath/Poem\ of\ the\ Day.debug.dylib -dead_strip -rdynamic -Xlinker -no_deduplicate -Xlinker -dependency_info -Xlinker /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Objects-normal/arm64/Poem\ of\ the\ Day_dependency_info.dat -Xlinker -no_adhoc_codesign -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphoneos/Poem\ of\ the\ Day.app/__preview.dylib
+
+ValidateDevelopmentAssets /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    builtin-validate-development-assets --validate YES_ERROR /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Preview\ Content
+
+CpResource /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphoneos/Poem\ of\ the\ Day.app/TestPlan.xctestplan /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/TestPlan.xctestplan (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/TestPlan.xctestplan /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphoneos/Poem\ of\ the\ Day.app
+
+CpResource /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphoneos/Poem\ of\ the\ Day.app/VibeKeywords.json /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Services/VibeKeywords.json (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Services/VibeKeywords.json /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphoneos/Poem\ of\ the\ Day.app
+
+CpResource /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphoneos/Poem\ of\ the\ Day.app/README.md /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/README.md (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/README.md /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphoneos/Poem\ of\ the\ Day.app
+
+CpResource /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphoneos/Poem\ of\ the\ Day.app/RSSFeeds.json /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Poem\ of\ the\ Day/RSSFeeds.json (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Poem\ of\ the\ Day/RSSFeeds.json /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphoneos/Poem\ of\ the\ Day.app
+
+SwiftCompile normal arm64 Compiling\ Logger.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Utilities/Logger.swift (in target 'Poem of the Day' from project 'Poem of the Day')
+
+SwiftCompile normal arm64 /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Utilities/Logger.swift (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    
+
+SwiftCompile normal arm64 Compiling\ PoemRepository.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Services/PoemRepository.swift (in target 'Poem of the Day' from project 'Poem of the Day')
+
+SwiftCompile normal arm64 /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Services/PoemRepository.swift (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    
+
+SwiftCompile normal arm64 Compiling\ ContentView.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Views/Screens/ContentView.swift (in target 'Poem of the Day' from project 'Poem of the Day')
+SwiftCompile normal arm64 /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Views/Screens/ContentView.swift (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    
+
+SwiftCompile normal arm64 Compiling\ TelemetryService.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Services/TelemetryService.swift (in target 'Poem of the Day' from project 'Poem of the Day')
+
+SwiftCompile normal arm64 /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Services/TelemetryService.swift (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    
+
+SwiftCompile normal arm64 Compiling\ PoemGenerationService.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Services/PoemGenerationService.swift (in target 'Poem of the Day' from project 'Poem of the Day')
+Failed frontend command:
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -frontend -c /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Core/AppConfiguration.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Core/DependencyContainer.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Core/Protocols.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Core/SharedModels.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Extensions/View+Extensions.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Models/Poem.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Models/PoemError.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Models/PoemHistory.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Models/PoemHistoryEntry.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Models/VibeModels.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Services/NetworkService.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Services/NewsService.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Services/NotificationService.swift -primary-file /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Services/PoemGenerationService.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Services/PoemRepository.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Services/TelemetryService.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Services/VibeAnalyzer.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Utilities/Logger.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Utilities/TelemetryConsoleLogger.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/ViewModels/PoemHistoryViewModel.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/ViewModels/PoemViewModel.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Views/Components/ErrorView.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Views/Components/LoadingView.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Views/Screens/ContentView.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Views/Screens/NotificationSettingsView.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Views/Screens/PoemHistoryView.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Views/Screens/SettingsView.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Views/Screens/TelemetryDebugView.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Views/Screens/VibeGenerationView.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Poem_of_the_DayApp.swift /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/DerivedSources/GeneratedAssetSymbols.swift -emit-dependencies-path /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Objects-normal/arm64/PoemGenerationService.d -emit-const-values-path /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Objects-normal/arm64/PoemGenerationService.swiftconstvalues -emit-reference-dependencies-path /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Objects-normal/arm64/PoemGenerationService.swiftdeps -serialize-diagnostics-path /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Objects-normal/arm64/PoemGenerationService.dia -emit-localized-strings -emit-localized-strings-path /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Objects-normal/arm64 -target arm64-apple-ios26.0 -module-can-import-version DeveloperToolsSupport 23.0.4 23.0.4 -module-can-import-version FoundationModels 1.1.7 0 -module-can-import-version SwiftUI 7.1.13.1 7.1.13 -module-can-import-version UIKit 9126.1.12.1 9126.1.12 -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libAppIntentsMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#AppIntentsMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libFoundationMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#FoundationMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libFoundationModelsMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#FoundationModelsMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libObservationMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#ObservationMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libPreviewsMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#PreviewsMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libSwiftMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#SwiftMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libSwiftUIMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#SwiftUIMacros -disable-implicit-swift-modules -Xcc -fno-implicit-modules -Xcc -fno-implicit-module-maps -explicit-swift-module-map-file /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Objects-normal/arm64/Poem_of_the_Day-dependencies-1.json -Xllvm -aarch64-use-tbi -enable-objc-interop -stack-check -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.1.sdk -I /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphoneos -F /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphoneos -no-color-diagnostics -Xcc -fno-color-diagnostics -enable-library-evolution -enable-testing -g -debug-info-format\=dwarf -dwarf-version\=5 -module-cache-path /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -swift-version 5 -enforce-exclusivity\=checked -Onone -D DEBUG -serialize-debugging-options -const-gather-protocols-file /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Objects-normal/arm64/Poem\ of\ the\ Day_const_extract_protocols.json -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -validate-clang-modules-once -clang-build-session-file /Users/stephenreitz/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -working-directory -Xcc /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day -enable-anonymous-context-mangled-names -file-compilation-dir /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -Xcc -ivfsstatcache -Xcc /Users/stephenreitz/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphoneos26.1-23B77-69b33fc7382b27d9b5d46e82a00f8e78.sdkstatcache -Xcc -I/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/swift-overrides.hmap -Xcc -iquote -Xcc /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day-generated-files.hmap -Xcc -I/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day-own-target-headers.hmap -Xcc -I/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day-all-target-headers.hmap -Xcc -iquote -Xcc /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Poem\ of\ the\ Day-project-headers.hmap -Xcc -I/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Products/Debug-iphoneos/include -Xcc -I/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/DerivedSources-normal/arm64 -Xcc -I/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/DerivedSources/arm64 -Xcc -I/Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/DerivedSources -Xcc -DDEBUG\=1 -no-auto-bridging-header-chaining -module-name Poem_of_the_Day -frontend-parseable-output -disable-clang-spi -target-sdk-version 26.1 -target-sdk-name iphoneos26.1 -clang-target arm64-apple-ios26.1 -in-process-plugin-server-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/libSwiftInProcPluginServer.dylib -o /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Build/Intermediates.noindex/Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Objects-normal/arm64/PoemGenerationService.o -index-unit-output-path /Poem\ of\ the\ Day.build/Debug-iphoneos/Poem\ of\ the\ Day.build/Objects-normal/arm64/PoemGenerationService.o -index-store-path /Users/stephenreitz/Library/Developer/Xcode/DerivedData/Poem_of_the_Day-eculcxybahbpacbbltzjqprhxjep/Index.noindex/DataStore -index-system-modules
+
+SwiftCompile normal arm64 /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Services/PoemGenerationService.swift (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    
+/Users/stephenreitz/Desktop/Swift-2048-test/Poem of the Day/Poem of the Day/Services/PoemGenerationService.swift:115:20: error: initializer for conditional binding must have Optional type, not 'SystemLanguageModel.Adapter'
+                if let poetryAdapter = try SystemLanguageModel.Adapter(name: "poetry_generation") {
+                   ^                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+SwiftCompile normal arm64 Compiling\ NotificationService.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Services/NotificationService.swift (in target 'Poem of the Day' from project 'Poem of the Day')
+
+SwiftCompile normal arm64 /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Services/NotificationService.swift (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    
+
+SwiftCompile normal arm64 Compiling\ VibeAnalyzer.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Services/VibeAnalyzer.swift (in target 'Poem of the Day' from project 'Poem of the Day')
+
+SwiftCompile normal arm64 /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Services/VibeAnalyzer.swift (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    
+
+SwiftCompile normal arm64 Compiling\ NotificationSettingsView.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Views/Screens/NotificationSettingsView.swift (in target 'Poem of the Day' from project 'Poem of the Day')
+
+SwiftCompile normal arm64 /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Views/Screens/NotificationSettingsView.swift (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    
+
+SwiftCompile normal arm64 Compiling\ PoemHistoryView.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Views/Screens/PoemHistoryView.swift (in target 'Poem of the Day' from project 'Poem of the Day')
+
+SwiftCompile normal arm64 /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Views/Screens/PoemHistoryView.swift (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    
+
+SwiftCompile normal arm64 Compiling\ TelemetryDebugView.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Views/Screens/TelemetryDebugView.swift (in target 'Poem of the Day' from project 'Poem of the Day')
+
+SwiftCompile normal arm64 /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Views/Screens/TelemetryDebugView.swift (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    
+
+SwiftCompile normal arm64 Compiling\ SettingsView.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Views/Screens/SettingsView.swift (in target 'Poem of the Day' from project 'Poem of the Day')
+
+SwiftCompile normal arm64 /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Views/Screens/SettingsView.swift (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ Poem_of_the_Day (in target 'Poem of the Day' from project 'Poem of the Day')
+
+EmitSwiftModule normal arm64 (in target 'Poem of the Day' from project 'Poem of the Day')
+    cd /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day
+    
+
+SwiftCompile normal arm64 Compiling\ VibeGenerationView.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Views/Screens/VibeGenerationView.swift (in target 'Poem of the Day' from project 'Poem of the Day')
+
+** BUILD FAILED **
+
+
+The following build commands failed:
+	SwiftCompile normal arm64 Compiling\ PoemGenerationService.swift /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Services/PoemGenerationService.swift (in target 'Poem of the Day' from project 'Poem of the Day')
+	SwiftCompile normal arm64 /Users/stephenreitz/Desktop/Swift-2048-test/Poem\ of\ the\ Day/Poem\ of\ the\ Day/Services/PoemGenerationService.swift (in target 'Poem of the Day' from project 'Poem of the Day')
+	Building project Poem of the Day with scheme Poem of the Day
+(3 failures)

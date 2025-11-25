@@ -1,6 +1,7 @@
 import XCTest
 @testable import Poem_of_the_Day
 
+@MainActor
 final class ComprehensiveIntegrationTests: XCTestCase {
     
     var poemRepository: PoemRepository!
@@ -14,14 +15,13 @@ final class ComprehensiveIntegrationTests: XCTestCase {
         // Create production-like dependency configuration
         networkService = NetworkService()
         telemetryService = TelemetryService()
-        vibeAnalyzer = VibeAnalyzer(newsService: NewsService())
-        newsService = NewsService(networkService: networkService)
+        vibeAnalyzer = VibeAnalyzer()
+        newsService = NewsService()
         poemRepository = PoemRepository(networkService: networkService, telemetryService: telemetryService)
         
         viewModel = PoemViewModel(
-            poemGenerationService: MockPoemGenerationService(),
-            telemetryService: telemetryService,
-            repository: poemRepository
+            repository: poemRepository,
+            telemetryService: telemetryService
         )
     }
     
@@ -40,20 +40,20 @@ final class ComprehensiveIntegrationTests: XCTestCase {
         // Simulate first-time app launch workflow
         
         // 1. App Launch - Load initial poem
-        await viewModel.loadTodaysPoem()
+        await viewModel.loadInitialData()
         
         // Should have poem loaded
-        XCTAssertNotNil(viewModel.currentPoem, "Should load initial poem on first launch")
-        XCTAssertEqual(viewModel.loadingState, .loaded, "Should reach loaded state")
+        XCTAssertNotNil(viewModel.poemOfTheDay, "Should load initial poem on first launch")
+        XCTAssertFalse(viewModel.isLoading, "Should reach loaded state")
         
         // 2. User reads poem for a while (engagement tracking)
-        let initialPoem = viewModel.currentPoem
+        let initialPoem = viewModel.poemOfTheDay
         
         // 3. User favorites the poem
         if let poem = initialPoem {
-            await viewModel.toggleFavorite(for: poem)
+            await viewModel.toggleFavorite(poem: poem)
             
-            let favorites = await viewModel.loadFavoritePoems()
+            let favorites = viewModel.favorites
             XCTAssertEqual(favorites.count, 1, "Should have one favorite after first favorite action")
             XCTAssert(favorites.contains { $0.id == poem.id }, "Favorite should contain the favorited poem")
         }
@@ -68,29 +68,29 @@ final class ComprehensiveIntegrationTests: XCTestCase {
         // 5. User refreshes to get new poem
         await viewModel.refreshPoem()
         
-        let newPoem = viewModel.currentPoem
+        let newPoem = viewModel.poemOfTheDay
         XCTAssertNotNil(newPoem, "Should have new poem after refresh")
         
         // 6. User discovers AI features and generates vibe-based poem
-        if AppConfiguration.FeatureFlags.aiPoemGeneration {
-            await viewModel.generatePoemFromVibe()
+        if viewModel.isAIGenerationAvailable {
+            await viewModel.generateVibeBasedPoem()
             
             // Should have AI-generated poem
-            XCTAssertNotNil(viewModel.currentPoem, "Should have AI-generated poem")
+            XCTAssertNotNil(viewModel.poemOfTheDay, "Should have AI-generated poem")
         }
         
         // 7. User generates custom poem
-        if AppConfiguration.FeatureFlags.aiPoemGeneration {
-            await viewModel.generatePoemFromPrompt("A poem about new beginnings")
+        if viewModel.isAIGenerationAvailable {
+            await viewModel.generateCustomPoem(prompt: "A poem about new beginnings")
             
-            XCTAssertNotNil(viewModel.currentPoem, "Should have custom AI-generated poem")
+            XCTAssertNotNil(viewModel.poemOfTheDay, "Should have custom AI-generated poem")
         }
         
         // 8. User adds AI poem to favorites
-        if let aiPoem = viewModel.currentPoem {
-            await viewModel.toggleFavorite(for: aiPoem)
+        if let aiPoem = viewModel.poemOfTheDay {
+            await viewModel.toggleFavorite(poem: aiPoem)
             
-            let finalFavorites = await viewModel.loadFavoritePoems()
+            let finalFavorites = viewModel.favorites
             XCTAssertEqual(finalFavorites.count, 2, "Should have two favorites after complete journey")
         }
     }
@@ -100,35 +100,35 @@ final class ComprehensiveIntegrationTests: XCTestCase {
         
         // Seed with some existing favorites
         let seedPoem = TestData.samplePoems[0]
-        await viewModel.toggleFavorite(for: seedPoem)
+        await viewModel.toggleFavorite(poem: seedPoem)
         
         // 1. User opens app (should check for new daily poem)
-        await viewModel.loadTodaysPoem()
+        await viewModel.loadInitialData()
         
-        XCTAssertNotNil(viewModel.currentPoem, "Should load today's poem")
+        XCTAssertNotNil(viewModel.poemOfTheDay, "Should load today's poem")
         
         // 2. User checks favorites to revisit old poems
-        let favorites = await viewModel.loadFavoritePoems()
+        let favorites = viewModel.favorites
         XCTAssertGreaterThan(favorites.count, 0, "Should have existing favorites")
         
         // 3. User might favorite today's poem too
-        if let todayPoem = viewModel.currentPoem {
-            await viewModel.toggleFavorite(for: todayPoem)
+        if let todayPoem = viewModel.poemOfTheDay {
+            await viewModel.toggleFavorite(poem: todayPoem)
             
-            let updatedFavorites = await viewModel.loadFavoritePoems()
+            let updatedFavorites = viewModel.favorites
             XCTAssertEqual(updatedFavorites.count, favorites.count + 1, "Should add today's poem to favorites")
         }
         
         // 4. User might share poem with friends
-        if let poem = viewModel.currentPoem {
+        if let poem = viewModel.poemOfTheDay {
             let shareText = poem.shareText
             XCTAssertTrue(shareText.contains(poem.title), "Should be able to share daily poem")
         }
         
         // 5. User explores AI features for variety
-        if AppConfiguration.FeatureFlags.aiPoemGeneration {
-            await viewModel.generatePoemFromVibe()
-            XCTAssertNotNil(viewModel.currentPoem, "Should generate poem from current vibe")
+        if viewModel.isAIGenerationAvailable {
+            await viewModel.generateVibeBasedPoem()
+            XCTAssertNotNil(viewModel.poemOfTheDay, "Should generate poem from current vibe")
         }
     }
     
@@ -139,16 +139,16 @@ final class ComprehensiveIntegrationTests: XCTestCase {
         for i in 0..<5 {
             await viewModel.refreshPoem()
             
-            if let poem = viewModel.currentPoem {
+            if let poem = viewModel.poemOfTheDay {
                 // Power user favorites selectively
                 if i % 2 == 0 {
-                    await viewModel.toggleFavorite(for: poem)
+                    await viewModel.toggleFavorite(poem: poem)
                 }
             }
         }
         
         // 2. Extensive AI feature usage
-        if AppConfiguration.FeatureFlags.aiPoemGeneration {
+        if viewModel.isAIGenerationAvailable {
             // Generate multiple AI poems with different prompts
             let prompts = [
                 "A poem about technology and nature",
@@ -158,23 +158,23 @@ final class ComprehensiveIntegrationTests: XCTestCase {
             ]
             
             for prompt in prompts {
-                await viewModel.generatePoemFromPrompt(prompt)
+                await viewModel.generateCustomPoem(prompt: prompt)
                 
-                if let aiPoem = viewModel.currentPoem {
-                    await viewModel.toggleFavorite(for: aiPoem)
+                if let aiPoem = viewModel.poemOfTheDay {
+                    await viewModel.toggleFavorite(poem: aiPoem)
                 }
             }
         }
         
         // 3. Favorite management
-        let allFavorites = await viewModel.loadFavoritePoems()
+        let allFavorites = viewModel.favorites
         XCTAssertGreaterThan(allFavorites.count, 0, "Power user should have many favorites")
         
         // Remove some favorites (curation)
         if let firstFavorite = allFavorites.first {
-            await viewModel.toggleFavorite(for: firstFavorite)
+            await viewModel.toggleFavorite(poem: firstFavorite)
             
-            let updatedFavorites = await viewModel.loadFavoritePoems()
+            let updatedFavorites = viewModel.favorites
             XCTAssertEqual(updatedFavorites.count, allFavorites.count - 1, "Should remove favorite")
         }
     }
@@ -191,10 +191,10 @@ final class ComprehensiveIntegrationTests: XCTestCase {
         XCTAssertNotNil(analyzedVibe, "Should analyze vibe from news")
         
         // 2. Use vibe to influence AI generation
-        if AppConfiguration.FeatureFlags.aiPoemGeneration {
-            await viewModel.generatePoemFromVibe()
+        if viewModel.isAIGenerationAvailable {
+            await viewModel.generateVibeBasedPoem()
             
-            let generatedPoem = viewModel.currentPoem
+            let generatedPoem = viewModel.poemOfTheDay
             XCTAssertNotNil(generatedPoem, "Should generate poem influenced by news vibe")
             
             // 3. Generated poem should reflect the analyzed vibe
@@ -209,20 +209,20 @@ final class ComprehensiveIntegrationTests: XCTestCase {
         // Test data flow from repository through viewmodel to UI-ready state
         
         // 1. Repository fetches poem
-        let poem = try await poemRepository.fetchTodaysPoem()
+        let poem = try await poemRepository.getDailyPoem()
         XCTAssertNotNil(poem, "Repository should fetch poem")
         
         // 2. ViewModel processes poem
-        await viewModel.loadTodaysPoem()
-        XCTAssertEqual(viewModel.loadingState, .loaded, "ViewModel should reach loaded state")
-        XCTAssertNotNil(viewModel.currentPoem, "ViewModel should have current poem")
+        await viewModel.loadInitialData()
+        XCTAssertFalse(viewModel.isLoading, "ViewModel should reach loaded state")
+        XCTAssertNotNil(viewModel.poemOfTheDay, "ViewModel should have current poem")
         
         // 3. ViewModel prepares UI state
         XCTAssertEqual(viewModel.errorMessage, nil, "Should not have error message in success case")
         
         // 4. Test interactions that trigger telemetry
-        if let currentPoem = viewModel.currentPoem {
-            await viewModel.toggleFavorite(for: currentPoem)
+        if let currentPoem = viewModel.poemOfTheDay {
+            await viewModel.toggleFavorite(poem: currentPoem)
             
             // Telemetry should be triggered (verified by no crashes)
             XCTAssertTrue(true, "Telemetry integration should work seamlessly")
@@ -234,8 +234,8 @@ final class ComprehensiveIntegrationTests: XCTestCase {
         
         // 1. Create network error scenario
         let failingNetworkService = MockNetworkService()
-        failingNetworkService.shouldFail = true
-        failingNetworkService.errorToReturn = PoemError.networkUnavailable
+        failingNetworkService.shouldThrowError = true
+        failingNetworkService.errorToThrow = PoemError.networkUnavailable
         
         let failingRepository = PoemRepository(
             networkService: failingNetworkService,
@@ -243,23 +243,22 @@ final class ComprehensiveIntegrationTests: XCTestCase {
         )
         
         let failingViewModel = PoemViewModel(
-            poemGenerationService: MockPoemGenerationService(),
-            telemetryService: telemetryService,
-            repository: failingRepository
+            repository: failingRepository,
+            telemetryService: telemetryService
         )
         
         // 2. Attempt to load poem
-        await failingViewModel.loadTodaysPoem()
+        await failingViewModel.loadInitialData()
         
         // 3. Error should propagate correctly
-        XCTAssertEqual(failingViewModel.loadingState, .error, "Should reach error state")
+        XCTAssertTrue(failingViewModel.showErrorAlert, "Should reach error state")
         XCTAssertNotNil(failingViewModel.errorMessage, "Should have error message")
         
         // 4. Recovery should work
-        failingNetworkService.shouldFail = false
+        failingNetworkService.shouldThrowError = false
         await failingViewModel.refreshPoem()
         
-        XCTAssertEqual(failingViewModel.loadingState, .loaded, "Should recover from error")
+        XCTAssertFalse(failingViewModel.isLoading, "Should recover from error")
         XCTAssertNil(failingViewModel.errorMessage, "Error message should be cleared")
     }
     
@@ -270,8 +269,8 @@ final class ComprehensiveIntegrationTests: XCTestCase {
         
         // Start multiple operations simultaneously
         async let poem1 = viewModel.refreshPoem()
-        async let poem2 = viewModel.loadTodaysPoem()
-        async let favorites = viewModel.loadFavoritePoems()
+        async let poem2 = viewModel.loadInitialData()
+        async let favorites = viewModel.favorites
         
         // Wait for all to complete
         await poem1
@@ -279,8 +278,8 @@ final class ComprehensiveIntegrationTests: XCTestCase {
         let favs = await favorites
         
         // App should handle concurrent operations gracefully
-        XCTAssertEqual(viewModel.loadingState, .loaded, "Should handle concurrent operations")
-        XCTAssertNotNil(viewModel.currentPoem, "Should have valid poem after concurrent operations")
+        XCTAssertFalse(viewModel.isLoading, "Should handle concurrent operations")
+        XCTAssertNotNil(viewModel.poemOfTheDay, "Should have valid poem after concurrent operations")
         XCTAssertNotNil(favs, "Should load favorites successfully")
     }
     
@@ -288,13 +287,13 @@ final class ComprehensiveIntegrationTests: XCTestCase {
         // Test that state remains consistent across various operations
         
         // 1. Load initial poem
-        await viewModel.loadTodaysPoem()
-        let initialPoem = viewModel.currentPoem
+        await viewModel.loadInitialData()
+        let initialPoem = viewModel.poemOfTheDay
         
         // 2. Add to favorites
         if let poem = initialPoem {
-            await viewModel.toggleFavorite(for: poem)
-            let favorites = await viewModel.loadFavoritePoems()
+            await viewModel.toggleFavorite(poem: poem)
+            let favorites = viewModel.favorites
             XCTAssertTrue(favorites.contains { $0.id == poem.id }, "State should remain consistent")
         }
         
@@ -302,18 +301,18 @@ final class ComprehensiveIntegrationTests: XCTestCase {
         await viewModel.refreshPoem()
         
         // 4. Check that favorites are still intact
-        let favoritesAfterRefresh = await viewModel.loadFavoritePoems()
+        let favoritesAfterRefresh = viewModel.favorites
         if let originalPoem = initialPoem {
             XCTAssertTrue(favoritesAfterRefresh.contains { $0.id == originalPoem.id }, 
                          "Favorites should persist across operations")
         }
         
         // 5. Generate AI poem
-        if AppConfiguration.FeatureFlags.aiPoemGeneration {
-            await viewModel.generatePoemFromPrompt("Test consistency")
+        if viewModel.isAIGenerationAvailable {
+            await viewModel.generateCustomPoem(prompt: "Test consistency")
             
             // Favorites should still be intact
-            let favoritesAfterAI = await viewModel.loadFavoritePoems()
+            let favoritesAfterAI = viewModel.favorites
             XCTAssertEqual(favoritesAfterAI.count, favoritesAfterRefresh.count, 
                           "AI generation should not affect existing favorites")
         }
@@ -327,22 +326,22 @@ final class ComprehensiveIntegrationTests: XCTestCase {
         let startTime = CFAbsoluteTimeGetCurrent()
         
         // Simulate intensive user session
-        await viewModel.loadTodaysPoem()
+        await viewModel.loadInitialData()
         
         for _ in 0..<3 {
             await viewModel.refreshPoem()
             
-            if let poem = viewModel.currentPoem {
-                await viewModel.toggleFavorite(for: poem)
+            if let poem = viewModel.poemOfTheDay {
+                await viewModel.toggleFavorite(poem: poem)
             }
         }
         
-        if AppConfiguration.FeatureFlags.aiPoemGeneration {
-            await viewModel.generatePoemFromVibe()
-            await viewModel.generatePoemFromPrompt("Performance test poem")
+        if viewModel.isAIGenerationAvailable {
+            await viewModel.generateVibeBasedPoem()
+            await viewModel.generateCustomPoem(prompt: "Performance test poem")
         }
         
-        let _ = await viewModel.loadFavoritePoems()
+        let _ = viewModel.favorites
         
         let endTime = CFAbsoluteTimeGetCurrent()
         let duration = endTime - startTime
@@ -351,8 +350,8 @@ final class ComprehensiveIntegrationTests: XCTestCase {
         XCTAssertLessThan(duration, 15.0, "Complete workflow should finish within 15 seconds")
         
         // Final state should be valid
-        XCTAssertNotNil(viewModel.currentPoem, "Should have valid poem after performance test")
-        XCTAssertEqual(viewModel.loadingState, .loaded, "Should end in loaded state")
+        XCTAssertNotNil(viewModel.poemOfTheDay, "Should have valid poem after performance test")
+        XCTAssertFalse(viewModel.isLoading, "Should end in loaded state")
     }
     
     func testMemoryUsageInLongSession() async throws {
@@ -362,25 +361,25 @@ final class ComprehensiveIntegrationTests: XCTestCase {
         for i in 0..<20 {
             await viewModel.refreshPoem()
             
-            if let poem = viewModel.currentPoem {
-                await viewModel.toggleFavorite(for: poem)
+            if let poem = viewModel.poemOfTheDay {
+                await viewModel.toggleFavorite(poem: poem)
                 
                 // Toggle again (remove from favorites)
-                await viewModel.toggleFavorite(for: poem)
+                await viewModel.toggleFavorite(poem: poem)
             }
             
             // Periodically generate AI poems
-            if i % 5 == 0 && AppConfiguration.FeatureFlags.aiPoemGeneration {
-                await viewModel.generatePoemFromPrompt("Memory test \(i)")
+            if i % 5 == 0 && viewModel.isAIGenerationAvailable {
+                await viewModel.generateCustomPoem(prompt: "Memory test \(i)")
             }
         }
         
         // Check final state
-        XCTAssertNotNil(viewModel.currentPoem, "Should maintain valid state after long session")
-        XCTAssertEqual(viewModel.loadingState, .loaded, "Should be in loaded state")
+        XCTAssertNotNil(viewModel.poemOfTheDay, "Should maintain valid state after long session")
+        XCTAssertFalse(viewModel.isLoading, "Should be in loaded state")
         
         // Favorites should be manageable (not accumulating indefinitely)
-        let favorites = await viewModel.loadFavoritePoems()
+        let favorites = viewModel.favorites
         XCTAssertLessThan(favorites.count, 10, "Should not accumulate excessive favorites")
     }
     
@@ -393,27 +392,27 @@ final class ComprehensiveIntegrationTests: XCTestCase {
         for _ in 0..<10 {
             await viewModel.refreshPoem()
             
-            if let poem = viewModel.currentPoem {
-                await viewModel.toggleFavorite(for: poem)
+            if let poem = viewModel.poemOfTheDay {
+                await viewModel.toggleFavorite(poem: poem)
             }
         }
         
         // System should remain stable
-        XCTAssertEqual(viewModel.loadingState, .loaded, "Should handle rapid interactions")
-        XCTAssertNotNil(viewModel.currentPoem, "Should have valid poem after rapid interactions")
+        XCTAssertFalse(viewModel.isLoading, "Should handle rapid interactions")
+        XCTAssertNotNil(viewModel.poemOfTheDay, "Should have valid poem after rapid interactions")
     }
     
     func testDataPersistenceAcrossRestarts() async throws {
         // Test data persistence (simulated app restart)
         
         // 1. Set up initial state
-        await viewModel.loadTodaysPoem()
+        await viewModel.loadInitialData()
         
-        if let poem = viewModel.currentPoem {
-            await viewModel.toggleFavorite(for: poem)
+        if let poem = viewModel.poemOfTheDay {
+            await viewModel.toggleFavorite(poem: poem)
         }
         
-        let originalFavorites = await viewModel.loadFavoritePoems()
+        let originalFavorites = viewModel.favorites
         
         // 2. Simulate app restart by creating new instances
         let newRepository = PoemRepository(
@@ -422,13 +421,12 @@ final class ComprehensiveIntegrationTests: XCTestCase {
         )
         
         let newViewModel = PoemViewModel(
-            poemGenerationService: MockPoemGenerationService(),
-            telemetryService: telemetryService,
-            repository: newRepository
+            repository: newRepository,
+            telemetryService: telemetryService
         )
         
         // 3. Check that favorites persisted
-        let persistedFavorites = await newViewModel.loadFavoritePoems()
+        let persistedFavorites = newViewModel.favorites
         XCTAssertEqual(persistedFavorites.count, originalFavorites.count, 
                       "Favorites should persist across app restarts")
     }
@@ -437,32 +435,32 @@ final class ComprehensiveIntegrationTests: XCTestCase {
         // Test handling of mixed content types (regular poems + AI poems)
         
         // 1. Load regular poem
-        await viewModel.loadTodaysPoem()
-        let regularPoem = viewModel.currentPoem
+        await viewModel.loadInitialData()
+        let regularPoem = viewModel.poemOfTheDay
         
         if let poem = regularPoem {
-            await viewModel.toggleFavorite(for: poem)
+            await viewModel.toggleFavorite(poem: poem)
         }
         
         // 2. Generate AI poems
-        if AppConfiguration.FeatureFlags.aiPoemGeneration {
-            await viewModel.generatePoemFromVibe()
-            let vibePoem = viewModel.currentPoem
+        if viewModel.isAIGenerationAvailable {
+            await viewModel.generateVibeBasedPoem()
+            let vibePoem = viewModel.poemOfTheDay
             
             if let poem = vibePoem {
-                await viewModel.toggleFavorite(for: poem)
+                await viewModel.toggleFavorite(poem: poem)
             }
             
-            await viewModel.generatePoemFromPrompt("Custom AI poem")
-            let customPoem = viewModel.currentPoem
+            await viewModel.generateCustomPoem(prompt: "Custom AI poem")
+            let customPoem = viewModel.poemOfTheDay
             
             if let poem = customPoem {
-                await viewModel.toggleFavorite(for: poem)
+                await viewModel.toggleFavorite(poem: poem)
             }
         }
         
         // 3. Check that all types are handled properly
-        let allFavorites = await viewModel.loadFavoritePoems()
+        let allFavorites = viewModel.favorites
         XCTAssertGreaterThan(allFavorites.count, 0, "Should handle mixed content types")
         
         // All poems should be valid
@@ -479,8 +477,8 @@ final class ComprehensiveIntegrationTests: XCTestCase {
         
         // 1. Simulate offline state
         let failingNetworkService = MockNetworkService()
-        failingNetworkService.shouldFail = true
-        failingNetworkService.errorToReturn = PoemError.networkUnavailable
+        failingNetworkService.shouldThrowError = true
+        failingNetworkService.errorToThrow = PoemError.networkUnavailable
         
         let offlineRepository = PoemRepository(
             networkService: failingNetworkService,
@@ -488,45 +486,44 @@ final class ComprehensiveIntegrationTests: XCTestCase {
         )
         
         let offlineViewModel = PoemViewModel(
-            poemGenerationService: MockPoemGenerationService(),
-            telemetryService: telemetryService,
-            repository: offlineRepository
+            repository: offlineRepository,
+            telemetryService: telemetryService
         )
         
         // Try to load poem while offline
-        await offlineViewModel.loadTodaysPoem()
-        XCTAssertEqual(offlineViewModel.loadingState, .error, "Should be in error state offline")
+        await offlineViewModel.loadInitialData()
+        XCTAssertTrue(offlineViewModel.showErrorAlert, "Should be in error state offline")
         
         // 2. Simulate coming back online
-        failingNetworkService.shouldFail = false
+        failingNetworkService.shouldThrowError = false
         
         // Retry operation
         await offlineViewModel.refreshPoem()
-        XCTAssertEqual(offlineViewModel.loadingState, .loaded, "Should recover when online")
-        XCTAssertNotNil(offlineViewModel.currentPoem, "Should have poem when online")
+        XCTAssertFalse(offlineViewModel.isLoading, "Should recover when online")
+        XCTAssertNotNil(offlineViewModel.poemOfTheDay, "Should have poem when online")
     }
     
     func testLowMemoryScenario() async throws {
         // Test behavior under simulated low memory conditions
         
         // Generate many AI poems to simulate memory pressure
-        if AppConfiguration.FeatureFlags.aiPoemGeneration {
+        if viewModel.isAIGenerationAvailable {
             for i in 0..<50 {
-                await viewModel.generatePoemFromPrompt("Memory pressure test \(i)")
+                await viewModel.generateCustomPoem(prompt: "Memory pressure test \(i)")
                 
                 // Only keep every 10th poem as favorite to simulate user behavior
-                if i % 10 == 0, let poem = viewModel.currentPoem {
-                    await viewModel.toggleFavorite(for: poem)
+                if i % 10 == 0, let poem = viewModel.poemOfTheDay {
+                    await viewModel.toggleFavorite(poem: poem)
                 }
             }
         }
         
         // System should still be responsive
-        XCTAssertNotNil(viewModel.currentPoem, "Should handle memory pressure gracefully")
-        XCTAssertEqual(viewModel.loadingState, .loaded, "Should remain in loaded state")
+        XCTAssertNotNil(viewModel.poemOfTheDay, "Should handle memory pressure gracefully")
+        XCTAssertFalse(viewModel.isLoading, "Should remain in loaded state")
         
         // Favorites should be reasonable
-        let favorites = await viewModel.loadFavoritePoems()
+        let favorites = viewModel.favorites
         XCTAssertLessThan(favorites.count, 20, "Should not accumulate excessive data")
     }
 } 

@@ -21,49 +21,31 @@ final class LocalizationTests: XCTestCase {
     func testInternationalPoemContent() throws {
         let internationalPoems = [
             // English
-            Poem(id: "en_1", title: "English Poem", author: "English Author", 
-                 content: "This is an English poem with standard Latin characters.",
-                 date: Date(), source: .daily, isFavorite: false),
+            Poem(id: UUID(), title: "English Poem", lines: ["This is an English poem with standard Latin characters."], author: "English Author", source: .api),
             
             // Spanish
-            Poem(id: "es_1", title: "Poema Español", author: "Autor Español",
-                 content: "Este es un poema en español con acentos: café, niño, corazón.",
-                 date: Date(), source: .daily, isFavorite: false),
+            Poem(id: UUID(), title: "Poema Español", lines: ["Este es un poema en español con acentos: café, niño, corazón."], author: "Autor Español", source: .api),
             
             // French  
-            Poem(id: "fr_1", title: "Poème Français", author: "Auteur Français",
-                 content: "Ceci est un poème français avec des accents: été, cœur, naïve.",
-                 date: Date(), source: .daily, isFavorite: false),
+            Poem(id: UUID(), title: "Poème Français", lines: ["Ceci est un poème français avec des accents: été, cœur, naïve."], author: "Auteur Français", source: .api),
             
             // German
-            Poem(id: "de_1", title: "Deutsches Gedicht", author: "Deutscher Autor",
-                 content: "Dies ist ein deutsches Gedicht mit Umlauten: Größe, Hände, Mädchen.",
-                 date: Date(), source: .daily, isFavorite: false),
+            Poem(id: UUID(), title: "Deutsches Gedicht", lines: ["Dies ist ein deutsches Gedicht mit Umlauten: Größe, Hände, Mädchen."], author: "Deutscher Autor", source: .api),
             
             // Japanese
-            Poem(id: "ja_1", title: "日本の詩", author: "日本の作家",
-                 content: "これは日本語の詩です。桜、月、海の美しさを歌います。",
-                 date: Date(), source: .daily, isFavorite: false),
+            Poem(id: UUID(), title: "日本の詩", lines: ["これは日本語の詩です。桜、月、海の美しさを歌います。"], author: "日本の作家", source: .api),
             
             // Arabic (RTL)
-            Poem(id: "ar_1", title: "قصيدة عربية", author: "شاعر عربي",
-                 content: "هذه قصيدة عربية تحتوي على نصوص من اليمين إلى اليسار.",
-                 date: Date(), source: .daily, isFavorite: false),
+            Poem(id: UUID(), title: "قصيدة عربية", lines: ["هذه قصيدة عربية تحتوي على نصوص من اليمين إلى اليسار."], author: "شاعر عربي", source: .api),
             
             // Hebrew (RTL)
-            Poem(id: "he_1", title: "שיר עברי", author: "משורר עברי",
-                 content: "זהו שיר עברי עם טקסט מימין לשמאל וניקוד.",
-                 date: Date(), source: .daily, isFavorite: false),
+            Poem(id: UUID(), title: "שיר עברי", lines: ["זהו שיר עברי עם טקסט מימין לשמאל וניקוד."], author: "משורר עברי", source: .api),
             
             // Chinese
-            Poem(id: "zh_1", title: "中文诗", author: "中文作者",
-                 content: "这是一首中文诗，包含简体中文字符。",
-                 date: Date(), source: .daily, isFavorite: false),
+            Poem(id: UUID(), title: "中文诗", lines: ["这是一首中文诗，包含简体中文字符。"], author: "中文作者", source: .api),
             
             // Russian
-            Poem(id: "ru_1", title: "Русская поэма", author: "Русский автор",
-                 content: "Это русская поэма с кириллическими символами: борщ, водка, медведь.",
-                 date: Date(), source: .daily, isFavorite: false)
+            Poem(id: UUID(), title: "Русская поэма", lines: ["Это русская поэма с кириллическими символами: борщ, водка, медведь."], author: "Русский автор", source: .api)
         ]
         
         for poem in internationalPoems {
@@ -93,17 +75,11 @@ final class LocalizationTests: XCTestCase {
     
     func testRightToLeftLanguageSupport() throws {
         let rtlPoems = [
-            Poem(id: "rtl_ar", title: "العنوان العربي", author: "المؤلف العربي",
-                 content: "محتوى النص العربي من اليمين إلى اليسار مع أرقام ١٢٣٤٥٦٧٨٩٠",
-                 date: Date(), source: .daily, isFavorite: false),
+            Poem(id: UUID(), title: "العنوان العربي", lines: ["محتوى النص العربي من اليمين إلى اليسار مع أرقام ١٢٣٤٥٦٧٨٩٠"], author: "المؤلف العربي", source: .api),
             
-            Poem(id: "rtl_he", title: "כותרת עברית", author: "כותב עברי",
-                 content: "תוכן עברי מימין לשמאל עם מספרים ١٢٣٤٥٦٧٨٩٠",
-                 date: Date(), source: .daily, isFavorite: false),
+            Poem(id: UUID(), title: "כותרת עברית", lines: ["תוכן עברי מימין לשמאל עם מספרים ١٢٣٤٥٦٧٨٩٠"], author: "כותב עברי", source: .api),
             
-            Poem(id: "rtl_fa", title: "عنوان فارسی", author: "نویسنده فارسی",
-                 content: "محتوای فارسی از راست به چپ با اعداد ۱۲۳۴۵۶۷۸۹۰",
-                 date: Date(), source: .daily, isFavorite: false)
+            Poem(id: UUID(), title: "عنوان فارسی", lines: ["محتوای فارسی از راست به چپ با اعداد ۱۲۳۴۵۶۷۸۹۰"], author: "نویسنده فارسی", source: .api)
         ]
         
         for poem in rtlPoems {
@@ -194,13 +170,11 @@ final class LocalizationTests: XCTestCase {
         for (locale, culturalTerms) in culturalTestCases {
             // Simulate culturally appropriate content
             let culturalPoem = Poem(
-                id: "cultural_\(locale)",
+                id: UUID(),
                 title: "Cultural Poem for \(locale)",
+                lines: ["This poem includes cultural elements: \(culturalTerms.joined(separator: ", "))"],
                 author: "Local Author",
-                content: "This poem includes cultural elements: \(culturalTerms.joined(separator: ", "))",
-                date: Date(),
-                source: .daily,
-                isFavorite: false
+                source: .api
             )
             
             XCTAssertTrue(culturalTerms.allSatisfy { term in
@@ -223,23 +197,19 @@ final class LocalizationTests: XCTestCase {
         for (inputMethod, phonetic, native) in inputMethodTests {
             // Test that both phonetic and native inputs are handled
             let phoneticPoem = Poem(
-                id: "input_\(inputMethod)_phonetic",
+                id: UUID(),
                 title: phonetic,
+                lines: ["Testing \(inputMethod) input: \(phonetic)"],
                 author: "Input Tester",
-                content: "Testing \(inputMethod) input: \(phonetic)",
-                date: Date(),
-                source: .custom,
-                isFavorite: false
+                source: .aiGenerated
             )
             
             let nativePoem = Poem(
-                id: "input_\(inputMethod)_native",
+                id: UUID(),
                 title: native,
+                lines: ["Testing \(inputMethod) input: \(native)"],
                 author: "Input Tester",
-                content: "Testing \(inputMethod) input: \(native)",
-                date: Date(),
-                source: .custom,
-                isFavorite: false
+                source: .aiGenerated
             )
             
             XCTAssertNotNil(phoneticPoem, "Should handle phonetic input for \(inputMethod)")
@@ -262,13 +232,11 @@ final class LocalizationTests: XCTestCase {
             let measurementContent = "Distance: 10 \(distance), Temperature: 20 \(temperature)"
             
             let poem = Poem(
-                id: "measurement_\(system)",
+                id: UUID(),
                 title: "Measurement Poem",
+                lines: [measurementContent],
                 author: "Measurement Author",
-                content: measurementContent,
-                date: Date(),
-                source: .custom,
-                isFavorite: false
+                source: .aiGenerated
             )
             
             XCTAssertTrue(poem.content.contains(distance), "Should contain distance unit")
@@ -330,13 +298,11 @@ final class LocalizationTests: XCTestCase {
             
             // Test that poem dates work across time zones
             let poem = Poem(
-                id: "tz_\(timeZoneId.replacingOccurrences(of: "/", with: "_"))",
+                id: UUID(),
                 title: "Time Zone Test Poem",
+                lines: ["Created at \(formattedDate) in \(timeZoneId)"],
                 author: "Time Zone Tester",
-                content: "Created at \(formattedDate) in \(timeZoneId)",
-                date: testDate,
-                source: .daily,
-                isFavorite: false
+                source: .api
             )
             
             XCTAssertNotNil(poem, "Should create poem with time zone-specific date")

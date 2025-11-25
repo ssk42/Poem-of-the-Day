@@ -29,8 +29,8 @@ final class DependencyContainer: ObservableObject {
         self.notificationService = NotificationService()
         self.historyService = PoemHistoryService()
         
-        // Initialize AI service if available (iOS 26+)
-        if #available(iOS 26, *) {
+        // Initialize AI service if available (iOS 18+)
+        if #available(iOS 18, *) {
             self.aiService = PoemGenerationService()
         } else {
             self.aiService = nil

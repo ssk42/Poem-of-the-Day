@@ -430,3 +430,46 @@ final class MockUserDefaults: UserDefaults {
         storage.removeAll()
     }
 }
+
+// MARK: - Mock History Service
+
+final class MockHistoryService: PoemHistoryServiceProtocol, @unchecked Sendable {
+    private var entries: [PoemHistoryEntry] = []
+    
+    func addEntry(_ poem: Poem, source: PoemSource, vibe: DailyVibe?) async {
+        let entry = PoemHistoryEntry(poem: poem, source: source, vibeAtTime: vibe)
+        entries.insert(entry, at: 0)
+    }
+    
+    func getHistory() async -> [PoemHistoryEntry] {
+        return entries
+    }
+    
+    func getHistory(for date: Date) async -> [PoemHistoryEntry] {
+        return entries.filter { Calendar.current.isDate($0.viewedDate, inSameDayAs: date) }
+    }
+    
+    func getHistoryGroupedByDate() async -> [(date: Date, entries: [PoemHistoryEntry])] {
+        return []
+    }
+    
+    func clearHistory() async {
+        entries.removeAll()
+    }
+    
+    func deleteEntry(_ entry: PoemHistoryEntry) async {
+        entries.removeAll { $0.id == entry.id }
+    }
+    
+    func getEntryCount() async -> Int {
+        return entries.count
+    }
+    
+    func getUniquePoems() async -> Int {
+        return Set(entries.map { $0.poem.id }).count
+    }
+    
+    func getStreakInfo() async -> StreakInfo {
+        return .empty
+    }
+}

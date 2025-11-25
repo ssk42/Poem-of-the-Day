@@ -1,0 +1,1412 @@
+{
+  "_type" : {
+    "_name" : "ActionsInvocationRecord"
+  },
+  "actions" : {
+    "_type" : {
+      "_name" : "Array"
+    },
+    "_values" : [
+      {
+        "_type" : {
+          "_name" : "ActionRecord"
+        },
+        "actionResult" : {
+          "_type" : {
+            "_name" : "ActionResult"
+          },
+          "coverage" : {
+            "_type" : {
+              "_name" : "CodeCoverageInfo"
+            }
+          },
+          "diagnosticsRef" : {
+            "_type" : {
+              "_name" : "Reference"
+            },
+            "id" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "0~pzp651Ia24OhyTKqcbw6is8S-wYIE-ef_4ydvMdinC7nc_Gk22S1gjJd4nqsX61i3m1ZsMb87ACsc-AcRjmxrw=="
+            }
+          },
+          "issues" : {
+            "_type" : {
+              "_name" : "ResultIssueSummaries"
+            },
+            "testFailureSummaries" : {
+              "_type" : {
+                "_name" : "Array"
+              },
+              "_values" : [
+                {
+                  "_type" : {
+                    "_name" : "TestFailureIssueSummary",
+                    "_supertype" : {
+                      "_name" : "IssueSummary"
+                    }
+                  },
+                  "documentLocationInCreatingWorkspace" : {
+                    "_type" : {
+                      "_name" : "DocumentLocation"
+                    },
+                    "concreteTypeName" : {
+                      "_type" : {
+                        "_name" : "String"
+                      },
+                      "_value" : "DVTTextDocumentLocation"
+                    },
+                    "url" : {
+                      "_type" : {
+                        "_name" : "String"
+                      },
+                      "_value" : "file:\/\/\/Users\/stephenreitz\/Desktop\/Swift-2048-test\/Poem%20of%20the%20Day\/Poem%20of%20the%20DayUITests\/AIFeaturesUITests.swift#EndingLineNumber=198&StartingLineNumber=198"
+                    }
+                  },
+                  "issueType" : {
+                    "_type" : {
+                      "_name" : "String"
+                    },
+                    "_value" : "Uncategorized"
+                  },
+                  "message" : {
+                    "_type" : {
+                      "_name" : "String"
+                    },
+                    "_value" : "Failed to tap \"cancel_button\" Button: No matches found for Elements matching predicate '\"cancel_button\" IN identifiers' from input {(\n    Button, identifier: 'favorites_button', label: 'Favorite Poems',\n    Button, identifier: 'menu_button', label: 'Menu',\n    Button,\n    Button, identifier: 'top_vibe_poem_button', label: 'Generate vibe-based poem',\n    Button, identifier: 'top_custom_poem_button', label: 'Create custom poem',\n    Button, identifier: 'refresh_button', label: 'Get a new poem',\n    Button, identifier: 'vibe_poem_button', label: 'Generate AI poem based on today's news vibe',\n    Button, identifier: 'custom_poem_button', label: 'Create custom AI poem',\n    Button, identifier: 'favorite_button', label: 'Add to favorites',\n    Button, identifier: 'share_button', label: 'Share poem'\n)}\nPossibly caused by runtime issues:\nAutomation type mismatch: computed Button from legacy attributes vs PopUpButton from modern attribute. Input attributes and values: {\n    \"XC_kAXXCAttributeAutomationType\" = 14;\n    \"XC_kAXXCAttributeElementBaseType\" = UIResponder;\n    \"XC_kAXXCAttributeElementType\" = \"SwiftUI.AccessibilityNode\";\n    \"XC_kAXXCAttributeTraits\" = 1108101562369;\n}\nSee test report attachments for more detail."
+                  },
+                  "testCaseName" : {
+                    "_type" : {
+                      "_name" : "String"
+                    },
+                    "_value" : "AIFeaturesUITests.testAIGenerationErrorHandling()"
+                  }
+                }
+              ]
+            }
+          },
+          "logRef" : {
+            "_type" : {
+              "_name" : "Reference"
+            },
+            "id" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "0~OKOgnLHqZ8efRJC18EVO8VYbJqMWNQf3eISWgjZ1N2BQBiBttOPAIoRvejNyr3eYMgC7qx0d7jash-pS48-bJQ=="
+            },
+            "targetType" : {
+              "_type" : {
+                "_name" : "TypeDefinition"
+              },
+              "name" : {
+                "_type" : {
+                  "_name" : "String"
+                },
+                "_value" : "ActivityLogSection"
+              }
+            }
+          },
+          "metrics" : {
+            "_type" : {
+              "_name" : "ResultMetrics"
+            },
+            "testsCount" : {
+              "_type" : {
+                "_name" : "Int"
+              },
+              "_value" : "11"
+            },
+            "testsFailedCount" : {
+              "_type" : {
+                "_name" : "Int"
+              },
+              "_value" : "1"
+            }
+          },
+          "resultName" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "action"
+          },
+          "status" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "failed"
+          },
+          "testsRef" : {
+            "_type" : {
+              "_name" : "Reference"
+            },
+            "id" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "0~4OWZgxiQQIJoOSihSFYEIsuy6hRhHu2fFqZYq1F2iKZTp4lhEnDZMnHvI-NAsoNqFAYbuHWgb7TTBUENlE99cg=="
+            },
+            "targetType" : {
+              "_type" : {
+                "_name" : "TypeDefinition"
+              },
+              "name" : {
+                "_type" : {
+                  "_name" : "String"
+                },
+                "_value" : "ActionTestPlanRunSummaries"
+              }
+            }
+          }
+        },
+        "buildResult" : {
+          "_type" : {
+            "_name" : "ActionResult"
+          },
+          "coverage" : {
+            "_type" : {
+              "_name" : "CodeCoverageInfo"
+            }
+          },
+          "issues" : {
+            "_type" : {
+              "_name" : "ResultIssueSummaries"
+            },
+            "warningSummaries" : {
+              "_type" : {
+                "_name" : "Array"
+              },
+              "_values" : [
+                {
+                  "_type" : {
+                    "_name" : "IssueSummary"
+                  },
+                  "documentLocationInCreatingWorkspace" : {
+                    "_type" : {
+                      "_name" : "DocumentLocation"
+                    },
+                    "concreteTypeName" : {
+                      "_type" : {
+                        "_name" : "String"
+                      },
+                      "_value" : "DVTTextDocumentLocation"
+                    },
+                    "url" : {
+                      "_type" : {
+                        "_name" : "String"
+                      },
+                      "_value" : "file:\/\/\/Users\/stephenreitz\/Desktop\/Swift-2048-test\/Poem%20of%20the%20Day\/Poem%20of%20the%20Day\/Services\/NotificationService.swift#EndingColumnNumber=4&EndingLineNumber=52&StartingColumnNumber=4&StartingLineNumber=52&Timestamp=785784471.828029"
+                    }
+                  },
+                  "issueType" : {
+                    "_type" : {
+                      "_name" : "String"
+                    },
+                    "_value" : "Swift Compiler Warning"
+                  },
+                  "message" : {
+                    "_type" : {
+                      "_name" : "String"
+                    },
+                    "_value" : "'nonisolated' can not be applied to variable with non-'Sendable' type 'UserDefaults'; this is an error in the Swift 6 language mode"
+                  }
+                },
+                {
+                  "_type" : {
+                    "_name" : "IssueSummary"
+                  },
+                  "documentLocationInCreatingWorkspace" : {
+                    "_type" : {
+                      "_name" : "DocumentLocation"
+                    },
+                    "concreteTypeName" : {
+                      "_type" : {
+                        "_name" : "String"
+                      },
+                      "_value" : "DVTTextDocumentLocation"
+                    },
+                    "url" : {
+                      "_type" : {
+                        "_name" : "String"
+                      },
+                      "_value" : "file:\/\/\/Users\/stephenreitz\/Desktop\/Swift-2048-test\/Poem%20of%20the%20Day\/Poem%20of%20the%20DayUITests\/AIFeaturesUITests.swift#EndingColumnNumber=17&EndingLineNumber=59&StartingColumnNumber=17&StartingLineNumber=59&Timestamp=785784471.828029"
+                    }
+                  },
+                  "issueType" : {
+                    "_type" : {
+                      "_name" : "String"
+                    },
+                    "_value" : "No-usage"
+                  },
+                  "message" : {
+                    "_type" : {
+                      "_name" : "String"
+                    },
+                    "_value" : "Result of call to 'tapVibeGenerationButton()' is unused"
+                  }
+                },
+                {
+                  "_type" : {
+                    "_name" : "IssueSummary"
+                  },
+                  "documentLocationInCreatingWorkspace" : {
+                    "_type" : {
+                      "_name" : "DocumentLocation"
+                    },
+                    "concreteTypeName" : {
+                      "_type" : {
+                        "_name" : "String"
+                      },
+                      "_value" : "DVTTextDocumentLocation"
+                    },
+                    "url" : {
+                      "_type" : {
+                        "_name" : "String"
+                      },
+                      "_value" : "file:\/\/\/Users\/stephenreitz\/Desktop\/Swift-2048-test\/Poem%20of%20the%20Day\/Poem%20of%20the%20DayUITests\/AIFeaturesUITests.swift#EndingColumnNumber=17&EndingLineNumber=79&StartingColumnNumber=17&StartingLineNumber=79&Timestamp=785784471.828029"
+                    }
+                  },
+                  "issueType" : {
+                    "_type" : {
+                      "_name" : "String"
+                    },
+                    "_value" : "No-usage"
+                  },
+                  "message" : {
+                    "_type" : {
+                      "_name" : "String"
+                    },
+                    "_value" : "Result of call to 'tapVibeGenerationButton()' is unused"
+                  }
+                },
+                {
+                  "_type" : {
+                    "_name" : "IssueSummary"
+                  },
+                  "documentLocationInCreatingWorkspace" : {
+                    "_type" : {
+                      "_name" : "DocumentLocation"
+                    },
+                    "concreteTypeName" : {
+                      "_type" : {
+                        "_name" : "String"
+                      },
+                      "_value" : "DVTTextDocumentLocation"
+                    },
+                    "url" : {
+                      "_type" : {
+                        "_name" : "String"
+                      },
+                      "_value" : "file:\/\/\/Users\/stephenreitz\/Desktop\/Swift-2048-test\/Poem%20of%20the%20Day\/Poem%20of%20the%20DayUITests\/AIFeaturesUITests.swift#EndingColumnNumber=17&EndingLineNumber=93&StartingColumnNumber=17&StartingLineNumber=93&Timestamp=785784471.828029"
+                    }
+                  },
+                  "issueType" : {
+                    "_type" : {
+                      "_name" : "String"
+                    },
+                    "_value" : "No-usage"
+                  },
+                  "message" : {
+                    "_type" : {
+                      "_name" : "String"
+                    },
+                    "_value" : "Result of call to 'tapVibeGenerationButton()' is unused"
+                  }
+                },
+                {
+                  "_type" : {
+                    "_name" : "IssueSummary"
+                  },
+                  "documentLocationInCreatingWorkspace" : {
+                    "_type" : {
+                      "_name" : "DocumentLocation"
+                    },
+                    "concreteTypeName" : {
+                      "_type" : {
+                        "_name" : "String"
+                      },
+                      "_value" : "DVTTextDocumentLocation"
+                    },
+                    "url" : {
+                      "_type" : {
+                        "_name" : "String"
+                      },
+                      "_value" : "file:\/\/\/Users\/stephenreitz\/Desktop\/Swift-2048-test\/Poem%20of%20the%20Day\/Poem%20of%20the%20DayUITests\/AIFeaturesUITests.swift#EndingColumnNumber=17&EndingLineNumber=116&StartingColumnNumber=17&StartingLineNumber=116&Timestamp=785784471.828029"
+                    }
+                  },
+                  "issueType" : {
+                    "_type" : {
+                      "_name" : "String"
+                    },
+                    "_value" : "No-usage"
+                  },
+                  "message" : {
+                    "_type" : {
+                      "_name" : "String"
+                    },
+                    "_value" : "Result of call to 'tapCustomPromptButton()' is unused"
+                  }
+                },
+                {
+                  "_type" : {
+                    "_name" : "IssueSummary"
+                  },
+                  "documentLocationInCreatingWorkspace" : {
+                    "_type" : {
+                      "_name" : "DocumentLocation"
+                    },
+                    "concreteTypeName" : {
+                      "_type" : {
+                        "_name" : "String"
+                      },
+                      "_value" : "DVTTextDocumentLocation"
+                    },
+                    "url" : {
+                      "_type" : {
+                        "_name" : "String"
+                      },
+                      "_value" : "file:\/\/\/Users\/stephenreitz\/Desktop\/Swift-2048-test\/Poem%20of%20the%20Day\/Poem%20of%20the%20DayUITests\/AIFeaturesUITests.swift#EndingColumnNumber=17&EndingLineNumber=149&StartingColumnNumber=17&StartingLineNumber=149&Timestamp=785784471.828029"
+                    }
+                  },
+                  "issueType" : {
+                    "_type" : {
+                      "_name" : "String"
+                    },
+                    "_value" : "No-usage"
+                  },
+                  "message" : {
+                    "_type" : {
+                      "_name" : "String"
+                    },
+                    "_value" : "Result of call to 'tapCustomPromptButton()' is unused"
+                  }
+                },
+                {
+                  "_type" : {
+                    "_name" : "IssueSummary"
+                  },
+                  "documentLocationInCreatingWorkspace" : {
+                    "_type" : {
+                      "_name" : "DocumentLocation"
+                    },
+                    "concreteTypeName" : {
+                      "_type" : {
+                        "_name" : "String"
+                      },
+                      "_value" : "DVTTextDocumentLocation"
+                    },
+                    "url" : {
+                      "_type" : {
+                        "_name" : "String"
+                      },
+                      "_value" : "file:\/\/\/Users\/stephenreitz\/Desktop\/Swift-2048-test\/Poem%20of%20the%20Day\/Poem%20of%20the%20DayUITests\/AIFeaturesUITests.swift#EndingColumnNumber=17&EndingLineNumber=179&StartingColumnNumber=17&StartingLineNumber=179&Timestamp=785784471.828029"
+                    }
+                  },
+                  "issueType" : {
+                    "_type" : {
+                      "_name" : "String"
+                    },
+                    "_value" : "No-usage"
+                  },
+                  "message" : {
+                    "_type" : {
+                      "_name" : "String"
+                    },
+                    "_value" : "Result of call to 'tapVibeGenerationButton()' is unused"
+                  }
+                },
+                {
+                  "_type" : {
+                    "_name" : "IssueSummary"
+                  },
+                  "documentLocationInCreatingWorkspace" : {
+                    "_type" : {
+                      "_name" : "DocumentLocation"
+                    },
+                    "concreteTypeName" : {
+                      "_type" : {
+                        "_name" : "String"
+                      },
+                      "_value" : "DVTTextDocumentLocation"
+                    },
+                    "url" : {
+                      "_type" : {
+                        "_name" : "String"
+                      },
+                      "_value" : "file:\/\/\/Users\/stephenreitz\/Desktop\/Swift-2048-test\/Poem%20of%20the%20Day\/Poem%20of%20the%20DayUITests\/AIFeaturesUITests.swift#EndingColumnNumber=17&EndingLineNumber=233&StartingColumnNumber=17&StartingLineNumber=233&Timestamp=785784471.828029"
+                    }
+                  },
+                  "issueType" : {
+                    "_type" : {
+                      "_name" : "String"
+                    },
+                    "_value" : "No-usage"
+                  },
+                  "message" : {
+                    "_type" : {
+                      "_name" : "String"
+                    },
+                    "_value" : "Result of call to 'tapVibeGenerationButton()' is unused"
+                  }
+                },
+                {
+                  "_type" : {
+                    "_name" : "IssueSummary"
+                  },
+                  "documentLocationInCreatingWorkspace" : {
+                    "_type" : {
+                      "_name" : "DocumentLocation"
+                    },
+                    "concreteTypeName" : {
+                      "_type" : {
+                        "_name" : "String"
+                      },
+                      "_value" : "DVTTextDocumentLocation"
+                    },
+                    "url" : {
+                      "_type" : {
+                        "_name" : "String"
+                      },
+                      "_value" : "file:\/\/\/Users\/stephenreitz\/Desktop\/Swift-2048-test\/Poem%20of%20the%20Day\/Poem%20of%20the%20DayUITests\/AIFeaturesUITests.swift#EndingColumnNumber=17&EndingLineNumber=260&StartingColumnNumber=17&StartingLineNumber=260&Timestamp=785784471.828029"
+                    }
+                  },
+                  "issueType" : {
+                    "_type" : {
+                      "_name" : "String"
+                    },
+                    "_value" : "No-usage"
+                  },
+                  "message" : {
+                    "_type" : {
+                      "_name" : "String"
+                    },
+                    "_value" : "Result of call to 'tapVibeGenerationButton()' is unused"
+                  }
+                },
+                {
+                  "_type" : {
+                    "_name" : "IssueSummary"
+                  },
+                  "documentLocationInCreatingWorkspace" : {
+                    "_type" : {
+                      "_name" : "DocumentLocation"
+                    },
+                    "concreteTypeName" : {
+                      "_type" : {
+                        "_name" : "String"
+                      },
+                      "_value" : "DVTTextDocumentLocation"
+                    },
+                    "url" : {
+                      "_type" : {
+                        "_name" : "String"
+                      },
+                      "_value" : "file:\/\/\/Users\/stephenreitz\/Desktop\/Swift-2048-test\/Poem%20of%20the%20Day\/Poem%20of%20the%20DayUITests\/AIFeaturesUITests.swift#EndingColumnNumber=17&EndingLineNumber=290&StartingColumnNumber=17&StartingLineNumber=290&Timestamp=785784471.828029"
+                    }
+                  },
+                  "issueType" : {
+                    "_type" : {
+                      "_name" : "String"
+                    },
+                    "_value" : "No-usage"
+                  },
+                  "message" : {
+                    "_type" : {
+                      "_name" : "String"
+                    },
+                    "_value" : "Result of call to 'tapCustomPromptButton()' is unused"
+                  }
+                },
+                {
+                  "_type" : {
+                    "_name" : "IssueSummary"
+                  },
+                  "documentLocationInCreatingWorkspace" : {
+                    "_type" : {
+                      "_name" : "DocumentLocation"
+                    },
+                    "concreteTypeName" : {
+                      "_type" : {
+                        "_name" : "String"
+                      },
+                      "_value" : "DVTTextDocumentLocation"
+                    },
+                    "url" : {
+                      "_type" : {
+                        "_name" : "String"
+                      },
+                      "_value" : "file:\/\/\/Users\/stephenreitz\/Desktop\/Swift-2048-test\/Poem%20of%20the%20Day\/Poem%20of%20the%20DayUITests\/AIFeaturesUITests.swift#EndingColumnNumber=17&EndingLineNumber=333&StartingColumnNumber=17&StartingLineNumber=333&Timestamp=785784471.828029"
+                    }
+                  },
+                  "issueType" : {
+                    "_type" : {
+                      "_name" : "String"
+                    },
+                    "_value" : "No-usage"
+                  },
+                  "message" : {
+                    "_type" : {
+                      "_name" : "String"
+                    },
+                    "_value" : "Result of call to 'tapVibeGenerationButton()' is unused"
+                  }
+                },
+                {
+                  "_type" : {
+                    "_name" : "IssueSummary"
+                  },
+                  "documentLocationInCreatingWorkspace" : {
+                    "_type" : {
+                      "_name" : "DocumentLocation"
+                    },
+                    "concreteTypeName" : {
+                      "_type" : {
+                        "_name" : "String"
+                      },
+                      "_value" : "DVTTextDocumentLocation"
+                    },
+                    "url" : {
+                      "_type" : {
+                        "_name" : "String"
+                      },
+                      "_value" : "file:\/\/\/Users\/stephenreitz\/Desktop\/Swift-2048-test\/Poem%20of%20the%20Day\/Poem%20of%20the%20DayUITests\/AIFeaturesUITests.swift#EndingColumnNumber=17&EndingLineNumber=346&StartingColumnNumber=17&StartingLineNumber=346&Timestamp=785784471.828029"
+                    }
+                  },
+                  "issueType" : {
+                    "_type" : {
+                      "_name" : "String"
+                    },
+                    "_value" : "No-usage"
+                  },
+                  "message" : {
+                    "_type" : {
+                      "_name" : "String"
+                    },
+                    "_value" : "Result of call to 'tapCustomPromptButton()' is unused"
+                  }
+                }
+              ]
+            }
+          },
+          "logRef" : {
+            "_type" : {
+              "_name" : "Reference"
+            },
+            "id" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "0~ocZTrl-GREIqs9AODHbu6EyXzaFuyvun5VcujOEPGJKFuWshD4y3QCCqr1bYw9a2GLz2rI6z202RsmChCYS1Ig=="
+            },
+            "targetType" : {
+              "_type" : {
+                "_name" : "TypeDefinition"
+              },
+              "name" : {
+                "_type" : {
+                  "_name" : "String"
+                },
+                "_value" : "ActivityLogSection"
+              }
+            }
+          },
+          "metrics" : {
+            "_type" : {
+              "_name" : "ResultMetrics"
+            },
+            "warningCount" : {
+              "_type" : {
+                "_name" : "Int"
+              },
+              "_value" : "12"
+            }
+          },
+          "resultName" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "build"
+          },
+          "status" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "succeeded"
+          }
+        },
+        "endedTime" : {
+          "_type" : {
+            "_name" : "Date"
+          },
+          "_value" : "2025-11-25T12:30:36.238-0500"
+        },
+        "runDestination" : {
+          "_type" : {
+            "_name" : "ActionRunDestinationRecord"
+          },
+          "displayName" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "iPhone 17"
+          },
+          "localComputerRecord" : {
+            "_type" : {
+              "_name" : "ActionDeviceRecord"
+            },
+            "busSpeedInMHz" : {
+              "_type" : {
+                "_name" : "Int"
+              },
+              "_value" : "100"
+            },
+            "cpuCount" : {
+              "_type" : {
+                "_name" : "Int"
+              },
+              "_value" : "1"
+            },
+            "cpuKind" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "Unknown"
+            },
+            "cpuSpeedInMHz" : {
+              "_type" : {
+                "_name" : "Int"
+              },
+              "_value" : "2400"
+            },
+            "identifier" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "2197D444-0D60-5FE0-8BD7-53EC3A69019B"
+            },
+            "isConcreteDevice" : {
+              "_type" : {
+                "_name" : "Bool"
+              },
+              "_value" : "true"
+            },
+            "logicalCPUCoresPerPackage" : {
+              "_type" : {
+                "_name" : "Int"
+              },
+              "_value" : "12"
+            },
+            "modelCode" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "Mac16,8"
+            },
+            "modelName" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "Mac"
+            },
+            "modelUTI" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "com.apple.macbookpro-14-2024-2"
+            },
+            "name" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "My Mac"
+            },
+            "nativeArchitecture" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "x86_64"
+            },
+            "operatingSystemVersion" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "26.1"
+            },
+            "operatingSystemVersionWithBuildNumber" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "26.1 (25B78)"
+            },
+            "physicalCPUCoresPerPackage" : {
+              "_type" : {
+                "_name" : "Int"
+              },
+              "_value" : "12"
+            },
+            "platformRecord" : {
+              "_type" : {
+                "_name" : "ActionPlatformRecord"
+              },
+              "identifier" : {
+                "_type" : {
+                  "_name" : "String"
+                },
+                "_value" : "com.apple.platform.macosx"
+              },
+              "userDescription" : {
+                "_type" : {
+                  "_name" : "String"
+                },
+                "_value" : "macOS"
+              }
+            },
+            "ramSizeInMegabytes" : {
+              "_type" : {
+                "_name" : "Int"
+              },
+              "_value" : "24576"
+            }
+          },
+          "targetArchitecture" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "arm64"
+          },
+          "targetDeviceRecord" : {
+            "_type" : {
+              "_name" : "ActionDeviceRecord"
+            },
+            "busSpeedInMHz" : {
+              "_type" : {
+                "_name" : "Int"
+              },
+              "_value" : "0"
+            },
+            "cpuCount" : {
+              "_type" : {
+                "_name" : "Int"
+              },
+              "_value" : "0"
+            },
+            "cpuSpeedInMHz" : {
+              "_type" : {
+                "_name" : "Int"
+              },
+              "_value" : "0"
+            },
+            "identifier" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "A200808B-1415-4CF1-A458-F37D7DF263CD"
+            },
+            "isConcreteDevice" : {
+              "_type" : {
+                "_name" : "Bool"
+              },
+              "_value" : "true"
+            },
+            "logicalCPUCoresPerPackage" : {
+              "_type" : {
+                "_name" : "Int"
+              },
+              "_value" : "0"
+            },
+            "modelCode" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "iPhone18,3"
+            },
+            "modelName" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "iPhone 17"
+            },
+            "modelUTI" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "com.apple.com.apple.iphone-17-2"
+            },
+            "name" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "iPhone 17"
+            },
+            "nativeArchitecture" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "arm64"
+            },
+            "operatingSystemVersion" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "26.1"
+            },
+            "operatingSystemVersionWithBuildNumber" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "26.1 (23B86)"
+            },
+            "physicalCPUCoresPerPackage" : {
+              "_type" : {
+                "_name" : "Int"
+              },
+              "_value" : "0"
+            },
+            "platformRecord" : {
+              "_type" : {
+                "_name" : "ActionPlatformRecord"
+              },
+              "identifier" : {
+                "_type" : {
+                  "_name" : "String"
+                },
+                "_value" : "com.apple.platform.iphonesimulator"
+              },
+              "userDescription" : {
+                "_type" : {
+                  "_name" : "String"
+                },
+                "_value" : "iOS Simulator"
+              }
+            },
+            "ramSizeInMegabytes" : {
+              "_type" : {
+                "_name" : "Int"
+              },
+              "_value" : "0"
+            }
+          },
+          "targetSDKRecord" : {
+            "_type" : {
+              "_name" : "ActionSDKRecord"
+            },
+            "identifier" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "iphonesimulator26.1"
+            },
+            "name" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "Simulator - iOS 26.1"
+            },
+            "operatingSystemVersion" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "26.1"
+            }
+          }
+        },
+        "schemeCommandName" : {
+          "_type" : {
+            "_name" : "String"
+          },
+          "_value" : "Test"
+        },
+        "schemeTaskName" : {
+          "_type" : {
+            "_name" : "String"
+          },
+          "_value" : "BuildAndAction"
+        },
+        "startedTime" : {
+          "_type" : {
+            "_name" : "Date"
+          },
+          "_value" : "2025-11-25T12:27:50.577-0500"
+        },
+        "testPlanName" : {
+          "_type" : {
+            "_name" : "String"
+          },
+          "_value" : "Poem of the Day"
+        },
+        "title" : {
+          "_type" : {
+            "_name" : "String"
+          },
+          "_value" : "Testing project Poem of the Day with scheme Poem of the Day"
+        }
+      }
+    ]
+  },
+  "issues" : {
+    "_type" : {
+      "_name" : "ResultIssueSummaries"
+    },
+    "warningSummaries" : {
+      "_type" : {
+        "_name" : "Array"
+      },
+      "_values" : [
+        {
+          "_type" : {
+            "_name" : "IssueSummary"
+          },
+          "documentLocationInCreatingWorkspace" : {
+            "_type" : {
+              "_name" : "DocumentLocation"
+            },
+            "concreteTypeName" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "DVTTextDocumentLocation"
+            },
+            "url" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "file:\/\/\/Users\/stephenreitz\/Desktop\/Swift-2048-test\/Poem%20of%20the%20Day\/Poem%20of%20the%20Day\/Services\/NotificationService.swift#EndingColumnNumber=4&EndingLineNumber=52&StartingColumnNumber=4&StartingLineNumber=52&Timestamp=785784471.828029"
+            }
+          },
+          "issueType" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "Swift Compiler Warning"
+          },
+          "message" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "'nonisolated' can not be applied to variable with non-'Sendable' type 'UserDefaults'; this is an error in the Swift 6 language mode"
+          }
+        },
+        {
+          "_type" : {
+            "_name" : "IssueSummary"
+          },
+          "documentLocationInCreatingWorkspace" : {
+            "_type" : {
+              "_name" : "DocumentLocation"
+            },
+            "concreteTypeName" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "DVTTextDocumentLocation"
+            },
+            "url" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "file:\/\/\/Users\/stephenreitz\/Desktop\/Swift-2048-test\/Poem%20of%20the%20Day\/Poem%20of%20the%20DayUITests\/AIFeaturesUITests.swift#EndingColumnNumber=17&EndingLineNumber=59&StartingColumnNumber=17&StartingLineNumber=59&Timestamp=785784471.828029"
+            }
+          },
+          "issueType" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "No-usage"
+          },
+          "message" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "Result of call to 'tapVibeGenerationButton()' is unused"
+          }
+        },
+        {
+          "_type" : {
+            "_name" : "IssueSummary"
+          },
+          "documentLocationInCreatingWorkspace" : {
+            "_type" : {
+              "_name" : "DocumentLocation"
+            },
+            "concreteTypeName" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "DVTTextDocumentLocation"
+            },
+            "url" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "file:\/\/\/Users\/stephenreitz\/Desktop\/Swift-2048-test\/Poem%20of%20the%20Day\/Poem%20of%20the%20DayUITests\/AIFeaturesUITests.swift#EndingColumnNumber=17&EndingLineNumber=79&StartingColumnNumber=17&StartingLineNumber=79&Timestamp=785784471.828029"
+            }
+          },
+          "issueType" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "No-usage"
+          },
+          "message" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "Result of call to 'tapVibeGenerationButton()' is unused"
+          }
+        },
+        {
+          "_type" : {
+            "_name" : "IssueSummary"
+          },
+          "documentLocationInCreatingWorkspace" : {
+            "_type" : {
+              "_name" : "DocumentLocation"
+            },
+            "concreteTypeName" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "DVTTextDocumentLocation"
+            },
+            "url" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "file:\/\/\/Users\/stephenreitz\/Desktop\/Swift-2048-test\/Poem%20of%20the%20Day\/Poem%20of%20the%20DayUITests\/AIFeaturesUITests.swift#EndingColumnNumber=17&EndingLineNumber=93&StartingColumnNumber=17&StartingLineNumber=93&Timestamp=785784471.828029"
+            }
+          },
+          "issueType" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "No-usage"
+          },
+          "message" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "Result of call to 'tapVibeGenerationButton()' is unused"
+          }
+        },
+        {
+          "_type" : {
+            "_name" : "IssueSummary"
+          },
+          "documentLocationInCreatingWorkspace" : {
+            "_type" : {
+              "_name" : "DocumentLocation"
+            },
+            "concreteTypeName" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "DVTTextDocumentLocation"
+            },
+            "url" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "file:\/\/\/Users\/stephenreitz\/Desktop\/Swift-2048-test\/Poem%20of%20the%20Day\/Poem%20of%20the%20DayUITests\/AIFeaturesUITests.swift#EndingColumnNumber=17&EndingLineNumber=116&StartingColumnNumber=17&StartingLineNumber=116&Timestamp=785784471.828029"
+            }
+          },
+          "issueType" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "No-usage"
+          },
+          "message" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "Result of call to 'tapCustomPromptButton()' is unused"
+          }
+        },
+        {
+          "_type" : {
+            "_name" : "IssueSummary"
+          },
+          "documentLocationInCreatingWorkspace" : {
+            "_type" : {
+              "_name" : "DocumentLocation"
+            },
+            "concreteTypeName" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "DVTTextDocumentLocation"
+            },
+            "url" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "file:\/\/\/Users\/stephenreitz\/Desktop\/Swift-2048-test\/Poem%20of%20the%20Day\/Poem%20of%20the%20DayUITests\/AIFeaturesUITests.swift#EndingColumnNumber=17&EndingLineNumber=149&StartingColumnNumber=17&StartingLineNumber=149&Timestamp=785784471.828029"
+            }
+          },
+          "issueType" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "No-usage"
+          },
+          "message" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "Result of call to 'tapCustomPromptButton()' is unused"
+          }
+        },
+        {
+          "_type" : {
+            "_name" : "IssueSummary"
+          },
+          "documentLocationInCreatingWorkspace" : {
+            "_type" : {
+              "_name" : "DocumentLocation"
+            },
+            "concreteTypeName" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "DVTTextDocumentLocation"
+            },
+            "url" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "file:\/\/\/Users\/stephenreitz\/Desktop\/Swift-2048-test\/Poem%20of%20the%20Day\/Poem%20of%20the%20DayUITests\/AIFeaturesUITests.swift#EndingColumnNumber=17&EndingLineNumber=179&StartingColumnNumber=17&StartingLineNumber=179&Timestamp=785784471.828029"
+            }
+          },
+          "issueType" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "No-usage"
+          },
+          "message" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "Result of call to 'tapVibeGenerationButton()' is unused"
+          }
+        },
+        {
+          "_type" : {
+            "_name" : "IssueSummary"
+          },
+          "documentLocationInCreatingWorkspace" : {
+            "_type" : {
+              "_name" : "DocumentLocation"
+            },
+            "concreteTypeName" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "DVTTextDocumentLocation"
+            },
+            "url" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "file:\/\/\/Users\/stephenreitz\/Desktop\/Swift-2048-test\/Poem%20of%20the%20Day\/Poem%20of%20the%20DayUITests\/AIFeaturesUITests.swift#EndingColumnNumber=17&EndingLineNumber=233&StartingColumnNumber=17&StartingLineNumber=233&Timestamp=785784471.828029"
+            }
+          },
+          "issueType" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "No-usage"
+          },
+          "message" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "Result of call to 'tapVibeGenerationButton()' is unused"
+          }
+        },
+        {
+          "_type" : {
+            "_name" : "IssueSummary"
+          },
+          "documentLocationInCreatingWorkspace" : {
+            "_type" : {
+              "_name" : "DocumentLocation"
+            },
+            "concreteTypeName" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "DVTTextDocumentLocation"
+            },
+            "url" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "file:\/\/\/Users\/stephenreitz\/Desktop\/Swift-2048-test\/Poem%20of%20the%20Day\/Poem%20of%20the%20DayUITests\/AIFeaturesUITests.swift#EndingColumnNumber=17&EndingLineNumber=260&StartingColumnNumber=17&StartingLineNumber=260&Timestamp=785784471.828029"
+            }
+          },
+          "issueType" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "No-usage"
+          },
+          "message" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "Result of call to 'tapVibeGenerationButton()' is unused"
+          }
+        },
+        {
+          "_type" : {
+            "_name" : "IssueSummary"
+          },
+          "documentLocationInCreatingWorkspace" : {
+            "_type" : {
+              "_name" : "DocumentLocation"
+            },
+            "concreteTypeName" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "DVTTextDocumentLocation"
+            },
+            "url" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "file:\/\/\/Users\/stephenreitz\/Desktop\/Swift-2048-test\/Poem%20of%20the%20Day\/Poem%20of%20the%20DayUITests\/AIFeaturesUITests.swift#EndingColumnNumber=17&EndingLineNumber=290&StartingColumnNumber=17&StartingLineNumber=290&Timestamp=785784471.828029"
+            }
+          },
+          "issueType" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "No-usage"
+          },
+          "message" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "Result of call to 'tapCustomPromptButton()' is unused"
+          }
+        },
+        {
+          "_type" : {
+            "_name" : "IssueSummary"
+          },
+          "documentLocationInCreatingWorkspace" : {
+            "_type" : {
+              "_name" : "DocumentLocation"
+            },
+            "concreteTypeName" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "DVTTextDocumentLocation"
+            },
+            "url" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "file:\/\/\/Users\/stephenreitz\/Desktop\/Swift-2048-test\/Poem%20of%20the%20Day\/Poem%20of%20the%20DayUITests\/AIFeaturesUITests.swift#EndingColumnNumber=17&EndingLineNumber=333&StartingColumnNumber=17&StartingLineNumber=333&Timestamp=785784471.828029"
+            }
+          },
+          "issueType" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "No-usage"
+          },
+          "message" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "Result of call to 'tapVibeGenerationButton()' is unused"
+          }
+        },
+        {
+          "_type" : {
+            "_name" : "IssueSummary"
+          },
+          "documentLocationInCreatingWorkspace" : {
+            "_type" : {
+              "_name" : "DocumentLocation"
+            },
+            "concreteTypeName" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "DVTTextDocumentLocation"
+            },
+            "url" : {
+              "_type" : {
+                "_name" : "String"
+              },
+              "_value" : "file:\/\/\/Users\/stephenreitz\/Desktop\/Swift-2048-test\/Poem%20of%20the%20Day\/Poem%20of%20the%20DayUITests\/AIFeaturesUITests.swift#EndingColumnNumber=17&EndingLineNumber=346&StartingColumnNumber=17&StartingLineNumber=346&Timestamp=785784471.828029"
+            }
+          },
+          "issueType" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "No-usage"
+          },
+          "message" : {
+            "_type" : {
+              "_name" : "String"
+            },
+            "_value" : "Result of call to 'tapCustomPromptButton()' is unused"
+          }
+        }
+      ]
+    }
+  },
+  "metadataRef" : {
+    "_type" : {
+      "_name" : "Reference"
+    },
+    "id" : {
+      "_type" : {
+        "_name" : "String"
+      },
+      "_value" : "0~cvMktWhG-iYO5mnGz1TxtZLc6YeNGyMg9vw7Asq1PZCas1Fv4rjJ50FQuWR1DG--DRhZ4CXjYlrs_oo1KQcbfA=="
+    },
+    "targetType" : {
+      "_type" : {
+        "_name" : "TypeDefinition"
+      },
+      "name" : {
+        "_type" : {
+          "_name" : "String"
+        },
+        "_value" : "ActionsInvocationMetadata"
+      }
+    }
+  },
+  "metrics" : {
+    "_type" : {
+      "_name" : "ResultMetrics"
+    },
+    "testsCount" : {
+      "_type" : {
+        "_name" : "Int"
+      },
+      "_value" : "11"
+    },
+    "testsFailedCount" : {
+      "_type" : {
+        "_name" : "Int"
+      },
+      "_value" : "1"
+    },
+    "warningCount" : {
+      "_type" : {
+        "_name" : "Int"
+      },
+      "_value" : "12"
+    }
+  }
+}

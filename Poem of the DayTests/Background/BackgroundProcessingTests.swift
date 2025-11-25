@@ -1,6 +1,7 @@
 import XCTest
 @testable import Poem_of_the_Day
 
+@MainActor
 final class BackgroundProcessingTests: XCTestCase {
     
     var poemRepository: PoemRepository!
@@ -13,9 +14,8 @@ final class BackgroundProcessingTests: XCTestCase {
         telemetryService = TelemetryService()
         poemRepository = PoemRepository(networkService: networkService, telemetryService: telemetryService)
         viewModel = PoemViewModel(
-            poemGenerationService: MockPoemGenerationService(),
-            telemetryService: telemetryService,
-            repository: poemRepository
+            repository: poemRepository,
+            telemetryService: telemetryService
         )
     }
     
@@ -30,7 +30,7 @@ final class BackgroundProcessingTests: XCTestCase {
     
     func testAppDidEnterBackground() async throws {
         // Simulate app entering background
-        await viewModel.loadTodaysPoem()
+        await viewModel.loadInitialData()
         
         // Simulate background app refresh
         let expectation = expectation(description: "Background refresh")
@@ -38,7 +38,7 @@ final class BackgroundProcessingTests: XCTestCase {
         Task {
             // In background, app should handle operations gracefully
             do {
-                let _ = try await poemRepository.fetchTodaysPoem()
+                let _ = try await poemRepository.getDailyPoem()
                 expectation.fulfill()
             } catch {
                 // Background operations may fail - that's acceptable
@@ -57,7 +57,7 @@ final class BackgroundProcessingTests: XCTestCase {
             // App should refresh content when returning to foreground
             await viewModel.refreshPoem()
             
-            XCTAssertEqual(viewModel.loadingState, .loaded, "Should refresh content in foreground")
+            XCTAssertFalse(viewModel.isLoading, "Should refresh content in foreground")
             expectation.fulfill()
         }
         
@@ -66,8 +66,8 @@ final class BackgroundProcessingTests: XCTestCase {
     
     func testAppDidBecomeActive() async throws {
         // Test app becoming active after being inactive
-        await viewModel.loadTodaysPoem()
-        let initialPoem = viewModel.currentPoem
+        await viewModel.loadInitialData()
+        let initialPoem = viewModel.poemOfTheDay
         
         // Simulate app becoming active (should check for updates)
         let expectation = expectation(description: "App active check")
@@ -76,7 +76,7 @@ final class BackgroundProcessingTests: XCTestCase {
             await viewModel.refreshPoem()
             
             // Should update if new content available
-            XCTAssertNotNil(viewModel.currentPoem, "Should have poem when app becomes active")
+            XCTAssertNotNil(viewModel.poemOfTheDay, "Should have poem when app becomes active")
             expectation.fulfill()
         }
         
@@ -87,14 +87,14 @@ final class BackgroundProcessingTests: XCTestCase {
     
     func testBackgroundAppRefreshEnabled() async throws {
         // Test behavior when background app refresh is enabled
-        networkService.simulateDelay = 0.1 // Quick response for background
+        networkService.delayDuration = 0.1 // Quick response for background
         
         let expectation = expectation(description: "Background app refresh")
         
         Task {
             // Simulate background refresh
             do {
-                let _ = try await poemRepository.fetchTodaysPoem()
+                let _ = try await poemRepository.getDailyPoem()
                 
                 // Background refresh should succeed quickly
                 XCTAssertTrue(true, "Background refresh should work when enabled")
@@ -115,9 +115,10 @@ final class BackgroundProcessingTests: XCTestCase {
         
         Task {
             // Should use cached data when background refresh disabled
-            let cachedPoems = await viewModel.loadFavoritePoems()
+            await viewModel.loadInitialData()
+            let cachedPoems = viewModel.favorites
             
-            XCTAssertNotNil(cachedPoems, "Should use cached data when background refresh disabled")
+            XCTAssertFalse(cachedPoems.isEmpty, "Should use cached data when background refresh disabled")
             expectation.fulfill()
         }
         
@@ -128,7 +129,7 @@ final class BackgroundProcessingTests: XCTestCase {
     
     func testMemoryWarningHandling() async throws {
         // Test handling of memory warnings
-        await viewModel.loadTodaysPoem()
+        await viewModel.loadInitialData()
         
         // Simulate memory warning
         let expectation = expectation(description: "Memory warning")
@@ -140,7 +141,7 @@ final class BackgroundProcessingTests: XCTestCase {
             await viewModel.refreshPoem()
             
             // Should still function after memory warning
-            XCTAssertNotNil(viewModel.currentPoem, "Should maintain functionality after memory warning")
+            XCTAssertNotNil(viewModel.poemOfTheDay, "Should maintain functionality after memory warning")
             expectation.fulfill()
         }
         
@@ -159,12 +160,12 @@ final class BackgroundProcessingTests: XCTestCase {
             }
             
             // App should still function
-            await viewModel.loadTodaysPoem()
+            await viewModel.loadInitialData()
             
             // Clean up memory
             largeData.removeAll()
             
-            XCTAssertEqual(viewModel.loadingState, .loaded, "Should recover from low memory")
+            XCTAssertFalse(viewModel.isLoading, "Should recover from low memory")
             expectation.fulfill()
         }
         
@@ -217,17 +218,18 @@ final class BackgroundProcessingTests: XCTestCase {
     
     func testBackgroundDataPersistence() async throws {
         // Test data persistence during background operations
-        await viewModel.loadTodaysPoem()
+        await viewModel.loadInitialData()
         
-        if let poem = viewModel.currentPoem {
-            await viewModel.toggleFavorite(for: poem)
+        if let poem = viewModel.poemOfTheDay {
+            await viewModel.toggleFavorite(poem: poem)
             
             // Simulate app backgrounding
             let expectation = expectation(description: "Background persistence")
             
             Task {
                 // Data should persist through background
-                let favorites = await viewModel.loadFavoritePoems()
+                await viewModel.loadInitialData()
+                let favorites = viewModel.favorites
                 
                 XCTAssertTrue(favorites.contains { $0.id == poem.id }, "Should persist favorites in background")
                 expectation.fulfill()
@@ -239,7 +241,7 @@ final class BackgroundProcessingTests: XCTestCase {
     
     func testBackgroundCacheManagement() async throws {
         // Test cache management in background
-        await viewModel.loadTodaysPoem()
+        await viewModel.loadInitialData()
         
         let expectation = expectation(description: "Background cache")
         
@@ -250,7 +252,7 @@ final class BackgroundProcessingTests: XCTestCase {
             }
             
             // Should not accumulate excessive cache data
-            XCTAssertNotNil(viewModel.currentPoem, "Should maintain cache efficiently")
+            XCTAssertNotNil(viewModel.poemOfTheDay, "Should maintain cache efficiently")
             expectation.fulfill()
         }
         
@@ -261,8 +263,8 @@ final class BackgroundProcessingTests: XCTestCase {
     
     func testNetworkConnectionLost() async throws {
         // Test behavior when network connection is lost
-        networkService.shouldFail = true
-        networkService.errorToReturn = PoemError.networkUnavailable
+        networkService.shouldThrowError = true
+        networkService.errorToThrow = PoemError.networkUnavailable
         
         let expectation = expectation(description: "Network lost")
         
@@ -270,7 +272,7 @@ final class BackgroundProcessingTests: XCTestCase {
             await viewModel.refreshPoem()
             
             // Should handle network loss gracefully
-            XCTAssertEqual(viewModel.loadingState, .error, "Should handle network loss")
+            XCTAssertTrue(viewModel.showErrorAlert, "Should handle network loss")
             expectation.fulfill()
         }
         
@@ -279,11 +281,11 @@ final class BackgroundProcessingTests: XCTestCase {
     
     func testNetworkConnectionRestored() async throws {
         // Test behavior when network connection is restored
-        networkService.shouldFail = true
+        networkService.shouldThrowError = true
         await viewModel.refreshPoem()
         
         // Restore network
-        networkService.shouldFail = false
+        networkService.shouldThrowError = false
         
         let expectation = expectation(description: "Network restored")
         
@@ -291,7 +293,7 @@ final class BackgroundProcessingTests: XCTestCase {
             await viewModel.refreshPoem()
             
             // Should recover when network restored
-            XCTAssertEqual(viewModel.loadingState, .loaded, "Should recover when network restored")
+            XCTAssertFalse(viewModel.isLoading, "Should recover when network restored")
             expectation.fulfill()
         }
         
@@ -331,20 +333,20 @@ final class BackgroundProcessingTests: XCTestCase {
     
     func testStatePreservationDuringBackground() async throws {
         // Test that app state is preserved during backgrounding
-        await viewModel.loadTodaysPoem()
-        let originalPoem = viewModel.currentPoem
-        let originalState = viewModel.loadingState
+        await viewModel.loadInitialData()
+        let originalPoem = viewModel.poemOfTheDay
+        let originalState = viewModel.isLoading
         
         // Simulate backgrounding and returning
         let expectation = expectation(description: "State preservation")
         
         Task {
             // Simulate background period
-            await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
+            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
             
             // State should be preserved or gracefully recovered
             XCTAssertTrue(
-                viewModel.currentPoem?.id == originalPoem?.id || viewModel.loadingState == .loaded,
+                viewModel.poemOfTheDay?.id == originalPoem?.id || !viewModel.isLoading,
                 "Should preserve or recover state after backgrounding"
             )
             
