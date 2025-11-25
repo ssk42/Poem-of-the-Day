@@ -28,15 +28,17 @@ jobs:
         id: simulator
         run: |
           # Try to find iPhone 16 first, then any iPhone
-          SIM_DEVICE=$(xcrun simctl list devices available | grep -i "iPhone 16" | head -1 | sed -E 's/.*\(([^)]+)\).*/\1/' | xargs)
+          # Extract UUID from lines like "iPhone 16 (0F923FCA-0495-463A-945B-8E57B9C9AD52) (Shutdown)"
+          SIM_DEVICE=$(xcrun simctl list devices available | grep -i "iPhone 16" | grep -oE '\([A-F0-9-]{36}\)' | head -1 | tr -d '()')
           if [ -z "$SIM_DEVICE" ]; then
-            SIM_DEVICE=$(xcrun simctl list devices available | grep -i "iPhone" | head -1 | sed -E 's/.*\(([^)]+)\).*/\1/' | xargs)
+            SIM_DEVICE=$(xcrun simctl list devices available | grep -i "iPhone" | grep -oE '\([A-F0-9-]{36}\)' | head -1 | tr -d '()')
           fi
           if [ -n "$SIM_DEVICE" ]; then
             echo "device_id=$SIM_DEVICE" >> $GITHUB_OUTPUT
-            echo "Found simulator: $SIM_DEVICE"
+            echo "Found simulator UUID: $SIM_DEVICE"
           else
-            echo "No simulator found"
+            echo "No simulator found. Available devices:"
+            xcrun simctl list devices available | grep -i "iPhone" | head -5
             exit 1
           fi
 
