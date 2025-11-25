@@ -1,4 +1,9 @@
 # CI workflow for Poem of the Day
+#
+# NOTE: Currently failing due to GitHub Actions environment limitation:
+# - Xcode 26.1 RC SDK (23B77) doesn't match available simulator runtimes
+# - Available runtimes: iOS 18.4-18.6, iOS 26.0.1 (23A8464)
+# - Will work with self-hosted runners or when GitHub updates simulator runtimes
 
 name: CI
 
