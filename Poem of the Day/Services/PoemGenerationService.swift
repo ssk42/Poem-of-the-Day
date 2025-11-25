@@ -575,7 +575,7 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
             ]
         }
         
-        return Poem(title: title, lines: lines, author: author, vibe: vibe)
+        return Poem(title: title, lines: lines, author: author, vibe: vibe, source: .localFallback)
     }
     
     private func generateVibeSpecificLines(for vibe: DailyVibe) -> [String] {
