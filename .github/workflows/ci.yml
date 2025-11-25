@@ -21,12 +21,38 @@ jobs:
         with:
           xcode-version: 'latest-stable'
 
+      - name: Create and Boot Simulator
+        id: create_boot_sim
+        run: |
+          SIM_NAME="iPhone 15 Pro (CI)"
+          SIM_DEVICE_TYPE="iPhone 15 Pro"
+          SIM_OS_ID="com.apple.CoreSimulator.SimRuntime.iOS-26-0" # Based on available runtimes from logs
+
+          # Check if a simulator with this name already exists
+          EXISTING_SIM=$(xcrun simctl list devices --json | jq -r ".devices.\"$SIM_OS_ID\"[] | select(.name == \"$SIM_NAME\") | .udid")
+
+          if [ -n "$EXISTING_SIM" ]; then
+            echo "Simulator '$SIM_NAME' already exists with UDID: $EXISTING_SIM"
+            SIM_UDID=$EXISTING_SIM
+          else
+            echo "Creating simulator '$SIM_NAME'..."
+            SIM_UDID=$(xcrun simctl create "$SIM_NAME" "$SIM_DEVICE_TYPE" "$SIM_OS_ID")
+            echo "Created simulator with UDID: $SIM_UDID"
+          fi
+
+          # Ensure the simulator is booted
+          xcrun simctl boot "$SIM_UDID" || echo "Simulator already booted or failed to boot."
+
+          echo "device_udid=$SIM_UDID" >> $GITHUB_OUTPUT
+
+          xcrun simctl list devices # For debugging
+
       - name: Build and Test
         run: |
           xcodebuild clean test \
             -scheme "Poem of the Day" \
             -sdk iphonesimulator \
-            -destination "generic/platform=iOS Simulator" \
+            -destination "platform=iOS Simulator,id=${{ steps.create_boot_sim.outputs.device_udid }}" \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO
 
