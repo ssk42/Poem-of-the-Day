@@ -94,7 +94,12 @@ enum AppConfiguration {
     
     enum Testing {
         static var isUITesting: Bool {
-            ProcessInfo.processInfo.arguments.contains("--ui-testing")
+            let processInfo = ProcessInfo.processInfo
+            let args = processInfo.arguments
+            let env = processInfo.environment
+            return args.contains("--ui-testing")
+                || env["UITESTING"] == "1"
+                || env["XCTestConfigurationFilePath"] != nil
         }
         
         static var isAIAvailable: Bool {

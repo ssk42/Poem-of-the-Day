@@ -32,12 +32,21 @@ struct VibeGenerationView: View {
             .navigationTitle("Today's Vibe")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                #if os(visionOS)
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                    .accessibilityIdentifier("cancel_button")
+                }
+                #else
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Cancel") {
                         dismiss()
                     }
                     .accessibilityIdentifier("cancel_button")
                 }
+                #endif
             }
         }
     }
@@ -246,12 +255,21 @@ struct CustomPromptView: View {
             .navigationTitle("Custom Poem")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                #if os(visionOS)
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                    .accessibilityIdentifier("cancel_button")
+                }
+                #else
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {
                         dismiss()
                     }
                     .accessibilityIdentifier("cancel_button")
                 }
+                #endif
             }
         }
     }

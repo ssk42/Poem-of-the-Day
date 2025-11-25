@@ -1,0 +1,25 @@
+# Ignore Xcode build artifacts
+DerivedData/
+build/
+*.xcodeproj/
+*.xcworkspace/
+
+# Ignore git
+.git/
+
+# Ignore other VCS
+.svn/
+.hg/
+
+# Ignore IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Ignore test outputs
+*.xcresult/
+test_output.txt
+test_results.json
+error_test_log.txt
+build.log

@@ -201,16 +201,46 @@ extension Color {
     /// Vibe-specific colors
     static func vibeColor(for vibe: DailyVibe) -> Color {
         switch vibe {
-        case .hopeful: return .green
-        case .contemplative: return .indigo
-        case .energetic: return .orange
-        case .peaceful: return .mint
-        case .melancholic: return .gray
-        case .inspiring: return .yellow
-        case .uncertain: return .purple
-        case .celebratory: return .pink
-        case .reflective: return .brown
-        case .determined: return .red
+        case .hopeful:
+            return .green
+        case .contemplative:
+            return .indigo
+        case .energetic:
+            return .orange
+        case .peaceful:
+            return .mint
+        case .melancholic:
+            return .gray
+        case .inspiring:
+            return .yellow
+        case .uncertain:
+            return .purple
+        case .celebratory:
+            return .pink
+        case .reflective:
+            return .brown
+        case .determined:
+            return .red
+        case .nostalgic:
+            return .brown
+        case .adventurous:
+            return .teal
+        case .whimsical:
+            return .purple
+        case .urgent:
+            return .orange
+        case .triumphant:
+            return .yellow
+        case .solemn:
+            return .gray
+        case .playful:
+            return .pink
+        case .mysterious:
+            return .indigo
+        case .rebellious:
+            return .red
+        case .compassionate:
+            return .pink
         }
     }
 }

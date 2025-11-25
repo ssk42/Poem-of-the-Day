@@ -47,6 +47,14 @@ struct Poem: Identifiable, Codable, Equatable {
             text += "\nby \(author)"
         }
         text += "\n\n\(content)"
+        
+        // Basic sanitization for sharing
+        // Remove script tags
+        text = text.replacingOccurrences(of: "<script>", with: "")
+        text = text.replacingOccurrences(of: "</script>", with: "")
+        // Remove javascript protocol
+        text = text.replacingOccurrences(of: "javascript:", with: "")
+        
         return text
     }
 }

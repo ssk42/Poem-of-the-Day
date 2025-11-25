@@ -35,16 +35,26 @@ actor VibeAnalyzer: VibeAnalyzerProtocol {
         }
         // Fallback minimal defaults to avoid crashes if resource is missing or duplicated
         return [
-            .hopeful: ["hope", "progress", "growth", "recovery", "optimistic", "peace"],
-            .contemplative: ["philosophy", "thought", "reflect", "ponder", "debate"],
-            .energetic: ["surge", "rally", "boom", "race", "soar"],
-            .peaceful: ["calm", "tranquil", "serene", "nature", "green"],
-            .melancholic: ["farewell", "loss", "mourning", "rain", "autumn"],
-            .inspiring: ["inspire", "courage", "dream", "achieve", "triumph"],
+            .hopeful: ["hope", "progress", "growth", "recovery", "optimistic", "peace", "breakthrough", "treatment", "new", "optimism", "discovery"],
+            .contemplative: ["philosophy", "thought", "reflect", "ponder", "debate", "meaning", "questions", "society", "scholars", "discussion"],
+            .energetic: ["surge", "rally", "boom", "race", "soar", "marathon", "runners", "competition", "electric", "excitement", "dynamic", "action"],
+            .peaceful: ["calm", "tranquil", "serene", "nature", "green", "preserve", "sanctuary", "retreat", "soothing", "harmony"],
+            .melancholic: ["farewell", "loss", "mourning", "rain", "autumn", "memorial", "remembering", "grief", "sadness"],
+            .inspiring: ["inspire", "courage", "dream", "achieve", "triumph", "amazing", "major", "step", "forward"],
             .uncertain: ["uncertain", "doubt", "crossroads", "risk", "unknown"],
             .celebratory: ["celebrate", "victory", "win", "award", "festival"],
             .reflective: ["reflect", "memory", "lesson", "learned", "wisdom"],
-            .determined: ["resolve", "commit", "focus", "persevere", "persist"]
+            .determined: ["resolve", "commit", "focus", "persevere", "persist"],
+            .nostalgic: ["memory", "remember", "past", "vintage", "heritage", "tradition", "childhood", "history"],
+            .adventurous: ["explore", "journey", "discover", "venture", "quest", "frontier", "expedition", "voyage"],
+            .whimsical: ["playful", "imaginative", "creative", "whimsy", "fancy", "peculiar", "quirky", "magic"],
+            .urgent: ["immediate", "crisis", "pressing", "crucial", "critical", "urgent", "emergency", "deadline"],
+            .triumphant: ["victory", "champion", "conquest", "prevail", "winning", "triumph", "success", "achieve"],
+            .solemn: ["reverent", "serious", "dignified", "sacred", "honor", "memorial", "respect", "grave"],
+            .playful: ["fun", "lighthearted", "joy", "game", "dance", "jest", "merry", "frolic"],
+            .mysterious: ["enigma", "puzzle", "secret", "unknown", "hidden", "mystery", "riddle", "obscure"],
+            .rebellious: ["defiant", "resist", "challenge", "rebel", "revolution", "uprising", "protest", "revolt"],
+            .compassionate: ["kindness", "empathy", "care", "love", "tender", "compassion", "gentle", "caring"]
         ]
     }
     
@@ -148,7 +158,8 @@ actor VibeAnalyzer: VibeAnalyzerProtocol {
         }
 
         // Find the vibe with the highest score
-        let topVibe = vibeScores.max(by: { $0.value < $1.value })?.key ?? .contemplative
+        let topVibeEntry = vibeScores.max(by: { $0.value < $1.value })
+        let topVibe = (topVibeEntry?.value ?? 0 > 0) ? (topVibeEntry?.key ?? .contemplative) : .contemplative
         let confidence = vibeScores[topVibe] ?? 0.0
 
         // Generate reasoning

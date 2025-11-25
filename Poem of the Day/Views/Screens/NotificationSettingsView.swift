@@ -34,11 +34,19 @@ struct NotificationSettingsView: View {
             .navigationTitle("Notifications")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                #if os(visionOS)
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+                #else
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") {
                         dismiss()
                     }
                 }
+                #endif
             }
             .alert("Enable Notifications", isPresented: $viewModel.showPermissionAlert) {
                 Button("Open Settings") {

@@ -79,11 +79,21 @@ actor PoemRepository: PoemRepositoryProtocol {
             print("🔄 Getting fresh vibe analysis...")
             let vibeAnalysis = try await getVibeOfTheDayInternal(forceRefresh: true)
             print("✅ Vibe analysis complete: \(vibeAnalysis.vibe.displayName)")
+            print("   Sentiment: positivity=\(vibeAnalysis.sentiment.positivity), energy=\(vibeAnalysis.sentiment.energy)")
+            print("   Keywords: \(vibeAnalysis.keywords.joined(separator: ", "))")
             
             vibeScore = vibeAnalysis.confidence
             
-            print("🤖 Generating poem from AI...")
+            print("🤖 Generating poem from AI service...")
             let poem = try await aiService.generatePoemFromVibe(vibeAnalysis)
+            
+            // Validate that we actually got content
+            guard !poem.title.isEmpty, !poem.content.isEmpty else {
+                print("❌ ERROR: Generated poem has empty title or content!")
+                print("   Title: '\(poem.title)'")
+                print("   Content length: \(poem.content.count)")
+                throw PoemError.localGenerationFailed
+            }
             
             // Check if we got a fallback poem
             if poem.source == .localFallback {
@@ -93,15 +103,30 @@ actor PoemRepository: PoemRepositoryProtocol {
                 print("✅ Poem generated successfully!")
             }
             
-            print("   Title: \(poem.title)")
+            print("📄 Generated Poem Details:")
+            print("   Title: '\(poem.title)'")
             print("   Author: \(poem.author ?? "Unknown")")
             print("   Content length: \(poem.content.count) chars")
+            print("   Lines count: \(poem.content.components(separatedBy: "\n").count)")
+            print("   Vibe: \(poem.vibe?.displayName ?? "none")")
             print("   Source: \(poem.source?.rawValue ?? "unknown")")
+            print("   First 150 chars: \(String(poem.content.prefix(150)))")
             
             success = true
             
+            // Cache the poem as today's poem (so it becomes the daily poem)
+            print("💾 Caching generated poem...")
+            await cachePoemWithVibe(poem)
+            print("✅ Poem cached successfully")
+            
             // Track in history
+            print("📚 Adding to history...")
             await historyService.addEntry(poem, source: .aiGenerated, vibe: vibeAnalysis.vibe)
+            print("✅ Added to history")
+            
+            // Reload widgets to show new poem
+            print("🔄 Reloading widgets...")
+            WidgetCenter.shared.reloadAllTimelines()
             
             let event = AIGenerationEvent(
                 timestamp: Date(),
@@ -114,11 +139,13 @@ actor PoemRepository: PoemRepositoryProtocol {
             )
             await telemetryService.track(event)
             
+            print("✅ Vibe-based poem generation complete!")
             return poem
         } catch {
             errorType = (error as? PoemError)?.localizedDescription ?? error.localizedDescription
             print("❌ Error generating vibe-based poem: \(error)")
             print("   Error type: \(errorType ?? "Unknown")")
+            print("   Error details: \(String(describing: error))")
             
             let event = AIGenerationEvent(
                 timestamp: Date(),
@@ -295,7 +322,21 @@ actor PoemRepository: PoemRepositoryProtocol {
         var errorType: String?
         
         do {
-            let poem = try await networkService.fetchRandomPoem()
+            let poem: Poem
+            // Add timeout for network request (20 seconds)
+            poem = try await withThrowingTaskGroup(of: Poem.self) { group in
+                group.addTask {
+                    return try await self.networkService.fetchRandomPoem()
+                }
+                group.addTask {
+                    try await Task.sleep(nanoseconds: 10 * 1_000_000_000)
+                    throw PoemError.networkUnavailable
+                }
+                let result = try await group.next()!
+                group.cancelAll()
+                return result
+            }
+            
             await cachePoem(poem)
             
             // Track in history
@@ -304,7 +345,7 @@ actor PoemRepository: PoemRepositoryProtocol {
             WidgetCenter.shared.reloadAllTimelines()
             success = true
             
-            let event = Poem_of_the_Day.PoemFetchEvent(
+            let event = PoemFetchEvent(
                 timestamp: Date(),
                 source: .mainApp,
                 poemSource: "api",

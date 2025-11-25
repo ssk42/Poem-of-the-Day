@@ -1,0 +1,19 @@
+load("@rules_apple//apple:ios.bzl", "ios_ui_test")
+load("@rules_swift//swift:swift.bzl", "swift_library")
+
+# UI test library
+swift_library(
+    name = "UITestLib",
+    testonly = True,
+    srcs = glob(["**/*.swift"]),
+    module_name = "PoemOfTheDayUITests",
+)
+
+# UI test target
+ios_ui_test(
+    name = "PoemOfTheDayUITests",
+    bundle_id = "Stevereitz.Poem-of-the-DayUITests",
+    minimum_os_version = "17.0",
+    test_host = "//:PoemOfTheDay",
+    deps = [":UITestLib"],
+)

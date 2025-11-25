@@ -106,7 +106,7 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
     
     private func initializeFoundationModel() async {
         #if canImport(FoundationModels)
-        if #available(iOS 18, *) {
+        if #available(iOS 26, *) {
             // Future implementation when Foundation Models API is available
             // This will be uncommented when the actual APIs are available
             
@@ -137,28 +137,42 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
         }
         
         print("🎨 PoemGenerationService: Generating poem for vibe: \(vibeAnalysis.vibe.displayName)")
+        print("   Vibe details: \(vibeAnalysis.vibe.description)")
+        print("   Confidence: \(vibeAnalysis.confidence)")
         
         do {
             let prompt = buildVibePrompt(from: vibeAnalysis)
             print("📝 Built prompt (\(prompt.count) chars)")
+            print("   First 200 chars: \(String(prompt.prefix(200)))")
         
-        // Check for mock responses (UI Testing)
-        if AppConfiguration.Testing.shouldMockAIResponses {
-            print("🧪 Returning mock response for UI testing")
-            return generateLocalPoem(vibe: vibeAnalysis.vibe)
-        }
+            // Check for mock responses (UI Testing)
+            if AppConfiguration.Testing.shouldMockAIResponses {
+                print("🧪 Returning mock response for UI testing")
+                let mockPoem = generateLocalPoem(vibe: vibeAnalysis.vibe)
+                print("✅ Mock poem created:")
+                print("   Title: \(mockPoem.title)")
+                print("   Content length: \(mockPoem.content.count)")
+                return mockPoem
+            }
             
-        // Try Foundation Models if available (iOS 18+)
+            // Try Foundation Models if available (iOS 18+)
             let isAvailable = await isFoundationModelsAvailable()
             print("🔍 Foundation Models available: \(isAvailable)")
             
             if isAvailable {
                 #if canImport(FoundationModels)
-                if #available(iOS 18, *) {
-                    print("🚀 Attempting AI generation...")
+                if #available(iOS 26, *) {
+                    print("🚀 Attempting AI generation with Foundation Models...")
                     let generatedPoem = try await generateWithFoundationModels(prompt: prompt)
-                    let poem = convertToPoemModel(generatedPoem, vibe: vibeAnalysis.vibe)
-                    print("✅ Successfully generated AI poem!")
+                    print("✅ Foundation Models returned poem:")
+                    print("   Title: \(generatedPoem.title)")
+                    print("   Lines: \(generatedPoem.lines.count)")
+                    
+                    let poem = convertToPoemModel(generatedPoem, vibeAnalysis: vibeAnalysis)
+                    print("✅ Successfully converted to Poem model!")
+                    print("   Final title: \(poem.title)")
+                    print("   Final content length: \(poem.content.count)")
+                    print("   Vibe: \(poem.vibe?.displayName ?? "none")")
                     return poem
                 }
                 #endif
@@ -169,14 +183,29 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
             throw PoemGenerationError.modelUnavailable
             
         } catch PoemGenerationError.deviceNotSupported {
-            print("❌ Device not supported, using local poem")
-            return generateLocalPoem(vibe: vibeAnalysis.vibe)
+            print("❌ Device not supported, generating local fallback poem")
+            let fallbackPoem = generateLocalPoem(vibe: vibeAnalysis.vibe)
+            print("✅ Fallback poem created:")
+            print("   Title: \(fallbackPoem.title)")
+            print("   Content length: \(fallbackPoem.content.count)")
+            print("   Source: \(fallbackPoem.source?.rawValue ?? "unknown")")
+            return fallbackPoem
         } catch PoemGenerationError.modelUnavailable {
-            print("❌ Model unavailable, using local poem")
-            return generateLocalPoem(vibe: vibeAnalysis.vibe)
+            print("❌ Model unavailable, generating local fallback poem")
+            let fallbackPoem = generateLocalPoem(vibe: vibeAnalysis.vibe)
+            print("✅ Fallback poem created:")
+            print("   Title: \(fallbackPoem.title)")
+            print("   Content length: \(fallbackPoem.content.count)")
+            print("   Source: \(fallbackPoem.source?.rawValue ?? "unknown")")
+            return fallbackPoem
         } catch {
-            print("❌ Unexpected error: \(error), using local poem")
-            return generateLocalPoem(vibe: vibeAnalysis.vibe)
+            print("❌ Unexpected error: \(error), generating local fallback poem")
+            let fallbackPoem = generateLocalPoem(vibe: vibeAnalysis.vibe)
+            print("✅ Fallback poem created:")
+            print("   Title: \(fallbackPoem.title)")
+            print("   Content length: \(fallbackPoem.content.count)")
+            print("   Source: \(fallbackPoem.source?.rawValue ?? "unknown")")
+            return fallbackPoem
         }
     }
     
@@ -200,10 +229,21 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
         // Try Foundation Models if available (iOS 18+)
         if await isFoundationModelsAvailable() {
             #if canImport(FoundationModels)
-            if #available(iOS 18, *) {
+            if #available(iOS 26, *) {
                 // Future implementation
                 let generatedPoem = try await generateWithFoundationModels(prompt: enhancedPrompt)
-                let poem = convertToPoemModel(generatedPoem, vibe: nil)
+                
+                // For custom prompts, extract keywords from prompt for dynamic title
+                let keywords = extractKeywordsFromPrompt(prompt)
+                let dynamicTitle = keywords.first?.capitalized ?? generatedPoem.title
+                
+                let poem = Poem(
+                    title: dynamicTitle,
+                    lines: generatedPoem.lines,
+                    author: generatedPoem.author,
+                    vibe: nil,
+                    source: .aiGenerated
+                )
                 return poem
             }
             #endif
@@ -227,7 +267,7 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
     
     private func isFoundationModelsAvailable() async -> Bool {
         #if canImport(FoundationModels)
-        if #available(iOS 18, *) {
+        if #available(iOS 26, *) {
             // Check if SystemLanguageModel is available on this device
             let model = SystemLanguageModel.default
             
@@ -337,7 +377,6 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
         Create a poem that captures this \(vibeAnalysis.vibe.displayName.lowercased()) feeling while being:
         - Original and creative
         - Appropriate for all audiences
-        - 12-20 lines long
         - Emotionally resonant
         - Well-structured with clear rhythm
         
@@ -500,20 +539,26 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
         )
     }
     
-    @available(iOS 26, *)
-    private func convertToPoemModel(_ generatedPoem: GeneratedPoem, vibe: DailyVibe?) -> Poem {
+    @available(iOS 26, *) 
+    private func convertToPoemModel(_ generatedPoem: GeneratedPoem, vibeAnalysis: VibeAnalysis) -> Poem {
         print("🔄 Converting GeneratedPoem to Poem model:")
-        print("  - Title: \(generatedPoem.title)")
+        print("  - Original Title: \(generatedPoem.title)")
         print("  - Author: \(generatedPoem.author)")
         print("  - Lines count: \(generatedPoem.lines.count)")
         print("  - Style: \(generatedPoem.style ?? "none")")
-        print("  - Vibe: \(vibe?.displayName ?? "none")")
+        print("  - Vibe: \(vibeAnalysis.vibe.displayName)")
+        
+        // Generate dynamic title using vibe analysis keywords
+        let keywords = vibeAnalysis.keywords.isEmpty ? extractKeywordsFromVibe(vibeAnalysis.vibe) : vibeAnalysis.keywords
+        let dynamicTitle = vibeAnalysis.vibe.generateDynamicTitle(keywords: keywords)
+        
+        print("  - Dynamic Title: \(dynamicTitle)")
         
         let poem = Poem(
-            title: generatedPoem.title,
+            title: dynamicTitle,  // Use dynamic title instead of generatedPoem.title
             lines: generatedPoem.lines,
             author: generatedPoem.author,
-            vibe: vibe,
+            vibe: vibeAnalysis.vibe,
             source: .aiGenerated
         )
         
@@ -525,24 +570,48 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
     #endif
     
     private func generateLocalPoem(vibe: DailyVibe? = nil, prompt: String? = nil) -> Poem {
-        var title = vibe?.displayName ?? (prompt != nil ? "Custom Inspiration" : "A Simple Poem")
+        var title: String
         var author = "Local Poet"
+        
+        print("🏠 Generating local fallback poem...")
+        print("   Vibe: \(vibe?.displayName ?? "none")")
+        print("   Prompt: \(prompt ?? "none")")
+        
+        // Generate dynamic titles based on vibe and keywords
+        if let vibe = vibe {
+            // Use vibe-specific keywords for title generation
+            let keywords = extractKeywordsFromVibe(vibe)
+            title = vibe.generateDynamicTitle(keywords: keywords)
+            print("   Generated title from vibe: '\(title)'")
+        } else if let prompt = prompt {
+            // For custom prompts, extract keywords from the prompt
+            let keywords = extractKeywordsFromPrompt(prompt)
+            title = keywords.first?.capitalized ?? "Custom Inspiration"
+            print("   Generated title from prompt: '\(title)'")
+        } else {
+            title = "A Simple Poem"
+            print("   Using default title: '\(title)'")
+        }
         
         // For UI Testing: Append timestamp to ensure unique content on each generation
         if AppConfiguration.Testing.isUITesting {
             let timestamp = Int(Date().timeIntervalSince1970 * 1000)
             title = "\(title) \(timestamp)"
             author = "Test Poet \(timestamp)"
+            print("   UI Testing mode: Added timestamp \(timestamp)")
         }
         
         // Generate different poems based on vibe or prompt
-        let lines: [String]
+        var lines: [String]
         
         if let vibe = vibe {
+            print("   Generating vibe-specific lines for: \(vibe.displayName)")
             lines = generateVibeSpecificLines(for: vibe)
         } else if let prompt = prompt {
+            print("   Generating prompt-specific lines")
             lines = generatePromptSpecificLines(for: prompt)
         } else {
+            print("   Using default poem lines")
             lines = [
                 "When AI sleeps, and models rest,",
                 "A local verse is put to the test.",
@@ -553,7 +622,32 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
             ]
         }
         
-        return Poem(title: title, lines: lines, author: author, vibe: vibe, source: .localFallback)
+        // For UI Testing: Make content unique by adding a timestamp comment to the last line
+        if AppConfiguration.Testing.isUITesting, !lines.isEmpty {
+            let timestamp = Int(Date().timeIntervalSince1970 * 1000)
+            // Append a subtle timestamp to make content unique for UI tests
+            lines.append("") // Empty line for separation
+            lines.append("(Generated at \(timestamp))")
+            print("   UI Testing mode: Added timestamp line to content")
+        }
+        
+        let poem = Poem(
+            title: title, 
+            lines: lines, 
+            author: author, 
+            vibe: vibe, 
+            source: .localFallback
+        )
+        
+        print("✅ Local poem created:")
+        print("   Title: '\(poem.title)'")
+        print("   Author: \(poem.author ?? "Unknown")")
+        print("   Content length: \(poem.content.count) chars")
+        print("   Vibe: \(poem.vibe?.displayName ?? "none")")
+        print("   Source: \(poem.source?.rawValue ?? "unknown")")
+        print("   First 100 chars: \(String(poem.content.prefix(100)))")
+        
+        return poem
     }
     
     private func generateVibeSpecificLines(for vibe: DailyVibe) -> [String] {
@@ -668,6 +762,116 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
                 "With purpose clear and vision true,",
                 "There's nothing we cannot push through."
             ]
+        case .nostalgic:
+            return [
+                "Looking back through time's soft haze,",
+                "To golden childhood summer days.",
+                "Memory's warmth wraps 'round my heart,",
+                "Though years and miles keep us apart.",
+                "Vintage photos, fading still,",
+                "Tell stories that no time can kill.",
+                "In nostalgia's gentle embrace,",
+                "Yesterday finds a sacred place."
+            ]
+        case .adventurous:
+            return [
+                "Beyond horizons, frontiers call,",
+                "Adventure waits beyond the wall.",
+                "With map in hand and courage strong,",
+                "We journey forth where we belong.",
+                "Discover worlds both far and near,",
+                "Step past the boundaries of our fear.",
+                "The quest unfolds with each new day,",
+                "Adventure lights the unknown way."
+            ]
+        case .whimsical:
+            return [
+                "Dancing fireflies and moonlit dreams,",
+                "Nothing's quite the way it seems.",
+                "Imagination takes its flight,",
+                "Through stard ust and magic light.",
+                "Quirky thoughts and playful rhyme,",
+                "Step outside of space and time.",
+                "In whimsy's wonderful embrace,",
+                "We find a most enchanted place."
+            ]
+        case .urgent:
+            return [
+                "Time runs short, the hour is here,",
+                "Pressing matters drawing near.",
+                "Critical choices must be made,",
+                "Decisions can't be long delayed.",
+                "Urgency propels us on,",
+                "Before the precious moment's gone.",
+                "Act now with purpose, swift and true,",
+                "For time waits not for me or you."
+            ]
+        case .triumphant:
+            return [
+                "Victory's sweet and hard-won taste,",
+                "Conquering what once we faced.",
+                "Triumphant hearts beat strong and free,",
+                "Celebrating what we've come to be.",
+                "Glory shines in morning's light,",
+                "We conquered darkness with our might.",
+                "Champions rise above the fray,",
+                "Triumphant on this glorious day."
+            ]
+        case .solemn:
+            return [
+                "In reverent silence, heads are bowed,",
+                "Honoring memories, solemn, proud.",
+                "Dignity marks these hallowed grounds,",
+                "Where sacred truth in stillness sounds.",
+                "With respect we gather here,",
+                "For those we hold forever dear.",
+                "In solemn moments, hearts aligned,",
+                "Great meaning in the quiet we find."
+            ]
+        case .playful:
+            return [
+                "Laughter echoes through the air,",
+                "Joy and playfulness everywhere!",
+                "Dancing, skipping, games at hand,",
+                "Fun awaits in wonderland.",
+                "Lighthearted moments, merry days,",
+                "Finding joy in simple ways.",
+                "With playful spirit, hearts run free,",
+                "Embracing life's sweet comedy."
+            ]
+        case .mysterious:
+            return [
+                "Secrets whisper in the night,",
+                "Hidden truths just out of sight.",
+                "Mysteries wrapped in shadow's veil,",
+                "Enigmas telling cryptic tale.",
+                "Unknown paths through foggy maze,",
+                "Riddles formed in moonlight's haze.",
+                "In mystery's alluring call,",
+                "We seek to unravel it all."
+            ]
+        case .rebellious:
+            return [
+                "Break the chains and challenge fate,",
+                "Defy the rules, don't hesitate.",
+                "Revolution's fire burns so bright,",
+                "Standing up for what is right.",
+                "Rebellious hearts refuse to bow,",
+                "Question every why and how.",
+                "Freedom calls to those who dare,",
+                "To shake the world and show they care."
+            ]
+        case .compassionate:
+            return [
+                "Gentle touch and caring heart,",
+                "Kindness sets us all apart.",
+                "Empathy flows like rivers deep,",
+                "Compassion's promises we keep.",
+                "Love extends to all we meet,",
+                "Making every day complete.",
+                "With tender grace and understanding,",
+                "We build a world more kind and standing."
+            ]
         }
     }
     
@@ -712,5 +916,46 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
                 "Creating beauty in the night."
             ]
         }
+    }
+    
+    // MARK: - Title Generation Helpers
+    
+    /// Extracts keywords from a vibe for title generation
+    private func extractKeywordsFromVibe(_ vibe: DailyVibe) -> [String] {
+        // Use common thematic words associated with each vibe
+        switch vibe {
+        case .hopeful: return ["Hope", "Dawn", "Tomorrow"]
+        case .contemplative: return ["Thought", "Reflection", "Wisdom"]
+        case .energetic: return ["Energy", "Motion", "Surge"]
+        case .peaceful: return ["Peace", "Calm", "Serenity"]
+        case .melancholic: return ["Memory", "Autumn", "Rain"]
+        case .inspiring: return ["Courage", "Rise", "Dreams"]
+        case .uncertain: return ["Unknown", "Crossroads", "Journey"]
+        case .celebratory: return ["Victory", "Joy", "Celebration"]
+        case .reflective: return ["Wisdom", "Memory", "Time"]
+        case .determined: return ["Will", "Resolve", "Strength"]
+        case .nostalgic: return ["Memory", "Yesterday", "Heritage"]
+        case .adventurous: return ["Quest", "Discovery", "Frontier"]
+        case .whimsical: return ["Wonder", "Imagination", "Magic"]
+        case .urgent: return ["Time", "Crisis", "Now"]
+        case .triumphant: return ["Triumph", "Conquest", "Glory"]
+        case .solemn: return ["Honor", "Remembrance", "Dignity"]
+        case .playful: return ["Joy", "Dance", "Games"]
+        case .mysterious: return ["Mystery", "Secrets", "Enigma"]
+        case .rebellious: return ["Revolution", "Freedom", "Defiance"]
+        case .compassionate: return ["Love", "Kindness", "Heart"]
+        }
+    }
+    
+    /// Extracts keywords from a custom prompt for title generation
+    private func extractKeywordsFromPrompt(_ prompt: String) -> [String] {
+        // Extract meaningful words (nouns, important adjectives)
+        let stopWords = Set(["a", "an", "the", "about", "of", "in", "on", "at", "to", "for", "with", "by", "from", "write", "poem", "poetry"])
+        let words = prompt.lowercased()
+            .components(separatedBy: CharacterSet.alphanumerics.inverted)
+            .filter { !$0.isEmpty && $0.count > 2 && !stopWords.contains($0) }
+        
+        // Return first 3 meaningful words
+        return Array(words.prefix(3))
     }
 }

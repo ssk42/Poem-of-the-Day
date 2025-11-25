@@ -29,11 +29,19 @@ struct PoemHistoryView: View {
             .navigationTitle("Poem History")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                #if os(visionOS)
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+                #else
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") {
                         dismiss()
                     }
                 }
+                #endif
                 
                 ToolbarItem(placement: .navigationBarLeading) {
                     Menu {

@@ -1,0 +1,88 @@
+# Xcode
+*.xcodeproj
+*.xcworkspace
+xcuserdata/
+DerivedData/
+*.xccheckout
+*.moved-aside
+*.xcuserstate
+
+# Bazel
+bazel-*
+/bazel-bin
+/bazel-out
+/bazel-testlogs
+/bazel-poem_of_the_day
+.bazel_cache/
+bazel_build_events.txt
+*.dot
+deps.png
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved
+
+# CocoaPods
+Pods/
+*.podspec
+Podfile.lock
+
+# Carthage
+Carthage/Build/
+
+# macOS
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# Build Artifacts
+*.app
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift
+*.swp
+*.swo
+*~
+*.playground
+
+# Temporary files
+*.orig
+*.log
+*.tmp
+
+# IDE
+.vscode/
+.idea/
+*.swiftpm
+
+# Coverage
+coverage/
+*.profdata
+*.profraw
+*.gcda
+*.gcno
+*.lcov
+
+# Documentation
+docs/_build/
+site/
+
+# Environment
+.env
+.env.local
+
+# Test Results
+test_results/
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# CI/CD
+*.cer
+*.p12
+*.mobileprovision

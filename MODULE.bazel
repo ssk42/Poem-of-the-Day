@@ -1,0 +1,9 @@
+module(
+    name = "poem_of_the_day",
+    version = "1.0.0",
+)
+
+# Apple platform build rules - using latest BCR versions
+# Compatible with Bazel 8.x
+bazel_dep(name = "rules_apple", version = "4.3.2")
+bazel_dep(name = "rules_swift", version = "2.1.1")

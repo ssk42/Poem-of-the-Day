@@ -97,18 +97,37 @@ An intelligent iOS poetry app that curates daily poems and creates AI-generated 
 - iOS 18.0+ deployment target
 - macOS 14.0+ for development
 - Apple Developer account (for device testing)
+- Bazelisk (for Bazel builds) - optional
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
    git clone https://github.com/your-username/poem-of-the-day.git
-   cd poem-of-the-day
+ can 
    ```
 
-2. **Open in Xcode**
+2. **Choose your build system:**
+
+   **Option A: Xcode (Traditional)**
    ```bash
    open "Poem of the Day.xcodeproj"
+   # Press Cmd+R to build and run
+   ```
+
+   **Option B: Bazel (Recommended for CI/CD)**
+   ```bash
+   # Install Bazelisk
+   brew install bazelisk
+   
+   # Make the helper script executable
+   chmod +x bazel.sh
+   
+   # Build the app
+   ./bazel.sh build
+   
+   # Run tests
+   ./bazel.sh test
    ```
 
 3. **Configure API Keys** *(Optional)*
@@ -116,8 +135,8 @@ An intelligent iOS poetry app that curates daily poems and creates AI-generated 
    - Configure AI service endpoints if using external providers
 
 4. **Build and Run**
-   - Select your target device or simulator
-   - Press `Cmd+R` to build and run
+   - **Xcode**: Select your target device or simulator, press `Cmd+R`
+   - **Bazel**: Run `./bazel.sh build` then deploy to simulator
 
 ### Configuration
 
@@ -139,25 +158,40 @@ Create a `Config.plist` file with your API configurations:
 
 ### Running Tests
 
-**All Tests**
+**With Bazel (Recommended)**
 ```bash
+# All tests
+./bazel.sh test
+
+# Unit tests only
+./bazel.sh unit-test
+
+# UI tests only
+./bazel.sh ui-test
+
+# Generate coverage report
+./bazel.sh coverage
+
+# Run CI pipeline locally
+./bazel.sh ci
+```
+
+**With Xcode**
+```bash
+# All Tests
 xcodebuild test -scheme "Poem of the Day" -destination "platform=iOS Simulator,name=iPhone 16"
-```
 
-**Unit Tests Only**
-```bash
+# Unit Tests Only
 xcodebuild test -scheme "Poem of the Day" -destination "platform=iOS Simulator,name=iPhone 16" -only-testing:"Poem of the DayTests"
-```
 
-**UI Tests Only**
-```bash
+# UI Tests Only
 xcodebuild test -scheme "Poem of the Day" -destination "platform=iOS Simulator,name=iPhone 16" -only-testing:"Poem of the DayUITests"
-```
 
-**Background Color Tests**
-```bash
+# Background Color Tests
 xcodebuild test -scheme "Poem of the Day" -destination "platform=iOS Simulator,name=iPhone 16" -only-testing:"Poem of the DayTests/VibeAnalyzerTests"
 ```
+
+For detailed Bazel build and test instructions, see [BAZEL_BUILD.md](BAZEL_BUILD.md).
 
 ### Test Coverage
 

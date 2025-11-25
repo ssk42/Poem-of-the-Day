@@ -1,0 +1,75 @@
+name: Bazel CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    name: Build and Test with Bazel
+    runs-on: macos-14  # macOS with Xcode 15+
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Select Xcode version
+      run: sudo xcode-select -s /Applications/Xcode_15.4.app/Contents/Developer
+    
+    - name: Install Bazelisk
+      run: |
+        brew install bazelisk
+        bazelisk version
+    
+    - name: Cache Bazel artifacts
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cache/bazel
+          ~/Library/Caches/bazel
+        key: bazel-${{ runner.os }}-${{ hashFiles('MODULE.bazel', '.bazelrc', '**/BUILD.bazel') }}
+        restore-keys: |
+          bazel-${{ runner.os }}-
+    
+    - name: Build app library
+      run: |
+        cd "Poem of the Day"
+        bazelisk build //:PoemOfTheDayLib
+    
+    - name: Build main app
+      run: |
+        cd "Poem of the Day"
+        bazelisk build //:PoemOfTheDay
+    
+    - name: Build widget extension
+      run: |
+        cd "Poem of the Day"
+        bazelisk build //Poem\ of\ the\ Day\ Widget:PoemOfTheDayWidget
+    
+    - name: Run unit tests
+      run: |
+        cd "Poem of the Day"
+        bazelisk test //Poem\ of\ the\ DayTests:PoemOfTheDayTests
+    
+    - name: Run UI tests
+      run: |
+        cd "Poem of the Day"
+        bazelisk test //Poem\ of\ the\ DayUITests:PoemOfTheDayUITests
+    
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results
+        path: |
+          Poem of the Day/bazel-testlogs/
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-bundle
+        path: |
+          Poem of the Day/bazel-bin/PoemOfTheDay.ipa

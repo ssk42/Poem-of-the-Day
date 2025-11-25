@@ -1,0 +1,7 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild test -scheme "Poem of the Day" -destination "platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1" "-only-testing:Poem_of_the_DayUITests" -resultBundlePath ./test-results/ui-manual -parallel-testing-enabled YES
+
+Writing result bundle at path:
+	/Users/stephenreitz/Desktop/Swift-2048-test/Poem of the Day/test-results/ui-manual
+
+xcodebuild: error: Failed to build project Poem of the Day with scheme Poem of the Day.: Tests in the target “Poem_of_the_DayUITests” can’t be run because “Poem_of_the_DayUITests” isn’t a member of the specified test plan or scheme.

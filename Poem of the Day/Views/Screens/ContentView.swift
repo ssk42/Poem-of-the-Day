@@ -25,6 +25,14 @@ struct ContentView: View {
         self._viewModel = StateObject(wrappedValue: container.makePoemViewModel())
     }
     
+    private var toolbarPlacement: ToolbarItemPlacement {
+        #if os(visionOS)
+        return .topBarTrailing
+        #else
+        return .navigationBarTrailing
+        #endif
+    }
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -77,7 +85,7 @@ struct ContentView: View {
                     .accessibilityIdentifier("menu_button")
                 }
                 
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: toolbarPlacement) {
                     Button(action: {
                         showFavorites = true
                     }) {
@@ -99,9 +107,13 @@ struct ContentView: View {
                 SettingsView()
             }
             .sheet(isPresented: $showShareSheet) {
+                #if canImport(UIKit)
                 if let poem = viewModel.poemOfTheDay {
                     ShareSheet(items: [poem.shareText])
                 }
+                #else
+                EmptyView()
+                #endif
             }
             .sheet(isPresented: $viewModel.showVibeGeneration) {
                 if let vibe = viewModel.currentVibe {
@@ -143,9 +155,11 @@ struct ContentView: View {
     }
     
     private func provideFeedback(success: Bool) {
+        #if canImport(UIKit)
         let generator = UINotificationFeedbackGenerator()
         generator.prepare()
         generator.notificationOccurred(success ? .success : .error)
+        #endif
     }
     
     // MARK: - UI Components
@@ -373,8 +387,10 @@ struct ContentView: View {
                 Button(action: {
                     Task {
                         await viewModel.toggleFavorite(poem: poem)
+                        #if canImport(UIKit)
                         let generator = UIImpactFeedbackGenerator(style: .medium)
                         generator.impactOccurred()
+                        #endif
                     }
                 }) {
                     Label(
@@ -584,8 +600,13 @@ struct ContentView: View {
     }
 }
 
+#if canImport(UIKit)
+import UIKit
+#endif
+
 // MARK: - Share Sheet
 
+#if canImport(UIKit)
 struct ShareSheet: UIViewControllerRepresentable {
     let items: [Any]
     
@@ -595,6 +616,7 @@ struct ShareSheet: UIViewControllerRepresentable {
     
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
+#endif
 
 // MARK: - Favorites View
 
@@ -654,11 +676,19 @@ struct FavoritesView: View {
             .navigationTitle("Favorite Poems")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                #if os(visionOS)
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+                #else
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") {
                         dismiss()
                     }
                 }
+                #endif
             }
         }
     }

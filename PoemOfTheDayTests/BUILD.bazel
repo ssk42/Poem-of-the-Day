@@ -1,0 +1,19 @@
+load("@rules_apple//apple:ios.bzl", "ios_unit_test")
+load("@rules_swift//swift:swift.bzl", "swift_library")
+
+# Unit test library
+swift_library(
+    name = "TestLib",
+    testonly = True,
+    srcs = glob(["**/*.swift"]),
+    module_name = "PoemOfTheDayTests",
+    deps = ["//:PoemOfTheDayLib"],
+)
+
+# Unit test target
+ios_unit_test(
+    name = "PoemOfTheDayTests",
+    bundle_id = "Stevereitz.Poem-of-the-DayTests",
+    minimum_os_version = "17.0",
+    deps = [":TestLib"],
+)

@@ -1,0 +1,90 @@
+load("@rules_apple//apple:ios.bzl", "ios_application")
+load("@rules_swift//swift:swift.bzl", "swift_library")
+
+# Main app Swift library
+swift_library(
+    name = "PoemOfTheDayLib",
+    srcs = glob([
+        "Poem of the Day/**/*.swift",
+    ]),
+    data = glob([
+        "Poem of the Day/**/*.json",
+        "Poem of the Day/Assets.xcassets/**",
+    ]),
+    module_name = "Poem_of_the_Day",
+    visibility = ["//visibility:public"],
+)
+
+# Main iOS application
+ios_application(
+    name = "PoemOfTheDay",
+    bundle_id = "Stevereitz.Poem-of-the-Day",
+    families = [
+        "iphone",
+        "ipad",
+    ],
+    infoplists = [":GeneratedInfoPlist"],
+    minimum_os_version = "17.0",
+    provisioning_profile = select({
+        "//conditions:default": None,
+    }),
+    visibility = ["//visibility:public"],
+    deps = [":PoemOfTheDayLib"],
+)
+
+# Generated Info.plist for main app
+genrule(
+    name = "GeneratedInfoPlist",
+    outs = ["Info.plist"],
+    cmd = """
+cat > $@ <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>en</string>
+    <key>CFBundleExecutable</key>
+    <string>PoemOfTheDay</string>
+    <key>CFBundleIdentifier</key>
+    <string>Stevereitz.Poem-of-the-Day</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleName</key>
+    <string>Poem of the Day</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>LSRequiresIPhoneOS</key>
+    <true/>
+    <key>UILaunchScreen</key>
+    <dict>
+        <key>UIColorName</key>
+        <string>LaunchScreenColor</string>
+    </dict>
+    <key>UIRequiredDeviceCapabilities</key>
+    <array>
+        <string>armv7</string>
+    </array>
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+    <key>UISupportedInterfaceOrientations~ipad</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationPortraitUpsideDown</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+</dict>
+</plist>
+EOF
+    """,
+)
+

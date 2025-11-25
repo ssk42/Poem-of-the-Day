@@ -11,6 +11,15 @@
 		9109EB1B2CE70172005F1C09 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9109EB1A2CE70172005F1C09 /* SwiftUI.framework */; };
 		9109EB2C2CE70174005F1C09 /* Poem of the Day WidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 9109EB162CE70172005F1C09 /* Poem of the Day WidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		911A8ED02DEB882300C72055 /* TestPlan.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 911A8ECF2DEB882300C72055 /* TestPlan.xctestplan */; };
+		918645882ED6397800F5FCC5 /* .bazelversion 2 in Resources */ = {isa = PBXBuildFile; fileRef = 918645872ED6397800F5FCC5 /* .bazelversion 2 */; };
+		9186458A2ED639A500F5FCC5 /* BAZEL_MIGRATION.md in Resources */ = {isa = PBXBuildFile; fileRef = 918645892ED639A500F5FCC5 /* BAZEL_MIGRATION.md */; };
+		9186458C2ED639B900F5FCC5 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 9186458B2ED639B900F5FCC5 /* Makefile */; };
+		9186458E2ED639DE00F5FCC5 /* BAZEL_SETUP_SUMMARY.md in Resources */ = {isa = PBXBuildFile; fileRef = 9186458D2ED639DE00F5FCC5 /* BAZEL_SETUP_SUMMARY.md */; };
+		918645902ED63A0F00F5FCC5 /* BAZEL_ARCHITECTURE.md in Resources */ = {isa = PBXBuildFile; fileRef = 9186458F2ED63A0F00F5FCC5 /* BAZEL_ARCHITECTURE.md */; };
+		918645922ED63A1E00F5FCC5 /* .gitignore 2 in Resources */ = {isa = PBXBuildFile; fileRef = 918645912ED63A1E00F5FCC5 /* .gitignore 2 */; };
+		918645942ED63A4800F5FCC5 /* BAZEL_CHECKLIST.md in Resources */ = {isa = PBXBuildFile; fileRef = 918645932ED63A4800F5FCC5 /* BAZEL_CHECKLIST.md */; };
+		918645962ED63A7600F5FCC5 /* BAZEL_QUICK_REF.txt in Resources */ = {isa = PBXBuildFile; fileRef = 918645952ED63A7600F5FCC5 /* BAZEL_QUICK_REF.txt */; };
+		918645982ED645F500F5FCC5 /* UITestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 918645972ED645F500F5FCC5 /* UITestExtensions.swift */; };
 		91A69DC92CECCBBC00E2AC19 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 91A69DC72CECCBB500E2AC19 /* README.md */; };
 /* End PBXBuildFile section */
 
@@ -61,6 +70,15 @@
 		9109EB1A2CE70172005F1C09 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		9109EB392CE793ED005F1C09 /* Poem of the Day WidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Poem of the Day WidgetExtension.entitlements"; sourceTree = "<group>"; };
 		911A8ECF2DEB882300C72055 /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
+		918645872ED6397800F5FCC5 /* .bazelversion 2 */ = {isa = PBXFileReference; lastKnownFileType = text; path = ".bazelversion 2"; sourceTree = "<group>"; };
+		918645892ED639A500F5FCC5 /* BAZEL_MIGRATION.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = BAZEL_MIGRATION.md; sourceTree = "<group>"; };
+		9186458B2ED639B900F5FCC5 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		9186458D2ED639DE00F5FCC5 /* BAZEL_SETUP_SUMMARY.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = BAZEL_SETUP_SUMMARY.md; sourceTree = "<group>"; };
+		9186458F2ED63A0F00F5FCC5 /* BAZEL_ARCHITECTURE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = BAZEL_ARCHITECTURE.md; sourceTree = "<group>"; };
+		918645912ED63A1E00F5FCC5 /* .gitignore 2 */ = {isa = PBXFileReference; lastKnownFileType = text; path = ".gitignore 2"; sourceTree = "<group>"; };
+		918645932ED63A4800F5FCC5 /* BAZEL_CHECKLIST.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = BAZEL_CHECKLIST.md; sourceTree = "<group>"; };
+		918645952ED63A7600F5FCC5 /* BAZEL_QUICK_REF.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = BAZEL_QUICK_REF.txt; sourceTree = "<group>"; };
+		918645972ED645F500F5FCC5 /* UITestExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestExtensions.swift; sourceTree = "<group>"; };
 		91A69DC72CECCBB500E2AC19 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		91E4ECFF2DEB8894006154BA /* Poem of the Day.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Poem of the Day.xctestplan"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -148,6 +166,15 @@
 				9109EB172CE70172005F1C09 /* Frameworks */,
 				9109EAE62CE6F481005F1C09 /* Products */,
 				91A69DC72CECCBB500E2AC19 /* README.md */,
+				918645872ED6397800F5FCC5 /* .bazelversion 2 */,
+				918645892ED639A500F5FCC5 /* BAZEL_MIGRATION.md */,
+				9186458B2ED639B900F5FCC5 /* Makefile */,
+				9186458D2ED639DE00F5FCC5 /* BAZEL_SETUP_SUMMARY.md */,
+				9186458F2ED63A0F00F5FCC5 /* BAZEL_ARCHITECTURE.md */,
+				918645912ED63A1E00F5FCC5 /* .gitignore 2 */,
+				918645932ED63A4800F5FCC5 /* BAZEL_CHECKLIST.md */,
+				918645952ED63A7600F5FCC5 /* BAZEL_QUICK_REF.txt */,
+				918645972ED645F500F5FCC5 /* UITestExtensions.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -319,8 +346,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9186458E2ED639DE00F5FCC5 /* BAZEL_SETUP_SUMMARY.md in Resources */,
 				911A8ED02DEB882300C72055 /* TestPlan.xctestplan in Resources */,
 				91A69DC92CECCBBC00E2AC19 /* README.md in Resources */,
+				918645942ED63A4800F5FCC5 /* BAZEL_CHECKLIST.md in Resources */,
+				9186458A2ED639A500F5FCC5 /* BAZEL_MIGRATION.md in Resources */,
+				918645962ED63A7600F5FCC5 /* BAZEL_QUICK_REF.txt in Resources */,
+				918645902ED63A0F00F5FCC5 /* BAZEL_ARCHITECTURE.md in Resources */,
+				918645922ED63A1E00F5FCC5 /* .gitignore 2 in Resources */,
+				918645882ED6397800F5FCC5 /* .bazelversion 2 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -352,6 +386,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9186458C2ED639B900F5FCC5 /* Makefile in Sources */,
+				918645982ED645F500F5FCC5 /* UITestExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

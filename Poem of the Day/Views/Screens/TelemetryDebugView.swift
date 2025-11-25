@@ -22,11 +22,19 @@ struct TelemetryDebugView: View {
             }
             .navigationTitle("Telemetry Debug")
             .toolbar {
+                #if os(visionOS)
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Export") {
+                        exportTelemetryData()
+                    }
+                }
+                #else
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Export") {
                         exportTelemetryData()
                     }
                 }
+                #endif
             }
             .refreshable {
                 await loadTelemetryData()
