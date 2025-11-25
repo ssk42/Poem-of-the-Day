@@ -24,11 +24,27 @@ jobs:
       - name: List available simulators
         run: xcrun simctl list devices available | grep -i "iPhone 16" || echo "iPhone 16 simulators:"
 
-      - name: Build project (generic destination to avoid runtime mismatch)
+      - name: Find available iPhone simulator
+        id: simulator
+        run: |
+          # Try to find iPhone 16 first, then any iPhone
+          SIM_DEVICE=$(xcrun simctl list devices available | grep -i "iPhone 16" | head -1 | sed -E 's/.*\(([^)]+)\).*/\1/' | xargs)
+          if [ -z "$SIM_DEVICE" ]; then
+            SIM_DEVICE=$(xcrun simctl list devices available | grep -i "iPhone" | head -1 | sed -E 's/.*\(([^)]+)\).*/\1/' | xargs)
+          fi
+          if [ -n "$SIM_DEVICE" ]; then
+            echo "device_id=$SIM_DEVICE" >> $GITHUB_OUTPUT
+            echo "Found simulator: $SIM_DEVICE"
+          else
+            echo "No simulator found"
+            exit 1
+          fi
+
+      - name: Build project
         run: |
           xcodebuild clean build \
             -scheme "Poem of the Day" \
-            -destination 'generic/platform=iOS Simulator' \
+            -destination "platform=iOS Simulator,id=${{ steps.simulator.outputs.device_id }}" \
             -sdk iphonesimulator \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO
@@ -37,7 +53,7 @@ jobs:
         run: |
           xcodebuild test \
             -scheme "Poem of the Day" \
-            -destination 'platform=iOS Simulator,name=iPhone 16' \
+            -destination "platform=iOS Simulator,id=${{ steps.simulator.outputs.device_id }}" \
             -only-testing:"Poem of the DayTests" \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO
@@ -46,7 +62,7 @@ jobs:
         run: |
           xcodebuild test \
             -scheme "Poem of the Day" \
-            -destination 'platform=iOS Simulator,name=iPhone 16' \
+            -destination "platform=iOS Simulator,id=${{ steps.simulator.outputs.device_id }}" \
             -only-testing:"Poem of the DayUITests" \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO
