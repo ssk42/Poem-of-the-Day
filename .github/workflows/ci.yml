@@ -21,6 +21,12 @@ jobs:
         with:
           xcode-version: 'latest-stable'
 
+      - name: Install iOS 26.1 Simulator Runtime
+        run: |
+          echo "Installing iOS 26.1 simulator runtime..."
+          xcrun simctl runtime add 'iOS 26.1' || echo "Runtime already installed or unable to install."
+          xcrun simctl list runtimes
+
       - name: Build and Test
         run: |
           xcodebuild clean test \
