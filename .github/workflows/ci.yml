@@ -25,7 +25,7 @@ jobs:
         run: |
           xcodebuild build \
             -scheme "Poem of the Day" \
-            -sdk iphonesimulator \
+            -sdk iphoneos \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             -allowProvisioningUpdates
