@@ -26,9 +26,12 @@ jobs:
           xcodebuild build \
             -scheme "Poem of the Day" \
             -sdk iphoneos \
+            -configuration Debug \
+            ONLY_ACTIVE_ARCH=YES \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
-            -allowProvisioningUpdates
+            -allowProvisioningUpdates \
+            -skipMacroValidation
 
       - name: How to watch this run
         if: always()
