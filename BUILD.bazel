@@ -26,10 +26,16 @@ ios_application(
     infoplists = [":GeneratedInfoPlist"],
     minimum_os_version = "17.0",
     provisioning_profile = select({
+        ":release_build": "release.mobileprovision",
         "//conditions:default": None,
     }),
     visibility = ["//visibility:public"],
     deps = [":PoemOfTheDayLib"],
+)
+
+config_setting(
+    name = "release_build",
+    values = {"define": "release=true"},
 )
 
 # Generated Info.plist for main app
