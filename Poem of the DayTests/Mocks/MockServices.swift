@@ -177,6 +177,12 @@ final class MockPoemRepository: PoemRepositoryProtocol, @unchecked Sendable {
     var addToFavoritesCallCount = 0
     var removeFromFavoritesCallCount = 0
     var isFavoriteCallCount = 0
+    var getHistoryCallCount = 0
+    var getHistoryGroupedByDateCallCount = 0
+    var getStreakInfoCallCount = 0
+    
+    var mockHistory: [PoemHistoryEntry] = []
+    var mockStreakInfo: StreakInfo = .empty
     
     func getDailyPoem() async throws -> Poem {
         getDailyPoemCallCount += 1
@@ -257,6 +263,25 @@ final class MockPoemRepository: PoemRepositoryProtocol, @unchecked Sendable {
         return favoritePoems.contains { $0.id == poem.id }
     }
     
+    func getHistory() async -> [PoemHistoryEntry] {
+        getHistoryCallCount += 1
+        return mockHistory
+    }
+    
+    func getHistoryGroupedByDate() async -> [(date: Date, entries: [PoemHistoryEntry])] {
+        getHistoryGroupedByDateCallCount += 1
+        let grouped = Dictionary(grouping: mockHistory) { entry in
+            Calendar.current.startOfDay(for: entry.viewedDate)
+        }
+        return grouped.map { (date: $0.key, entries: $0.value) }
+            .sorted { $0.date > $1.date }
+    }
+    
+    func getStreakInfo() async -> StreakInfo {
+        getStreakInfoCallCount += 1
+        return mockStreakInfo
+    }
+    
     func reset() {
         dailyPoem = nil
         favoritePoems = []
@@ -276,6 +301,11 @@ final class MockPoemRepository: PoemRepositoryProtocol, @unchecked Sendable {
         addToFavoritesCallCount = 0
         removeFromFavoritesCallCount = 0
         isFavoriteCallCount = 0
+        getHistoryCallCount = 0
+        getHistoryGroupedByDateCallCount = 0
+        getStreakInfoCallCount = 0
+        mockHistory = []
+        mockStreakInfo = .empty
         delayDuration = 0
     }
 }

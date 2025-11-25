@@ -32,7 +32,7 @@ final class AIFeaturesUITests: XCTestCase {
         XCTAssertTrue(mainPage.waitForPoemToLoad())
         
         // Navigate to vibe generation (sheet presentation)
-        mainPage.tapVibeGenerationButton()
+        _ = mainPage.tapVibeGenerationButton()
         
         // Wait for vibe generation sheet to appear
         let vibeSheet = app.sheets.firstMatch
@@ -48,13 +48,13 @@ final class AIFeaturesUITests: XCTestCase {
         XCTAssertTrue(vibeSheet.waitForNonExistence(timeout: 8))
         
         // Verify we're back on main page with new poem
-        XCTAssertTrue(mainPage.waitForPageToLoad())
-        XCTAssertTrue(mainPage.verifyPoemIsDisplayed())
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
+        XCTAssertTrue(mainPage.verifyPoemDisplayed())
     }
     
     func testVibeGenerationCancel() throws {
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
+        let mainPage = PageFactory.mainContentPage(app: app)
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
         
         // Open vibe generation sheet
         mainPage.tapVibeGenerationButton()
@@ -69,14 +69,14 @@ final class AIFeaturesUITests: XCTestCase {
         
         // Verify sheet is dismissed and we're back on main page
         XCTAssertTrue(vibeSheet.waitForNonExistence(timeout: 3))
-        XCTAssertTrue(mainPage.waitForPageToLoad())
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
     }
     
     // MARK: - Custom Prompt Tests
     
     func testCustomPromptPoemGeneration() throws {
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
+        let mainPage = PageFactory.mainContentPage(app: app)
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
         
         // Navigate to custom prompt (sheet presentation)
         mainPage.tapCustomPromptButton()
@@ -104,13 +104,13 @@ final class AIFeaturesUITests: XCTestCase {
         XCTAssertTrue(customSheet.waitForNonExistence(timeout: 8))
         
         // Verify we're back on main page with new poem
-        XCTAssertTrue(mainPage.waitForPageToLoad())
-        XCTAssertTrue(mainPage.verifyPoemIsDisplayed())
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
+        XCTAssertTrue(mainPage.verifyPoemDisplayed())
     }
     
     func testCustomPromptWithEmptyInput() throws {
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
+        let mainPage = PageFactory.mainContentPage(app: app)
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
         
         mainPage.tapCustomPromptButton()
         
@@ -138,8 +138,8 @@ final class AIFeaturesUITests: XCTestCase {
         app.launchEnvironment["MOCK_AI_ERROR"] = "true"
         app.launch()
         
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
+        let mainPage = PageFactory.mainContentPage(app: app)
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
         
         // Try vibe generation
         mainPage.tapVibeGenerationButton()
@@ -170,8 +170,8 @@ final class AIFeaturesUITests: XCTestCase {
         app.launchEnvironment["AI_AVAILABLE"] = "false"
         app.launch()
         
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
+        let mainPage = PageFactory.mainContentPage(app: app)
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
         
         // AI buttons should be hidden or disabled
         let vibeButton = app.buttons.matching(identifier: "vibe_generation_button").firstMatch
@@ -190,8 +190,8 @@ final class AIFeaturesUITests: XCTestCase {
     // MARK: - Performance Tests
     
     func testAIGenerationPerformance() throws {
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
+        let mainPage = PageFactory.mainContentPage(app: app)
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
         
         // Measure time for AI generation
         let startTime = CFAbsoluteTimeGetCurrent()
@@ -213,14 +213,14 @@ final class AIFeaturesUITests: XCTestCase {
         // AI generation should complete within reasonable time
         XCTAssertLessThan(duration, 10.0, "AI generation should complete within 10 seconds")
         
-        XCTAssertTrue(mainPage.verifyPoemIsDisplayed())
+        XCTAssertTrue(mainPage.verifyPoemDisplayed())
     }
     
     // MARK: - Integration with Favorites Tests
     
     func testAIGeneratedPoemFavoriting() throws {
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
+        let mainPage = PageFactory.mainContentPage(app: app)
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
         
         // Generate an AI poem
         mainPage.tapVibeGenerationButton()
@@ -233,7 +233,7 @@ final class AIFeaturesUITests: XCTestCase {
         
         // Wait for generation to complete
         XCTAssertTrue(vibeSheet.waitForNonExistence(timeout: 8))
-        XCTAssertTrue(mainPage.verifyPoemIsDisplayed())
+        XCTAssertTrue(mainPage.verifyPoemDisplayed())
         
         // Favorite the AI-generated poem
         let favoriteButton = app.buttons.matching(identifier: "favorite_button").firstMatch
@@ -249,8 +249,8 @@ final class AIFeaturesUITests: XCTestCase {
     }
     
     func testAIGeneratedPoemSharing() throws {
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
+        let mainPage = PageFactory.mainContentPage(app: app)
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
         
         // Generate an AI poem
         mainPage.tapCustomPromptButton()
@@ -267,7 +267,7 @@ final class AIFeaturesUITests: XCTestCase {
         
         // Wait for generation to complete
         XCTAssertTrue(customSheet.waitForNonExistence(timeout: 8))
-        XCTAssertTrue(mainPage.verifyPoemIsDisplayed())
+        XCTAssertTrue(mainPage.verifyPoemDisplayed())
         
         // Share the AI-generated poem
         let shareButton = app.buttons.matching(identifier: "share_button").firstMatch
@@ -292,8 +292,8 @@ final class AIFeaturesUITests: XCTestCase {
     // MARK: - Accessibility Tests
     
     func testAIFeaturesAccessibility() throws {
-        let mainPage = pageFactory.mainContentPage()
-        XCTAssertTrue(mainPage.waitForPageToLoad())
+        let mainPage = PageFactory.mainContentPage(app: app)
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
         
         // Test vibe generation accessibility
         mainPage.tapVibeGenerationButton()

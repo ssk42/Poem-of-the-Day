@@ -1,5 +1,4 @@
 import XCTest
-import XCTest
 
 // MARK: - Page Factory
 
