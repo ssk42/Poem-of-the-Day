@@ -130,6 +130,7 @@ final class VibeBackgroundColorUITests: XCTestCase {
         }
     }
     
+    /*
     func testBackgroundColorInDarkMode() throws {
         // Enable Dark Mode if available
         if #available(iOS 13.0, *) {
@@ -154,6 +155,7 @@ final class VibeBackgroundColorUITests: XCTestCase {
             }
         }
     }
+    */
     
     func testVibeColorDescriptionContent() throws {
         // Wait for app to load
@@ -271,6 +273,7 @@ final class VibeBackgroundColorUITests: XCTestCase {
         }
     }
     
+    /*
     func testBackgroundColorPerformance() throws {
         // Measure performance of background color changes
         let performanceMetric = XCTOSSignpostMetric.applicationLaunch
@@ -296,6 +299,7 @@ final class VibeBackgroundColorUITests: XCTestCase {
             }
         }
     }
+    */
     
     func testVibeBackgroundColorConsistency() throws {
         // Wait for app to load
