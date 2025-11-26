@@ -43,6 +43,7 @@ extension Poem_of_the_Day_WidgetControl {
         var poemTitle: String?
     }
 
+    @available(iOS 18.0, *)
     struct PoemControlProvider: AppIntentControlValueProvider {
         func previewValue(configuration: PoemControlConfiguration) -> Value {
             Value(hasNewPoem: false, poemTitle: nil)
