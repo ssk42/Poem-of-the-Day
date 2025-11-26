@@ -1,6 +1,14 @@
 import XCTest
 @testable import Poem_of_the_Day
+@testable import Poem_of_the_Day
 
+class MockWidgetReloader: WidgetReloaderProtocol {
+    var reloadAllTimelinesCallCount = 0
+    
+    func reloadAllTimelines() {
+        reloadAllTimelinesCallCount += 1
+    }
+}
 final class PoemRepositoryTests: XCTestCase {
     
     var repository: PoemRepository!
@@ -9,6 +17,7 @@ final class PoemRepositoryTests: XCTestCase {
     var mockVibeAnalyzer: MockVibeAnalyzer!
     var mockTelemetryService: MockTelemetryService!
     var mockAIService: MockPoemGenerationService!
+    var mockWidgetReloader: MockWidgetReloader!
     
     override func setUp() {
         super.setUp()
@@ -17,6 +26,7 @@ final class PoemRepositoryTests: XCTestCase {
         mockVibeAnalyzer = MockVibeAnalyzer()
         mockTelemetryService = MockTelemetryService()
         mockAIService = MockPoemGenerationService()
+        mockWidgetReloader = MockWidgetReloader()
         
         // Reset all mocks to clean state
         mockNetworkService.reset()
@@ -31,7 +41,8 @@ final class PoemRepositoryTests: XCTestCase {
             vibeAnalyzer: mockVibeAnalyzer,
             aiService: mockAIService,
             telemetryService: mockTelemetryService,
-            userDefaults: TestData.createTestUserDefaults()
+            userDefaults: TestData.createTestUserDefaults(),
+            widgetReloader: mockWidgetReloader
         )
     }
     
@@ -49,6 +60,7 @@ final class PoemRepositoryTests: XCTestCase {
         mockVibeAnalyzer = nil
         mockTelemetryService = nil
         mockAIService = nil
+        mockWidgetReloader = nil
         super.tearDown()
     }
     
@@ -64,7 +76,8 @@ final class PoemRepositoryTests: XCTestCase {
             vibeAnalyzer: mockVibeAnalyzer,
             aiService: nil,
             telemetryService: mockTelemetryService,
-            userDefaults: TestData.createTestUserDefaults()
+            userDefaults: TestData.createTestUserDefaults(),
+            widgetReloader: mockWidgetReloader
         )
         
         // When
@@ -88,7 +101,8 @@ final class PoemRepositoryTests: XCTestCase {
             vibeAnalyzer: mockVibeAnalyzer,
             aiService: nil,
             telemetryService: mockTelemetryService,
-            userDefaults: TestData.createTestUserDefaults()
+            userDefaults: TestData.createTestUserDefaults(),
+            widgetReloader: mockWidgetReloader
         )
         
         // When/Then
@@ -135,6 +149,7 @@ final class PoemRepositoryTests: XCTestCase {
         XCTAssertEqual(mockNewsService.callCount, 1)
         XCTAssertEqual(mockVibeAnalyzer.callCount, 1)
         XCTAssertEqual(mockAIService.generateFromVibeCallCount, 1)
+        XCTAssertEqual(mockWidgetReloader.reloadAllTimelinesCallCount, 1)
     }
     
     func testGenerateCustomPoem() async throws {
@@ -221,7 +236,8 @@ final class PoemRepositoryTests: XCTestCase {
             vibeAnalyzer: mockVibeAnalyzer,
             aiService: nil,
             telemetryService: mockTelemetryService,
-            userDefaults: TestData.createTestUserDefaults()
+            userDefaults: TestData.createTestUserDefaults(),
+            widgetReloader: mockWidgetReloader
         )
         
         // When

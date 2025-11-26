@@ -9,6 +9,16 @@
 import Foundation
 import WidgetKit
 
+protocol WidgetReloaderProtocol {
+    func reloadAllTimelines()
+}
+
+class DefaultWidgetReloader: WidgetReloaderProtocol {
+    func reloadAllTimelines() {
+        WidgetCenter.shared.reloadAllTimelines()
+    }
+}
+
 actor PoemRepository: PoemRepositoryProtocol {
     private let networkService: NetworkServiceProtocol
     private let newsService: NewsServiceProtocol
@@ -16,7 +26,9 @@ actor PoemRepository: PoemRepositoryProtocol {
     private let aiService: PoemGenerationServiceProtocol?
     private let telemetryService: TelemetryServiceProtocol
     private let historyService: PoemHistoryServiceProtocol
+    private let historyService: PoemHistoryServiceProtocol
     private let userDefaults: UserDefaults
+    private let widgetReloader: WidgetReloaderProtocol
     
     private var cachedFavorites: [Poem] = []
     private var favoritesLoaded = false
@@ -27,13 +39,17 @@ actor PoemRepository: PoemRepositoryProtocol {
          aiService: PoemGenerationServiceProtocol? = nil,
          telemetryService: TelemetryServiceProtocol = TelemetryService(),
          historyService: PoemHistoryServiceProtocol = PoemHistoryService(),
-         userDefaults: UserDefaults = UserDefaults(suiteName: "group.com.stevereitz.poemoftheday") ?? .standard) {
+         telemetryService: TelemetryServiceProtocol = TelemetryService(),
+         historyService: PoemHistoryServiceProtocol = PoemHistoryService(),
+         userDefaults: UserDefaults = UserDefaults(suiteName: "group.com.stevereitz.poemoftheday") ?? .standard,
+         widgetReloader: WidgetReloaderProtocol = DefaultWidgetReloader()) {
         self.networkService = networkService
         self.newsService = newsService
         self.vibeAnalyzer = vibeAnalyzer
         self.telemetryService = telemetryService
         self.historyService = historyService
         self.userDefaults = userDefaults
+        self.widgetReloader = widgetReloader
         
         // Initialize AI service if available (iOS 18+)
         if #available(iOS 18, *) {
@@ -126,7 +142,9 @@ actor PoemRepository: PoemRepositoryProtocol {
             
             // Reload widgets to show new poem
             print("🔄 Reloading widgets...")
-            WidgetCenter.shared.reloadAllTimelines()
+            // Reload widgets to show new poem
+            print("🔄 Reloading widgets...")
+            widgetReloader.reloadAllTimelines()
             
             let event = AIGenerationEvent(
                 timestamp: Date(),
@@ -308,7 +326,8 @@ actor PoemRepository: PoemRepositoryProtocol {
             do {
                 let vibePoem = try await generateVibeBasedPoem()
                 await cachePoemWithVibe(vibePoem)
-                WidgetCenter.shared.reloadAllTimelines()
+                await cachePoemWithVibe(vibePoem)
+                widgetReloader.reloadAllTimelines()
                 return vibePoem
             } catch {
                 // Fall back to API poem if AI generation fails
@@ -342,7 +361,9 @@ actor PoemRepository: PoemRepositoryProtocol {
             // Track in history
             await historyService.addEntry(poem, source: .api, vibe: currentVibe)
             
-            WidgetCenter.shared.reloadAllTimelines()
+            await historyService.addEntry(poem, source: .api, vibe: currentVibe)
+            
+            widgetReloader.reloadAllTimelines()
             success = true
             
             let event = PoemFetchEvent(
