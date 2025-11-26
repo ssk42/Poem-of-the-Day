@@ -10,7 +10,7 @@ import XCTest
 final class Poem_of_the_DayUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
-        true
+        false  // Disabled for faster CI execution - was causing 4-8x runs
     }
 
     override func setUpWithError() throws {

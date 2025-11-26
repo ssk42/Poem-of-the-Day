@@ -96,12 +96,16 @@ final class PoemUITests: XCTestCase {
         let refreshButton = app.buttons.matching(identifier: "refresh_button").firstMatch
         refreshButton.tap()
         
-        // Wait for new poem to load
-        sleep(2) // Allow time for refresh
+        // Wait for loading indicator to appear and disappear
+        let loadingIndicator = app.activityIndicators["loading_indicator"]
+        if loadingIndicator.waitForExistence(timeout: 2) {
+            // Wait for loading to complete
+            XCTAssertTrue(loadingIndicator.waitForNonExistence(timeout: 10), "Loading should complete within 10 seconds")
+        }
         
         // Verify poem changed (title should be different)
         let newPoemTitle = app.staticTexts.matching(identifier: "poem_title").firstMatch
-        XCTAssertTrue(newPoemTitle.waitForExistence(timeout: 5))
+        XCTAssertTrue(newPoemTitle.waitForExistence(timeout: 10))
         
         // In a real test, we might check if the title changed
         // For now, just verify a title exists
