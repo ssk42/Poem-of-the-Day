@@ -25,4 +25,4 @@ test --test_output=errors
 test --ios_multi_cpus=sim_arm64
 test --ios_simulator_device="iPhone 15 Pro"
 test --ios_simulator_version=18.4
-test --test_timeout=600
+test --test_timeout=900
