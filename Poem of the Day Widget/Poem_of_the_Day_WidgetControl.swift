@@ -13,6 +13,7 @@ import WidgetKit
 // MARK: - Poem Control Widget
 
 /// Control Center widget for quick poem actions
+@available(iOS 18.0, *)
 struct Poem_of_the_Day_WidgetControl: ControlWidget {
     static let kind: String = "Stevereitz.Poem-of-the-Day.Poem of the Day Widget"
 
