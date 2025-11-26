@@ -10,7 +10,7 @@ on:
 jobs:
   build-and-test:
     name: Build and Test with Bazel
-    runs-on: macos-14  # macOS with Xcode 15+
+    runs-on: macos-latest  # macOS with Xcode 15+
     
     steps:
     - name: Checkout code
