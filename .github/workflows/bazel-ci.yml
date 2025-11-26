@@ -46,12 +46,12 @@ jobs:
     - name: Run unit tests
       run: |
         cd "Poem of the Day"
-        bazelisk test //Poem\ of\ the\ DayTests:PoemOfTheDayTests
+        bazelisk test //PoemOfTheDayTests:PoemOfTheDayTests
     
     - name: Run UI tests
       run: |
         cd "Poem of the Day"
-        bazelisk test //Poem\ of\ the\ DayUITests:PoemOfTheDayUITests
+        bazelisk test //PoemOfTheDayUITests:PoemOfTheDayUITests
     
     - name: Upload test results
       if: always()
