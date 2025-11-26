@@ -17,7 +17,7 @@ final class VibeBackgroundColorUITests: XCTestCase {
         app = XCUIApplication()
         
         // Force Portrait orientation to prevent flakiness from previous tests
-        XCUIDevice.shared.orientation = .portrait
+        // XCUIDevice.shared.orientation = .portrait  // Disabled: causes crashes in headless CI
         
         // Set environment variables for testing
         app.launchEnvironment["UI_TESTING"] = "true"
