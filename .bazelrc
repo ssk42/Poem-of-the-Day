@@ -24,5 +24,5 @@ build --worker_sandboxing
 test --test_output=errors
 test --ios_multi_cpus=sim_arm64
 test --ios_simulator_device="iPhone 17 Pro"
-test --ios_simulator_version=26.1
+test --ios_simulator_version=18.4
 test --test_timeout=600
