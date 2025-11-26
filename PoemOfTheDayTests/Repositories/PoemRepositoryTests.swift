@@ -1,6 +1,6 @@
 import XCTest
 @testable import Poem_of_the_Day
-@testable import Poem_of_the_Day
+
 
 class MockWidgetReloader: WidgetReloaderProtocol {
     var reloadAllTimelinesCallCount = 0

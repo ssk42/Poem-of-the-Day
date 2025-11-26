@@ -26,7 +26,6 @@ actor PoemRepository: PoemRepositoryProtocol {
     private let aiService: PoemGenerationServiceProtocol?
     private let telemetryService: TelemetryServiceProtocol
     private let historyService: PoemHistoryServiceProtocol
-    private let historyService: PoemHistoryServiceProtocol
     private let userDefaults: UserDefaults
     private let widgetReloader: WidgetReloaderProtocol
     
@@ -37,8 +36,6 @@ actor PoemRepository: PoemRepositoryProtocol {
          newsService: NewsServiceProtocol = NewsService(),
          vibeAnalyzer: VibeAnalyzerProtocol = VibeAnalyzer(),
          aiService: PoemGenerationServiceProtocol? = nil,
-         telemetryService: TelemetryServiceProtocol = TelemetryService(),
-         historyService: PoemHistoryServiceProtocol = PoemHistoryService(),
          telemetryService: TelemetryServiceProtocol = TelemetryService(),
          historyService: PoemHistoryServiceProtocol = PoemHistoryService(),
          userDefaults: UserDefaults = UserDefaults(suiteName: "group.com.stevereitz.poemoftheday") ?? .standard,
@@ -141,7 +138,6 @@ actor PoemRepository: PoemRepositoryProtocol {
             print("✅ Added to history")
             
             // Reload widgets to show new poem
-            print("🔄 Reloading widgets...")
             // Reload widgets to show new poem
             print("🔄 Reloading widgets...")
             widgetReloader.reloadAllTimelines()
@@ -326,7 +322,6 @@ actor PoemRepository: PoemRepositoryProtocol {
             do {
                 let vibePoem = try await generateVibeBasedPoem()
                 await cachePoemWithVibe(vibePoem)
-                await cachePoemWithVibe(vibePoem)
                 widgetReloader.reloadAllTimelines()
                 return vibePoem
             } catch {
@@ -359,8 +354,6 @@ actor PoemRepository: PoemRepositoryProtocol {
             await cachePoem(poem)
             
             // Track in history
-            await historyService.addEntry(poem, source: .api, vibe: currentVibe)
-            
             await historyService.addEntry(poem, source: .api, vibe: currentVibe)
             
             widgetReloader.reloadAllTimelines()
