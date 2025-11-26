@@ -16,4 +16,7 @@ ios_ui_test(
     minimum_os_version = "17.0",
     test_host = "//:PoemOfTheDay",
     deps = [":UITestLib"],
+    env = {
+        "LAUNCH_TIMEOUT": "300",
+    },
 )

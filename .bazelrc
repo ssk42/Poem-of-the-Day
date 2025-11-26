@@ -23,6 +23,7 @@ build --worker_sandboxing
 # Test configuration
 test --test_output=errors
 test --ios_multi_cpus=sim_arm64
-test --ios_simulator_device="iPhone 15 Pro"
+test --ios_simulator_device="iPhone SE (3rd generation)"
 test --ios_simulator_version=18.4
 test --test_timeout=900
+test --test_env=OS_ACTIVITY_MODE=disable
