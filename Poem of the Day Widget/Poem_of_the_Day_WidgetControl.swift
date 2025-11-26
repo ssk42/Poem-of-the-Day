@@ -37,6 +37,7 @@ struct Poem_of_the_Day_WidgetControl: ControlWidget {
 
 // MARK: - Control Provider
 
+@available(iOS 18.0, *)
 extension Poem_of_the_Day_WidgetControl {
     struct Value {
         var hasNewPoem: Bool
@@ -62,6 +63,7 @@ extension Poem_of_the_Day_WidgetControl {
 
 // MARK: - Configuration Intent
 
+@available(iOS 18.0, *)
 struct PoemControlConfiguration: ControlConfigurationIntent {
     static let title: LocalizedStringResource = "Poem Control Configuration"
     
