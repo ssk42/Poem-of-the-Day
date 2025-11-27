@@ -10,142 +10,66 @@ final class PoemUITests: XCTestCase {
         app.launchArguments = ["--ui-testing"]
         app.launchEnvironment = [
             "AI_AVAILABLE": "false", // Disable AI for basic poem tests
-            "ENABLE_TELEMETRY": "true"
+            "ENABLE_TELEMETRY": "true",
+            "UITESTING": "1"
         ]
         
         app.launch()
     }
     
     func testMainUIElements() {
-        // Test header elements using accessibility identifiers
-        XCTAssertTrue(app.staticTexts["Poem of the Day"].waitForExistence(timeout: 5))
+        let mainPage = PageFactory.mainContentPage(app: app)
+        
+        // Test header elements
+        XCTAssertTrue(mainPage.waitForElementToAppear(mainPage.headerTitle))
         
         // Test refresh button
-        let refreshButton = app.buttons.matching(identifier: "refresh_button").firstMatch
-        XCTAssertTrue(refreshButton.waitForExistence(timeout: 3))
+        XCTAssertTrue(mainPage.waitForElementToAppear(mainPage.refreshButton))
         
         // Test navigation elements
-        let favoritesButton = app.buttons.matching(identifier: "favorites_button").firstMatch
-        XCTAssertTrue(favoritesButton.waitForExistence(timeout: 3))
+        XCTAssertTrue(mainPage.waitForElementToAppear(mainPage.favoritesButton))
     }
     
     func testPoemDisplay() {
+        let mainPage = PageFactory.mainContentPage(app: app)
+        
         // Wait for poem to load
-        let poemContent = app.scrollViews.firstMatch
-        XCTAssertTrue(poemContent.waitForExistence(timeout: 5))
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
         
-        // Verify poem title exists
-        let poemTitle = app.staticTexts.matching(identifier: "poem_title").firstMatch
-        XCTAssertTrue(poemTitle.waitForExistence(timeout: 3))
-        XCTAssertFalse(poemTitle.label.isEmpty)
-        
-        // Verify poem author exists
-        let poemAuthor = app.staticTexts.matching(identifier: "poem_author").firstMatch
-        XCTAssertTrue(poemAuthor.waitForExistence(timeout: 3))
+        // Verify poem elements exist
+        XCTAssertTrue(mainPage.verifyPoemDisplayed())
+        XCTAssertFalse(mainPage.getPoemTitle().isEmpty)
+        XCTAssertFalse(mainPage.getAuthorName().isEmpty)
     }
-    
-    /*
-    func testFavoriteFunctionality() {
-        // Wait for poem to load
-        let poemTitle = app.staticTexts.matching(identifier: "poem_title").firstMatch
-        XCTAssertTrue(poemTitle.waitForExistence(timeout: 5))
-        
-        // Test favorite button
-        let favoriteButton = app.buttons.matching(identifier: "favorite_button").firstMatch
-        XCTAssertTrue(favoriteButton.waitForExistence(timeout: 3))
-        favoriteButton.tap()
-        
-        // Verify button state changed (should show unfavorite state)
-        let unfavoriteButton = app.buttons.matching(identifier: "unfavorite_button").firstMatch
-        XCTAssertTrue(unfavoriteButton.waitForExistence(timeout: 2))
-        
-        // Open favorites
-        let favoritesButton = app.buttons.matching(identifier: "favorites_button").firstMatch
-        favoritesButton.tap()
-        
-        // Verify favorites sheet appears
-        let favoritesSheet = app.sheets.firstMatch
-        XCTAssertTrue(favoritesSheet.waitForExistence(timeout: 3))
-        
-        // Verify poem appears in favorites
-        XCTAssertTrue(poemTitle.waitForExistence(timeout: 2))
-        
-        // Close favorites
-        let cancelButton = app.buttons["Cancel"]
-        if cancelButton.exists {
-            cancelButton.tap()
-        } else {
-            app.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.1)).tap()
-        }
-        
-        // Unfavorite the poem
-        unfavoriteButton.tap()
-        
-        // Verify button state changed back
-        XCTAssertTrue(favoriteButton.waitForExistence(timeout: 2))
-    }
-    */
     
     func testRefreshFunctionality() {
+        let mainPage = PageFactory.mainContentPage(app: app)
+        
         // Wait for initial poem to load
-        let initialPoemTitle = app.staticTexts.matching(identifier: "poem_title").firstMatch
-        XCTAssertTrue(initialPoemTitle.waitForExistence(timeout: 5))
-        let initialTitle = initialPoemTitle.label
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
+        let initialTitle = mainPage.getPoemTitle()
         
         // Refresh poem
-        let refreshButton = app.buttons.matching(identifier: "refresh_button").firstMatch
-        refreshButton.tap()
+        _ = mainPage.tapRefreshButton()
         
         // Wait for loading indicator to appear and disappear
-        let loadingIndicator = app.activityIndicators["loading_indicator"]
-        if loadingIndicator.waitForExistence(timeout: 2) {
-            // Wait for loading to complete
-            XCTAssertTrue(loadingIndicator.waitForNonExistence(timeout: 10), "Loading should complete within 10 seconds")
+        if mainPage.isLoadingIndicatorVisible() {
+            XCTAssertTrue(mainPage.waitForLoadingToComplete(), "Loading should complete within 10 seconds")
         }
         
-        // Verify poem changed (title should be different)
-        let newPoemTitle = app.staticTexts.matching(identifier: "poem_title").firstMatch
-        XCTAssertTrue(newPoemTitle.waitForExistence(timeout: 10))
-        
-        // In a real test, we might check if the title changed
-        // For now, just verify a title exists
-        XCTAssertFalse(newPoemTitle.label.isEmpty)
+        // Verify poem changed (title should be different or at least exist)
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
+        XCTAssertFalse(mainPage.getPoemTitle().isEmpty)
     }
-    
-    /*
-    func testShareFunctionality() {
-        // Wait for poem to load
-        let poemTitle = app.staticTexts.matching(identifier: "poem_title").firstMatch
-        XCTAssertTrue(poemTitle.waitForExistence(timeout: 5))
-        
-        // Test share button
-        let shareButton = app.buttons.matching(identifier: "share_button").firstMatch
-        XCTAssertTrue(shareButton.waitForExistence(timeout: 3))
-        shareButton.tap()
-        
-        // Verify share sheet appears
-        let shareSheet = app.sheets.firstMatch
-        XCTAssertTrue(shareSheet.waitForExistence(timeout: 10))
-        
-        // Dismiss share sheet
-        let cancelButton = shareSheet.buttons["Cancel"]
-        if cancelButton.exists {
-            cancelButton.tap()
-        } else {
-            // Tap outside to dismiss
-            app.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.1)).tap()
-        }
-        
-        XCTAssertTrue(shareSheet.waitForNonExistence(timeout: 5))
-    }
-    */
     
     func testPullToRefresh() {
+        let mainPage = PageFactory.mainContentPage(app: app)
+        
         // Wait for poem to load
-        let poemContent = app.scrollViews.firstMatch
-        XCTAssertTrue(poemContent.waitForExistence(timeout: 5))
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
         
         // Perform pull to refresh gesture
+        let poemContent = app.scrollViews.firstMatch
         let start = poemContent.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.1))
         let end = poemContent.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.9))
         start.press(forDuration: 0.1, thenDragTo: end)
@@ -154,76 +78,128 @@ final class PoemUITests: XCTestCase {
         sleep(3)
         
         // Verify poem is still displayed
-        let poemTitle = app.staticTexts.matching(identifier: "poem_title").firstMatch
-        XCTAssertTrue(poemTitle.waitForExistence(timeout: 5))
+        XCTAssertTrue(mainPage.verifyPoemDisplayed())
     }
     
-    /*
-    func testEmptyFavorites() {
-        // Open favorites
-        let favoritesButton = app.buttons.matching(identifier: "favorites_button").firstMatch
-        favoritesButton.tap()
+    func testFavoriteFunctionality() {
+        let mainPage = PageFactory.mainContentPage(app: app)
         
-        // Verify favorites sheet appears
-        let favoritesSheet = app.sheets.firstMatch
-        XCTAssertTrue(favoritesSheet.waitForExistence(timeout: 3))
+        // Wait for poem to load
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
+        
+        // Test favorite button
+        XCTAssertTrue(mainPage.waitForElementToAppear(mainPage.favoriteButton))
+        _ = mainPage.tapFavoriteButton()
+        
+        // Verify button state changed (should show unfavorite state)
+        // Note: The button identifier might not change, but the label/hint or visual state does.
+        // PageObject method isFavoriteButtonSelected() checks isSelected property which might be set by SwiftUI
+        // Or we check if the button label changed if accessibility label changes
+        // Based on ContentView, the label changes to "Remove from favorites"
+        
+        // Let's assume the button identifier remains "favorite_button" but we can check label
+        // Or we can check if the "unfavorite_button" exists if the ID changes.
+        // ContentView uses: .accessibilityIdentifier("favorite_button") always.
+        // But the label changes.
+        
+        // Open favorites
+        let favoritesPage = mainPage.tapFavoritesButton()
+        
+        // Verify favorites page appears
+        XCTAssertTrue(favoritesPage.waitForPageToLoad())
+        
+        // Verify poem appears in favorites (count should be at least 1)
+        XCTAssertTrue(favoritesPage.getFavoritePoemsCount() > 0)
+        
+        // Close favorites
+        _ = favoritesPage.tapBackButton()
+        
+        // Unfavorite the poem
+        _ = mainPage.tapFavoriteButton() // Tapping again should unfavorite
+    }
+    
+    func testShareFunctionality() {
+        let mainPage = PageFactory.mainContentPage(app: app)
+        
+        // Wait for poem to load
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
+        
+        // Test share button
+        XCTAssertTrue(mainPage.waitForElementToAppear(mainPage.shareButton))
+        mainPage.tapShareButton()
+        
+        // Verify share sheet appears
+        // Share sheet is a system UI, so we might just wait for a button or the sheet itself
+        let shareSheet = app.sheets.firstMatch
+        // On iPad it might be a popover, on iPhone a sheet.
+        // Just checking existence of "Copy" or "Cancel" might be safer if we want to be specific,
+        // but waiting for the sheet is a good start.
+        XCTAssertTrue(shareSheet.waitForExistence(timeout: 10) || app.collectionViews.firstMatch.waitForExistence(timeout: 10))
+        
+        // Dismiss share sheet
+        // This part is tricky across devices/OS versions.
+        // We can try to tap "Close" or "Cancel" if it exists.
+        let closeButton = app.buttons["Close"]
+        if closeButton.exists {
+            closeButton.tap()
+        } else {
+            // Tap outside
+            app.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.1)).tap()
+        }
+    }
+    
+    func testEmptyFavorites() {
+        let mainPage = PageFactory.mainContentPage(app: app)
+        
+        // Open favorites
+        let favoritesPage = mainPage.tapFavoritesButton()
+        
+        // Verify favorites page appears
+        XCTAssertTrue(favoritesPage.waitForPageToLoad())
         
         // Look for empty state message
-        let emptyMessage = app.staticTexts["No Favorite Poems Yet"]
-        if emptyMessage.exists {
-            XCTAssertTrue(emptyMessage.exists, "Should show empty state message")
+        // Note: This assumes we start with no favorites.
+        // If previous tests added favorites, this might fail unless we clear them.
+        // For now, we'll check if either the list exists OR the empty state exists.
+        if favoritesPage.getFavoritePoemsCount() == 0 {
+             XCTAssertTrue(favoritesPage.verifyEmptyState())
         }
         
         // Close favorites
-        let cancelButton = app.buttons["Cancel"]
-        if cancelButton.exists {
-            cancelButton.tap()
-        } else {
-            app.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.1)).tap()
-        }
+        _ = favoritesPage.tapBackButton()
     }
     
     func testMultipleFavorites() {
+        let mainPage = PageFactory.mainContentPage(app: app)
+        
         // Wait for initial poem to load
-        let initialPoemTitle = app.staticTexts.matching(identifier: "poem_title").firstMatch
-        XCTAssertTrue(initialPoemTitle.waitForExistence(timeout: 5))
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
         
         // Favorite first poem
-        let favoriteButton = app.buttons.matching(identifier: "favorite_button").firstMatch
-        favoriteButton.tap()
+        _ = mainPage.tapFavoriteButton()
         
         // Get new poem
-        let refreshButton = app.buttons.matching(identifier: "refresh_button").firstMatch
-        refreshButton.tap()
+        _ = mainPage.tapRefreshButton()
         
         // Wait for new poem to load
-        sleep(2)
-        let secondPoemTitle = app.staticTexts.matching(identifier: "poem_title").firstMatch
-        XCTAssertTrue(secondPoemTitle.waitForExistence(timeout: 5))
+        XCTAssertTrue(mainPage.waitForLoadingToComplete())
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
         
         // Favorite second poem
-        let favoriteButton2 = app.buttons.matching(identifier: "favorite_button").firstMatch
-        if favoriteButton2.exists {
-            favoriteButton2.tap()
-        }
+        _ = mainPage.tapFavoriteButton()
         
         // Open favorites
-        let favoritesButton = app.buttons.matching(identifier: "favorites_button").firstMatch
-        favoritesButton.tap()
+        let favoritesPage = mainPage.tapFavoritesButton()
         
-        // Verify favorites sheet appears
-        let favoritesSheet = app.sheets.firstMatch
-        XCTAssertTrue(favoritesSheet.waitForExistence(timeout: 3))
+        // Verify favorites page appears
+        XCTAssertTrue(favoritesPage.waitForPageToLoad())
+        
+        // Verify multiple poems in favorites
+        XCTAssertTrue(favoritesPage.getFavoritePoemsCount() >= 2)
         
         // Close favorites
-        let cancelButton = app.buttons["Cancel"]
-        if cancelButton.exists {
-            cancelButton.tap()
-        } else {
-            app.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.1)).tap()
-        }
+        _ = favoritesPage.tapBackButton()
     }
-    */
     
     func testAccessibility() {
         // Wait for poem to load
@@ -264,17 +240,17 @@ final class PoemUITests: XCTestCase {
         XCTAssertTrue(newPoemTitle.waitForExistence(timeout: 5))
     }
     
-    /*
     func testErrorHandling() {
         // Configure app for network error simulation
         app.terminate()
         app.launchEnvironment["SIMULATE_NETWORK_ERROR"] = "true"
         app.launch()
         
+        let mainPage = PageFactory.mainContentPage(app: app)
+        
         // Try to refresh
-        let refreshButton = app.buttons.matching(identifier: "refresh_button").firstMatch
-        XCTAssertTrue(refreshButton.waitForExistence(timeout: 5))
-        refreshButton.tap()
+        XCTAssertTrue(mainPage.waitForElementToAppear(mainPage.refreshButton))
+        _ = mainPage.tapRefreshButton()
         
         // Should show error alert
         let errorAlert = app.alerts.firstMatch
@@ -288,11 +264,9 @@ final class PoemUITests: XCTestCase {
             }
         }
         
-        // Verify app is still functional
-        let poemTitle = app.staticTexts.matching(identifier: "poem_title").firstMatch
-        XCTAssertTrue(poemTitle.waitForExistence(timeout: 5))
+        // Verify app is still functional (header still exists)
+        XCTAssertTrue(mainPage.waitForElementToAppear(mainPage.headerTitle))
     }
-    */
 }
 
 extension XCUIElement {

@@ -1,0 +1,89 @@
+Build and Test with Bazel	Run UI tests	﻿2025-11-26T17:44:11.8552400Z ##[group]Run cd "Poem of the Day"
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:11.8552790Z [36;1mcd "Poem of the Day"[0m
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:11.8553120Z [36;1mbazelisk test //PoemOfTheDayUITests:PoemOfTheDayUITests[0m
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:11.9604780Z shell: /bin/bash -e {0}
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:11.9605010Z ##[endgroup]
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:12.0550760Z INFO: Options provided by the client:
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:12.0654540Z   Inherited 'common' options: --isatty=0 --terminal_columns=80
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:12.0761800Z INFO: Reading rc options for 'test' from /Users/runner/work/Poem-of-the-Day/Poem-of-the-Day/.bazelrc:
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:12.0869120Z   Inherited 'build' options: --announce_rc --verbose_failures --apple_platform_type=ios --ios_minimum_os=17.0 --apple_generate_dsym --symlink_prefix=bazel- --experimental_reuse_sandbox_directories --worker_sandboxing
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:12.0985060Z INFO: Reading rc options for 'test' from /Users/runner/work/Poem-of-the-Day/Poem-of-the-Day/.bazelrc:
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:12.1086530Z   'test' options: --test_output=errors --ios_multi_cpus=sim_arm64 --ios_simulator_device=iPhone 15 Pro --ios_simulator_version=18.4 --test_timeout=900
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:12.1448510Z Computing main repo mapping: 
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:12.1791120Z Loading: 
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:12.1898880Z Loading: 0 packages loaded
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:12.2369630Z Analyzing: target //PoemOfTheDayUITests:PoemOfTheDayUITests (1 packages loaded, 0 targets configured)
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:12.2471460Z Analyzing: target //PoemOfTheDayUITests:PoemOfTheDayUITests (1 packages loaded, 0 targets configured)
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:12.2572480Z 
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:12.3201490Z INFO: Analyzed target //PoemOfTheDayUITests:PoemOfTheDayUITests (1 packages loaded, 20 targets configured).
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:14.2924870Z [93 / 102] Compiling Swift module //PoemOfTheDayUITests:UITestLib; 1s worker
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:21.7620640Z INFO: From Compiling Swift module //PoemOfTheDayUITests:UITestLib:
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:21.7722990Z PoemOfTheDayUITests/PoemUITests.swift:93:13: warning: initialization of immutable value 'initialTitle' was never used; consider replacing with assignment to '_' or removing it
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:21.7824960Z  91 |         let initialPoemTitle = app.staticTexts.matching(identifier: "poem_title").firstMatch
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:21.7927470Z  92 |         XCTAssertTrue(initialPoemTitle.waitForExistence(timeout: 5))
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:21.8028890Z  93 |         let initialTitle = initialPoemTitle.label
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:21.8168120Z     |             `- warning: initialization of immutable value 'initialTitle' was never used; consider replacing with assignment to '_' or removing it
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:21.8270460Z  94 |         
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:21.8371730Z  95 |         // Refresh poem
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:21.8474030Z 
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:21.8582120Z PoemOfTheDayUITests/VibeBackgroundColorUITests.swift:255:17: warning: initialization of immutable value 'colorIndicatorCircle' was never used; consider replacing with assignment to '_' or removing it
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:21.8683760Z 253 |         if vibeIndicator.exists {
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:21.8787870Z 254 |             // Verify the color intensity circle is visible
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:21.8898850Z 255 |             let colorIndicatorCircle = app.otherElements.matching(NSPredicate(format: "identifier CONTAINS 'color_intensity'")).firstMatch
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:21.9013650Z     |                 `- warning: initialization of immutable value 'colorIndicatorCircle' was never used; consider replacing with assignment to '_' or removing it
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:21.9120750Z 256 |             
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:21.9222380Z 257 |             // Since we might not have specific identifiers, check for visual elements
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:21.9346570Z [94 / 102] [Prepa] Linking PoemOfTheDayUITests/libUITestLib.a
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:22.2072210Z INFO: From Linking PoemOfTheDayUITests/PoemOfTheDayUITests.__internal__.__test_bundle_bin:
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:22.2183610Z warning: no debug symbols in executable (-arch arm64)
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:22.8187780Z [100 / 102] Processing and signing PoemOfTheDayUITests.__internal__.__test_bundle; 0s local
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:23.9809970Z [102 / 103] Testing //PoemOfTheDayUITests:PoemOfTheDayUITests; 0s darwin-sandbox
+Build and Test with Bazel	Run UI tests	2025-11-26T17:44:37.1958140Z [102 / 103] Testing //PoemOfTheDayUITests:PoemOfTheDayUITests; 13s darwin-sandbox
+Build and Test with Bazel	Run UI tests	2025-11-26T17:45:11.7537440Z [102 / 103] Testing //PoemOfTheDayUITests:PoemOfTheDayUITests; 48s darwin-sandbox
+Build and Test with Bazel	Run UI tests	2025-11-26T17:47:03.4019890Z [102 / 103] Testing //PoemOfTheDayUITests:PoemOfTheDayUITests; 152s darwin-sandbox
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:08.4314710Z [102 / 103] Testing //PoemOfTheDayUITests:PoemOfTheDayUITests; 224s darwin-sandbox
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:28.7424520Z [102 / 103] Testing //PoemOfTheDayUITests:PoemOfTheDayUITests; 245s darwin-sandbox
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.1765680Z FAIL: //PoemOfTheDayUITests:PoemOfTheDayUITests (Exit 12) (see /private/var/tmp/_bazel_runner/fe2d0117d2d9b33eff91f94ca60a61fc/execroot/_main/bazel-out/darwin_arm64-fastbuild/testlogs/PoemOfTheDayUITests/PoemOfTheDayUITests/test.log)
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.1892090Z INFO: From Testing //PoemOfTheDayUITests:PoemOfTheDayUITests:
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.1896690Z ==================== Test output for //PoemOfTheDayUITests:PoemOfTheDayUITests:
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.2173020Z 2025-11-26 17:44:25,314 Creating a new simulator:
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.2305940Z Name: New-iPhone 15 Pro-18.4
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.2429050Z OS: iOS 18.4
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.2881430Z Type: iPhone 15 Pro
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.2991540Z 2025-11-26 17:44:26,439 Created new simulator 792885EB-0EEF-4519-B23A-EB7F47465A32.
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.3403640Z 2025-11-26 17:44:36,297 The simulator 792885EB-0EEF-4519-B23A-EB7F47465A32 is booted.
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.3572620Z 2025-11-26 17:44:36,461 Generating xctestrun file.
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.3913370Z 2025-11-26 17:45:34,809 Running test-without-building with device 792885EB-0EEF-4519-B23A-EB7F47465A32
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.4085720Z INFO: Found 1 test target...
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.4086050Z Command line invocation:
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.4343200Z     /Applications/Xcode_16.4.app/Contents/Developer/usr/bin/xcodebuild test-without-building -xctestrun /private/var/tmp/_bazel_runner/fe2d0117d2d9b33eff91f94ca60a61fc/sandbox/darwin-sandbox/67/execroot/_main/_tmp/0e207e07b1114ab625714b143e1a3643/test_runner_work_dir.wC9xlq/TEST_ROOT/test.xctestrun -destination id=792885EB-0EEF-4519-B23A-EB7F47465A32 -derivedDataPath /private/var/tmp/_bazel_runner/fe2d0117d2d9b33eff91f94ca60a61fc/sandbox/darwin-sandbox/67/execroot/_main/bazel-out/darwin_arm64-fastbuild/testlogs/PoemOfTheDayUITests/PoemOfTheDayUITests/test.outputs -resultBundlePath /private/var/tmp/_bazel_runner/fe2d0117d2d9b33eff91f94ca60a61fc/sandbox/darwin-sandbox/67/execroot/_main/bazel-out/darwin_arm64-fastbuild/testlogs/PoemOfTheDayUITests/PoemOfTheDayUITests/test.outputs/test.xcresult -collect-test-diagnostics=never
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.4499990Z 
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.4884620Z Writing result bundle at path:
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.5040340Z Target //PoemOfTheDayUITests:PoemOfTheDayUITests up-to-date:
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.5302520Z 	/private/var/tmp/_bazel_runner/fe2d0117d2d9b33eff91f94ca60a61fc/sandbox/darwin-sandbox/67/execroot/_main/bazel-out/darwin_arm64-fastbuild/testlogs/PoemOfTheDayUITests/PoemOfTheDayUITests/test.outputs/test.xcresult
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.5430960Z   bazel-out/ios_sim_arm64-fastbuild-ios-sim_arm64-min17.0-applebin_ios-ST-f3259bc0b2ed/bin/PoemOfTheDayUITests/PoemOfTheDayUITests.xctest.dSYM/Contents/Resources/DWARF/PoemOfTheDayUITests
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.5509020Z 
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.5509290Z --- xcodebuild: WARNING: Using the first of multiple matching destinations:
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.5510140Z { platform:iOS Simulator, arch:arm64, id:792885EB-0EEF-4519-B23A-EB7F47465A32, OS:18.4, name:New-iPhone 15 Pro-18.4 }
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.5515270Z { platform:iOS Simulator, arch:x86_64, id:792885EB-0EEF-4519-B23A-EB7F47465A32, OS:18.4, name:New-iPhone 15 Pro-18.4 }
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.5515750Z Testing started
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.5516460Z 2025-11-26 17:48:19,329 The xcodebuild command got stuck and has not started test in 150. Will kill the command directly.
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.5516900Z ** BUILD INTERRUPTED **
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.5533540Z 2025-11-26 17:48:19,392 xcodebuild command can not launch test on device/simulator in 150s.
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.5534790Z Error: Info.plist at /private/var/tmp/_bazel_runner/fe2d0117d2d9b33eff91f94ca60a61fc/sandbox/darwin-sandbox/67/execroot/_main/bazel-out/darwin_arm64-fastbuild/testlogs/PoemOfTheDayUITests/PoemOfTheDayUITests/test.outputs/test.xcresult/Info.plist does not exist, the result bundle might be corrupted or the provided path is not a result bundle
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.5536750Z 2025-11-26 17:48:27,394 b''
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.5537210Z 2025-11-26 17:48:27,396 Deleting simulator 792885EB-0EEF-4519-B23A-EB7F47465A32 asynchronously.
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.5537700Z 2025-11-26 17:48:27,501 Done.
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.5538010Z error: tests exited with '12'
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.5538350Z ================================================================================
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.5541460Z   bazel-out/ios_sim_arm64-fastbuild-ios-sim_arm64-min17.0-applebin_ios-ST-f3259bc0b2ed/bin/PoemOfTheDayUITests/PoemOfTheDayUITests.xctest.dSYM/Contents/Info.plist
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.5560760Z   bazel-bin/PoemOfTheDayUITests/PoemOfTheDayUITests
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:29.5728770Z   bazel-out/ios_sim_arm64-fastbuild-ios-sim_arm64-min17.0-applebin_ios-ST-f3259bc0b2ed/bin/PoemOfTheDayUITests/PoemOfTheDayUITests.zip
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:30.3592720Z INFO: Elapsed time: 257.439s, Critical Path: 256.86s
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:30.3930210Z INFO: 23 processes: 20 action cache hit, 13 internal, 8 darwin-sandbox, 1 local, 1 worker.
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:30.4009120Z //PoemOfTheDayUITests:PoemOfTheDayUITests                                FAILED in 244.8s
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:30.4120580Z INFO: Build completed, 1 test FAILED, 23 total actions
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:30.4140960Z   /private/var/tmp/_bazel_runner/fe2d0117d2d9b33eff91f94ca60a61fc/execroot/_main/bazel-out/darwin_arm64-fastbuild/testlogs/PoemOfTheDayUITests/PoemOfTheDayUITests/test.log
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:30.4256760Z 
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:30.4360590Z Executed 1 out of 1 test: 1 fails locally.
+Build and Test with Bazel	Run UI tests	2025-11-26T17:48:31.4127000Z ##[error]Process completed with exit code 3.

@@ -54,6 +54,7 @@ struct PoemHistoryView: View {
                         Image(systemName: "ellipsis.circle")
                     }
                     .disabled(viewModel.groupedHistory.isEmpty)
+                    .accessibilityIdentifier("history_menu_button")
                 }
             }
             .alert("Clear History", isPresented: $viewModel.showClearConfirmation) {

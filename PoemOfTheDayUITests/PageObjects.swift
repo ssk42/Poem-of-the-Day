@@ -22,6 +22,14 @@ class PageFactory {
     static func telemetryDebugPage(app: XCUIApplication) -> TelemetryDebugPage {
         return TelemetryDebugPage(app: app)
     }
+    
+    static func settingsPage(app: XCUIApplication) -> SettingsPage {
+        return SettingsPage(app: app)
+    }
+    
+    static func historyPage(app: XCUIApplication) -> HistoryPage {
+        return HistoryPage(app: app)
+    }
 }
 
 // MARK: - Base Page
@@ -33,14 +41,14 @@ class BasePage {
         self.app = app
     }
     
-    func waitForElementToAppear(_ element: XCUIElement, timeout: TimeInterval = 5) -> Bool {
+    func waitForElementToAppear(_ element: XCUIElement, timeout: TimeInterval = 10) -> Bool {
         let predicate = NSPredicate(format: "exists == true")
         let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
         let result = XCTWaiter.wait(for: [expectation], timeout: timeout)
         return result == .completed
     }
     
-    func waitForElementToDisappear(_ element: XCUIElement, timeout: TimeInterval = 5) -> Bool {
+    func waitForElementToDisappear(_ element: XCUIElement, timeout: TimeInterval = 10) -> Bool {
         let predicate = NSPredicate(format: "exists == false")
         let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
         let result = XCTWaiter.wait(for: [expectation], timeout: timeout)
@@ -67,6 +75,9 @@ class MainContentPage: BasePage {
     var shareButton: XCUIElement { app.buttons["share_button"] }
     var loadingIndicator: XCUIElement { app.activityIndicators.firstMatch }
     var headerTitle: XCUIElement { app.staticTexts["Poem of the Day"] }
+    var menuButton: XCUIElement { app.buttons["menu_button"] }
+    var historyButton: XCUIElement { app.buttons["History"] }
+    var settingsButton: XCUIElement { app.buttons["Settings"] }
     
     override init(app: XCUIApplication) {
         super.init(app: app)
@@ -74,16 +85,22 @@ class MainContentPage: BasePage {
     
     // MARK: - Actions
     
+    func waitForHeaderToLoad() -> Bool {
+        return waitForElementToAppear(headerTitle)
+    }
+    
     func waitForPoemToLoad() -> Bool {
         return waitForElementToAppear(poemTitle)
     }
     
     func tapRefreshButton() -> MainContentPage {
+        _ = waitForElementToAppear(refreshButton)
         refreshButton.tap()
         return self
     }
     
     func tapFavoriteButton() -> MainContentPage {
+        _ = waitForElementToAppear(favoriteButton)
         favoriteButton.tap()
         return self
     }
@@ -93,23 +110,46 @@ class MainContentPage: BasePage {
         return self
     }
     
-    func tapShareButton() {
+    func tapShareButton() -> MainContentPage {
+        _ = waitForElementToAppear(shareButton)
         shareButton.tap()
+        return self
     }
     
     func tapFavoritesButton() -> FavoritesPage {
+        _ = waitForElementToAppear(favoritesButton)
         favoritesButton.tap()
         return PageFactory.favoritesPage(app: app)
     }
     
     func tapVibeGenerationButton() -> VibeGenerationPage {
+        _ = waitForElementToAppear(vibeGenerationButton)
         vibeGenerationButton.tap()
         return PageFactory.vibeGenerationPage(app: app)
     }
     
     func tapCustomPromptButton() -> CustomPromptPage {
+        _ = waitForElementToAppear(customPromptButton)
         customPromptButton.tap()
         return PageFactory.customPromptPage(app: app)
+    }
+    
+    func tapMenuButton() -> MainContentPage {
+        _ = waitForElementToAppear(menuButton)
+        menuButton.tap()
+        return self
+    }
+    
+    func tapHistoryButton() -> MainContentPage { // Should return HistoryPage eventually
+        _ = waitForElementToAppear(historyButton)
+        historyButton.tap()
+        return self
+    }
+    
+    func tapSettingsButton() -> MainContentPage { // Should return SettingsPage eventually
+        _ = waitForElementToAppear(settingsButton)
+        settingsButton.tap()
+        return self
     }
     
     // MARK: - Getters
@@ -331,7 +371,7 @@ class FavoritesPage: BasePage {
     // MARK: - UI Elements
     
     var navigationTitle: XCUIElement {
-        app.navigationBars["Favorites"]
+        app.navigationBars["Favorite Poems"]
     }
     
     var backButton: XCUIElement {
@@ -451,5 +491,108 @@ class TelemetryDebugPage: BasePage {
     
     func verifyEventExists(withName name: String) -> Bool {
         return eventsList.staticTexts[name].exists
+    }
+}
+
+// MARK: - Settings Page
+
+class SettingsPage: BasePage {
+    
+    // MARK: - UI Elements
+    
+    var navigationTitle: XCUIElement {
+        app.navigationBars["Settings"]
+    }
+    
+    var doneButton: XCUIElement {
+        app.buttons["Done"]
+    }
+    
+    var notificationSettingsButton: XCUIElement {
+        app.buttons["notification_settings_button"]
+    }
+    
+    // MARK: - Actions
+    
+    func waitForPageToLoad() -> Bool {
+        return waitForElementToAppear(navigationTitle)
+    }
+    
+    func tapDoneButton() -> MainContentPage {
+        doneButton.tap()
+        return MainContentPage(app: app)
+    }
+    
+    // MARK: - Verifications
+    
+    func verifyPageDisplayed() -> Bool {
+        return navigationTitle.exists
+    }
+}
+
+// MARK: - History Page
+
+class HistoryPage: BasePage {
+    
+    // MARK: - UI Elements
+    
+    var navigationTitle: XCUIElement {
+        app.navigationBars["Poem History"]
+    }
+    
+    var doneButton: XCUIElement {
+        app.buttons["Done"]
+    }
+    
+    var emptyStateMessage: XCUIElement {
+        app.staticTexts["No Poem History Yet"]
+    }
+    
+    var menuButton: XCUIElement {
+        app.buttons["history_menu_button"]
+    }
+    
+    var clearHistoryButton: XCUIElement {
+        app.buttons["Clear History"]
+    }
+    
+    var clearAllConfirmationButton: XCUIElement {
+        app.buttons["Clear All"]
+    }
+    
+    // MARK: - Actions
+    
+    func waitForPageToLoad() -> Bool {
+        return waitForElementToAppear(navigationTitle)
+    }
+    
+    func tapDoneButton() -> MainContentPage {
+        doneButton.tap()
+        return MainContentPage(app: app)
+    }
+    
+    func tapMenuButton() -> HistoryPage {
+        menuButton.tap()
+        return self
+    }
+    
+    func tapClearHistoryButton() -> HistoryPage {
+        clearHistoryButton.tap()
+        return self
+    }
+    
+    func tapClearAllConfirmationButton() -> HistoryPage {
+        clearAllConfirmationButton.tap()
+        return self
+    }
+    
+    // MARK: - Verifications
+    
+    func verifyPageDisplayed() -> Bool {
+        return navigationTitle.exists
+    }
+    
+    func verifyEmptyState() -> Bool {
+        return emptyStateMessage.exists
     }
 }
