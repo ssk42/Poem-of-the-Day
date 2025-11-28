@@ -342,6 +342,15 @@ class CustomPromptPage: BasePage {
     func enterPrompt(_ prompt: String) -> CustomPromptPage {
         promptTextField.tap()
         promptTextField.typeText(prompt)
+        // Dismiss keyboard
+        if app.keyboards.buttons["return"].exists {
+            app.keyboards.buttons["return"].tap()
+        } else if app.keyboards.buttons["Done"].exists {
+            app.keyboards.buttons["Done"].tap()
+        } else {
+            // Tap outside to dismiss
+            app.tap()
+        }
         return self
     }
     

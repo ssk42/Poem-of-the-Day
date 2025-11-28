@@ -470,19 +470,28 @@ actor PoemRepository: PoemRepositoryProtocol {
     }
     
     private func loadFavorites() async {
+        NSLog("PoemRepository: loadFavorites called")
         guard let data = userDefaults.data(forKey: "favoritePoems"),
               let favorites = try? JSONDecoder().decode([Poem].self, from: data) else {
+            NSLog("PoemRepository: No favorites found in UserDefaults or decode failed")
             cachedFavorites = []
             favoritesLoaded = true
             return
         }
         
+        NSLog("PoemRepository: Loaded \(favorites.count) favorites from UserDefaults")
         cachedFavorites = favorites
         favoritesLoaded = true
     }
     
     private func saveFavorites() async {
-        guard let data = try? JSONEncoder().encode(cachedFavorites) else { return }
+        NSLog("PoemRepository: saveFavorites called with \(cachedFavorites.count) favorites")
+        guard let data = try? JSONEncoder().encode(cachedFavorites) else {
+            NSLog("PoemRepository: Failed to encode favorites")
+            return
+        }
         userDefaults.set(data, forKey: "favoritePoems")
+        userDefaults.synchronize() // Force save
+        NSLog("PoemRepository: Favorites saved to UserDefaults")
     }
 }
