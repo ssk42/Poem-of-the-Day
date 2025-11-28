@@ -95,10 +95,8 @@ final class PoemUITests: XCTestCase {
         _ = mainPage.tapFavoriteButton()
         
         // Verify button state changed (should show unfavorite state)
-        // Note: The button identifier might not change, but the label/hint or visual state does.
-        // PageObject method isFavoriteButtonSelected() checks isSelected property which might be set by SwiftUI
-        // Or we check if the button label changed if accessibility label changes
-        // Based on ContentView, the label changes to "Remove from favorites"
+        // Wait for the label to change to "Unfavorite" to ensure async task completed
+        XCTAssertTrue(mainPage.waitForFavoriteButtonState(isFavorite: true), "Favorite button should show 'Unfavorite' state")
         
         // Let's assume the button identifier remains "favorite_button" but we can check label
         // Or we can check if the "unfavorite_button" exists if the ID changes.
@@ -119,6 +117,7 @@ final class PoemUITests: XCTestCase {
         
         // Unfavorite the poem
         _ = mainPage.tapFavoriteButton() // Tapping again should unfavorite
+        XCTAssertTrue(mainPage.waitForFavoriteButtonState(isFavorite: false), "Favorite button should show 'Favorite' state")
     }
     
     func testShareFunctionality() {
@@ -180,6 +179,7 @@ final class PoemUITests: XCTestCase {
         
         // Favorite first poem
         _ = mainPage.tapFavoriteButton()
+        XCTAssertTrue(mainPage.waitForFavoriteButtonState(isFavorite: true))
         
         // Get new poem
         _ = mainPage.tapRefreshButton()
@@ -190,6 +190,7 @@ final class PoemUITests: XCTestCase {
         
         // Favorite second poem
         _ = mainPage.tapFavoriteButton()
+        XCTAssertTrue(mainPage.waitForFavoriteButtonState(isFavorite: true))
         
         // Open favorites
         let favoritesPage = mainPage.tapFavoritesButton()

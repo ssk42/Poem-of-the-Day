@@ -721,6 +721,7 @@ struct FavoritesView: View {
         }
         .accessibilityElement(children: .combine)
         .accessibilityLabel("No favorite poems yet. Your favorite poems will appear here.")
+        .accessibilityIdentifier("favorites_empty_state")
     }
 }
 

@@ -362,6 +362,13 @@ class CustomPromptPage: BasePage {
     func verifyPageDisplayed() -> Bool {
         return promptTextField.exists && generateButton.exists
     }
+    
+    func waitForFavoriteButtonState(isFavorite: Bool, timeout: TimeInterval = 5.0) -> Bool {
+        let expectedLabel = isFavorite ? "Unfavorite" : "Favorite"
+        let predicate = NSPredicate(format: "label == %@", expectedLabel)
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: favoriteButton)
+        return XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed
+    }
 }
 
 // MARK: - Favorites Page
@@ -387,7 +394,7 @@ class FavoritesPage: BasePage {
     }
     
     var emptyStateMessage: XCUIElement {
-        app.staticTexts["No favorite poems yet"]
+        app.otherElements["favorites_empty_state"]
     }
     
     // MARK: - Actions
