@@ -402,7 +402,7 @@ class FavoritesPage: BasePage {
     }
     
     var emptyStateMessage: XCUIElement {
-        app.otherElements["favorites_empty_state"]
+        app.staticTexts["No Favorite Poems Yet"]
     }
     
     // MARK: - Actions
@@ -608,10 +608,6 @@ class HistoryPage: BasePage {
     }
     
     func verifyEmptyState() -> Bool {
-        if waitForElementToAppear(emptyStateMessage) {
-            return true
-        }
-        // Fallback: check for the text directly
-        return app.staticTexts["No Favorite Poems Yet"].exists
+        return waitForElementToAppear(emptyStateMessage)
     }
 }
