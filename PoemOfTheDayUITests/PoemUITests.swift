@@ -164,7 +164,12 @@ final class PoemUITests: XCTestCase {
         // If previous tests added favorites, this might fail unless we clear them.
         // For now, we'll check if either the list exists OR the empty state exists.
         if favoritesPage.getFavoritePoemsCount() == 0 {
-             XCTAssertTrue(favoritesPage.verifyEmptyState())
+             // Print debug info
+        if app.staticTexts["debug_info"].exists {
+            NSLog("PoemUITests: Debug Info: \(app.staticTexts["debug_info"].label)")
+        }
+        
+        XCTAssertTrue(favoritesPage.verifyEmptyState())
         }
         
         // Close favorites
