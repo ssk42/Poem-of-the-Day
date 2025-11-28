@@ -220,7 +220,8 @@ class MainContentPage: BasePage {
     }
     
     func waitForPageToLoad(timeout: TimeInterval = 5) -> Bool {
-    
+        return waitForPoemToLoad(timeout: timeout)
+    }
     func waitForFavoriteButtonState(isFavorite: Bool, timeout: TimeInterval = 10.0) -> Bool {
         let expectedLabel = isFavorite ? "Remove from favorites" : "Add (Test)" // Debug label
         let predicate = NSPredicate(format: "label == %@", expectedLabel)

@@ -1,0 +1,1158 @@
+Build and Test with Bazel	Set up job	﻿2025-11-28T20:14:48.5797640Z Current runner version: '2.329.0'
+Build and Test with Bazel	Set up job	2025-11-28T20:14:48.5814910Z ##[group]Runner Image Provisioner
+Build and Test with Bazel	Set up job	2025-11-28T20:14:48.5815430Z Hosted Compute Agent
+Build and Test with Bazel	Set up job	2025-11-28T20:14:48.5815750Z Version: 20251124.448
+Build and Test with Bazel	Set up job	2025-11-28T20:14:48.5816130Z Commit: fda5086b43ec66ade217e5fcd18146c879571177
+Build and Test with Bazel	Set up job	2025-11-28T20:14:48.5816570Z Build Date: 2025-11-24T21:16:26Z
+Build and Test with Bazel	Set up job	2025-11-28T20:14:48.5816930Z ##[endgroup]
+Build and Test with Bazel	Set up job	2025-11-28T20:14:48.5817250Z ##[group]Operating System
+Build and Test with Bazel	Set up job	2025-11-28T20:14:48.5817590Z macOS
+Build and Test with Bazel	Set up job	2025-11-28T20:14:48.5817880Z 15.7.2
+Build and Test with Bazel	Set up job	2025-11-28T20:14:48.5818160Z 24G325
+Build and Test with Bazel	Set up job	2025-11-28T20:14:48.5818430Z ##[endgroup]
+Build and Test with Bazel	Set up job	2025-11-28T20:14:48.5818720Z ##[group]Runner Image
+Build and Test with Bazel	Set up job	2025-11-28T20:14:48.5819050Z Image: macos-15-arm64
+Build and Test with Bazel	Set up job	2025-11-28T20:14:48.5819350Z Version: 20251126.0044
+Build and Test with Bazel	Set up job	2025-11-28T20:14:48.5820020Z Included Software: https://github.com/actions/runner-images/blob/macos-15-arm64/20251126.0044/images/macos/macos-15-arm64-Readme.md
+Build and Test with Bazel	Set up job	2025-11-28T20:14:48.5820970Z Image Release: https://github.com/actions/runner-images/releases/tag/macos-15-arm64%2F20251126.0044
+Build and Test with Bazel	Set up job	2025-11-28T20:14:48.5821690Z ##[endgroup]
+Build and Test with Bazel	Set up job	2025-11-28T20:14:48.5822360Z ##[group]GITHUB_TOKEN Permissions
+Build and Test with Bazel	Set up job	2025-11-28T20:14:48.5823550Z Contents: read
+Build and Test with Bazel	Set up job	2025-11-28T20:14:48.5823850Z Metadata: read
+Build and Test with Bazel	Set up job	2025-11-28T20:14:48.5824150Z Packages: read
+Build and Test with Bazel	Set up job	2025-11-28T20:14:48.5824440Z ##[endgroup]
+Build and Test with Bazel	Set up job	2025-11-28T20:14:48.5825830Z Secret source: Actions
+Build and Test with Bazel	Set up job	2025-11-28T20:14:48.5826220Z Prepare workflow directory
+Build and Test with Bazel	Set up job	2025-11-28T20:14:48.6254660Z Prepare all required actions
+Build and Test with Bazel	Set up job	2025-11-28T20:14:48.6282370Z Getting action download info
+Build and Test with Bazel	Set up job	2025-11-28T20:14:48.9709350Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+Build and Test with Bazel	Set up job	2025-11-28T20:14:50.2871680Z Download action repository 'actions/cache@v4' (SHA:0057852bfaa89a56745cba8c7296529d2fc39830)
+Build and Test with Bazel	Set up job	2025-11-28T20:14:50.4270510Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+Build and Test with Bazel	Set up job	2025-11-28T20:14:50.6998440Z Complete job name: Build and Test with Bazel
+Build and Test with Bazel	Checkout code	﻿2025-11-28T20:14:50.7527260Z ##[group]Run actions/checkout@v4
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:50.7527840Z with:
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:50.7528140Z   repository: ssk42/Poem-of-the-Day
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:50.7528700Z   token: ***
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:50.7528970Z   ssh-strict: true
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:50.7529250Z   ssh-user: git
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:50.7529530Z   persist-credentials: true
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:50.7529850Z   clean: true
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:50.7530140Z   sparse-checkout-cone-mode: true
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:50.7530480Z   fetch-depth: 1
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:50.7530750Z   fetch-tags: false
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:50.7531030Z   show-progress: true
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:50.7531310Z   lfs: false
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:50.7531570Z   submodules: false
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:50.7531880Z   set-safe-directory: true
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:50.7532310Z ##[endgroup]
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.2702120Z Syncing repository: ssk42/Poem-of-the-Day
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.2709440Z ##[group]Getting Git version info
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.2711630Z Working directory is '/Users/runner/work/Poem-of-the-Day/Poem-of-the-Day'
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.2715890Z [command]/opt/homebrew/bin/git version
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.3455060Z git version 2.50.1
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.3486680Z ##[endgroup]
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.3500910Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/d72cd3ba-c52c-464b-b44a-6ca9763bfd3e/.gitconfig'
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.3515540Z Temporarily overriding HOME='/Users/runner/work/_temp/d72cd3ba-c52c-464b-b44a-6ca9763bfd3e' before making global git config changes
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.3520020Z Adding repository directory to the temporary git global config as a safe directory
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.3524180Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/Poem-of-the-Day/Poem-of-the-Day
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.3680640Z Deleting the contents of '/Users/runner/work/Poem-of-the-Day/Poem-of-the-Day'
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.3686160Z ##[group]Initializing the repository
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.3690340Z [command]/opt/homebrew/bin/git init /Users/runner/work/Poem-of-the-Day/Poem-of-the-Day
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.4155260Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.4162350Z hint: is subject to change. To configure the initial branch name to use in all
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.4164720Z hint: of your new repositories, which will suppress this warning, call:
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.4167270Z hint:
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.4170360Z hint: 	git config --global init.defaultBranch <name>
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.4173590Z hint:
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.4175820Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.4179720Z hint: 'development'. The just-created branch can be renamed via this command:
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.4182710Z hint:
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.4184260Z hint: 	git branch -m <name>
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.4186180Z hint:
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.4188670Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.4202310Z Initialized empty Git repository in /Users/runner/work/Poem-of-the-Day/Poem-of-the-Day/.git/
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.4212430Z [command]/opt/homebrew/bin/git remote add origin https://github.com/ssk42/Poem-of-the-Day
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.4245470Z ##[endgroup]
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.4248070Z ##[group]Disabling automatic garbage collection
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.4249420Z [command]/opt/homebrew/bin/git config --local gc.auto 0
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.4318450Z ##[endgroup]
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.4321390Z ##[group]Setting up auth
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.4327130Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.4392390Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.6031660Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.6095950Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.7432450Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.7435890Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.8476410Z [command]/opt/homebrew/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.8571460Z ##[endgroup]
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.8574710Z ##[group]Fetching the repository
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:51.8580260Z [command]/opt/homebrew/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +22179d38f2fe69b1d9d84ab37325f4db34a6ec65:refs/remotes/origin/main
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:53.0761530Z From https://github.com/ssk42/Poem-of-the-Day
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:53.0767870Z  * [new ref]         22179d38f2fe69b1d9d84ab37325f4db34a6ec65 -> origin/main
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:53.0858030Z ##[endgroup]
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:53.0858830Z ##[group]Determining the checkout info
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:53.0859720Z ##[endgroup]
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:53.0861810Z [command]/opt/homebrew/bin/git sparse-checkout disable
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:53.0944590Z [command]/opt/homebrew/bin/git config --local --unset-all extensions.worktreeConfig
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:53.1020840Z ##[group]Checking out the ref
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:53.1022120Z [command]/opt/homebrew/bin/git checkout --progress --force -B main refs/remotes/origin/main
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:53.1536350Z Switched to a new branch 'main'
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:53.1539990Z branch 'main' set up to track 'origin/main'.
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:53.1542590Z ##[endgroup]
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:53.1707020Z [command]/opt/homebrew/bin/git log -1 --format=%H
+Build and Test with Bazel	Checkout code	2025-11-28T20:14:53.1810720Z 22179d38f2fe69b1d9d84ab37325f4db34a6ec65
+Build and Test with Bazel	Install Bazelisk	﻿2025-11-28T20:14:53.2001770Z ##[group]Run brew install bazelisk
+Build and Test with Bazel	Install Bazelisk	2025-11-28T20:14:53.2002090Z [36;1mbrew install bazelisk[0m
+Build and Test with Bazel	Install Bazelisk	2025-11-28T20:14:53.2002300Z [36;1mbazelisk version[0m
+Build and Test with Bazel	Install Bazelisk	2025-11-28T20:14:53.2042770Z shell: /bin/bash -e {0}
+Build and Test with Bazel	Install Bazelisk	2025-11-28T20:14:53.2043050Z ##[endgroup]
+Build and Test with Bazel	Install Bazelisk	2025-11-28T20:14:58.1384370Z ✔︎ JSON API formula_tap_migrations.jws.json
+Build and Test with Bazel	Install Bazelisk	2025-11-28T20:14:58.1385900Z ✔︎ JSON API cask_tap_migrations.jws.json
+Build and Test with Bazel	Install Bazelisk	2025-11-28T20:14:59.5694140Z ##[warning]bazelisk 1.27.0 is already installed and up-to-date.
+Build and Test with Bazel	Install Bazelisk	To reinstall 1.27.0, run:
+Build and Test with Bazel	Install Bazelisk	  brew reinstall bazelisk
+Build and Test with Bazel	Install Bazelisk	
+Build and Test with Bazel	Install Bazelisk	2025-11-28T20:14:59.6434090Z 2025/11/28 20:14:59 Downloading https://releases.bazel.build/8.3.1/release/bazel-8.3.1-darwin-arm64...
+Build and Test with Bazel	Install Bazelisk	2025-11-28T20:15:00.5636720Z Bazelisk version: 1.27.0
+Build and Test with Bazel	Install Bazelisk	2025-11-28T20:15:00.5974910Z Extracting Bazel installation...
+Build and Test with Bazel	Install Bazelisk	2025-11-28T20:15:01.4722930Z Starting local Bazel server (8.3.1) and connecting to it...
+Build and Test with Bazel	Install Bazelisk	2025-11-28T20:15:08.2707260Z Build label: 8.3.1
+Build and Test with Bazel	Install Bazelisk	2025-11-28T20:15:08.2810230Z Build target: @@//src/main/java/com/google/devtools/build/lib/bazel:BazelServer
+Build and Test with Bazel	Install Bazelisk	2025-11-28T20:15:08.2911340Z Build time: Mon Jun 30 16:26:17 2025 (1751300777)
+Build and Test with Bazel	Install Bazelisk	2025-11-28T20:15:08.3010900Z Build timestamp: 1751300777
+Build and Test with Bazel	Install Bazelisk	2025-11-28T20:15:08.3113330Z Build timestamp as int: 1751300777
+Build and Test with Bazel	Cache Bazel artifacts	﻿2025-11-28T20:15:08.5630710Z ##[group]Run actions/cache@v4
+Build and Test with Bazel	Cache Bazel artifacts	2025-11-28T20:15:08.5631400Z with:
+Build and Test with Bazel	Cache Bazel artifacts	2025-11-28T20:15:08.5632050Z   path: ~/.cache/bazel
+Build and Test with Bazel	Cache Bazel artifacts	~/Library/Caches/bazel
+Build and Test with Bazel	Cache Bazel artifacts	
+Build and Test with Bazel	Cache Bazel artifacts	2025-11-28T20:15:08.5633050Z   key: bazel-macOS-d2c6af6a20aa517595728efab8a084c90fdf9194466719476027e4e2fac8fe92
+Build and Test with Bazel	Cache Bazel artifacts	2025-11-28T20:15:08.5634020Z   restore-keys: bazel-macOS-
+Build and Test with Bazel	Cache Bazel artifacts	
+Build and Test with Bazel	Cache Bazel artifacts	2025-11-28T20:15:08.5634620Z   enableCrossOsArchive: false
+Build and Test with Bazel	Cache Bazel artifacts	2025-11-28T20:15:08.5635290Z   fail-on-cache-miss: false
+Build and Test with Bazel	Cache Bazel artifacts	2025-11-28T20:15:08.5635820Z   lookup-only: false
+Build and Test with Bazel	Cache Bazel artifacts	2025-11-28T20:15:08.5636300Z   save-always: false
+Build and Test with Bazel	Cache Bazel artifacts	2025-11-28T20:15:08.5636880Z ##[endgroup]
+Build and Test with Bazel	Cache Bazel artifacts	2025-11-28T20:15:08.9893670Z Cache not found for input keys: bazel-macOS-d2c6af6a20aa517595728efab8a084c90fdf9194466719476027e4e2fac8fe92, bazel-macOS-
+Build and Test with Bazel	Build main app	﻿2025-11-28T20:15:09.0006010Z ##[group]Run cd "Poem of the Day"
+Build and Test with Bazel	Build main app	2025-11-28T20:15:09.0006270Z [36;1mcd "Poem of the Day"[0m
+Build and Test with Bazel	Build main app	2025-11-28T20:15:09.0006460Z [36;1mbazelisk build //:PoemOfTheDay[0m
+Build and Test with Bazel	Build main app	2025-11-28T20:15:09.0045590Z shell: /bin/bash -e {0}
+Build and Test with Bazel	Build main app	2025-11-28T20:15:09.0045850Z ##[endgroup]
+Build and Test with Bazel	Build main app	2025-11-28T20:15:09.1941860Z INFO: Options provided by the client:
+Build and Test with Bazel	Build main app	2025-11-28T20:15:09.1952450Z   Inherited 'common' options: --isatty=0 --terminal_columns=80
+Build and Test with Bazel	Build main app	2025-11-28T20:15:09.1953070Z INFO: Reading rc options for 'build' from /Users/runner/work/Poem-of-the-Day/Poem-of-the-Day/.bazelrc:
+Build and Test with Bazel	Build main app	2025-11-28T20:15:09.1954070Z   'build' options: --announce_rc --verbose_failures --apple_platform_type=ios --ios_minimum_os=17.0 --apple_generate_dsym --symlink_prefix=bazel- --experimental_reuse_sandbox_directories --worker_sandboxing
+Build and Test with Bazel	Build main app	2025-11-28T20:15:09.3083620Z Computing main repo mapping: 
+Build and Test with Bazel	Build main app	2025-11-28T20:15:10.3083940Z Computing main repo mapping: 
+Build and Test with Bazel	Build main app	2025-11-28T20:15:11.0674590Z WARNING: For repository 'rules_swift', the root module requires module version rules_swift@2.1.1, but got rules_swift@2.4.0 in the resolved dependency graph. Please update the version in your MODULE.bazel or set --check_direct_dependencies=off
+Build and Test with Bazel	Build main app	2025-11-28T20:15:11.2677190Z Loading: 
+Build and Test with Bazel	Build main app	2025-11-28T20:15:11.2704760Z Loading: 0 packages loaded
+Build and Test with Bazel	Build main app	2025-11-28T20:15:12.3225910Z Loading: 0 packages loaded
+Build and Test with Bazel	Build main app	2025-11-28T20:15:13.4688230Z Loading: 0 packages loaded
+Build and Test with Bazel	Build main app	2025-11-28T20:15:14.4844010Z Loading: 0 packages loaded
+Build and Test with Bazel	Build main app	2025-11-28T20:15:14.4947310Z     currently loading: 
+Build and Test with Bazel	Build main app	2025-11-28T20:15:15.5348360Z Analyzing: target //:PoemOfTheDay (1 packages loaded)
+Build and Test with Bazel	Build main app	2025-11-28T20:15:15.7609320Z Analyzing: target //:PoemOfTheDay (1 packages loaded, 0 targets configured)
+Build and Test with Bazel	Build main app	2025-11-28T20:15:15.8038280Z Analyzing: target //:PoemOfTheDay (1 packages loaded, 0 targets configured)
+Build and Test with Bazel	Build main app	2025-11-28T20:15:15.8152120Z 
+Build and Test with Bazel	Build main app	2025-11-28T20:15:17.0657710Z Analyzing: target //:PoemOfTheDay (52 packages loaded, 17 targets configured)
+Build and Test with Bazel	Build main app	2025-11-28T20:15:17.0685570Z 
+Build and Test with Bazel	Build main app	2025-11-28T20:15:18.1842980Z Analyzing: target //:PoemOfTheDay (93 packages loaded, 1146 targets configured)
+Build and Test with Bazel	Build main app	2025-11-28T20:15:18.1943870Z 
+Build and Test with Bazel	Build main app	2025-11-28T20:15:19.7404380Z Analyzing: target //:PoemOfTheDay (95 packages loaded, 1173 targets configured)
+Build and Test with Bazel	Build main app	2025-11-28T20:15:19.7505530Z 
+Build and Test with Bazel	Build main app	2025-11-28T20:15:20.8066780Z Analyzing: target //:PoemOfTheDay (95 packages loaded, 1173 targets configured)
+Build and Test with Bazel	Build main app	2025-11-28T20:15:20.8179750Z 
+Build and Test with Bazel	Build main app	2025-11-28T20:15:21.8772890Z Analyzing: target //:PoemOfTheDay (113 packages loaded, 3484 targets configured)
+Build and Test with Bazel	Build main app	2025-11-28T20:15:21.8773430Z 
+Build and Test with Bazel	Build main app	2025-11-28T20:15:23.6998440Z Analyzing: target //:PoemOfTheDay (113 packages loaded, 3484 targets configured)
+Build and Test with Bazel	Build main app	2025-11-28T20:15:23.7055360Z 
+Build and Test with Bazel	Build main app	2025-11-28T20:15:25.0667390Z Analyzing: target //:PoemOfTheDay (113 packages loaded, 3484 targets configured)
+Build and Test with Bazel	Build main app	2025-11-28T20:15:25.0778680Z 
+Build and Test with Bazel	Build main app	2025-11-28T20:15:26.7431030Z Analyzing: target //:PoemOfTheDay (113 packages loaded, 3484 targets configured)
+Build and Test with Bazel	Build main app	2025-11-28T20:15:26.7468820Z 
+Build and Test with Bazel	Build main app	2025-11-28T20:15:30.5383970Z Analyzing: target //:PoemOfTheDay (113 packages loaded, 3484 targets configured)
+Build and Test with Bazel	Build main app	2025-11-28T20:15:30.5393040Z 
+Build and Test with Bazel	Build main app	2025-11-28T20:15:33.8761330Z Analyzing: target //:PoemOfTheDay (113 packages loaded, 3484 targets configured)
+Build and Test with Bazel	Build main app	2025-11-28T20:15:33.8764330Z 
+Build and Test with Bazel	Build main app	2025-11-28T20:15:35.4519370Z Analyzing: target //:PoemOfTheDay (113 packages loaded, 3484 targets configured)
+Build and Test with Bazel	Build main app	2025-11-28T20:15:35.4519970Z 
+Build and Test with Bazel	Build main app	2025-11-28T20:15:40.9003740Z Analyzing: target //:PoemOfTheDay (113 packages loaded, 3484 targets configured)
+Build and Test with Bazel	Build main app	2025-11-28T20:15:40.9021580Z 
+Build and Test with Bazel	Build main app	2025-11-28T20:15:44.9473660Z Analyzing: target //:PoemOfTheDay (113 packages loaded, 3484 targets configured)
+Build and Test with Bazel	Build main app	2025-11-28T20:15:44.9508310Z 
+Build and Test with Bazel	Build main app	2025-11-28T20:15:48.9251490Z Analyzing: target //:PoemOfTheDay (113 packages loaded, 3484 targets configured)
+Build and Test with Bazel	Build main app	2025-11-28T20:15:48.9378110Z 
+Build and Test with Bazel	Build main app	2025-11-28T20:15:50.2051950Z INFO: Analyzed target //:PoemOfTheDay (118 packages loaded, 3624 targets configured).
+Build and Test with Bazel	Build main app	2025-11-28T20:15:50.2280890Z [1 / 1] no actions running
+Build and Test with Bazel	Build main app	2025-11-28T20:15:51.5975410Z [16 / 59] Creating runfiles tree bazel-out/darwin_arm64-opt-exec-ST-d57f47055a04/bin/external/rules_apple+/tools/bundletool/bundletool.runfiles [for tool]; 0s local ... (3 actions, 2 running)
+Build and Test with Bazel	Build main app	2025-11-28T20:15:52.8520030Z [35 / 76] Creating runfiles tree bazel-out/darwin_arm64-opt-exec-ST-d57f47055a04/bin/external/rules_apple+/tools/xctoolrunner/xctoolrunner.runfiles [for tool]; 0s local ... (3 actions, 2 running)
+Build and Test with Bazel	Build main app	2025-11-28T20:15:54.1045150Z [37 / 76] Executing apple_genrule @@apple_support+//crosstool:exec_wrapped_clang.target_config [for tool]; 1s darwin-sandbox ... (3 actions running)
+Build and Test with Bazel	Build main app	2025-11-28T20:15:57.4786350Z [38 / 76] Executing apple_genrule @@apple_support+//crosstool:exec_wrapped_clang.target_config [for tool]; 4s darwin-sandbox ... (3 actions, 2 running)
+Build and Test with Bazel	Build main app	2025-11-28T20:15:58.7462960Z [43 / 76] Executing apple_genrule @@apple_support+//crosstool:exec_libtool.target_config [for tool]; 1s darwin-sandbox ... (2 actions, 1 running)
+Build and Test with Bazel	Build main app	2025-11-28T20:16:00.1396310Z [45 / 76] Executing apple_genrule @@apple_support+//crosstool:exec_libtool.target_config [for tool]; 2s darwin-sandbox ... (3 actions, 2 running)
+Build and Test with Bazel	Build main app	2025-11-28T20:16:01.4355580Z [47 / 76] Executing apple_genrule @@apple_support+//crosstool:exec_libtool.target_config [for tool]; 3s darwin-sandbox ... (2 actions running)
+Build and Test with Bazel	Build main app	2025-11-28T20:16:04.3977350Z [48 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 5s local ... (2 actions, 1 running)
+Build and Test with Bazel	Build main app	2025-11-28T20:16:05.5842490Z [48 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 6s local ... (3 actions running)
+Build and Test with Bazel	Build main app	2025-11-28T20:16:08.5129450Z [49 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 9s local ... (3 actions, 2 running)
+Build and Test with Bazel	Build main app	2025-11-28T20:16:09.7595440Z [49 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 10s local ... (3 actions running)
+Build and Test with Bazel	Build main app	2025-11-28T20:16:10.8069900Z [50 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 12s local ... (3 actions, 2 running)
+Build and Test with Bazel	Build main app	2025-11-28T20:16:11.8662560Z [50 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 13s local ... (3 actions running)
+Build and Test with Bazel	Build main app	2025-11-28T20:16:13.9573400Z [51 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 15s local ... (3 actions, 2 running)
+Build and Test with Bazel	Build main app	2025-11-28T20:16:14.9554970Z [52 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 16s local ... (3 actions running)
+Build and Test with Bazel	Build main app	2025-11-28T20:16:16.9545300Z [53 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 18s local ... (3 actions, 2 running)
+Build and Test with Bazel	Build main app	2025-11-28T20:16:17.9651100Z [56 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 19s local ... (3 actions, 2 running)
+Build and Test with Bazel	Build main app	2025-11-28T20:16:19.2516630Z [58 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 20s local ... (3 actions running)
+Build and Test with Bazel	Build main app	2025-11-28T20:16:21.1069290Z [59 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 22s local ... (3 actions, 2 running)
+Build and Test with Bazel	Build main app	2025-11-28T20:16:22.3460220Z [61 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 23s local ... (3 actions running)
+Build and Test with Bazel	Build main app	2025-11-28T20:16:23.4135830Z [63 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 24s local ... (2 actions running)
+Build and Test with Bazel	Build main app	2025-11-28T20:16:24.4718380Z [65 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 25s local ... (2 actions running)
+Build and Test with Bazel	Build main app	2025-11-28T20:16:25.5050790Z [66 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 26s local ... (2 actions running)
+Build and Test with Bazel	Build main app	2025-11-28T20:16:36.9822740Z [66 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 38s local ... (2 actions running)
+Build and Test with Bazel	Build main app	2025-11-28T20:16:56.3977650Z [67 / 76] Compiling Swift module //:PoemOfTheDayLib; 31s worker ... (2 actions, 1 running)
+Build and Test with Bazel	Build main app	2025-11-28T20:16:57.6569220Z [68 / 76] Compiling Swift module //:PoemOfTheDayLib; 32s worker
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.0717520Z INFO: From Compiling Swift module //:PoemOfTheDayLib:
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.0844360Z Poem of the Day/Services/NotificationService.swift:53:5: warning: 'nonisolated' can not be applied to variable with non-'Sendable' type 'UserDefaults'; this is an error in the Swift 6 language mode
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.0965780Z  51 |     
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.1067910Z  52 |     private let notificationCenter: UNUserNotificationCenter
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.1169790Z  53 |     nonisolated private let userDefaults: UserDefaults
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.1273760Z     |     `- warning: 'nonisolated' can not be applied to variable with non-'Sendable' type 'UserDefaults'; this is an error in the Swift 6 language mode
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.1392270Z  54 |     private let notificationIdentifier = "daily_poem_notification"
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.1494010Z  55 |     
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.1595880Z 
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.1697440Z /Applications/Xcode_16.4.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSUserDefaults.h:49:12: note: class 'UserDefaults' does not conform to the 'Sendable' protocol
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.1802220Z  47 |  NSUserDefaults can be observed using Key-Value Observing for any key stored in it. Using NSKeyValueObservingOptionPrior to observe changes from other processes or devices will behave as though NSKeyValueObservingOptionPrior was not specified.
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.1928800Z  48 |  */
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.2030570Z  49 | @interface NSUserDefaults : NSObject {
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.2136380Z     |            `- note: class 'UserDefaults' does not conform to the 'Sendable' protocol
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.2322680Z  50 | @private
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.2424080Z  51 |     id _kvo_;
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.2524840Z Poem of the Day/Services/NotificationService.swift:53:5: warning: 'nonisolated' can not be applied to variable with non-'Sendable' type 'UserDefaults'; this is an error in the Swift 6 language mode
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.2625840Z  51 |     
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.2730340Z  52 |     private let notificationCenter: UNUserNotificationCenter
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.2840560Z  53 |     nonisolated private let userDefaults: UserDefaults
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.2948670Z     |     `- warning: 'nonisolated' can not be applied to variable with non-'Sendable' type 'UserDefaults'; this is an error in the Swift 6 language mode
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.3084120Z  54 |     private let notificationIdentifier = "daily_poem_notification"
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.3195330Z  55 |     
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.3296100Z 
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.3399890Z /Applications/Xcode_16.4.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSUserDefaults.h:49:12: note: class 'UserDefaults' does not conform to the 'Sendable' protocol
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.3498580Z  47 |  NSUserDefaults can be observed using Key-Value Observing for any key stored in it. Using NSKeyValueObservingOptionPrior to observe changes from other processes or devices will behave as though NSKeyValueObservingOptionPrior was not specified.
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.3600850Z  48 |  */
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.3702980Z  49 | @interface NSUserDefaults : NSObject {
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.3804560Z     |            `- note: class 'UserDefaults' does not conform to the 'Sendable' protocol
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.3906270Z  50 | @private
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.4007670Z  51 |     id _kvo_;
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.4108030Z 
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.4209490Z Poem of the Day/Services/NotificationService.swift:156:26: warning: non-sendable type 'UserDefaults' of property 'userDefaults' cannot exit nonisolated context; this is an error in the Swift 6 language mode
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.4304260Z 154 |     
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.4406080Z 155 |     nonisolated func getSettings() -> NotificationSettings {
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.4507930Z 156 |         guard let data = userDefaults.data(forKey: "notificationSettings"),
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.4611070Z     |                          `- warning: non-sendable type 'UserDefaults' of property 'userDefaults' cannot exit nonisolated context; this is an error in the Swift 6 language mode
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.4725540Z 157 |               let settings = try? JSONDecoder().decode(NotificationSettings.self, from: data) else {
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.4826260Z 158 |             return .default
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.4926730Z 
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.5128950Z /Applications/Xcode_16.4.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSUserDefaults.h:49:12: note: class 'UserDefaults' does not conform to the 'Sendable' protocol
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.5232100Z  47 |  NSUserDefaults can be observed using Key-Value Observing for any key stored in it. Using NSKeyValueObservingOptionPrior to observe changes from other processes or devices will behave as though NSKeyValueObservingOptionPrior was not specified.
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.5258870Z  48 |  */
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.5361480Z  49 | @interface NSUserDefaults : NSObject {
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.5462950Z     |            `- note: class 'UserDefaults' does not conform to the 'Sendable' protocol
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.5568260Z  50 | @private
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.5669660Z  51 |     id _kvo_;
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.5770520Z 
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.5870940Z Poem of the Day/Services/NotificationService.swift:165:9: warning: non-sendable type 'UserDefaults' of property 'userDefaults' cannot exit nonisolated context; this is an error in the Swift 6 language mode
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.5975380Z 163 |     nonisolated func saveSettings(_ settings: NotificationSettings) {
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.6078900Z 164 |         guard let data = try? JSONEncoder().encode(settings) else { return }
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.6179930Z 165 |         userDefaults.set(data, forKey: "notificationSettings")
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.6295340Z     |         `- warning: non-sendable type 'UserDefaults' of property 'userDefaults' cannot exit nonisolated context; this is an error in the Swift 6 language mode
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.6404980Z 166 |     }
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.6506780Z 167 | }
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.6608970Z 
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.6710710Z /Applications/Xcode_16.4.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSUserDefaults.h:49:12: note: class 'UserDefaults' does not conform to the 'Sendable' protocol
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.6814710Z  47 |  NSUserDefaults can be observed using Key-Value Observing for any key stored in it. Using NSKeyValueObservingOptionPrior to observe changes from other processes or devices will behave as though NSKeyValueObservingOptionPrior was not specified.
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.6938450Z  48 |  */
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.7039500Z  49 | @interface NSUserDefaults : NSObject {
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.7142420Z     |            `- note: class 'UserDefaults' does not conform to the 'Sendable' protocol
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.7244020Z  50 | @private
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.7354110Z  51 |     id _kvo_;
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.7455680Z Poem of the Day/ViewModels/PoemViewModel.swift:80:19: warning: constant 'poemTask' inferred to have type '()', which may be unexpected
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.7557440Z  78 |         await telemetryService.track(appLaunchEvent)
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.7668410Z  79 |         
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.7769860Z  80 |         async let poemTask = loadDailyPoem()
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.7871780Z     |                   |- warning: constant 'poemTask' inferred to have type '()', which may be unexpected
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.7973860Z     |                   `- note: add an explicit type annotation to silence this warning
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.8104180Z  81 |         async let favoritesTask = loadFavorites()
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.8256590Z  82 |         async let aiAvailabilityTask = checkAIAvailability()
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.8257130Z 
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.8358270Z Poem of the Day/ViewModels/PoemViewModel.swift:81:19: warning: constant 'favoritesTask' inferred to have type '()', which may be unexpected
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.8492050Z  79 |         
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.8596000Z  80 |         async let poemTask = loadDailyPoem()
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.8697060Z  81 |         async let favoritesTask = loadFavorites()
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.8798520Z     |                   |- warning: constant 'favoritesTask' inferred to have type '()', which may be unexpected
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.8900750Z     |                   `- note: add an explicit type annotation to silence this warning
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.9002260Z  82 |         async let aiAvailabilityTask = checkAIAvailability()
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.9103950Z  83 |         async let vibeTask = loadDailyVibe()
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.9216830Z 
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.9334870Z Poem of the Day/ViewModels/PoemViewModel.swift:82:19: warning: constant 'aiAvailabilityTask' inferred to have type '()', which may be unexpected
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.9436170Z  80 |         async let poemTask = loadDailyPoem()
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.9537450Z  81 |         async let favoritesTask = loadFavorites()
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.9639540Z  82 |         async let aiAvailabilityTask = checkAIAvailability()
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.9741690Z     |                   |- warning: constant 'aiAvailabilityTask' inferred to have type '()', which may be unexpected
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.9843180Z     |                   `- note: add an explicit type annotation to silence this warning
+Build and Test with Bazel	Build main app	2025-11-28T20:17:02.9947210Z  83 |         async let vibeTask = loadDailyVibe()
+Build and Test with Bazel	Build main app	2025-11-28T20:17:03.0048710Z  84 |         
+Build and Test with Bazel	Build main app	2025-11-28T20:17:03.0149680Z 
+Build and Test with Bazel	Build main app	2025-11-28T20:17:03.0250810Z Poem of the Day/ViewModels/PoemViewModel.swift:83:19: warning: constant 'vibeTask' inferred to have type '()', which may be unexpected
+Build and Test with Bazel	Build main app	2025-11-28T20:17:03.0353220Z  81 |         async let favoritesTask = loadFavorites()
+Build and Test with Bazel	Build main app	2025-11-28T20:17:03.0455300Z  82 |         async let aiAvailabilityTask = checkAIAvailability()
+Build and Test with Bazel	Build main app	2025-11-28T20:17:03.0556800Z  83 |         async let vibeTask = loadDailyVibe()
+Build and Test with Bazel	Build main app	2025-11-28T20:17:03.0659260Z     |                   |- warning: constant 'vibeTask' inferred to have type '()', which may be unexpected
+Build and Test with Bazel	Build main app	2025-11-28T20:17:03.0761310Z     |                   `- note: add an explicit type annotation to silence this warning
+Build and Test with Bazel	Build main app	2025-11-28T20:17:03.0863330Z  84 |         
+Build and Test with Bazel	Build main app	2025-11-28T20:17:03.0964630Z  85 |         await poemTask
+Build and Test with Bazel	Build main app	2025-11-28T20:17:03.1067150Z [69 / 76] [Prepa] Linking libPoemOfTheDayLib.a
+Build and Test with Bazel	Build main app	2025-11-28T20:17:03.8976840Z [69 / 76] Linking libPoemOfTheDayLib.a; 1s darwin-sandbox
+Build and Test with Bazel	Build main app	2025-11-28T20:17:05.5053910Z [70 / 76] [Prepa] Linking PoemOfTheDay_bin
+Build and Test with Bazel	Build main app	2025-11-28T20:17:07.0086460Z [70 / 76] Linking PoemOfTheDay_bin; 1s darwin-sandbox
+Build and Test with Bazel	Build main app	2025-11-28T20:17:08.7505060Z INFO: From Linking PoemOfTheDay_bin:
+Build and Test with Bazel	Build main app	2025-11-28T20:17:08.7657920Z warning: no debug symbols in executable (-arch arm64)
+Build and Test with Bazel	Build main app	2025-11-28T20:17:08.7781990Z [71 / 76] [Prepa] Creating symlink PoemOfTheDay_lipobin
+Build and Test with Bazel	Build main app	2025-11-28T20:17:10.0633970Z [74 / 76] Bundling PoemOfTheDay; 1s darwin-sandbox
+Build and Test with Bazel	Build main app	2025-11-28T20:17:11.0902390Z [75 / 76] Processing and signing PoemOfTheDay; 0s local
+Build and Test with Bazel	Build main app	2025-11-28T20:17:12.5560060Z INFO: Found 1 target...
+Build and Test with Bazel	Build main app	2025-11-28T20:17:12.6164620Z Target //:PoemOfTheDay up-to-date:
+Build and Test with Bazel	Build main app	2025-11-28T20:17:12.6288380Z   bazel-bin/PoemOfTheDay.ipa
+Build and Test with Bazel	Build main app	2025-11-28T20:17:12.6414790Z   bazel-bin/PoemOfTheDay.app.dSYM/Contents/Resources/DWARF/PoemOfTheDay
+Build and Test with Bazel	Build main app	2025-11-28T20:17:12.6540670Z   bazel-bin/PoemOfTheDay.app.dSYM/Contents/Info.plist
+Build and Test with Bazel	Build main app	2025-11-28T20:17:12.7280460Z INFO: Elapsed time: 123.511s, Critical Path: 64.98s
+Build and Test with Bazel	Build main app	2025-11-28T20:17:12.7384150Z INFO: 76 processes: 40 internal, 33 darwin-sandbox, 2 local, 1 worker.
+Build and Test with Bazel	Build main app	2025-11-28T20:17:12.7491040Z INFO: Build completed successfully, 76 total actions
+Build and Test with Bazel	Build widget extension	﻿2025-11-28T20:17:12.9932720Z ##[group]Run cd "Poem of the Day"
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:12.9933460Z [36;1mcd "Poem of the Day"[0m
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:12.9934170Z [36;1mbazelisk build //Poem\ of\ the\ Day\ Widget:PoemOfTheDayWidget[0m
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:13.6046680Z shell: /bin/bash -e {0}
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:13.6047000Z ##[endgroup]
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:14.0083360Z INFO: Options provided by the client:
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:14.0196100Z   Inherited 'common' options: --isatty=0 --terminal_columns=80
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:14.0335280Z INFO: Reading rc options for 'build' from /Users/runner/work/Poem-of-the-Day/Poem-of-the-Day/.bazelrc:
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:14.0451530Z   'build' options: --announce_rc --verbose_failures --apple_platform_type=ios --ios_minimum_os=17.0 --apple_generate_dsym --symlink_prefix=bazel- --experimental_reuse_sandbox_directories --worker_sandboxing
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:14.6350180Z Computing main repo mapping: 
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:14.9626550Z Loading: 
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:14.9729720Z Loading: 0 packages loaded
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:15.2733970Z Analyzing: target //Poem of the Day Widget:PoemOfTheDayWidget (1 packages loaded, 0 targets configured)
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:15.3636650Z Analyzing: target //Poem of the Day Widget:PoemOfTheDayWidget (1 packages loaded, 0 targets configured)
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:15.3738330Z 
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:16.5460300Z INFO: Analyzed target //Poem of the Day Widget:PoemOfTheDayWidget (33 packages loaded, 336 targets configured).
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:16.5624860Z [1 / 1] no actions running
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:17.6943850Z [58 / 71] Compiling Swift module //Poem of the Day Widget:WidgetLib; 1s worker ... (3 actions running)
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:18.7223240Z [61 / 71] Compiling Swift module //Poem of the Day Widget:WidgetLib; 2s worker ... (3 actions running)
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:19.7902010Z [63 / 71] Compiling Swift module //Poem of the Day Widget:WidgetLib; 3s worker
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:29.9005790Z [63 / 71] Compiling Swift module //Poem of the Day Widget:WidgetLib; 13s worker
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:31.9827450Z [64 / 71] [Prepa] Linking Poem of the Day Widget/libWidgetLib.a
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:32.6919190Z INFO: From Linking Poem of the Day Widget/PoemOfTheDayWidget_bin:
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:32.7036260Z warning: no debug symbols in executable (-arch arm64)
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:32.8368420Z INFO: From Copy DWARF into dSYM `Poem of the Day Widget/PoemOfTheDayWidget_bin.dwarf`:
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:32.8475660Z stat: bazel-out/ios_sim_arm64-fastbuild-ios-sim_arm64-min17.0-applebin_ios-ST-f3259bc0b2ed/bin/Poem: stat: No such file or directory
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:32.8577200Z stat: of: stat: No such file or directory
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:32.8689820Z stat: the: stat: No such file or directory
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:32.8803880Z stat: Day: stat: No such file or directory
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:32.8905310Z stat: Widget/PoemOfTheDayWidget_bin.dwarf: stat: No such file or directory
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:32.9006800Z stat: Widget/PoemOfTheDayWidget.appex.dSYM/Contents/Resources/DWARF: stat: No such file or directory
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:33.2618150Z [69 / 71] Bundling PoemOfTheDayWidget; 0s darwin-sandbox
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:34.3161200Z INFO: Found 1 target...
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:34.3283980Z Target //Poem of the Day Widget:PoemOfTheDayWidget up-to-date:
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:34.3429600Z   bazel-bin/Poem of the Day Widget/PoemOfTheDayWidget.zip
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:34.3549740Z   bazel-bin/Poem of the Day Widget/PoemOfTheDayWidget.appex.dSYM/Contents/Resources/DWARF/PoemOfTheDayWidget
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:34.3651880Z   bazel-bin/Poem of the Day Widget/PoemOfTheDayWidget.appex.dSYM/Contents/Info.plist
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:34.3754050Z [71 / 71] no actions running
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:34.3856390Z INFO: Elapsed time: 20.557s, Critical Path: 17.69s
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:34.3958890Z INFO: 22 processes: 11 internal, 9 darwin-sandbox, 1 local, 1 worker.
+Build and Test with Bazel	Build widget extension	2025-11-28T20:17:34.4084500Z INFO: Build completed successfully, 22 total actions
+Build and Test with Bazel	Run unit tests	﻿2025-11-28T20:17:34.4448950Z ##[group]Run cd "Poem of the Day"
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:34.4449880Z [36;1mcd "Poem of the Day"[0m
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:34.4450640Z [36;1mbazelisk test --config=ci //PoemOfTheDayTests:PoemOfTheDayTests[0m
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:34.4821280Z shell: /bin/bash -e {0}
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:34.4821620Z ##[endgroup]
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:34.6655490Z INFO: Options provided by the client:
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:34.6756860Z   Inherited 'common' options: --isatty=0 --terminal_columns=80
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:34.6858520Z INFO: Reading rc options for 'test' from /Users/runner/work/Poem-of-the-Day/Poem-of-the-Day/.bazelrc:
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:34.6962000Z   Inherited 'build' options: --announce_rc --verbose_failures --apple_platform_type=ios --ios_minimum_os=17.0 --apple_generate_dsym --symlink_prefix=bazel- --experimental_reuse_sandbox_directories --worker_sandboxing
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:34.7064870Z INFO: Reading rc options for 'test' from /Users/runner/work/Poem-of-the-Day/Poem-of-the-Day/.bazelrc:
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:34.7205740Z   'test' options: --test_output=errors --ios_multi_cpus=sim_arm64 --ios_simulator_device=iPhone 15 Pro --ios_simulator_version=26.1 --test_timeout=900 --test_env=OS_ACTIVITY_MODE=disable
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:34.7309110Z INFO: Found applicable config definition test:ci in file /Users/runner/work/Poem-of-the-Day/Poem-of-the-Day/.bazelrc: --ios_simulator_version=18.6 --test_output=all
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:34.8586570Z Computing main repo mapping: 
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:34.9133890Z Loading: 
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:34.9238110Z Loading: 0 packages loaded
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:34.9735510Z WARNING: Build options --ios_multi_cpus, --ios_simulator_device, --ios_simulator_version, and 1 more have changed, discarding analysis cache (this can be expensive, see https://bazel.build/advanced/performance/iteration-speed).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:35.0597970Z Analyzing: target //PoemOfTheDayTests:PoemOfTheDayTests (1 packages loaded, 0 targets configured)
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:35.0704300Z Analyzing: target //PoemOfTheDayTests:PoemOfTheDayTests (1 packages loaded, 0 targets configured)
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:35.0825120Z 
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:36.0969810Z Analyzing: target //PoemOfTheDayTests:PoemOfTheDayTests (7 packages loaded, 3626 targets configured)
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:36.1072190Z 
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:36.1994750Z INFO: Analyzed target //PoemOfTheDayTests:PoemOfTheDayTests (8 packages loaded, 3652 targets configured).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:37.9283400Z [66 / 77] AssetCatalogCompile PoemOfTheDayTests/PoemOfTheDayTests.__internal__.__test_bundle-intermediates/xcassets; 1s local ... (2 actions running)
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:46.2223400Z [67 / 77] Compiling Swift module //PoemOfTheDayTests:TestLib; 9s worker ... (2 actions, 1 running)
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:47.2510860Z [68 / 77] Compiling Swift module //PoemOfTheDayTests:TestLib; 10s worker
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:57.7530430Z [68 / 77] Compiling Swift module //PoemOfTheDayTests:TestLib; 21s worker
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.6780350Z INFO: From Compiling Swift module //PoemOfTheDayTests:TestLib:
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.6881930Z PoemOfTheDayTests/Localization/LocalizationTests.swift:230:14: warning: immutable value 'system' was never used; consider replacing with '_' or removing it
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.6984270Z 228 |         ]
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.7085410Z 229 |         
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.7186780Z 230 |         for (system, distance, temperature) in measurements {
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.7288820Z     |              `- warning: immutable value 'system' was never used; consider replacing with '_' or removing it
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.7393110Z 231 |             // Test that measurement-related content is handled properly
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.7494290Z 232 |             let measurementContent = "Distance: 10 \(distance), Temperature: 20 \(temperature)"
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.7595320Z 
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.7696460Z PoemOfTheDayTests/Platform/DevicePlatformTests.swift:92:29: warning: result of call to 'fulfillment(of:timeout:enforceOrder:)' is unused
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.7797940Z  90 |         
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.7900060Z  91 |         expectation.expectedFulfillmentCount = maxConcurrentOperations
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.8005110Z  92 |         try await XCTWaiter.fulfillment(of: [expectation], timeout: 3.0)
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.8107280Z     |                             `- warning: result of call to 'fulfillment(of:timeout:enforceOrder:)' is unused
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.8208490Z  93 |     }
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.8309450Z  94 |     
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.8410250Z 
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.8512870Z PoemOfTheDayTests/Platform/DevicePlatformTests.swift:80:13: warning: immutable value 'i' was never used; consider replacing with '_' or removing it
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.8767980Z  78 |         let maxConcurrentOperations = 2
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.8870650Z  79 |         
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.8971860Z  80 |         for i in 0..<maxConcurrentOperations {
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.9088880Z     |             `- warning: immutable value 'i' was never used; consider replacing with '_' or removing it
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.9089590Z  81 |             Task {
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.9219660Z  82 |                 do {
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.9327220Z 
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.9430380Z PoemOfTheDayTests/Platform/DevicePlatformTests.swift:92:9: warning: no calls to throwing functions occur within 'try' expression
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.9532850Z  90 |         
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.9638820Z  91 |         expectation.expectedFulfillmentCount = maxConcurrentOperations
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.9740180Z  92 |         try await XCTWaiter.fulfillment(of: [expectation], timeout: 3.0)
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.9846160Z     |         `- warning: no calls to throwing functions occur within 'try' expression
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:58.9947850Z  93 |     }
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.0050290Z  94 |     
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.0162270Z 
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.0264420Z PoemOfTheDayTests/Platform/DevicePlatformTests.swift:115:29: warning: result of call to 'fulfillment(of:timeout:enforceOrder:)' is unused
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.0366600Z 113 |         
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.0467700Z 114 |         expectation.fulfill()
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.0568880Z 115 |         try await XCTWaiter.fulfillment(of: [expectation], timeout: 5.0)
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.0678180Z     |                             `- warning: result of call to 'fulfillment(of:timeout:enforceOrder:)' is unused
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.0780160Z 116 |     }
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.0881360Z 117 |     
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.0982460Z 
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.1112790Z PoemOfTheDayTests/Platform/DevicePlatformTests.swift:103:17: warning: immutable value 'i' was never used; consider replacing with '_' or removing it
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.1215140Z 101 |         
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.1316820Z 102 |         await withTaskGroup(of: Void.self) { group in
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.1418320Z 103 |             for i in 0..<maxConcurrentOperations {
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.1520430Z     |                 `- warning: immutable value 'i' was never used; consider replacing with '_' or removing it
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.1622730Z 104 |                 group.addTask {
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.1724270Z 105 |                     do {
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.1827660Z 
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.1928700Z PoemOfTheDayTests/Platform/DevicePlatformTests.swift:115:9: warning: no calls to throwing functions occur within 'try' expression
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.2030310Z 113 |         
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.2131430Z 114 |         expectation.fulfill()
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.2232510Z 115 |         try await XCTWaiter.fulfillment(of: [expectation], timeout: 5.0)
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.2338080Z     |         `- warning: no calls to throwing functions occur within 'try' expression
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.2449190Z 116 |     }
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.2552660Z 117 |     
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.2653490Z 
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.2755100Z PoemOfTheDayTests/Security/SecurityInputValidationTests.swift:329:13: warning: immutable value 'i' was never used; consider replacing with '_' or removing it
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.2857190Z 327 |         
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.2959550Z 328 |         // Create multiple concurrent operations
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.3063470Z 329 |         for i in 0..<10 {
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.3164790Z     |             `- warning: immutable value 'i' was never used; consider replacing with '_' or removing it
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.3267230Z 330 |             DispatchQueue.global(qos: .background).async {
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.3368770Z 331 |                 // Test that poem properties can be safely accessed concurrently
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.3474880Z 
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.3606680Z PoemOfTheDayTests/ViewModels/PoemViewModelTests.swift:85:13: warning: initialization of immutable value 'vibePoem' was never used; consider replacing with assignment to '_' or removing it
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.3708330Z  83 |     func testGenerateVibeBasedPoem() async {
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.3809340Z  84 |         // Given
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.3910370Z  85 |         let vibePoem = TestData.vibePoem
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.4011640Z     |             `- warning: initialization of immutable value 'vibePoem' was never used; consider replacing with assignment to '_' or removing it
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.4112660Z  86 |         mockRepository.isAIAvailable = true
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.4213690Z  87 |         
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.4315500Z [69 / 77] [Prepa] Linking PoemOfTheDayTests/libTestLib.a
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.4618770Z INFO: From Linking PoemOfTheDayTests/PoemOfTheDayTests.__internal__.__test_bundle_bin:
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.4731120Z warning: no debug symbols in executable (-arch arm64)
+Build and Test with Bazel	Run unit tests	2025-11-28T20:17:59.9497630Z [75 / 77] [Prepa] Processing and signing PoemOfTheDayTests.__internal__.__test_bundle
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:00.9657880Z [77 / 78] [Prepa] Testing //PoemOfTheDayTests:PoemOfTheDayTests
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:02.6416150Z [77 / 78] Testing //PoemOfTheDayTests:PoemOfTheDayTests; 1s darwin-sandbox
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:12.2402420Z [77 / 78] Testing //PoemOfTheDayTests:PoemOfTheDayTests; 11s darwin-sandbox
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.2224500Z [77 / 78] Testing //PoemOfTheDayTests:PoemOfTheDayTests; 25s darwin-sandbox
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.4708320Z INFO: From Testing //PoemOfTheDayTests:PoemOfTheDayTests:
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.4709480Z ==================== Test output for //PoemOfTheDayTests:PoemOfTheDayTests:
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.4815040Z 2025-11-28 20:18:08,202 Creating a new simulator:
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.4916460Z INFO: Found 1 test target...
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.4916860Z Name: New-iPhone 15 Pro-18.6
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.5048780Z Target //PoemOfTheDayTests:PoemOfTheDayTests up-to-date:
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.5050610Z OS: iOS 18.6
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.5153330Z   bazel-out/ios_sim_arm64-fastbuild-ios-sim_arm64-min17.0-applebin_ios-ST-f3259bc0b2ed/bin/PoemOfTheDayTests/PoemOfTheDayTests.xctest.dSYM/Contents/Resources/DWARF/PoemOfTheDayTests
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.5155510Z Type: iPhone 15 Pro
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.5259630Z   bazel-out/ios_sim_arm64-fastbuild-ios-sim_arm64-min17.0-applebin_ios-ST-f3259bc0b2ed/bin/PoemOfTheDayTests/PoemOfTheDayTests.xctest.dSYM/Contents/Info.plist
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.5263140Z 2025-11-28 20:18:09,510 Created new simulator 42FE7139-042F-48EC-9DBC-212CA25006E5.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.5263720Z   bazel-bin/PoemOfTheDayTests/PoemOfTheDayTests
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.5400140Z 2025-11-28 20:18:09,511 Will consider the test as test type Logic Test to run. Because the app under test is not given.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.5402010Z   bazel-out/ios_sim_arm64-fastbuild-ios-sim_arm64-min17.0-applebin_ios-ST-f3259bc0b2ed/bin/PoemOfTheDayTests/PoemOfTheDayTests.zip
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.5519240Z INFO: Elapsed time: 51.897s, Critical Path: 49.67s
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.5519710Z Test Suite 'All tests' started at 2025-11-28 20:18:14.702.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.5578500Z INFO: 27 processes: 57 action cache hit, 16 internal, 8 darwin-sandbox, 2 local, 1 worker.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.5579090Z Test Suite 'PoemOfTheDayTests.xctest' started at 2025-11-28 20:18:14.898.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.5580750Z INFO: Build completed successfully, 27 total actions
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.5581140Z Test Suite 'DevicePlatformTests' started at 2025-11-28 20:18:14.898.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.5682300Z Test Case '-[PoemOfTheDayTests.DevicePlatformTests testCellularDataOptimizations]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.5784460Z 2025-11-28 20:18:14.990 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.5886680Z Test Case '-[PoemOfTheDayTests.DevicePlatformTests testCellularDataOptimizations]' passed (0.102 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.5995540Z Test Case '-[PoemOfTheDayTests.DevicePlatformTests testDifferentScreenSizeLayouts]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.6098100Z 2025-11-28 20:18:15.000 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.6199570Z Test Case '-[PoemOfTheDayTests.DevicePlatformTests testDifferentScreenSizeLayouts]' passed (0.001 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.6337370Z Test Case '-[PoemOfTheDayTests.DevicePlatformTests testDynamicTypeScaling]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.6438680Z 2025-11-28 20:18:15.001 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.6540090Z Test Case '-[PoemOfTheDayTests.DevicePlatformTests testDynamicTypeScaling]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.6642630Z Test Case '-[PoemOfTheDayTests.DevicePlatformTests testHighEndDeviceOptimizations]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.6757430Z 2025-11-28 20:18:15.001 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.6859570Z Test Case '-[PoemOfTheDayTests.DevicePlatformTests testHighEndDeviceOptimizations]' passed (0.021 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.6983760Z Test Case '-[PoemOfTheDayTests.DevicePlatformTests testLowEndDevicePerformance]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.7169530Z 2025-11-28 20:18:15.022 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.7312170Z Test Case '-[PoemOfTheDayTests.DevicePlatformTests testLowEndDevicePerformance]' passed (0.002 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.7446020Z Test Case '-[PoemOfTheDayTests.DevicePlatformTests testLowPowerModeOptimizations]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.7588930Z 2025-11-28 20:18:15.024 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.7695250Z Test Case '-[PoemOfTheDayTests.DevicePlatformTests testLowPowerModeOptimizations]' passed (0.002 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.7851130Z Test Case '-[PoemOfTheDayTests.DevicePlatformTests testOrientationChangeHandling]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.7970340Z 2025-11-28 20:18:15.027 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.8176930Z Test Case '-[PoemOfTheDayTests.DevicePlatformTests testOrientationChangeHandling]' passed (0.002 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.8297320Z Test Case '-[PoemOfTheDayTests.DevicePlatformTests testSwitchControlSupport]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.8334140Z 2025-11-28 20:18:15.028 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.8342380Z Test Case '-[PoemOfTheDayTests.DevicePlatformTests testSwitchControlSupport]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.8445200Z Test Case '-[PoemOfTheDayTests.DevicePlatformTests testThermalStateHandling]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.8560280Z 2025-11-28 20:18:15.028 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.8561850Z Test Case '-[PoemOfTheDayTests.DevicePlatformTests testThermalStateHandling]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.8568920Z Test Case '-[PoemOfTheDayTests.DevicePlatformTests testVoiceOverIntegration]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.8685160Z 2025-11-28 20:18:15.028 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.8788110Z Test Case '-[PoemOfTheDayTests.DevicePlatformTests testVoiceOverIntegration]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.8891210Z Test Suite 'DevicePlatformTests' passed at 2025-11-28 20:18:15.029.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.9019580Z 	 Executed 10 tests, with 0 failures (0 unexpected) in 0.130 (0.131) seconds
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.9124050Z Test Suite 'LocalizationTests' started at 2025-11-28 20:18:15.029.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.9232950Z Test Case '-[PoemOfTheDayTests.LocalizationTests testCulturallyAppropriatePoemContent]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.9338570Z 2025-11-28 20:18:15.029 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.9475850Z Test Case '-[PoemOfTheDayTests.LocalizationTests testCulturallyAppropriatePoemContent]' passed (0.012 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.9616120Z Test Case '-[PoemOfTheDayTests.LocalizationTests testInputMethodSupport]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.9741580Z 2025-11-28 20:18:15.041 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.9846200Z Test Case '-[PoemOfTheDayTests.LocalizationTests testInputMethodSupport]' passed (0.021 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:26.9950130Z Test Case '-[PoemOfTheDayTests.LocalizationTests testInternationalPoemContent]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.0074330Z 2025-11-28 20:18:15.062 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.0179240Z Test Case '-[PoemOfTheDayTests.LocalizationTests testInternationalPoemContent]' passed (0.020 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.0295180Z Test Case '-[PoemOfTheDayTests.LocalizationTests testLocalizedAccessibilityLabels]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.0428110Z 2025-11-28 20:18:15.082 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.0534280Z Test Case '-[PoemOfTheDayTests.LocalizationTests testLocalizedAccessibilityLabels]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.0643900Z Test Case '-[PoemOfTheDayTests.LocalizationTests testRegionalDateFormatting]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.0746280Z 2025-11-28 20:18:15.082 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.0848960Z Test Case '-[PoemOfTheDayTests.LocalizationTests testRegionalDateFormatting]' passed (0.041 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.0951800Z Test Case '-[PoemOfTheDayTests.LocalizationTests testRegionalMeasurements]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.1053730Z 2025-11-28 20:18:15.124 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.1155170Z Test Case '-[PoemOfTheDayTests.LocalizationTests testRegionalMeasurements]' passed (0.001 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.1258090Z Test Case '-[PoemOfTheDayTests.LocalizationTests testRegionalNumberFormatting]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.1363860Z 2025-11-28 20:18:15.124 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.1473560Z Test Case '-[PoemOfTheDayTests.LocalizationTests testRegionalNumberFormatting]' passed (0.005 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.1582480Z Test Case '-[PoemOfTheDayTests.LocalizationTests testRightToLeftLanguageSupport]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.1584230Z 2025-11-28 20:18:15.129 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.1648460Z Test Case '-[PoemOfTheDayTests.LocalizationTests testRightToLeftLanguageSupport]' passed (0.010 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.1750090Z Test Case '-[PoemOfTheDayTests.LocalizationTests testTimeZoneHandling]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.1852190Z 2025-11-28 20:18:15.139 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.1943230Z Test Case '-[PoemOfTheDayTests.LocalizationTests testTimeZoneHandling]' passed (0.010 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2052080Z Test Suite 'LocalizationTests' passed at 2025-11-28 20:18:15.150.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2060430Z 	 Executed 9 tests, with 0 failures (0 unexpected) in 0.120 (0.121) seconds
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2115240Z Test Suite 'NetworkServiceTests' started at 2025-11-28 20:18:15.150.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2217690Z Test Case '-[PoemOfTheDayTests.NetworkServiceTests testFetchRandomPoem_NetworkError]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2232420Z Test Case '-[PoemOfTheDayTests.NetworkServiceTests testFetchRandomPoem_NetworkError]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2233670Z Test Case '-[PoemOfTheDayTests.NetworkServiceTests testFetchRandomPoem_NoPoems]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2234330Z Test Case '-[PoemOfTheDayTests.NetworkServiceTests testFetchRandomPoem_NoPoems]' passed (0.001 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2234930Z Test Case '-[PoemOfTheDayTests.NetworkServiceTests testFetchRandomPoem_RateLimited]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2235640Z Test Case '-[PoemOfTheDayTests.NetworkServiceTests testFetchRandomPoem_RateLimited]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2236260Z Test Case '-[PoemOfTheDayTests.NetworkServiceTests testFetchRandomPoem_ServerError]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2237400Z Test Case '-[PoemOfTheDayTests.NetworkServiceTests testFetchRandomPoem_ServerError]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2238050Z Test Case '-[PoemOfTheDayTests.NetworkServiceTests testFetchRandomPoem_Success]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2238680Z Test Case '-[PoemOfTheDayTests.NetworkServiceTests testFetchRandomPoem_Success]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2239280Z Test Case '-[PoemOfTheDayTests.NetworkServiceTests testFetchRandomPoem_WithDelay]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2240010Z Test Case '-[PoemOfTheDayTests.NetworkServiceTests testFetchRandomPoem_WithDelay]' passed (0.128 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2240570Z Test Suite 'NetworkServiceTests' passed at 2025-11-28 20:18:15.281.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2240970Z 	 Executed 6 tests, with 0 failures (0 unexpected) in 0.130 (0.130) seconds
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2241340Z Test Suite 'NewsServiceTests' started at 2025-11-28 20:18:15.281.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2241880Z Test Case '-[PoemOfTheDayTests.NewsServiceTests testFetchDailyNews_EmptyResult]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2242490Z Test Case '-[PoemOfTheDayTests.NewsServiceTests testFetchDailyNews_EmptyResult]' passed (0.001 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2244430Z Test Case '-[PoemOfTheDayTests.NewsServiceTests testFetchDailyNews_NetworkError]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2245640Z Test Case '-[PoemOfTheDayTests.NewsServiceTests testFetchDailyNews_NetworkError]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2361680Z Test Case '-[PoemOfTheDayTests.NewsServiceTests testFetchDailyNews_NoArticles]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2500700Z Test Case '-[PoemOfTheDayTests.NewsServiceTests testFetchDailyNews_NoArticles]' passed (0.001 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2612460Z Test Case '-[PoemOfTheDayTests.NewsServiceTests testFetchDailyNews_RateLimited]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2727620Z Test Case '-[PoemOfTheDayTests.NewsServiceTests testFetchDailyNews_RateLimited]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2836070Z Test Case '-[PoemOfTheDayTests.NewsServiceTests testFetchDailyNews_ServerError]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2844970Z Test Case '-[PoemOfTheDayTests.NewsServiceTests testFetchDailyNews_ServerError]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2846030Z Test Case '-[PoemOfTheDayTests.NewsServiceTests testFetchDailyNews_Success]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2846690Z Test Case '-[PoemOfTheDayTests.NewsServiceTests testFetchDailyNews_Success]' passed (0.003 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2847350Z Test Case '-[PoemOfTheDayTests.NewsServiceTests testFetchDailyNews_WithDelay]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2848420Z Test Case '-[PoemOfTheDayTests.NewsServiceTests testFetchDailyNews_WithDelay]' passed (0.177 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2849060Z Test Case '-[PoemOfTheDayTests.NewsServiceTests testNewsArticleProperties]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2849700Z Test Case '-[PoemOfTheDayTests.NewsServiceTests testNewsArticleProperties]' passed (0.002 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2850690Z Test Case '-[PoemOfTheDayTests.NewsServiceTests testNewsSourceProperties]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2851820Z Test Case '-[PoemOfTheDayTests.NewsServiceTests testNewsSourceProperties]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2856850Z Test Suite 'NewsServiceTests' passed at 2025-11-28 20:18:15.466.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2865630Z 	 Executed 9 tests, with 0 failures (0 unexpected) in 0.184 (0.185) seconds
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2866150Z Test Suite 'PoemRepositoryTests' started at 2025-11-28 20:18:15.466.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2866670Z Test Case '-[PoemOfTheDayTests.PoemRepositoryTests testAddToFavorites]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2867620Z 2025-11-28 20:18:15.465 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2868310Z 2025-11-28 20:18:15.468 xctest[4986:24444] PoemRepository: addToFavorites called for poem: The Road Not Taken (ID: 517E9FC6-3325-4740-8F2E-98DCC84A7956)
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2871940Z 2025-11-28 20:18:15.468 xctest[4986:24444] PoemRepository: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2873070Z 2025-11-28 20:18:15.468 xctest[4986:24444] PoemRepository: No favorites found in UserDefaults or decode failed
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2875480Z 2025-11-28 20:18:15.468 xctest[4986:24444] PoemRepository: saveFavorites called with 1 favorites
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2876050Z 2025-11-28 20:18:15.479 xctest[4986:24444] PoemRepository: Favorites saved to UserDefaults
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2876660Z Test Case '-[PoemOfTheDayTests.PoemRepositoryTests testAddToFavorites]' passed (0.017 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2877340Z Test Case '-[PoemOfTheDayTests.PoemRepositoryTests testCheckAIAvailability]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2877870Z 2025-11-28 20:18:15.482 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2878400Z Test Case '-[PoemOfTheDayTests.PoemRepositoryTests testCheckAIAvailability]' passed (0.001 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2879030Z Test Case '-[PoemOfTheDayTests.PoemRepositoryTests testGenerateCustomPoem]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2879510Z 2025-11-28 20:18:15.484 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2880030Z Test Case '-[PoemOfTheDayTests.PoemRepositoryTests testGenerateCustomPoem]' passed (0.031 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2880650Z Test Case '-[PoemOfTheDayTests.PoemRepositoryTests testGenerateVibeBasedPoem]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2881240Z 2025-11-28 20:18:15.515 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2881750Z Test Case '-[PoemOfTheDayTests.PoemRepositoryTests testGenerateVibeBasedPoem]' passed (0.009 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2882330Z Test Case '-[PoemOfTheDayTests.PoemRepositoryTests testGetDailyPoem_NetworkError]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2882890Z 2025-11-28 20:18:15.525 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2883350Z 2025-11-28 20:18:15.525 xctest[4986:24437] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2883890Z Test Case '-[PoemOfTheDayTests.PoemRepositoryTests testGetDailyPoem_NetworkError]' passed (0.003 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2884500Z Test Case '-[PoemOfTheDayTests.PoemRepositoryTests testGetDailyPoem_Success]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2886320Z 2025-11-28 20:18:15.527 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2887250Z 2025-11-28 20:18:15.527 xctest[4986:24395] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2887800Z Test Case '-[PoemOfTheDayTests.PoemRepositoryTests testGetDailyPoem_Success]' passed (0.001 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2888440Z Test Case '-[PoemOfTheDayTests.PoemRepositoryTests testGetFavoritePoems]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2888940Z 2025-11-28 20:18:15.529 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2889570Z 2025-11-28 20:18:15.529 xctest[4986:24444] PoemRepository: addToFavorites called for poem: The Road Not Taken (ID: 517E9FC6-3325-4740-8F2E-98DCC84A7956)
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2890280Z 2025-11-28 20:18:15.529 xctest[4986:24444] PoemRepository: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2890810Z 2025-11-28 20:18:15.529 xctest[4986:24444] PoemRepository: No favorites found in UserDefaults or decode failed
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2891380Z 2025-11-28 20:18:15.529 xctest[4986:24444] PoemRepository: saveFavorites called with 1 favorites
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2892240Z 2025-11-28 20:18:15.529 xctest[4986:24444] PoemRepository: Favorites saved to UserDefaults
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2892890Z 2025-11-28 20:18:15.529 xctest[4986:24444] PoemRepository: addToFavorites called for poem: Digital Dreams (ID: 108A520C-B308-491F-B7F5-2F87B94804A0)
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2894260Z 2025-11-28 20:18:15.529 xctest[4986:24444] PoemRepository: saveFavorites called with 2 favorites
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2897280Z 2025-11-28 20:18:15.529 xctest[4986:24444] PoemRepository: Favorites saved to UserDefaults
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2897950Z Test Case '-[PoemOfTheDayTests.PoemRepositoryTests testGetFavoritePoems]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2898780Z Test Case '-[PoemOfTheDayTests.PoemRepositoryTests testRefreshDailyPoem]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2899260Z 2025-11-28 20:18:15.529 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2899810Z Test Case '-[PoemOfTheDayTests.PoemRepositoryTests testRefreshDailyPoem]' passed (0.001 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2900370Z Test Case '-[PoemOfTheDayTests.PoemRepositoryTests testRemoveFromFavorites]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2900860Z 2025-11-28 20:18:15.530 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2901560Z 2025-11-28 20:18:15.530 xctest[4986:24437] PoemRepository: addToFavorites called for poem: The Road Not Taken (ID: 517E9FC6-3325-4740-8F2E-98DCC84A7956)
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2902150Z 2025-11-28 20:18:15.530 xctest[4986:24437] PoemRepository: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2902650Z 2025-11-28 20:18:15.530 xctest[4986:24437] PoemRepository: No favorites found in UserDefaults or decode failed
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2903150Z 2025-11-28 20:18:15.530 xctest[4986:24437] PoemRepository: saveFavorites called with 1 favorites
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2903660Z 2025-11-28 20:18:15.530 xctest[4986:24437] PoemRepository: Favorites saved to UserDefaults
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2904100Z 2025-11-28 20:18:15.530 xctest[4986:24437] PoemRepository: saveFavorites called with 0 favorites
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2904570Z 2025-11-28 20:18:15.530 xctest[4986:24437] PoemRepository: Favorites saved to UserDefaults
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2905130Z Test Case '-[PoemOfTheDayTests.PoemRepositoryTests testRemoveFromFavorites]' passed (0.001 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2905680Z Test Case '-[PoemOfTheDayTests.PoemRepositoryTests testTelemetryTracking]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2906170Z 2025-11-28 20:18:15.530 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2906740Z 2025-11-28 20:18:15.530 xctest[4986:24395] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2907310Z Test Case '-[PoemOfTheDayTests.PoemRepositoryTests testTelemetryTracking]' passed (0.001 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2907830Z Test Suite 'PoemRepositoryTests' passed at 2025-11-28 20:18:15.532.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2908230Z 	 Executed 10 tests, with 0 failures (0 unexpected) in 0.066 (0.066) seconds
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2908730Z Test Suite 'PoemTests' started at 2025-11-28 20:18:15.532.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2909240Z Test Case '-[PoemOfTheDayTests.PoemTests testEmptyAuthorHandling]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2909730Z Test Case '-[PoemOfTheDayTests.PoemTests testEmptyAuthorHandling]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2910650Z Test Case '-[PoemOfTheDayTests.PoemTests testPoemCoding]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2911100Z Test Case '-[PoemOfTheDayTests.PoemTests testPoemCoding]' passed (0.001 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2911540Z Test Case '-[PoemOfTheDayTests.PoemTests testPoemContent]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2911950Z Test Case '-[PoemOfTheDayTests.PoemTests testPoemContent]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2912500Z Test Case '-[PoemOfTheDayTests.PoemTests testPoemEquality]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2912950Z Test Case '-[PoemOfTheDayTests.PoemTests testPoemEquality]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2913400Z Test Case '-[PoemOfTheDayTests.PoemTests testPoemInitialization]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2913910Z Test Case '-[PoemOfTheDayTests.PoemTests testPoemInitialization]' passed (0.001 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2914720Z Test Case '-[PoemOfTheDayTests.PoemTests testPoemResponseConversion]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2915230Z Test Case '-[PoemOfTheDayTests.PoemTests testPoemResponseConversion]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2915830Z Test Case '-[PoemOfTheDayTests.PoemTests testPoemShareText]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2916500Z Test Case '-[PoemOfTheDayTests.PoemTests testPoemShareText]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2917030Z Test Case '-[PoemOfTheDayTests.PoemTests testPoemWithoutAuthor]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2917670Z Test Case '-[PoemOfTheDayTests.PoemTests testPoemWithoutAuthor]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2918300Z Test Suite 'PoemTests' passed at 2025-11-28 20:18:15.536.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2918660Z 	 Executed 8 tests, with 0 failures (0 unexpected) in 0.003 (0.004) seconds
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2919050Z Test Suite 'PoemViewModelTests' started at 2025-11-28 20:18:15.536.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2919570Z Test Case '-[PoemOfTheDayTests.PoemViewModelTests testErrorHandling]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2920210Z 2025-11-28 20:18:15.541 xctest[4986:24331] PoemViewModel: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2920620Z 2025-11-28 20:18:15.541 xctest[4986:24331] PoemViewModel: Favorites loaded. Count: 0
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2921170Z Test Case '-[PoemOfTheDayTests.PoemViewModelTests testErrorHandling]' passed (0.005 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2921690Z Test Case '-[PoemOfTheDayTests.PoemViewModelTests testGenerateCustomPoem]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2922370Z Test Case '-[PoemOfTheDayTests.PoemViewModelTests testGenerateCustomPoem]' passed (0.001 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2923060Z Test Case '-[PoemOfTheDayTests.PoemViewModelTests testGenerateVibeBasedPoem]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2923550Z 2025-11-28 20:18:15.544 xctest[4986:24331] PoemViewModel: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2923960Z 2025-11-28 20:18:15.544 xctest[4986:24331] PoemViewModel: Favorites loaded. Count: 0
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2924470Z Test Case '-[PoemOfTheDayTests.PoemViewModelTests testGenerateVibeBasedPoem]' passed (0.002 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2925140Z Test Case '-[PoemOfTheDayTests.PoemViewModelTests testInitialDataLoading]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2925590Z 2025-11-28 20:18:15.544 xctest[4986:24331] PoemViewModel: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2926000Z 2025-11-28 20:18:15.544 xctest[4986:24331] PoemViewModel: Favorites loaded. Count: 0
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2926480Z 2025-11-28 20:18:15.544 xctest[4986:24331] PoemViewModel: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2926880Z 2025-11-28 20:18:15.544 xctest[4986:24331] PoemViewModel: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2930140Z 2025-11-28 20:18:15.544 xctest[4986:24331] PoemViewModel: Favorites loaded. Count: 0
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2930600Z 2025-11-28 20:18:15.544 xctest[4986:24331] PoemViewModel: Favorites loaded. Count: 0
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2931340Z Test Case '-[PoemOfTheDayTests.PoemViewModelTests testInitialDataLoading]' passed (0.001 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2966830Z Test Case '-[PoemOfTheDayTests.PoemViewModelTests testIsFavorite]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2967500Z Test Case '-[PoemOfTheDayTests.PoemViewModelTests testIsFavorite]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2968060Z Test Case '-[PoemOfTheDayTests.PoemViewModelTests testIsNotFavorite]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2968550Z Test Case '-[PoemOfTheDayTests.PoemViewModelTests testIsNotFavorite]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2969050Z Test Case '-[PoemOfTheDayTests.PoemViewModelTests testRefreshPoem]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2969530Z Test Case '-[PoemOfTheDayTests.PoemViewModelTests testRefreshPoem]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2970270Z Test Case '-[PoemOfTheDayTests.PoemViewModelTests testSharePoem]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2970690Z 2025-11-28 20:18:15.545 xctest[4986:24331] PoemViewModel: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2971080Z 2025-11-28 20:18:15.545 xctest[4986:24331] PoemViewModel: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2972090Z 2025-11-28 20:18:15.545 xctest[4986:24331] PoemViewModel: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2972490Z 2025-11-28 20:18:15.546 xctest[4986:24331] PoemViewModel: Favorites loaded. Count: 0
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2972890Z 2025-11-28 20:18:15.546 xctest[4986:24331] PoemViewModel: Favorites loaded. Count: 0
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2973340Z 2025-11-28 20:18:15.546 xctest[4986:24331] PoemViewModel: Favorites loaded. Count: 0
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2973800Z Test Case '-[PoemOfTheDayTests.PoemViewModelTests testSharePoem]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2974330Z Test Case '-[PoemOfTheDayTests.PoemViewModelTests testToggleFavorite_AddToFavorites]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2975210Z 2025-11-28 20:18:15.546 xctest[4986:24331] PoemViewModel: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2975710Z 2025-11-28 20:18:15.546 xctest[4986:24331] PoemViewModel: toggleFavorite called for poem: The Road Not Taken
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2976180Z 2025-11-28 20:18:15.546 xctest[4986:24331] PoemViewModel: Favorites loaded. Count: 0
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2976640Z 2025-11-28 20:18:15.546 xctest[4986:24331] PoemViewModel: Poem is NOT favorite. Adding.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2977030Z 2025-11-28 20:18:15.546 xctest[4986:24331] PoemViewModel: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2977410Z 2025-11-28 20:18:15.546 xctest[4986:24331] PoemViewModel: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2977850Z 2025-11-28 20:18:15.546 xctest[4986:24331] PoemViewModel: Favorites loaded. Count: 1
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2978240Z 2025-11-28 20:18:15.546 xctest[4986:24331] PoemViewModel: Favorites loaded. Count: 1
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2978820Z Test Case '-[PoemOfTheDayTests.PoemViewModelTests testToggleFavorite_AddToFavorites]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2979480Z Test Case '-[PoemOfTheDayTests.PoemViewModelTests testToggleFavorite_RemoveFromFavorites]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2980080Z 2025-11-28 20:18:15.546 xctest[4986:24331] PoemViewModel: toggleFavorite called for poem: The Road Not Taken
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2980610Z 2025-11-28 20:18:15.546 xctest[4986:24331] PoemViewModel: Poem is favorite. Removing.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2980990Z 2025-11-28 20:18:15.546 xctest[4986:24331] PoemViewModel: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2982060Z 2025-11-28 20:18:15.546 xctest[4986:24331] PoemViewModel: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2982520Z 2025-11-28 20:18:15.546 xctest[4986:24331] PoemViewModel: Favorites loaded. Count: 0
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2983260Z 2025-11-28 20:18:15.546 xctest[4986:24331] PoemViewModel: Favorites loaded. Count: 0
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2983800Z Test Case '-[PoemOfTheDayTests.PoemViewModelTests testToggleFavorite_RemoveFromFavorites]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2984660Z Test Suite 'PoemViewModelTests' passed at 2025-11-28 20:18:15.547.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2985170Z 	 Executed 10 tests, with 0 failures (0 unexpected) in 0.011 (0.011) seconds
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2985540Z Test Suite 'Poem_of_the_DayTests' started at 2025-11-28 20:18:15.547.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2985940Z Test Case '-[PoemOfTheDayTests.Poem_of_the_DayTests testExample]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2991640Z Test Case '-[PoemOfTheDayTests.Poem_of_the_DayTests testExample]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2992140Z Test Suite 'Poem_of_the_DayTests' passed at 2025-11-28 20:18:15.547.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2992580Z 	 Executed 1 test, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2992990Z Test Suite 'SecurityInputValidationTests' started at 2025-11-28 20:18:15.547.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2993490Z Test Case '-[PoemOfTheDayTests.SecurityInputValidationTests testConcurrentAccessSafety]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2994020Z 2025-11-28 20:18:15.547 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2994500Z 2025-11-28 20:18:15.547 xctest[4986:24331] PoemViewModel: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2994870Z 2025-11-28 20:18:15.547 xctest[4986:24437] PoemRepository: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2995320Z 2025-11-28 20:18:15.547 xctest[4986:24437] PoemRepository: No favorites found in UserDefaults or decode failed
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2996300Z 2025-11-28 20:18:15.547 xctest[4986:24331] PoemViewModel: Favorites loaded. Count: 0
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2996860Z Test Case '-[PoemOfTheDayTests.SecurityInputValidationTests testConcurrentAccessSafety]' passed (0.003 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2997500Z Test Case '-[PoemOfTheDayTests.SecurityInputValidationTests testExcessivelyLongInputHandling]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2998030Z 2025-11-28 20:18:15.550 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2998610Z Test Case '-[PoemOfTheDayTests.SecurityInputValidationTests testExcessivelyLongInputHandling]' passed (0.144 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.2999500Z Test Case '-[PoemOfTheDayTests.SecurityInputValidationTests testMaliciousHTMLInjectionProtection]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3000070Z 2025-11-28 20:18:15.694 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3000610Z Test Case '-[PoemOfTheDayTests.SecurityInputValidationTests testMaliciousHTMLInjectionProtection]' passed (0.001 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3001270Z Test Case '-[PoemOfTheDayTests.SecurityInputValidationTests testNetworkTimeoutSecurity]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3001790Z 2025-11-28 20:18:15.694 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3002290Z 2025-11-28 20:18:15.695 xctest[4986:24331] PoemViewModel: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3002690Z 2025-11-28 20:18:15.695 xctest[4986:24331] PoemViewModel: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3003060Z 2025-11-28 20:18:15.696 xctest[4986:24331] PoemViewModel: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3003390Z 2025-11-28 20:18:15.696 xctest[4986:24437] PoemRepository: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3003870Z 2025-11-28 20:18:15.696 xctest[4986:24437] PoemRepository: No favorites found in UserDefaults or decode failed
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3004330Z 2025-11-28 20:18:15.696 xctest[4986:24444] PoemRepository: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3004740Z 2025-11-28 20:18:15.696 xctest[4986:24444] PoemRepository: No favorites found in UserDefaults or decode failed
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3005150Z 2025-11-28 20:18:15.696 xctest[4986:24331] PoemViewModel: Favorites loaded. Count: 0
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3005540Z 2025-11-28 20:18:15.696 xctest[4986:24331] PoemViewModel: Favorites loaded. Count: 0
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3005890Z 2025-11-28 20:18:15.696 xctest[4986:24437] PoemRepository: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3006290Z 2025-11-28 20:18:15.696 xctest[4986:24437] PoemRepository: No favorites found in UserDefaults or decode failed
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3006710Z 2025-11-28 20:18:15.696 xctest[4986:24331] PoemViewModel: Favorites loaded. Count: 0
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3007220Z Test Case '-[PoemOfTheDayTests.SecurityInputValidationTests testNetworkTimeoutSecurity]' passed (10.135 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3007790Z Test Case '-[PoemOfTheDayTests.SecurityInputValidationTests testNumericBoundaryInputs]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3008690Z 2025-11-28 20:18:25.833 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3009200Z Test Case '-[PoemOfTheDayTests.SecurityInputValidationTests testNumericBoundaryInputs]' passed (0.004 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3009780Z Test Case '-[PoemOfTheDayTests.SecurityInputValidationTests testSensitiveDataProtection]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3010250Z 2025-11-28 20:18:25.835 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3010760Z Test Case '-[PoemOfTheDayTests.SecurityInputValidationTests testSensitiveDataProtection]' passed (0.001 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3011330Z Test Case '-[PoemOfTheDayTests.SecurityInputValidationTests testSpecialCharacterHandling]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3011800Z 2025-11-28 20:18:25.835 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3012350Z Test Case '-[PoemOfTheDayTests.SecurityInputValidationTests testSpecialCharacterHandling]' passed (0.001 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3013380Z Test Case '-[PoemOfTheDayTests.SecurityInputValidationTests testSQLInjectionProtection]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3013850Z 2025-11-28 20:18:25.836 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3014360Z Test Case '-[PoemOfTheDayTests.SecurityInputValidationTests testSQLInjectionProtection]' passed (0.002 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3014960Z Test Case '-[PoemOfTheDayTests.SecurityInputValidationTests testUserDefaultsSecurityIsolation]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3015440Z 2025-11-28 20:18:25.838 xctest[4986:24331] PoemRepository: ResetFavorites flag NOT detected.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3016220Z Test Case '-[PoemOfTheDayTests.SecurityInputValidationTests testUserDefaultsSecurityIsolation]' passed (0.019 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3016740Z Test Suite 'SecurityInputValidationTests' passed at 2025-11-28 20:18:25.857.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3017100Z 	 Executed 9 tests, with 0 failures (0 unexpected) in 10.308 (10.310) seconds
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3017430Z Test Suite 'VibeAnalyzerTests' started at 2025-11-28 20:18:25.857.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3017810Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testAnalyzeVibeEmptyNews]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3018600Z 2025-11-28 20:18:25.858 xctest[4986:24331] PoemViewModel: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3018960Z 2025-11-28 20:18:25.858 xctest[4986:24331] PoemViewModel: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3019300Z 2025-11-28 20:18:25.858 xctest[4986:24331] PoemViewModel: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3019690Z 2025-11-28 20:18:25.858 xctest[4986:24331] PoemViewModel: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3020020Z 2025-11-28 20:18:25.858 xctest[4986:24331] PoemViewModel: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3020830Z 2025-11-28 20:18:25.858 xctest[4986:24396] PoemRepository: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3021240Z 2025-11-28 20:18:25.858 xctest[4986:24396] PoemRepository: No favorites found in UserDefaults or decode failed
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3021680Z 2025-11-28 20:18:25.858 xctest[4986:24396] PoemRepository: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3022090Z 2025-11-28 20:18:25.858 xctest[4986:24396] PoemRepository: No favorites found in UserDefaults or decode failed
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3022490Z 2025-11-28 20:18:25.858 xctest[4986:24396] PoemRepository: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3022910Z 2025-11-28 20:18:25.858 xctest[4986:24396] PoemRepository: No favorites found in UserDefaults or decode failed
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3023310Z 2025-11-28 20:18:25.858 xctest[4986:24396] PoemRepository: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3023700Z 2025-11-28 20:18:25.858 xctest[4986:24396] PoemRepository: No favorites found in UserDefaults or decode failed
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3024100Z 2025-11-28 20:18:25.858 xctest[4986:24396] PoemRepository: loadFavorites called
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3024500Z 2025-11-28 20:18:25.858 xctest[4986:24396] PoemRepository: No favorites found in UserDefaults or decode failed
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3024920Z 2025-11-28 20:18:25.859 xctest[4986:24331] PoemViewModel: Favorites loaded. Count: 0
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3025290Z 2025-11-28 20:18:25.859 xctest[4986:24331] PoemViewModel: Favorites loaded. Count: 0
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3025630Z 2025-11-28 20:18:25.859 xctest[4986:24331] PoemViewModel: Favorites loaded. Count: 0
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3025970Z 2025-11-28 20:18:25.859 xctest[4986:24331] PoemViewModel: Favorites loaded. Count: 0
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3026330Z 2025-11-28 20:18:25.859 xctest[4986:24331] PoemViewModel: Favorites loaded. Count: 0
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3026760Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testAnalyzeVibeEmptyNews]' passed (0.039 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3038880Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testAnalyzeVibeFromNews]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3055010Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testAnalyzeVibeFromNews]' passed (0.004 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3056590Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testAnalyzeVibeWithContemplativeNews]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3065670Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testAnalyzeVibeWithContemplativeNews]' passed (0.001 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3066270Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testAnalyzeVibeWithEnergeticNews]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3066850Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testAnalyzeVibeWithEnergeticNews]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3067430Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testAnalyzeVibeWithHopefulNews]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3068000Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testAnalyzeVibeWithHopefulNews]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3068590Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testAnalyzeVibeWithMelancholicNews]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3069600Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testAnalyzeVibeWithMelancholicNews]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3070150Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testAnalyzeVibeWithPeacefulNews]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3070690Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testAnalyzeVibeWithPeacefulNews]' passed (0.000 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3071260Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testBackgroundColorIntensityCalculation]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3071890Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testBackgroundColorIntensityCalculation]' passed (0.001 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3072560Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testBackgroundColorIntensityWithDifferentConfidenceLevels]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3073280Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testBackgroundColorIntensityWithDifferentConfidenceLevels]' passed (0.001 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3073950Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testColorIntensityWithExtremeSentiment]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3074520Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testColorIntensityWithExtremeSentiment]' passed (0.004 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3075120Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testColorIntensityWithHighEnergyContent]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3075750Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testColorIntensityWithHighEnergyContent]' passed (0.001 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3076390Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testSpecificVibeBackgroundColors]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3076940Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testSpecificVibeBackgroundColors]' passed (0.010 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3077450Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testVibeAnalysisDateTracking]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3077950Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testVibeAnalysisDateTracking]' passed (0.001 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3078440Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testVibeBackgroundColorInfo]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3078930Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testVibeBackgroundColorInfo]' passed (0.001 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3079440Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testVibeBackgroundColorsAllCases]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3079960Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testVibeBackgroundColorsAllCases]' passed (0.032 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3080460Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testVibeKeywordExtraction]' started.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3080950Z Test Case '-[PoemOfTheDayTests.VibeAnalyzerTests testVibeKeywordExtraction]' passed (0.001 seconds).
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3081360Z Test Suite 'VibeAnalyzerTests' passed at 2025-11-28 20:18:25.957.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3081680Z 	 Executed 16 tests, with 0 failures (0 unexpected) in 0.098 (0.099) seconds
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3082020Z Test Suite 'PoemOfTheDayTests.xctest' passed at 2025-11-28 20:18:25.957.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3082420Z 	 Executed 88 tests, with 0 failures (0 unexpected) in 11.049 (11.059) seconds
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3082730Z Test Suite 'All tests' passed at 2025-11-28 20:18:25.957.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3083220Z 	 Executed 88 tests, with 0 failures (0 unexpected) in 11.049 (11.255) seconds
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3086880Z 🎬 Starting vibe-based poem generation...
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3087640Z ✅ AI service available, checking availability...
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3088190Z    AI Available: true
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3088670Z 🔄 Getting fresh vibe analysis...
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3089270Z 🔄 Fetching fresh news and analyzing vibe...
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3089950Z 📰 Fetched 3 news articles
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3090640Z ✅ Analyzed vibe: Hopeful (confidence: 0.85)
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3091240Z ✅ Vibe analysis complete: Hopeful
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3091730Z    Sentiment: positivity=0.8, energy=0.7
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3093560Z    Keywords: discovery, cooperation, breakthrough, community
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3094290Z 🤖 Generating poem from AI service...
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3094940Z ✅ Poem generated successfully!
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3095440Z 📄 Generated Poem Details:
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3095860Z    Title: 'Digital Dreams'
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3096280Z    Author: AI Poet
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3096650Z    Content length: 138 chars
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3097050Z    Lines count: 4
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3097400Z    Vibe: Hopeful
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3097750Z    Source: unknown
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3098210Z    First 150 chars: In circuits bright and screens aglow,
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3098810Z Where data streams and algorithms flow,
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3099320Z We find our hearts in silicon,
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3099770Z A future built, never undone.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3100270Z 💾 Caching generated poem...
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3100760Z ✅ Poem cached successfully
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3101230Z 📚 Adding to history...
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3101670Z ✅ Added to history
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3102080Z 🔄 Reloading widgets...
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3102560Z ✅ Vibe-based poem generation complete!
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3103350Z 2025-11-28 20:18:25,991 Deleting simulator 42FE7139-042F-48EC-9DBC-212CA25006E5 asynchronously.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3104130Z 2025-11-28 20:18:26,011 Done.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3104580Z ================================================================================
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3105380Z //PoemOfTheDayTests:PoemOfTheDayTests                                    PASSED in 24.9s
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3109640Z 
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3109750Z Executed 1 out of 1 test: 1 test passes.
+Build and Test with Bazel	Run unit tests	2025-11-28T20:18:27.3110180Z There were tests whose specified size is too big. Use the --test_verbose_timeout_warnings command line option to see which ones these are.
+Build and Test with Bazel	Run UI tests	﻿2025-11-28T20:18:27.3245810Z ##[group]Run cd "Poem of the Day"
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:27.3249200Z [36;1mcd "Poem of the Day"[0m
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:27.3249520Z [36;1mbazelisk test --config=ci //PoemOfTheDayUITests:PoemOfTheDayUITests[0m
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:27.4036470Z shell: /bin/bash -e {0}
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:27.4036690Z ##[endgroup]
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:27.5762840Z INFO: Options provided by the client:
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:27.5865780Z   Inherited 'common' options: --isatty=0 --terminal_columns=80
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:27.5970570Z INFO: Reading rc options for 'test' from /Users/runner/work/Poem-of-the-Day/Poem-of-the-Day/.bazelrc:
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:27.6091960Z   Inherited 'build' options: --announce_rc --verbose_failures --apple_platform_type=ios --ios_minimum_os=17.0 --apple_generate_dsym --symlink_prefix=bazel- --experimental_reuse_sandbox_directories --worker_sandboxing
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:27.6194320Z INFO: Reading rc options for 'test' from /Users/runner/work/Poem-of-the-Day/Poem-of-the-Day/.bazelrc:
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:27.6329510Z   'test' options: --test_output=errors --ios_multi_cpus=sim_arm64 --ios_simulator_device=iPhone 15 Pro --ios_simulator_version=26.1 --test_timeout=900 --test_env=OS_ACTIVITY_MODE=disable
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:27.6650940Z INFO: Found applicable config definition test:ci in file /Users/runner/work/Poem-of-the-Day/Poem-of-the-Day/.bazelrc: --ios_simulator_version=18.6 --test_output=all
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:27.8438820Z Computing main repo mapping: 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:28.0663130Z Loading: 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:28.0790730Z Loading: 0 packages loaded
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:28.1660350Z Analyzing: target //PoemOfTheDayUITests:PoemOfTheDayUITests (1 packages loaded, 0 targets configured)
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:28.1792410Z Analyzing: target //PoemOfTheDayUITests:PoemOfTheDayUITests (1 packages loaded, 0 targets configured)
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:28.1966110Z 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:28.4487200Z INFO: Analyzed target //PoemOfTheDayUITests:PoemOfTheDayUITests (1 packages loaded, 21 targets configured).
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:29.4138690Z [91 / 102] Compiling Swift module //PoemOfTheDayUITests:UITestLib; 0s worker ... (3 actions, 2 running)
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:30.9917500Z [93 / 102] Compiling Swift module //PoemOfTheDayUITests:UITestLib; 2s worker
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:40.6746560Z [93 / 102] Compiling Swift module //PoemOfTheDayUITests:UITestLib; 12s worker
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1436800Z ERROR: /Users/runner/work/Poem-of-the-Day/Poem-of-the-Day/PoemOfTheDayUITests/BUILD.bazel:5:14: Compiling Swift module //PoemOfTheDayUITests:UITestLib failed: (Exit 1): worker failed: error executing SwiftCompile command (from target //PoemOfTheDayUITests:UITestLib) 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1440940Z   (cd /private/var/tmp/_bazel_runner/fe2d0117d2d9b33eff91f94ca60a61fc/execroot/_main && \
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1442940Z   exec env - \
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1443190Z     APPLE_SDK_PLATFORM=iPhoneSimulator \
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1443530Z     APPLE_SDK_VERSION_OVERRIDE=18.5 \
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1445620Z     PATH=/Users/runner/Library/Caches/bazelisk/downloads/sha256/0cac3a67dc5429c68272dc6944104952e9e4cf84b29d126a5ff3fbaa59045217/bin:/opt/homebrew/lib/ruby/gems/3.3.0/bin:/opt/homebrew/opt/ruby@3.3/bin:/Users/runner/.local/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Users/runner/.cargo/bin:/usr/local/opt/curl/bin:/usr/local/bin:/usr/local/sbin:/Users/runner/bin:/Users/runner/.yarn/bin:/Users/runner/Library/Android/sdk/tools:/Users/runner/Library/Android/sdk/platform-tools:/Library/Frameworks/Python.framework/Versions/Current/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/usr/bin:/bin:/usr/sbin:/sbin:/Users/runner/.dotnet/tools \
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1447900Z     XCODE_VERSION_OVERRIDE=16.4.0.16F6 \
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1448750Z   bazel-out/darwin_arm64-opt-exec-ST-d57f47055a04/bin/external/rules_swift+/tools/worker/worker swiftc @bazel-out/ios_sim_arm64-fastbuild-ios-sim_arm64-min17.0-applebin_ios-ST-f3259bc0b2ed/bin/PoemOfTheDayUITests/PoemOfTheDayUITests.swiftmodule-0.params)
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1449800Z # Configuration: 4986f50ac823151fff4be2eea0367fe111e6287e9dee326839be156a6bc129db
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1450190Z # Execution platform: @@platforms//host:host
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1451760Z error: emit-module command failed with exit code 1 (use -v to see invocation)
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1452280Z PoemOfTheDayUITests/PageObjects.swift:64:5: error: expected declaration
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1452670Z  59 | // MARK: - Main Content Page
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1452910Z  60 | 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1453210Z  61 | class MainContentPage: BasePage {
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1453530Z     |       `- note: in declaration of 'MainContentPage'
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1453800Z  62 |     
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1453970Z  63 |     // Elements
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1454320Z  64 |     var poemTitle: XCUIElement { app.staticTexts["poem_title"] }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1454630Z     |     `- error: expected declaration
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1455050Z  65 |     var poemContent: XCUIElement { app.staticTexts["poem_content"] }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1455430Z  66 |     var poemAuthor: XCUIElement { app.staticTexts["poem_author"] }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1455690Z 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1459930Z PoemOfTheDayUITests/PageObjects.swift:64:5: error: expected '}' in class
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1461040Z  59 | // MARK: - Main Content Page
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1463940Z  60 | 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1464650Z  61 | class MainContentPage: BasePage {
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1465330Z     |                                 `- note: to match this opening '{'
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1465970Z  62 |     
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1466380Z  63 |     // Elements
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1467140Z  64 |     var poemTitle: XCUIElement { app.staticTexts["poem_title"] }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1523220Z     |     `- error: expected '}' in class
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1526660Z  65 |     var poemContent: XCUIElement { app.staticTexts["poem_content"] }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1527650Z  66 |     var poemAuthor: XCUIElement { app.staticTexts["poem_author"] }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1528280Z 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1528980Z PoemOfTheDayUITests/PageObjects.swift:10:61: error: cannot find type 'VibeGenerationPage' in scope
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1529960Z   8 |     }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1530410Z   9 |     
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1531160Z  10 |     static func vibeGenerationPage(app: XCUIApplication) -> VibeGenerationPage {
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1532700Z     |                                                             `- error: cannot find type 'VibeGenerationPage' in scope
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1533520Z  11 |         return VibeGenerationPage(app: app)
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1534790Z  12 |     }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1535160Z 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1540150Z PoemOfTheDayUITests/PageObjects.swift:14:59: error: cannot find type 'CustomPromptPage' in scope
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1544120Z  12 |     }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1544690Z  13 |     
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1545520Z  14 |     static func customPromptPage(app: XCUIApplication) -> CustomPromptPage {
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1552150Z     |                                                           `- error: cannot find type 'CustomPromptPage' in scope
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1552620Z  15 |         return CustomPromptPage(app: app)
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1552900Z  16 |     }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1553080Z 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1553610Z PoemOfTheDayUITests/PageObjects.swift:18:56: error: cannot find type 'FavoritesPage' in scope
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1554010Z  16 |     }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1554210Z  17 |     
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1556430Z  18 |     static func favoritesPage(app: XCUIApplication) -> FavoritesPage {
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1556920Z     |                                                        `- error: cannot find type 'FavoritesPage' in scope
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1557240Z  19 |         return FavoritesPage(app: app)
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1558500Z  20 |     }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1558590Z 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1563660Z PoemOfTheDayUITests/PageObjects.swift:22:61: error: cannot find type 'TelemetryDebugPage' in scope
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1564090Z  20 |     }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1564340Z  21 |     
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1564990Z  22 |     static func telemetryDebugPage(app: XCUIApplication) -> TelemetryDebugPage {
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1565410Z     |                                                             `- error: cannot find type 'TelemetryDebugPage' in scope
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1566170Z  23 |         return TelemetryDebugPage(app: app)
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1566440Z  24 |     }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1566530Z 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1567590Z PoemOfTheDayUITests/PageObjects.swift:26:55: error: cannot find type 'SettingsPage' in scope
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1567980Z  24 |     }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1568220Z  25 |     
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1568480Z  26 |     static func settingsPage(app: XCUIApplication) -> SettingsPage {
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1568870Z     |                                                       `- error: cannot find type 'SettingsPage' in scope
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1569180Z  27 |         return SettingsPage(app: app)
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1569420Z  28 |     }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1570190Z 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1570500Z PoemOfTheDayUITests/PageObjects.swift:30:54: error: cannot find type 'HistoryPage' in scope
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1570890Z  28 |     }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1571040Z  29 |     
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1571300Z  30 |     static func historyPage(app: XCUIApplication) -> HistoryPage {
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1571740Z     |                                                      `- error: cannot find type 'HistoryPage' in scope
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1572110Z  31 |         return HistoryPage(app: app)
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1572330Z  32 |     }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1572620Z PoemOfTheDayUITests/PageObjects.swift:635:2: error: expected '}' in class
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1574740Z  59 | // MARK: - Main Content Page
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1575280Z  60 | 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1575470Z  61 | class MainContentPage: BasePage {
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1575930Z     |                                 `- note: to match this opening '{'
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1576250Z  62 |     
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1576420Z  63 |     // Elements
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1576610Z     :
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1576850Z 633 |         return waitForElementToAppear(emptyStateMessage)
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1577170Z 634 |     }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1577340Z 635 | }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1577510Z     |  `- error: expected '}' in class
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1577700Z 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1579090Z PoemOfTheDayUITests/AIFeaturesUITests.swift:88:13: warning: initialization of immutable value 'mainPageAfterGen' was never used; consider replacing with assignment to '_' or removing it
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1579770Z 86 |         
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1579970Z 87 |         // Generate poem (should fail)
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1580270Z 88 |         let mainPageAfterGen = vibePage.tapGenerateButton()
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1581650Z    |             `- warning: initialization of immutable value 'mainPageAfterGen' was never used; consider replacing with assignment to '_' or removing it
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1582390Z 89 |         
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1584270Z 90 |         // Verify alert appears
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1584490Z 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1584710Z PoemOfTheDayUITests/PageObjects.swift:26:55: error: cannot find type 'SettingsPage' in scope
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1585170Z  24 |     }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1585370Z  25 |     
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1585640Z  26 |     static func settingsPage(app: XCUIApplication) -> SettingsPage {
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1586230Z     |                                                       `- error: cannot find type 'SettingsPage' in scope
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1586550Z  27 |         return SettingsPage(app: app)
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1586790Z  28 |     }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1586910Z 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1587110Z PoemOfTheDayUITests/PageObjects.swift:30:54: error: cannot find type 'HistoryPage' in scope
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1587570Z  28 |     }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1587740Z  29 |     
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1588210Z  30 |     static func historyPage(app: XCUIApplication) -> HistoryPage {
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1588760Z     |                                                      `- error: cannot find type 'HistoryPage' in scope
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1589050Z  31 |         return HistoryPage(app: app)
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1589290Z  32 |     }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1589420Z 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1589630Z PoemOfTheDayUITests/PageObjects.swift:10:61: error: cannot find type 'VibeGenerationPage' in scope
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1590470Z   8 |     }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1590630Z   9 |     
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1590910Z  10 |     static func vibeGenerationPage(app: XCUIApplication) -> VibeGenerationPage {
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1591410Z     |                                                             `- error: cannot find type 'VibeGenerationPage' in scope
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1591740Z  11 |         return VibeGenerationPage(app: app)
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1591990Z  12 |     }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1592110Z 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1592320Z PoemOfTheDayUITests/PageObjects.swift:14:59: error: cannot find type 'CustomPromptPage' in scope
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1592760Z  12 |     }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1592930Z  13 |     
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1593200Z  14 |     static func customPromptPage(app: XCUIApplication) -> CustomPromptPage {
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1593650Z     |                                                           `- error: cannot find type 'CustomPromptPage' in scope
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1593970Z  15 |         return CustomPromptPage(app: app)
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1594220Z  16 |     }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1594340Z 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1594540Z PoemOfTheDayUITests/PageObjects.swift:18:56: error: cannot find type 'FavoritesPage' in scope
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1594980Z  16 |     }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1595170Z  17 |     
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1595440Z  18 |     static func favoritesPage(app: XCUIApplication) -> FavoritesPage {
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1596260Z     |                                                        `- error: cannot find type 'FavoritesPage' in scope
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1596640Z  19 |         return FavoritesPage(app: app)
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1596890Z  20 |     }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1596980Z 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1597200Z PoemOfTheDayUITests/PageObjects.swift:22:61: error: cannot find type 'TelemetryDebugPage' in scope
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1597720Z  20 |     }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1597880Z  21 |     
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1598180Z  22 |     static func telemetryDebugPage(app: XCUIApplication) -> TelemetryDebugPage {
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1598600Z     |                                                             `- error: cannot find type 'TelemetryDebugPage' in scope
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1599060Z  23 |         return TelemetryDebugPage(app: app)
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1599320Z  24 |     }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1599450Z 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1600000Z PoemOfTheDayUITests/PoemUITests.swift:53:13: warning: initialization of immutable value 'initialTitle' was never used; consider replacing with assignment to '_' or removing it
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1600790Z  51 |         // Wait for initial poem to load
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1601070Z  52 |         XCTAssertTrue(mainPage.waitForPoemToLoad())
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1601380Z  53 |         let initialTitle = mainPage.getPoemTitle()
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1601970Z     |             `- warning: initialization of immutable value 'initialTitle' was never used; consider replacing with assignment to '_' or removing it
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1602450Z  54 |         
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1602770Z  55 |         // Refresh poem
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1602960Z 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1603270Z PoemOfTheDayUITests/PoemUITests.swift:99:32: error: value of type 'MainContentPage' has no member 'waitForFavoriteButtonState'
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1604010Z  97 |         // Verify button state changed (should show unfavorite state)
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1604470Z  98 |         // Wait for the label to change to "Unfavorite" to ensure async task completed
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1607090Z  99 |         XCTAssertTrue(mainPage.waitForFavoriteButtonState(isFavorite: true), "Favorite button should show 'Unfavorite' state")
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1608960Z     |                                `- error: value of type 'MainContentPage' has no member 'waitForFavoriteButtonState'
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1610170Z 100 |         
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1610960Z 101 |         // Let's assume the button identifier remains "favorite_button" but we can check label
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1612600Z 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1613710Z PoemOfTheDayUITests/PoemUITests.swift:120:32: error: value of type 'MainContentPage' has no member 'waitForFavoriteButtonState'
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1615530Z 118 |         // Unfavorite the poem
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1616660Z 119 |         _ = mainPage.tapFavoriteButton() // Tapping again should unfavorite
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1618310Z 120 |         XCTAssertTrue(mainPage.waitForFavoriteButtonState(isFavorite: false), "Favorite button should show 'Favorite' state")
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1620180Z     |                                `- error: value of type 'MainContentPage' has no member 'waitForFavoriteButtonState'
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1621230Z 121 |     }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1621680Z 122 |     
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1621970Z 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1622670Z PoemOfTheDayUITests/PoemUITests.swift:131:18: warning: result of call to 'tapShareButton()' is unused
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1623900Z 129 |         // Test share button
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1624990Z 130 |         XCTAssertTrue(mainPage.waitForElementToAppear(mainPage.shareButton))
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1625950Z 131 |         mainPage.tapShareButton()
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1626840Z     |                  `- warning: result of call to 'tapShareButton()' is unused
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1627710Z 132 |         
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1628380Z 133 |         // Verify share sheet appears
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1641380Z 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1642450Z PoemOfTheDayUITests/PoemUITests.swift:198:22: error: value of type 'MainContentPage' has no member 'waitForFavoriteButtonState'
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1645680Z 196 |         
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1647130Z 197 |         // Retry if state update fails (handling potential UI lag or missed tap)
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1647700Z 198 |         if !mainPage.waitForFavoriteButtonState(isFavorite: true, timeout: 5.0) {
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1648230Z     |                      `- error: value of type 'MainContentPage' has no member 'waitForFavoriteButtonState'
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1648780Z 199 |             print("PoemUITests: Retrying favorite tap")
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1649140Z 200 |             _ = mainPage.tapFavoriteButton()
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1649420Z 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1649830Z PoemOfTheDayUITests/PoemUITests.swift:211:32: error: value of type 'MainContentPage' has no member 'waitForFavoriteButtonState'
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1650290Z 209 |         }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1650520Z 210 |         
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1650810Z 211 |         XCTAssertTrue(mainPage.waitForFavoriteButtonState(isFavorite: true))
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1651310Z     |                                `- error: value of type 'MainContentPage' has no member 'waitForFavoriteButtonState'
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1651730Z 212 |         
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1651900Z 213 |         // Get new poem
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1652010Z 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1652300Z PoemOfTheDayUITests/PoemUITests.swift:215:18: warning: result of call to 'tapRefreshButton()' is unused
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1652740Z 213 |         // Get new poem
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1653060Z 214 |         let firstPoemTitle = mainPage.poemTitle.label
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1653350Z 215 |         mainPage.tapRefreshButton()
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1655880Z     |                  `- warning: result of call to 'tapRefreshButton()' is unused
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1657200Z 216 |         
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1657720Z 217 |         // Wait for new poem
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1658030Z 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1659080Z PoemOfTheDayUITests/PoemUITests.swift:224:22: error: value of type 'MainContentPage' has no member 'waitForFavoriteButtonState'
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1660650Z 222 |         
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1661450Z 223 |         // Retry if state update fails (handling potential UI lag or missed tap)
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1662530Z 224 |         if !mainPage.waitForFavoriteButtonState(isFavorite: true, timeout: 5.0) {
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1663880Z     |                      `- error: value of type 'MainContentPage' has no member 'waitForFavoriteButtonState'
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1665580Z 225 |             print("PoemUITests: Retrying favorite tap")
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1667370Z 226 |             _ = mainPage.tapFavoriteButton()
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1667760Z 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1668610Z PoemOfTheDayUITests/PoemUITests.swift:229:32: error: value of type 'MainContentPage' has no member 'waitForFavoriteButtonState'
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1691110Z 227 |         }
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1691440Z 228 |         
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1691730Z 229 |         XCTAssertTrue(mainPage.waitForFavoriteButtonState(isFavorite: true))
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1692240Z     |                                `- error: value of type 'MainContentPage' has no member 'waitForFavoriteButtonState'
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1692700Z 230 |         
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1692890Z 231 |         // Verify favorites count
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1693020Z 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1693670Z PoemOfTheDayUITests/VibeBackgroundColorUITests.swift:253:17: warning: initialization of immutable value 'colorIndicatorCircle' was never used; consider replacing with assignment to '_' or removing it
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1694430Z 251 |         if vibeIndicator.exists {
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1694820Z 252 |             // Verify the color intensity circle is visible
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1695450Z 253 |             let colorIndicatorCircle = app.otherElements.matching(NSPredicate(format: "identifier CONTAINS 'color_intensity'")).firstMatch
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1696240Z     |                 `- warning: initialization of immutable value 'colorIndicatorCircle' was never used; consider replacing with assignment to '_' or removing it
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1697150Z 254 |             
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.1697450Z 255 |             // Since we might not have specific identifiers, check for visual elements
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.2846450Z [94 / 102] 1 / 1 tests, 1 failed; checking cached actions
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.3317120Z Target //PoemOfTheDayUITests:PoemOfTheDayUITests failed to build
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.3759550Z INFO: Elapsed time: 20.825s, Critical Path: 19.65s
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.3785620Z INFO: 14 processes: 20 action cache hit, 12 internal, 2 darwin-sandbox.
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.3786310Z //PoemOfTheDayUITests:PoemOfTheDayUITests                       FAILED TO BUILD
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.3786860Z ERROR: Build did NOT complete successfully
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.3787070Z 
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.3787270Z Executed 0 out of 1 test: 1 fails to build.
+Build and Test with Bazel	Run UI tests	2025-11-28T20:18:48.6401910Z ##[error]Process completed with exit code 1.
+Build and Test with Bazel	Upload test results	﻿2025-11-28T20:18:48.6746650Z ##[group]Run actions/upload-artifact@v4
+Build and Test with Bazel	Upload test results	2025-11-28T20:18:48.6746930Z with:
+Build and Test with Bazel	Upload test results	2025-11-28T20:18:48.6747370Z   name: test-results
+Build and Test with Bazel	Upload test results	2025-11-28T20:18:48.6747670Z   path: Poem of the Day/bazel-testlogs/
+Build and Test with Bazel	Upload test results	
+Build and Test with Bazel	Upload test results	2025-11-28T20:18:48.6747940Z   if-no-files-found: warn
+Build and Test with Bazel	Upload test results	2025-11-28T20:18:48.6748280Z   compression-level: 6
+Build and Test with Bazel	Upload test results	2025-11-28T20:18:48.6748470Z   overwrite: false
+Build and Test with Bazel	Upload test results	2025-11-28T20:18:48.6748630Z   include-hidden-files: false
+Build and Test with Bazel	Upload test results	2025-11-28T20:18:48.6748900Z ##[endgroup]
+Build and Test with Bazel	Upload test results	2025-11-28T20:18:49.6470210Z ##[warning]No files were found with the provided path: Poem of the Day/bazel-testlogs/. No artifacts will be uploaded.
+Build and Test with Bazel	Post Checkout code	﻿2025-11-28T20:18:49.7859440Z Post job cleanup.
+Build and Test with Bazel	Post Checkout code	2025-11-28T20:18:50.0897600Z [command]/opt/homebrew/bin/git version
+Build and Test with Bazel	Post Checkout code	2025-11-28T20:18:50.2162260Z git version 2.50.1
+Build and Test with Bazel	Post Checkout code	2025-11-28T20:18:50.2505680Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/98c46449-03ac-477c-84a4-d5c46f0c5984/.gitconfig'
+Build and Test with Bazel	Post Checkout code	2025-11-28T20:18:50.2506580Z Temporarily overriding HOME='/Users/runner/work/_temp/98c46449-03ac-477c-84a4-d5c46f0c5984' before making global git config changes
+Build and Test with Bazel	Post Checkout code	2025-11-28T20:18:50.2572720Z Adding repository directory to the temporary git global config as a safe directory
+Build and Test with Bazel	Post Checkout code	2025-11-28T20:18:50.2590260Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/Poem-of-the-Day/Poem-of-the-Day
+Build and Test with Bazel	Post Checkout code	2025-11-28T20:18:50.2860730Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+Build and Test with Bazel	Post Checkout code	2025-11-28T20:18:50.3061180Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Build and Test with Bazel	Post Checkout code	2025-11-28T20:18:50.5608840Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Build and Test with Bazel	Post Checkout code	2025-11-28T20:18:50.5764600Z http.https://github.com/.extraheader
+Build and Test with Bazel	Post Checkout code	2025-11-28T20:18:50.5789130Z [command]/opt/homebrew/bin/git config --local --unset-all http.https://github.com/.extraheader
+Build and Test with Bazel	Post Checkout code	2025-11-28T20:18:50.5875420Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Build and Test with Bazel	Post Checkout code	2025-11-28T20:18:50.8509360Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Build and Test with Bazel	Post Checkout code	2025-11-28T20:18:50.8572860Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Build and Test with Bazel	Complete job	﻿2025-11-28T20:18:51.0403800Z Cleaning up orphan processes
+Build and Test with Bazel	Complete job	2025-11-28T20:18:52.6107240Z Terminate orphan process: pid (1707) (java)
