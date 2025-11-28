@@ -135,8 +135,14 @@ class MainContentPage: BasePage {
     }
     
     func tapMenuButton() -> MainContentPage {
-        _ = waitForElementToAppear(menuButton)
-        menuButton.tap()
+        if waitForElementToAppear(menuButton) {
+            if menuButton.isHittable {
+                menuButton.tap()
+            } else {
+                // Fallback to coordinate tap if not hittable (e.g. XCTest thinks it's off screen)
+                menuButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+            }
+        }
         return self
     }
     
@@ -602,6 +608,6 @@ class HistoryPage: BasePage {
     }
     
     func verifyEmptyState() -> Bool {
-        return emptyStateMessage.exists
+        return waitForElementToAppear(emptyStateMessage)
     }
 }

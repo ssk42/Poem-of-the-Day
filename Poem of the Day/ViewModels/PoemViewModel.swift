@@ -54,6 +54,7 @@ final class PoemViewModel: ObservableObject {
             
             // Create mock poem
             poemOfTheDay = Poem(
+                id: UUID(uuidString: "00000000-0000-0000-0000-000000000001")!,
                 title: "Test Poem",
                 lines: ["This is a test poem", "For UI testing purposes"],
                 author: "Test Author",
