@@ -185,8 +185,17 @@ final class PoemUITests: XCTestCase {
         // Wait for initial poem to load
         XCTAssertTrue(mainPage.waitForPoemToLoad())
         
-        // Favorite first poem
+        // Favorite the poem
         _ = mainPage.tapFavoriteButton()
+        
+        // Check debug info
+        let debugText = app.staticTexts["debug_info"]
+        if debugText.waitForExistence(timeout: 2.0) {
+            print("PoemUITests: Debug Info: \(debugText.label)")
+        } else {
+            print("PoemUITests: Debug Info not found")
+        }
+        
         XCTAssertTrue(mainPage.waitForFavoriteButtonState(isFavorite: true))
         
         // Get new poem
