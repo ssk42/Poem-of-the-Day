@@ -390,7 +390,7 @@ class FavoritesPage: BasePage {
     }
     
     var doneButton: XCUIElement {
-        app.buttons["Done"]
+        app.navigationBars.buttons["Done"]
     }
     
     var favoritesTable: XCUIElement {
