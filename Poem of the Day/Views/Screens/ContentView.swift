@@ -730,8 +730,8 @@ struct FavoritesView: View {
             .foregroundColor(.white)
             .padding(.top, 16)
         }
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("No favorite poems yet. Your favorite poems will appear here.")
+        // .accessibilityElement(children: .combine) - Removed to allow finding inner elements
+        // .accessibilityLabel("No favorite poems yet. Your favorite poems will appear here.")
         .accessibilityIdentifier("favorites_empty_state")
     }
 }
