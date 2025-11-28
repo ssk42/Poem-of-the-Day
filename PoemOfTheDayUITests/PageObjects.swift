@@ -211,8 +211,9 @@ class MainContentPage: BasePage {
     func waitForFavoriteButtonState(isFavorite: Bool, timeout: TimeInterval = 5.0) -> Bool {
         let expectedLabel = isFavorite ? "Unfavorite" : "Favorite"
         let predicate = NSPredicate(format: "label == %@", expectedLabel)
-        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: favoriteButton)
-        return XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed
+        // Use a fresh query to avoid stale element references
+        let button = app.buttons.matching(identifier: "favorite_button").matching(predicate).firstMatch
+        return button.waitForExistence(timeout: timeout)
     }
 }
 
