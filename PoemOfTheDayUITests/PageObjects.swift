@@ -389,8 +389,8 @@ class FavoritesPage: BasePage {
         app.navigationBars["Favorite Poems"]
     }
     
-    var backButton: XCUIElement {
-        app.navigationBars.buttons["Back"]
+    var doneButton: XCUIElement {
+        app.buttons["Done"]
     }
     
     var favoritesTable: XCUIElement {
@@ -411,8 +411,8 @@ class FavoritesPage: BasePage {
         return waitForElementToAppear(navigationTitle)
     }
     
-    func tapBackButton() -> MainContentPage {
-        backButton.tap()
+    func tapDoneButton() -> MainContentPage {
+        doneButton.tap()
         return MainContentPage(app: app)
     }
     
