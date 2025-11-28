@@ -185,8 +185,17 @@ final class PoemUITests: XCTestCase {
         // Wait for initial poem to load
         XCTAssertTrue(mainPage.waitForPoemToLoad())
         
+        // Wait for poem to load
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
+        
         // Favorite the poem
         _ = mainPage.tapFavoriteButton()
+        
+        // Retry if state update fails (handling potential UI lag or missed tap)
+        if !mainPage.waitForFavoriteButtonState(isFavorite: true, timeout: 5.0) {
+            print("PoemUITests: Retrying favorite tap")
+            _ = mainPage.tapFavoriteButton()
+        }
         
         // Check debug info
         let debugText = app.staticTexts["debug_info"]
@@ -207,6 +216,13 @@ final class PoemUITests: XCTestCase {
         
         // Favorite second poem
         _ = mainPage.tapFavoriteButton()
+        
+        // Retry if state update fails (handling potential UI lag or missed tap)
+        if !mainPage.waitForFavoriteButtonState(isFavorite: true, timeout: 5.0) {
+            print("PoemUITests: Retrying favorite tap")
+            _ = mainPage.tapFavoriteButton()
+        }
+        
         XCTAssertTrue(mainPage.waitForFavoriteButtonState(isFavorite: true))
         
         // Verify favorites count

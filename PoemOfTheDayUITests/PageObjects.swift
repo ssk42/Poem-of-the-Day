@@ -117,9 +117,14 @@ class MainContentPage: BasePage {
     }
     
     func tapFavoritesButton() -> FavoritesPage {
-        _ = waitForElementToAppear(favoritesButton)
-        favoritesButton.tap()
-        return PageFactory.favoritesPage(app: app)
+        if favoritesButton.waitForExistence(timeout: 5) {
+            // Force tap to avoid scroll errors in Menu
+            favoritesButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        } else {
+            // Fallback to label
+            app.buttons["Favorite Poems"].tap()
+        }
+        return FavoritesPage(app: app)
     }
     
     func tapVibeGenerationButton() -> VibeGenerationPage {
