@@ -14,6 +14,9 @@ final class PoemUITests: XCTestCase {
             "UITESTING": "1"
         ]
         
+        NSLog("PoemUITests: Launching app with arguments: \(app.launchArguments)")
+        NSLog("PoemUITests: Launching app with environment: \(app.launchEnvironment)")
+        
         app.launch()
     }
     

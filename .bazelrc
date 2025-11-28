@@ -30,3 +30,4 @@ test --test_env=OS_ACTIVITY_MODE=disable
 
 # CI Configuration
 test:ci --ios_simulator_version=18.6
+test:ci --test_output=all
