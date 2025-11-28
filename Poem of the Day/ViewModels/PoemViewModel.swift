@@ -102,12 +102,21 @@ final class PoemViewModel: ObservableObject {
         isLoading = false
     }
     
+    func loadFavorites() async {
+        NSLog("PoemViewModel: loadFavorites called")
+        self.favorites = await repository.getFavorites()
+        NSLog("PoemViewModel: Favorites loaded. Count: \(self.favorites.count)")
+    }
+    
     func toggleFavorite(poem: Poem) async {
+        NSLog("PoemViewModel: toggleFavorite called for poem: \(poem.title)")
         let isFavorite = await repository.isFavorite(poem)
         
         if isFavorite {
+            NSLog("PoemViewModel: Poem is favorite. Removing.")
             await repository.removeFromFavorites(poem)
         } else {
+            NSLog("PoemViewModel: Poem is NOT favorite. Adding.")
             await repository.addToFavorites(poem)
         }
         

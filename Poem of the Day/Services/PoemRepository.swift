@@ -57,9 +57,13 @@ actor PoemRepository: PoemRepositoryProtocol {
         
         // Check for reset flag in UI tests
         if ProcessInfo.processInfo.arguments.contains("-ResetFavorites") {
+            NSLog("PoemRepository: ResetFavorites flag detected. Clearing favorites.")
             self.userDefaults.removeObject(forKey: "favoritePoems")
             self.cachedFavorites = []
             self.favoritesLoaded = true
+            NSLog("PoemRepository: Favorites cleared.")
+        } else {
+            NSLog("PoemRepository: ResetFavorites flag NOT detected.")
         }
     }
     
@@ -243,11 +247,15 @@ actor PoemRepository: PoemRepositoryProtocol {
     }
     
     func addToFavorites(_ poem: Poem) async {
+        NSLog("PoemRepository: addToFavorites called for poem: \(poem.title) (ID: \(poem.id))")
         if !favoritesLoaded {
             await loadFavorites()
         }
         
-        guard !cachedFavorites.contains(where: { $0.id == poem.id }) else { return }
+        guard !cachedFavorites.contains(where: { $0.id == poem.id }) else {
+            NSLog("PoemRepository: Poem already in favorites. Skipping add.")
+            return
+        }
         
         // Enforce max favorites limit
         if cachedFavorites.count >= AppConfiguration.Storage.maxFavoritePoems {

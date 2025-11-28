@@ -643,6 +643,7 @@ struct FavoritesView: View {
                 
                 if favorites.isEmpty {
                     emptyStateView
+                        .onAppear { NSLog("FavoritesView: Showing empty state view") }
                 } else {
                     List {
                         ForEach(favorites) { poem in
