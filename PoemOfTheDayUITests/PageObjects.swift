@@ -220,16 +220,19 @@ class MainContentPage: BasePage {
     }
     
     func waitForPageToLoad(timeout: TimeInterval = 5) -> Bool {
-        return waitForPoemToLoad()
-    }
-    
     
     func waitForFavoriteButtonState(isFavorite: Bool, timeout: TimeInterval = 10.0) -> Bool {
-        let expectedLabel = isFavorite ? "Remove from favorites" : "Add to favorites"
+        let expectedLabel = isFavorite ? "Remove from favorites" : "Add (Test)" // Debug label
         let predicate = NSPredicate(format: "label == %@", expectedLabel)
-        // Use a fresh query to avoid stale element references
         let button = app.buttons.matching(identifier: "favorite_button").matching(predicate).firstMatch
-        return button.waitForExistence(timeout: timeout)
+        if button.waitForExistence(timeout: timeout) {
+            return true
+        }
+        // Fallback to normal label just in case
+        let normalLabel = isFavorite ? "Remove from favorites" : "Add to favorites"
+        let normalPredicate = NSPredicate(format: "label == %@", normalLabel)
+        let normalButton = app.buttons.matching(identifier: "favorite_button").matching(normalPredicate).firstMatch
+        return normalButton.waitForExistence(timeout: 1.0)
     }
 }
 

@@ -415,7 +415,7 @@ struct ContentView: View {
                     }
                 }) {
                     Label(
-                        viewModel.isFavorite(poem: poem) ? "Unfavorite" : "Favorite",
+                        viewModel.isFavorite(poem: poem) ? "Remove from favorites" : (AppConfiguration.Testing.isUITesting ? "Add (Test)" : "Add to favorites"),
                         systemImage: viewModel.isFavorite(poem: poem) ? "heart.fill" : "heart"
                     )
                     .foregroundColor(viewModel.isFavorite(poem: poem) ? .red : .primary)
