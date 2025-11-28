@@ -210,7 +210,7 @@ final class PoemUITests: XCTestCase {
         XCTAssertTrue(favoritesPage.getFavoritePoemsCount() >= 2)
         
         // Close favorites
-        _ = favoritesPage.tapBackButton()
+        _ = favoritesPage.tapDoneButton()
     }
     
     func testAccessibility() {
