@@ -6,7 +6,7 @@ final class AIFeaturesUITests: XCTestCase {
     override func setUpWithError() throws {
         continueAfterFailure = false
         app = XCUIApplication()
-        app.launchArguments = ["--ui-testing"]
+        app.launchArguments = ["--ui-testing", "-UITESTING", "1"]
         app.launchEnvironment = [
             "AI_AVAILABLE": "true",
             "MOCK_AI_RESPONSES": "true",

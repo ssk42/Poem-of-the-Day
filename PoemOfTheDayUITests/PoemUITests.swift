@@ -7,7 +7,7 @@ final class PoemUITests: XCTestCase {
         continueAfterFailure = false
         
         // Configure test environment
-        app.launchArguments = ["--ui-testing"]
+        app.launchArguments = ["--ui-testing", "-UITESTING", "1"]
         app.launchEnvironment = [
             "AI_AVAILABLE": "false", // Disable AI for basic poem tests
             "ENABLE_TELEMETRY": "true",

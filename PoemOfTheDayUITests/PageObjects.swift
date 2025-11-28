@@ -218,7 +218,7 @@ class VibeGenerationPage: BasePage {
     }
     
     var currentVibeLabel: XCUIElement {
-        app.staticTexts.matching(identifier: "current_vibe_label").firstMatch
+        app.staticTexts.matching(identifier: "current_vibe").firstMatch
     }
     
     var generateButton: XCUIElement {

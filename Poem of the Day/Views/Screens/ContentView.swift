@@ -152,6 +152,9 @@ struct ContentView: View {
                 Text(viewModel.errorMessage ?? "An error occurred")
             }
         }
+        .task {
+            await viewModel.loadInitialData()
+        }
     }
     
     private func provideFeedback(success: Bool) {

@@ -66,6 +66,8 @@ actor PoemRepository: PoemRepositoryProtocol {
         }
     }
     
+
+    
     func refreshDailyPoem() async throws -> Poem {
         return try await fetchAndCacheDailyPoem()
     }
@@ -215,6 +217,11 @@ actor PoemRepository: PoemRepositoryProtocol {
     }
     
     func isAIGenerationAvailable() async -> Bool {
+        // Check for UI Testing mode - check standard user defaults as launch arguments populate there
+        if UserDefaults.standard.bool(forKey: "UITESTING") || ProcessInfo.processInfo.environment["UITESTING"] == "1" {
+            return true
+        }
+        
         guard let aiService = aiService else { return false }
         return await aiService.isAvailable()
     }

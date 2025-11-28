@@ -33,9 +33,13 @@ final class PoemViewModel: ObservableObject {
     }
     
     func loadInitialData() async {
-        if AppConfiguration.Testing.isUITesting {
+        let isUITesting = AppConfiguration.Testing.isUITesting
+        
+        if isUITesting {
             isLoading = true
             isAIGenerationAvailable = AppConfiguration.Testing.isAIAvailable
+            
+            // Create mock vibe for testing
             
             // Create mock vibe for testing
             let mockVibe = DailyVibe.hopeful
