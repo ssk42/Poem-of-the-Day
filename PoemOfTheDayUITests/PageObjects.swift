@@ -201,6 +201,13 @@ class MainContentPage: BasePage {
     func isDisplayed() -> Bool {
         return verifyPoemDisplayed()
     }
+    
+    func waitForFavoriteButtonState(isFavorite: Bool, timeout: TimeInterval = 5.0) -> Bool {
+        let expectedLabel = isFavorite ? "Unfavorite" : "Favorite"
+        let predicate = NSPredicate(format: "label == %@", expectedLabel)
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: favoriteButton)
+        return XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed
+    }
 }
 
 // MARK: - Vibe Generation Page
@@ -363,12 +370,7 @@ class CustomPromptPage: BasePage {
         return promptTextField.exists && generateButton.exists
     }
     
-    func waitForFavoriteButtonState(isFavorite: Bool, timeout: TimeInterval = 5.0) -> Bool {
-        let expectedLabel = isFavorite ? "Unfavorite" : "Favorite"
-        let predicate = NSPredicate(format: "label == %@", expectedLabel)
-        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: favoriteButton)
-        return XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed
-    }
+
 }
 
 // MARK: - Favorites Page
