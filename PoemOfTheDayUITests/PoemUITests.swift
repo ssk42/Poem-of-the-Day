@@ -188,6 +188,15 @@ final class PoemUITests: XCTestCase {
         // Wait for poem to load
         XCTAssertTrue(mainPage.waitForPoemToLoad())
         
+        // Verify isUITesting is active
+        if app.buttons["Add (Test)"].waitForExistence(timeout: 5) {
+            print("PoemUITests: isUITesting is ACTIVE")
+        } else {
+            print("PoemUITests: isUITesting is INACTIVE or label not found")
+            // Print all buttons to debug
+            print("PoemUITests: All buttons: \(app.buttons.debugDescription)")
+        }
+        
         // Wait for any animations
         sleep(1)
         

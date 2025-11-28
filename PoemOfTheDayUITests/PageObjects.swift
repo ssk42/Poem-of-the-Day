@@ -117,12 +117,15 @@ class MainContentPage: BasePage {
     }
     
     func tapFavoritesButton() -> FavoritesPage {
-        if favoritesButton.waitForExistence(timeout: 5) {
-            // Force tap to avoid scroll errors in Menu
-            favoritesButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        // Use label for Menu item as it's more reliable
+        let menuButton = app.buttons["Favorite Poems"]
+        if menuButton.waitForExistence(timeout: 5) {
+            print("PageObjects: Tapping 'Favorite Poems' by label (force tap)")
+            menuButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
         } else {
-            // Fallback to label
-            app.buttons["Favorite Poems"].tap()
+            // Fallback to identifier
+            print("PageObjects: Tapping 'favorites_button' by identifier")
+            favoritesButton.tap()
         }
         return FavoritesPage(app: app)
     }
