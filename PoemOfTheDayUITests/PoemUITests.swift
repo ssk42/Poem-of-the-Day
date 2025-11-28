@@ -176,7 +176,7 @@ final class PoemUITests: XCTestCase {
         }
         
         // Close favorites
-        _ = favoritesPage.tapBackButton()
+        _ = favoritesPage.tapDoneButton()
     }
     
     func testMultipleFavorites() {
