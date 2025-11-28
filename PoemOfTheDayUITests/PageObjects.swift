@@ -608,6 +608,10 @@ class HistoryPage: BasePage {
     }
     
     func verifyEmptyState() -> Bool {
-        return waitForElementToAppear(emptyStateMessage)
+        if waitForElementToAppear(emptyStateMessage) {
+            return true
+        }
+        // Fallback: check for the text directly
+        return app.staticTexts["No Favorite Poems Yet"].exists
     }
 }

@@ -56,7 +56,7 @@ actor PoemRepository: PoemRepositoryProtocol {
         }
         
         // Check for reset flag in UI tests
-        if CommandLine.arguments.contains("-ResetFavorites") {
+        if ProcessInfo.processInfo.arguments.contains("-ResetFavorites") {
             self.userDefaults.removeObject(forKey: "favoritePoems")
             self.cachedFavorites = []
             self.favoritesLoaded = true
