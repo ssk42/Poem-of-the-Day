@@ -169,7 +169,10 @@ final class PoemUITests: XCTestCase {
             NSLog("PoemUITests: Debug Info: \(app.staticTexts["debug_info"].label)")
         }
         
-        XCTAssertTrue(favoritesPage.verifyEmptyState())
+        if !favoritesPage.verifyEmptyState() {
+            NSLog("PoemUITests: Empty state verification failed. App hierarchy: \(app.debugDescription)")
+            XCTFail("Empty state not found")
+        }
         }
         
         // Close favorites
