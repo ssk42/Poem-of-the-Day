@@ -199,21 +199,20 @@ final class PoemUITests: XCTestCase {
         XCTAssertTrue(mainPage.waitForFavoriteButtonState(isFavorite: true))
         
         // Get new poem
-        _ = mainPage.tapRefreshButton()
+        let firstPoemTitle = mainPage.poemTitle.label
+        mainPage.tapRefreshButton()
         
-        // Wait for new poem to load
-        XCTAssertTrue(mainPage.waitForLoadingToComplete())
-        XCTAssertTrue(mainPage.waitForPoemToLoad())
+        // Wait for new poem
+        XCTAssertTrue(mainPage.waitForPoemChange(oldTitle: firstPoemTitle))
         
         // Favorite second poem
         _ = mainPage.tapFavoriteButton()
         XCTAssertTrue(mainPage.waitForFavoriteButtonState(isFavorite: true))
         
-        // Open favorites
-        let favoritesPage = mainPage.tapFavoritesButton()
-        
-        // Verify favorites page appears
+        // Verify favorites count
+        let favoritesPage = mainPage.tapMenuButton().tapFavoritesButton()
         XCTAssertTrue(favoritesPage.waitForPageToLoad())
+        XCTAssertTrue(favoritesPage.getFavoritePoemsCount() >= 2)
         
         // Verify multiple poems in favorites
         XCTAssertTrue(favoritesPage.getFavoritePoemsCount() >= 2)

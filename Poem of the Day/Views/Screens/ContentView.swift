@@ -151,17 +151,24 @@ struct ContentView: View {
             } message: {
                 Text(viewModel.errorMessage ?? "An error occurred")
             }
-            if AppConfiguration.Testing.isUITesting {
-                VStack {
-                    Text("Debug: Favorites Count: \(viewModel.favorites.count)")
-                        .accessibilityIdentifier("debug_info")
-                        .foregroundColor(.red)
-                        .background(Color.white)
-                    Spacer()
-                }
-                .zIndex(100)
-            }
         }
+        .overlay(
+            Group {
+                if AppConfiguration.Testing.isUITesting {
+                    VStack {
+                        Text("Debug: Favorites Count: \(viewModel.favorites.count)")
+                            .accessibilityIdentifier("debug_info")
+                            .font(.caption)
+                            .padding(8)
+                            .background(Color.black.opacity(0.7))
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                        Spacer()
+                    }
+                    .padding(.top, 50)
+                }
+            }
+        )
         .task {
             await viewModel.loadInitialData()
         }

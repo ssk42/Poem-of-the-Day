@@ -200,13 +200,24 @@ class MainContentPage: BasePage {
         return verifyPoemDisplayed()
     }
     
-    func waitForPageToLoad(timeout: TimeInterval = 5) -> Bool {
-        return waitForPoemToLoad()
+    func waitForPoemToLoad(timeout: TimeInterval = 10.0) -> Bool {
+        return poemContent.waitForExistence(timeout: timeout)
+    }
+    
+    func waitForPoemChange(oldTitle: String, timeout: TimeInterval = 10.0) -> Bool {
+        let predicate = NSPredicate(format: "label != %@", oldTitle)
+        let titleElement = app.staticTexts.matching(identifier: "poem_title").matching(predicate).firstMatch
+        return titleElement.waitForExistence(timeout: timeout)
     }
     
     func isDisplayed() -> Bool {
         return verifyPoemDisplayed()
     }
+    
+    func waitForPageToLoad(timeout: TimeInterval = 5) -> Bool {
+        return waitForPoemToLoad()
+    }
+    
     
     func waitForFavoriteButtonState(isFavorite: Bool, timeout: TimeInterval = 5.0) -> Bool {
         let expectedLabel = isFavorite ? "Remove from favorites" : "Add to favorites"
