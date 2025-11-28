@@ -209,7 +209,7 @@ class MainContentPage: BasePage {
     }
     
     func waitForFavoriteButtonState(isFavorite: Bool, timeout: TimeInterval = 5.0) -> Bool {
-        let expectedLabel = isFavorite ? "Unfavorite" : "Favorite"
+        let expectedLabel = isFavorite ? "Remove from favorites" : "Add to favorites"
         let predicate = NSPredicate(format: "label == %@", expectedLabel)
         // Use a fresh query to avoid stale element references
         let button = app.buttons.matching(identifier: "favorite_button").matching(predicate).firstMatch
