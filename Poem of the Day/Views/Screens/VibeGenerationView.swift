@@ -299,20 +299,34 @@ struct CustomPromptView: View {
                 .font(.headline)
                 .foregroundColor(colorScheme == .dark ? .white : .black)
             
-            TextEditor(text: $promptText)
-                .font(.body)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(colorScheme == .dark ? Color(red: 0.2, green: 0.2, blue: 0.3) : Color.white)
-                        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
-                )
-                .frame(minHeight: 120)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .strokeBorder(Color.gray.opacity(0.3), lineWidth: 1)
-                )
-                .accessibilityIdentifier("custom_prompt_text_field")
+            ZStack(alignment: .topTrailing) {
+                TextEditor(text: $promptText)
+                    .font(.body)
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(colorScheme == .dark ? Color(red: 0.2, green: 0.2, blue: 0.3) : Color.white)
+                            .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+                    )
+                    .frame(minHeight: 120)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .strokeBorder(Color.gray.opacity(0.3), lineWidth: 1)
+                    )
+                    .accessibilityIdentifier("custom_prompt_text_field")
+                
+                if !promptText.isEmpty {
+                    Button(action: {
+                        promptText = ""
+                    }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundColor(.gray)
+                            .padding(12)
+                    }
+                    .accessibilityLabel("Clear prompt")
+                    .accessibilityIdentifier("Clear")
+                }
+            }
             
             Text("Examples: \"A poem about friendship\", \"Write about the ocean at sunset\", \"Something inspiring about overcoming challenges\"")
                 .font(.caption)

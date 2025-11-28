@@ -342,7 +342,8 @@ class CustomPromptPage: BasePage {
     func enterPrompt(_ prompt: String) -> CustomPromptPage {
         promptTextField.tap()
         promptTextField.typeText(prompt)
-        promptTextField.typeText("\n") // Try to dismiss keyboard with return
+        // Dismiss keyboard by tapping header
+        app.staticTexts["Create Your Own Poem"].tap()
         return self
     }
     
