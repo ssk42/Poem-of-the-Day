@@ -113,7 +113,7 @@ final class PoemUITests: XCTestCase {
         XCTAssertTrue(favoritesPage.getFavoritePoemsCount() > 0)
         
         // Close favorites
-        _ = favoritesPage.tapBackButton()
+        _ = favoritesPage.tapDoneButton()
         
         // Unfavorite the poem
         _ = mainPage.tapFavoriteButton() // Tapping again should unfavorite
