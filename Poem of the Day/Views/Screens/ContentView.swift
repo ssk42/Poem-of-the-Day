@@ -166,6 +166,7 @@ struct ContentView: View {
                         Spacer()
                     }
                     .padding(.top, 50)
+                    .allowsHitTesting(false) // Ensure overlay doesn't block interactions
                 }
             }
         )
