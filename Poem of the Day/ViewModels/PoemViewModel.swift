@@ -171,9 +171,7 @@ final class PoemViewModel: ObservableObject {
         }
     }
     
-    private func loadFavorites() async {
-        favorites = await repository.getFavorites()
-    }
+
     
     private func checkAIAvailability() async {
         isAIGenerationAvailable = await repository.isAIGenerationAvailable()
