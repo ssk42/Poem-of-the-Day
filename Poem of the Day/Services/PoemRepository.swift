@@ -54,6 +54,13 @@ actor PoemRepository: PoemRepositoryProtocol {
         } else {
             self.aiService = nil
         }
+        
+        // Check for reset flag in UI tests
+        if CommandLine.arguments.contains("-ResetFavorites") {
+            self.userDefaults.removeObject(forKey: "favoritePoems")
+            self.cachedFavorites = []
+            self.favoritesLoaded = true
+        }
     }
     
     func getDailyPoem() async throws -> Poem {

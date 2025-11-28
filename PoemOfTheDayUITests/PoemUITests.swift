@@ -7,11 +7,11 @@ final class PoemUITests: XCTestCase {
         continueAfterFailure = false
         
         // Configure test environment
-        app.launchArguments = ["--ui-testing", "-UITESTING", "1"]
+        app.launchArguments = ["--ui-testing", "-UITESTING", "1", "-ResetFavorites", "1"]
         app.launchEnvironment = [
-            "AI_AVAILABLE": "false", // Disable AI for basic poem tests
             "ENABLE_TELEMETRY": "true",
-            "UITESTING": "1"
+            "UITESTING": "1",
+            "AI_AVAILABLE": "false"
         ]
         
         NSLog("PoemUITests: Launching app with arguments: \(app.launchArguments)")
