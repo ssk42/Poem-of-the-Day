@@ -188,6 +188,9 @@ final class PoemUITests: XCTestCase {
         // Wait for poem to load
         XCTAssertTrue(mainPage.waitForPoemToLoad())
         
+        // Wait for any animations
+        sleep(1)
+        
         // Favorite the poem
         _ = mainPage.tapFavoriteButton()
         
