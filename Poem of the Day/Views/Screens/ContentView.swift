@@ -81,7 +81,8 @@ struct ContentView: View {
                         }
                         .accessibilityIdentifier("refresh_button")
                     } label: {
-                        Label("Menu", systemImage: "line.3.horizontal")
+                        Image(systemName: "line.3.horizontal")
+                            .imageScale(.large)
                     }
                     .accessibilityIdentifier("menu_button")
                 }
