@@ -77,15 +77,13 @@ final class PoemViewModel: ObservableObject {
         )
         await telemetryService.track(appLaunchEvent)
         
-        async let poemTask = loadDailyPoem()
-        async let favoritesTask = loadFavorites()
-        async let aiAvailabilityTask = checkAIAvailability()
-        async let vibeTask = loadDailyVibe()
+        async let _poem: Void = loadDailyPoem()
+        async let _favorites: Void = loadFavorites()
+        async let _ai: Void = checkAIAvailability()
+        async let _vibe: Void = loadDailyVibe()
         
-        _ = await poemTask
-        _ = await favoritesTask
-        _ = await aiAvailabilityTask
-        _ = await vibeTask
+        // Await all tasks to complete
+        _ = await (_poem, _favorites, _ai, _vibe)
         
         isLoading = false
     }

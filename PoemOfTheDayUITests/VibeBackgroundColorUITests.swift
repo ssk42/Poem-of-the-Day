@@ -250,7 +250,7 @@ final class VibeBackgroundColorUITests: XCTestCase {
         
         if vibeIndicator.exists {
             // Verify the color intensity circle is visible
-            let colorIndicatorCircle = app.otherElements.matching(NSPredicate(format: "identifier CONTAINS 'color_intensity'")).firstMatch
+            _ = app.otherElements.matching(NSPredicate(format: "identifier CONTAINS 'color_intensity'")).firstMatch
             
             // Since we might not have specific identifiers, check for visual elements
             // by looking for elements near the vibe indicator

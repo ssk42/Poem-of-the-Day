@@ -50,7 +50,7 @@ final class PoemUITests: XCTestCase {
         
         // Wait for initial poem to load
         XCTAssertTrue(mainPage.waitForPoemToLoad())
-        let initialTitle = mainPage.getPoemTitle()
+        _ = mainPage.getPoemTitle()
         
         // Refresh poem
         _ = mainPage.tapRefreshButton()
@@ -128,7 +128,7 @@ final class PoemUITests: XCTestCase {
         
         // Test share button
         XCTAssertTrue(mainPage.waitForElementToAppear(mainPage.shareButton))
-        mainPage.tapShareButton()
+        _ = mainPage.tapShareButton()
         
         // Verify share sheet appears
         // Share sheet is a system UI, so we might just wait for a button or the sheet itself
@@ -229,7 +229,7 @@ final class PoemUITests: XCTestCase {
         
         // Get new poem
         let firstPoemTitle = mainPage.poemTitle.label
-        mainPage.tapRefreshButton()
+        _ = mainPage.tapRefreshButton()
         
         // Wait for new poem
         XCTAssertTrue(mainPage.waitForPoemChange(oldTitle: firstPoemTitle))

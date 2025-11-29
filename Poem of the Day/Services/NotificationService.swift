@@ -8,6 +8,23 @@
 import Foundation
 import UserNotifications
 
+// Wrapper to make UserDefaults sendable since it's thread-safe but not marked as such
+private struct SendableUserDefaults: @unchecked Sendable {
+    let defaults: UserDefaults
+    
+    init(_ defaults: UserDefaults) {
+        self.defaults = defaults
+    }
+    
+    func data(forKey defaultName: String) -> Data? {
+        defaults.data(forKey: defaultName)
+    }
+    
+    func set(_ value: Any?, forKey defaultName: String) {
+        defaults.set(value, forKey: defaultName)
+    }
+}
+
 // MARK: - Notification Configuration
 
 struct NotificationSettings: Codable {
@@ -50,14 +67,14 @@ actor NotificationService: NotificationServiceProtocol {
     // MARK: - Properties
     
     private let notificationCenter: UNUserNotificationCenter
-    nonisolated private let userDefaults: UserDefaults
+    nonisolated private let userDefaults: SendableUserDefaults
     private let notificationIdentifier = "daily_poem_notification"
     
     // MARK: - Initialization
     
     init(userDefaults: UserDefaults = UserDefaults(suiteName: AppConfiguration.Storage.appGroupIdentifier) ?? .standard) {
         self.notificationCenter = UNUserNotificationCenter.current()
-        self.userDefaults = userDefaults
+        self.userDefaults = SendableUserDefaults(userDefaults)
     }
     
     // MARK: - Authorization

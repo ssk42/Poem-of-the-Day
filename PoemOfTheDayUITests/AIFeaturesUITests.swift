@@ -85,7 +85,7 @@ final class AIFeaturesUITests: XCTestCase {
         XCTAssertTrue(vibePage.waitForPageToLoad())
         
         // Generate poem (should fail)
-        let mainPageAfterGen = vibePage.tapGenerateButton()
+        _ = vibePage.tapGenerateButton()
         
         // Verify alert appears
         let alert = app.alerts["Error"]
