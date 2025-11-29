@@ -82,16 +82,17 @@ final class PoemViewModel: ObservableObject {
         async let aiAvailabilityTask = checkAIAvailability()
         async let vibeTask = loadDailyVibe()
         
-        await poemTask
-        await favoritesTask
-        await aiAvailabilityTask
-        await vibeTask
+        _ = await poemTask
+        _ = await favoritesTask
+        _ = await aiAvailabilityTask
+        _ = await vibeTask
         
         isLoading = false
     }
     
     func refreshPoem() async {
         isLoading = true
+        errorMessage = nil // Clear previous error
         
         do {
             poemOfTheDay = try await repository.refreshDailyPoem()
