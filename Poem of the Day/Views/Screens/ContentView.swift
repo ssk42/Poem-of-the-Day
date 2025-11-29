@@ -26,11 +26,8 @@ struct ContentView: View {
     }
     
     private var toolbarPlacement: ToolbarItemPlacement {
-        #if os(visionOS)
-        return .topBarTrailing
-        #else
         return .navigationBarTrailing
-        #endif
+
     }
     
     var body: some View {
@@ -58,13 +55,25 @@ struct ContentView: View {
                 }
                 .refreshable {
                     // Don't show full screen loading for pull to refresh
-                    await viewModel.refreshPoem(showLoading: false)
+                    await viewModel.refreshPoem(showLoading: true)
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
+                        Button(action: {
+                            showHistory = true
+                        }) {
+                            Label("History", systemImage: "clock.arrow.circlepath")
+                        }
+                        
+                        Button(action: {
+                            showSettings = true
+                        }) {
+                            Label("Settings", systemImage: "gearshape")
+                        }
+                        
                         Button(action: {
                             showFavorites = true
                         }) {
@@ -74,7 +83,7 @@ struct ContentView: View {
                         
                         Button(action: {
                             Task {
-                                await viewModel.refreshPoem()
+                                await viewModel.refreshPoem(showLoading: true)
                             }
                         }) {
                             Label("Get a new poem", systemImage: "arrow.clockwise")
@@ -135,7 +144,7 @@ struct ContentView: View {
                 Button("OK", role: .cancel) { }
                 Button("Retry") {
                     Task {
-                        await viewModel.refreshPoem()
+                        await viewModel.refreshPoem(showLoading: true)
                     }
                 }
             } message: {
