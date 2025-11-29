@@ -74,7 +74,9 @@ struct ContentView: View {
                         .accessibilityIdentifier("favorites_button")
                         
                         Button(action: {
-                            viewModel.loadPoem(forceRefresh: true)
+                            Task {
+                                await viewModel.refreshPoem()
+                            }
                         }) {
                             Label("Get a new poem", systemImage: "arrow.clockwise")
                         }

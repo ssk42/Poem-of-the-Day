@@ -1,0 +1,369 @@
+Build and Test with Bazel	Set up job	﻿2025-11-29T16:59:36.8785760Z Current runner version: '2.329.0'
+Build and Test with Bazel	Set up job	2025-11-29T16:59:36.8800090Z ##[group]Runner Image Provisioner
+Build and Test with Bazel	Set up job	2025-11-29T16:59:36.8800570Z Hosted Compute Agent
+Build and Test with Bazel	Set up job	2025-11-29T16:59:36.8800890Z Version: 20251124.448
+Build and Test with Bazel	Set up job	2025-11-29T16:59:36.8801270Z Commit: fda5086b43ec66ade217e5fcd18146c879571177
+Build and Test with Bazel	Set up job	2025-11-29T16:59:36.8801690Z Build Date: 2025-11-24T21:16:26Z
+Build and Test with Bazel	Set up job	2025-11-29T16:59:36.8802080Z ##[endgroup]
+Build and Test with Bazel	Set up job	2025-11-29T16:59:36.8802400Z ##[group]Operating System
+Build and Test with Bazel	Set up job	2025-11-29T16:59:36.8802740Z macOS
+Build and Test with Bazel	Set up job	2025-11-29T16:59:36.8803030Z 15.7.2
+Build and Test with Bazel	Set up job	2025-11-29T16:59:36.8803320Z 24G325
+Build and Test with Bazel	Set up job	2025-11-29T16:59:36.8803600Z ##[endgroup]
+Build and Test with Bazel	Set up job	2025-11-29T16:59:36.8803890Z ##[group]Runner Image
+Build and Test with Bazel	Set up job	2025-11-29T16:59:36.8804230Z Image: macos-15-arm64
+Build and Test with Bazel	Set up job	2025-11-29T16:59:36.8804530Z Version: 20251126.0044
+Build and Test with Bazel	Set up job	2025-11-29T16:59:36.8805190Z Included Software: https://github.com/actions/runner-images/blob/macos-15-arm64/20251126.0044/images/macos/macos-15-arm64-Readme.md
+Build and Test with Bazel	Set up job	2025-11-29T16:59:36.8806100Z Image Release: https://github.com/actions/runner-images/releases/tag/macos-15-arm64%2F20251126.0044
+Build and Test with Bazel	Set up job	2025-11-29T16:59:36.8806780Z ##[endgroup]
+Build and Test with Bazel	Set up job	2025-11-29T16:59:36.8807430Z ##[group]GITHUB_TOKEN Permissions
+Build and Test with Bazel	Set up job	2025-11-29T16:59:36.8808300Z Contents: read
+Build and Test with Bazel	Set up job	2025-11-29T16:59:36.8808610Z Metadata: read
+Build and Test with Bazel	Set up job	2025-11-29T16:59:36.8808930Z Packages: read
+Build and Test with Bazel	Set up job	2025-11-29T16:59:36.8809230Z ##[endgroup]
+Build and Test with Bazel	Set up job	2025-11-29T16:59:36.8810510Z Secret source: Actions
+Build and Test with Bazel	Set up job	2025-11-29T16:59:36.8810880Z Prepare workflow directory
+Build and Test with Bazel	Set up job	2025-11-29T16:59:36.9014590Z Prepare all required actions
+Build and Test with Bazel	Set up job	2025-11-29T16:59:36.9041190Z Getting action download info
+Build and Test with Bazel	Set up job	2025-11-29T16:59:37.2101150Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+Build and Test with Bazel	Set up job	2025-11-29T16:59:38.3625970Z Download action repository 'actions/cache@v4' (SHA:0057852bfaa89a56745cba8c7296529d2fc39830)
+Build and Test with Bazel	Set up job	2025-11-29T16:59:38.4623390Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+Build and Test with Bazel	Set up job	2025-11-29T16:59:38.6254690Z Complete job name: Build and Test with Bazel
+Build and Test with Bazel	Checkout code	﻿2025-11-29T16:59:38.6660940Z ##[group]Run actions/checkout@v4
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:38.6661560Z with:
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:38.6661900Z   repository: ssk42/Poem-of-the-Day
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:38.6662460Z   token: ***
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:38.6662770Z   ssh-strict: true
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:38.6663090Z   ssh-user: git
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:38.6663410Z   persist-credentials: true
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:38.6663770Z   clean: true
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:38.6664090Z   sparse-checkout-cone-mode: true
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:38.6664480Z   fetch-depth: 1
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:38.6664800Z   fetch-tags: false
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:38.6665120Z   show-progress: true
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:38.6665460Z   lfs: false
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:38.6665760Z   submodules: false
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:38.6666280Z   set-safe-directory: true
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:38.6666830Z ##[endgroup]
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:38.9221960Z Syncing repository: ssk42/Poem-of-the-Day
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:38.9223410Z ##[group]Getting Git version info
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:38.9224010Z Working directory is '/Users/runner/work/Poem-of-the-Day/Poem-of-the-Day'
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:38.9225390Z [command]/opt/homebrew/bin/git version
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0024140Z git version 2.50.1
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0051650Z ##[endgroup]
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0058970Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/b5b88c27-68da-4184-8b1d-30b9c62b0b88/.gitconfig'
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0064650Z Temporarily overriding HOME='/Users/runner/work/_temp/b5b88c27-68da-4184-8b1d-30b9c62b0b88' before making global git config changes
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0066000Z Adding repository directory to the temporary git global config as a safe directory
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0073500Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/Poem-of-the-Day/Poem-of-the-Day
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0170020Z Deleting the contents of '/Users/runner/work/Poem-of-the-Day/Poem-of-the-Day'
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0171690Z ##[group]Initializing the repository
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0176270Z [command]/opt/homebrew/bin/git init /Users/runner/work/Poem-of-the-Day/Poem-of-the-Day
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0365140Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0366980Z hint: is subject to change. To configure the initial branch name to use in all
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0367970Z hint: of your new repositories, which will suppress this warning, call:
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0368700Z hint:
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0369340Z hint: 	git config --global init.defaultBranch <name>
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0369900Z hint:
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0403250Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0404340Z hint: 'development'. The just-created branch can be renamed via this command:
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0405070Z hint:
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0405530Z hint: 	git branch -m <name>
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0405990Z hint:
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0406630Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0407580Z Initialized empty Git repository in /Users/runner/work/Poem-of-the-Day/Poem-of-the-Day/.git/
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0409420Z [command]/opt/homebrew/bin/git remote add origin https://github.com/ssk42/Poem-of-the-Day
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0441110Z ##[endgroup]
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0441830Z ##[group]Disabling automatic garbage collection
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0444740Z [command]/opt/homebrew/bin/git config --local gc.auto 0
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0500650Z ##[endgroup]
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0501640Z ##[group]Setting up auth
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0504710Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.0561320Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.1470550Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.1545360Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.2264110Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.2318230Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.3029750Z [command]/opt/homebrew/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.3088780Z ##[endgroup]
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.3089410Z ##[group]Fetching the repository
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:39.3094130Z [command]/opt/homebrew/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +8f65beee85932f44557b4e8959ddec5deaa30ae0:refs/remotes/origin/main
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:40.5051170Z From https://github.com/ssk42/Poem-of-the-Day
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:40.5052670Z  * [new ref]         8f65beee85932f44557b4e8959ddec5deaa30ae0 -> origin/main
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:40.5118200Z ##[endgroup]
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:40.5118900Z ##[group]Determining the checkout info
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:40.5119700Z ##[endgroup]
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:40.5122250Z [command]/opt/homebrew/bin/git sparse-checkout disable
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:40.5192220Z [command]/opt/homebrew/bin/git config --local --unset-all extensions.worktreeConfig
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:40.5248210Z ##[group]Checking out the ref
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:40.5250010Z [command]/opt/homebrew/bin/git checkout --progress --force -B main refs/remotes/origin/main
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:40.5578910Z Switched to a new branch 'main'
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:40.5583170Z branch 'main' set up to track 'origin/main'.
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:40.5588930Z ##[endgroup]
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:40.5656370Z [command]/opt/homebrew/bin/git log -1 --format=%H
+Build and Test with Bazel	Checkout code	2025-11-29T16:59:40.5713450Z 8f65beee85932f44557b4e8959ddec5deaa30ae0
+Build and Test with Bazel	Install Bazelisk	﻿2025-11-29T16:59:40.5872140Z ##[group]Run brew install bazelisk
+Build and Test with Bazel	Install Bazelisk	2025-11-29T16:59:40.5873060Z [36;1mbrew install bazelisk[0m
+Build and Test with Bazel	Install Bazelisk	2025-11-29T16:59:40.5874130Z [36;1mbazelisk version[0m
+Build and Test with Bazel	Install Bazelisk	2025-11-29T16:59:40.5910290Z shell: /bin/bash -e {0}
+Build and Test with Bazel	Install Bazelisk	2025-11-29T16:59:40.5910960Z ##[endgroup]
+Build and Test with Bazel	Install Bazelisk	2025-11-29T16:59:42.9463340Z ✔︎ JSON API formula_tap_migrations.jws.json
+Build and Test with Bazel	Install Bazelisk	2025-11-29T16:59:42.9563420Z ✔︎ JSON API cask_tap_migrations.jws.json
+Build and Test with Bazel	Install Bazelisk	2025-11-29T16:59:43.9469740Z ##[warning]bazelisk 1.27.0 is already installed and up-to-date.
+Build and Test with Bazel	Install Bazelisk	To reinstall 1.27.0, run:
+Build and Test with Bazel	Install Bazelisk	  brew reinstall bazelisk
+Build and Test with Bazel	Install Bazelisk	
+Build and Test with Bazel	Install Bazelisk	2025-11-29T16:59:43.9986130Z 2025/11/29 16:59:43 Downloading https://releases.bazel.build/8.3.1/release/bazel-8.3.1-darwin-arm64...
+Build and Test with Bazel	Install Bazelisk	2025-11-29T16:59:44.6597170Z Bazelisk version: 1.27.0
+Build and Test with Bazel	Install Bazelisk	2025-11-29T16:59:44.6793880Z Extracting Bazel installation...
+Build and Test with Bazel	Install Bazelisk	2025-11-29T16:59:45.3815320Z Starting local Bazel server (8.3.1) and connecting to it...
+Build and Test with Bazel	Install Bazelisk	2025-11-29T16:59:51.5585840Z Build label: 8.3.1
+Build and Test with Bazel	Install Bazelisk	2025-11-29T16:59:51.5591490Z Build target: @@//src/main/java/com/google/devtools/build/lib/bazel:BazelServer
+Build and Test with Bazel	Install Bazelisk	2025-11-29T16:59:51.5614900Z Build time: Mon Jun 30 16:26:17 2025 (1751300777)
+Build and Test with Bazel	Install Bazelisk	2025-11-29T16:59:51.5617990Z Build timestamp: 1751300777
+Build and Test with Bazel	Install Bazelisk	2025-11-29T16:59:51.5618580Z Build timestamp as int: 1751300777
+Build and Test with Bazel	Cache Bazel artifacts	﻿2025-11-29T16:59:51.7462680Z ##[group]Run actions/cache@v4
+Build and Test with Bazel	Cache Bazel artifacts	2025-11-29T16:59:51.7463030Z with:
+Build and Test with Bazel	Cache Bazel artifacts	2025-11-29T16:59:51.7463260Z   path: ~/.cache/bazel
+Build and Test with Bazel	Cache Bazel artifacts	~/Library/Caches/bazel
+Build and Test with Bazel	Cache Bazel artifacts	
+Build and Test with Bazel	Cache Bazel artifacts	2025-11-29T16:59:51.7463760Z   key: bazel-macOS-d2c6af6a20aa517595728efab8a084c90fdf9194466719476027e4e2fac8fe92
+Build and Test with Bazel	Cache Bazel artifacts	2025-11-29T16:59:51.7464260Z   restore-keys: bazel-macOS-
+Build and Test with Bazel	Cache Bazel artifacts	
+Build and Test with Bazel	Cache Bazel artifacts	2025-11-29T16:59:51.7464490Z   enableCrossOsArchive: false
+Build and Test with Bazel	Cache Bazel artifacts	2025-11-29T16:59:51.7464740Z   fail-on-cache-miss: false
+Build and Test with Bazel	Cache Bazel artifacts	2025-11-29T16:59:51.7465020Z   lookup-only: false
+Build and Test with Bazel	Cache Bazel artifacts	2025-11-29T16:59:51.7465240Z   save-always: false
+Build and Test with Bazel	Cache Bazel artifacts	2025-11-29T16:59:51.7465730Z ##[endgroup]
+Build and Test with Bazel	Cache Bazel artifacts	2025-11-29T16:59:52.0690930Z Cache not found for input keys: bazel-macOS-d2c6af6a20aa517595728efab8a084c90fdf9194466719476027e4e2fac8fe92, bazel-macOS-
+Build and Test with Bazel	Build main app	﻿2025-11-29T16:59:52.0758720Z ##[group]Run cd "Poem of the Day"
+Build and Test with Bazel	Build main app	2025-11-29T16:59:52.0759110Z [36;1mcd "Poem of the Day"[0m
+Build and Test with Bazel	Build main app	2025-11-29T16:59:52.0759380Z [36;1mbazelisk build //:PoemOfTheDay[0m
+Build and Test with Bazel	Build main app	2025-11-29T16:59:52.0794050Z shell: /bin/bash -e {0}
+Build and Test with Bazel	Build main app	2025-11-29T16:59:52.0794260Z ##[endgroup]
+Build and Test with Bazel	Build main app	2025-11-29T16:59:52.1868290Z INFO: Options provided by the client:
+Build and Test with Bazel	Build main app	2025-11-29T16:59:52.1898760Z   Inherited 'common' options: --isatty=0 --terminal_columns=80
+Build and Test with Bazel	Build main app	2025-11-29T16:59:52.1899650Z INFO: Reading rc options for 'build' from /Users/runner/work/Poem-of-the-Day/Poem-of-the-Day/.bazelrc:
+Build and Test with Bazel	Build main app	2025-11-29T16:59:52.1902340Z   'build' options: --announce_rc --verbose_failures --apple_platform_type=ios --ios_minimum_os=17.0 --apple_generate_dsym --symlink_prefix=bazel- --experimental_reuse_sandbox_directories --worker_sandboxing
+Build and Test with Bazel	Build main app	2025-11-29T16:59:52.2338670Z Computing main repo mapping: 
+Build and Test with Bazel	Build main app	2025-11-29T16:59:53.2516810Z Computing main repo mapping: 
+Build and Test with Bazel	Build main app	2025-11-29T16:59:53.5191250Z WARNING: For repository 'rules_swift', the root module requires module version rules_swift@2.1.1, but got rules_swift@2.4.0 in the resolved dependency graph. Please update the version in your MODULE.bazel or set --check_direct_dependencies=off
+Build and Test with Bazel	Build main app	2025-11-29T16:59:53.7016290Z Loading: 
+Build and Test with Bazel	Build main app	2025-11-29T16:59:53.7033730Z Loading: 0 packages loaded
+Build and Test with Bazel	Build main app	2025-11-29T16:59:54.7671850Z Loading: 0 packages loaded
+Build and Test with Bazel	Build main app	2025-11-29T16:59:55.8006830Z Loading: 0 packages loaded
+Build and Test with Bazel	Build main app	2025-11-29T16:59:55.8107090Z     currently loading: 
+Build and Test with Bazel	Build main app	2025-11-29T16:59:56.5641540Z Analyzing: target //:PoemOfTheDay (1 packages loaded, 0 targets configured)
+Build and Test with Bazel	Build main app	2025-11-29T16:59:56.5801710Z Analyzing: target //:PoemOfTheDay (1 packages loaded, 0 targets configured)
+Build and Test with Bazel	Build main app	2025-11-29T16:59:56.5802100Z 
+Build and Test with Bazel	Build main app	2025-11-29T16:59:57.6060750Z Analyzing: target //:PoemOfTheDay (39 packages loaded, 17 targets configured)
+Build and Test with Bazel	Build main app	2025-11-29T16:59:57.6178740Z 
+Build and Test with Bazel	Build main app	2025-11-29T16:59:58.6882570Z Analyzing: target //:PoemOfTheDay (93 packages loaded, 775 targets configured)
+Build and Test with Bazel	Build main app	2025-11-29T16:59:58.6984000Z 
+Build and Test with Bazel	Build main app	2025-11-29T17:00:00.5258090Z Analyzing: target //:PoemOfTheDay (97 packages loaded, 1175 targets configured)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:00.5364480Z 
+Build and Test with Bazel	Build main app	2025-11-29T17:00:01.5449820Z Analyzing: target //:PoemOfTheDay (111 packages loaded, 1533 targets configured)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:01.5552240Z 
+Build and Test with Bazel	Build main app	2025-11-29T17:00:02.6183840Z Analyzing: target //:PoemOfTheDay (113 packages loaded, 3484 targets configured)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:02.6185310Z 
+Build and Test with Bazel	Build main app	2025-11-29T17:00:03.6874240Z Analyzing: target //:PoemOfTheDay (113 packages loaded, 3484 targets configured)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:03.6874730Z 
+Build and Test with Bazel	Build main app	2025-11-29T17:00:04.8013730Z Analyzing: target //:PoemOfTheDay (113 packages loaded, 3484 targets configured)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:04.8113250Z 
+Build and Test with Bazel	Build main app	2025-11-29T17:00:07.2062190Z Analyzing: target //:PoemOfTheDay (113 packages loaded, 3484 targets configured)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:07.2162020Z 
+Build and Test with Bazel	Build main app	2025-11-29T17:00:09.6114670Z Analyzing: target //:PoemOfTheDay (113 packages loaded, 3484 targets configured)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:09.6167390Z 
+Build and Test with Bazel	Build main app	2025-11-29T17:00:11.0261940Z Analyzing: target //:PoemOfTheDay (113 packages loaded, 3484 targets configured)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:11.0262730Z 
+Build and Test with Bazel	Build main app	2025-11-29T17:00:12.1240160Z Analyzing: target //:PoemOfTheDay (113 packages loaded, 3484 targets configured)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:12.1340170Z 
+Build and Test with Bazel	Build main app	2025-11-29T17:00:14.2428730Z Analyzing: target //:PoemOfTheDay (113 packages loaded, 3484 targets configured)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:14.2529990Z 
+Build and Test with Bazel	Build main app	2025-11-29T17:00:16.4742490Z Analyzing: target //:PoemOfTheDay (113 packages loaded, 3484 targets configured)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:16.4849980Z 
+Build and Test with Bazel	Build main app	2025-11-29T17:00:17.2080720Z INFO: Analyzed target //:PoemOfTheDay (118 packages loaded, 3624 targets configured).
+Build and Test with Bazel	Build main app	2025-11-29T17:00:17.5411770Z [18 / 52] Creating runfiles tree bazel-out/darwin_arm64-opt-exec-ST-d57f47055a04/bin/external/rules_apple+/tools/codesigningtool/codesigningtool.runfiles [for tool]; 0s local ... (3 actions, 2 running)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:19.2686570Z [36 / 76] Executing apple_genrule @@apple_support+//crosstool:exec_wrapped_clang.target_config [for tool]; 1s darwin-sandbox ... (3 actions running)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:20.5155840Z [37 / 76] Executing apple_genrule @@apple_support+//crosstool:exec_wrapped_clang.target_config [for tool]; 2s darwin-sandbox ... (3 actions, 2 running)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:21.5137250Z [43 / 76] Executing apple_genrule @@apple_support+//crosstool:exec_libtool.target_config [for tool]; 1s darwin-sandbox ... (2 actions, 1 running)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:23.4958780Z [47 / 76] Executing apple_genrule @@apple_support+//crosstool:exec_libtool.target_config [for tool]; 2s darwin-sandbox ... (2 actions running)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:24.5431630Z [48 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 3s local ... (2 actions, 1 running)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:25.5665230Z [48 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 4s local ... (3 actions running)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:28.2593790Z [49 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 6s local ... (3 actions, 2 running)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:29.8774940Z [49 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 8s local ... (3 actions running)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:30.9231230Z [50 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 9s local ... (3 actions running)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:31.9401350Z [51 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 10s local ... (3 actions running)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:32.9931550Z [52 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 11s local ... (3 actions running)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:34.0242670Z [54 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 12s local ... (3 actions running)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:35.0862150Z [56 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 13s local ... (3 actions running)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:36.1563370Z [58 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 14s local ... (3 actions running)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:37.2309470Z [63 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 15s local ... (2 actions running)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:38.8479550Z [64 / 76] AssetCatalogCompile PoemOfTheDay-intermediates/xcassets; 17s local ... (2 actions, 1 running)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:40.2481990Z [67 / 76] Compiling Swift module //:PoemOfTheDayLib; 0s worker ... (2 actions, 1 running)
+Build and Test with Bazel	Build main app	2025-11-29T17:00:41.4014040Z [68 / 76] Compiling Swift module //:PoemOfTheDayLib; 1s worker
+Build and Test with Bazel	Build main app	2025-11-29T17:00:52.6192440Z [68 / 76] Compiling Swift module //:PoemOfTheDayLib; 12s worker
+Build and Test with Bazel	Build main app	2025-11-29T17:01:23.8965080Z [68 / 76] Compiling Swift module //:PoemOfTheDayLib; 44s worker
+Build and Test with Bazel	Build main app	2025-11-29T17:01:44.8219000Z ERROR: /Users/runner/work/Poem-of-the-Day/Poem-of-the-Day/BUILD.bazel:7:14: Compiling Swift module //:PoemOfTheDayLib failed: (Exit 1): worker failed: error executing SwiftCompile command (from target //:PoemOfTheDayLib) 
+Build and Test with Bazel	Build main app	2025-11-29T17:01:44.8318540Z   (cd /private/var/tmp/_bazel_runner/fe2d0117d2d9b33eff91f94ca60a61fc/execroot/_main && \
+Build and Test with Bazel	Build main app	2025-11-29T17:01:44.8432020Z   exec env - \
+Build and Test with Bazel	Build main app	2025-11-29T17:01:44.8542220Z     APPLE_SDK_PLATFORM=iPhoneSimulator \
+Build and Test with Bazel	Build main app	2025-11-29T17:01:44.8659760Z     APPLE_SDK_VERSION_OVERRIDE=18.5 \
+Build and Test with Bazel	Build main app	2025-11-29T17:01:44.8762510Z     PATH=/Users/runner/Library/Caches/bazelisk/downloads/sha256/0cac3a67dc5429c68272dc6944104952e9e4cf84b29d126a5ff3fbaa59045217/bin:/opt/homebrew/lib/ruby/gems/3.3.0/bin:/opt/homebrew/opt/ruby@3.3/bin:/Users/runner/.local/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Users/runner/.cargo/bin:/usr/local/opt/curl/bin:/usr/local/bin:/usr/local/sbin:/Users/runner/bin:/Users/runner/.yarn/bin:/Users/runner/Library/Android/sdk/tools:/Users/runner/Library/Android/sdk/platform-tools:/Library/Frameworks/Python.framework/Versions/Current/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/usr/bin:/bin:/usr/sbin:/sbin:/Users/runner/.dotnet/tools \
+Build and Test with Bazel	Build main app	2025-11-29T17:01:44.8880260Z     XCODE_VERSION_OVERRIDE=16.4.0.16F6 \
+Build and Test with Bazel	Build main app	2025-11-29T17:01:44.8984610Z   bazel-out/darwin_arm64-opt-exec-ST-d57f47055a04/bin/external/rules_swift+/tools/worker/worker swiftc @bazel-out/ios_sim_arm64-fastbuild-ios-sim_arm64-min17.0-applebin_ios-ST-f3259bc0b2ed/bin/Poem_of_the_Day.swiftmodule-0.params)
+Build and Test with Bazel	Build main app	2025-11-29T17:01:44.9087240Z # Configuration: 8177ed819b8dacead84e28ccbf63a7d738b704869a43c8ee2489cd57c9d65b4e
+Build and Test with Bazel	Build main app	2025-11-29T17:01:44.9192000Z # Execution platform: @@platforms//host:host
+Build and Test with Bazel	Build main app	2025-11-29T17:01:44.9294200Z Poem of the Day/Services/NotificationService.swift:53:5: warning: 'nonisolated' can not be applied to variable with non-'Sendable' type 'UserDefaults'; this is an error in the Swift 6 language mode
+Build and Test with Bazel	Build main app	2025-11-29T17:01:44.9396170Z  51 |     
+Build and Test with Bazel	Build main app	2025-11-29T17:01:44.9502630Z  52 |     private let notificationCenter: UNUserNotificationCenter
+Build and Test with Bazel	Build main app	2025-11-29T17:01:44.9619300Z  53 |     nonisolated private let userDefaults: UserDefaults
+Build and Test with Bazel	Build main app	2025-11-29T17:01:44.9720830Z     |     `- warning: 'nonisolated' can not be applied to variable with non-'Sendable' type 'UserDefaults'; this is an error in the Swift 6 language mode
+Build and Test with Bazel	Build main app	2025-11-29T17:01:44.9822600Z  54 |     private let notificationIdentifier = "daily_poem_notification"
+Build and Test with Bazel	Build main app	2025-11-29T17:01:44.9933650Z  55 |     
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.0039760Z 
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.0141680Z /Applications/Xcode_16.4.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSUserDefaults.h:49:12: note: class 'UserDefaults' does not conform to the 'Sendable' protocol
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.0244280Z  47 |  NSUserDefaults can be observed using Key-Value Observing for any key stored in it. Using NSKeyValueObservingOptionPrior to observe changes from other processes or devices will behave as though NSKeyValueObservingOptionPrior was not specified.
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.0346620Z  48 |  */
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.0448450Z  49 | @interface NSUserDefaults : NSObject {
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.0550300Z     |            `- note: class 'UserDefaults' does not conform to the 'Sendable' protocol
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.0671610Z  50 | @private
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.0773940Z  51 |     id _kvo_;
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.0851150Z Poem of the Day/Services/NotificationService.swift:53:5: warning: 'nonisolated' can not be applied to variable with non-'Sendable' type 'UserDefaults'; this is an error in the Swift 6 language mode
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.0924260Z  51 |     
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.0999160Z  52 |     private let notificationCenter: UNUserNotificationCenter
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.1100730Z  53 |     nonisolated private let userDefaults: UserDefaults
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.1202800Z     |     `- warning: 'nonisolated' can not be applied to variable with non-'Sendable' type 'UserDefaults'; this is an error in the Swift 6 language mode
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.1304520Z  54 |     private let notificationIdentifier = "daily_poem_notification"
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.1405800Z  55 |     
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.1506780Z 
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.1608220Z /Applications/Xcode_16.4.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSUserDefaults.h:49:12: note: class 'UserDefaults' does not conform to the 'Sendable' protocol
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.1711310Z  47 |  NSUserDefaults can be observed using Key-Value Observing for any key stored in it. Using NSKeyValueObservingOptionPrior to observe changes from other processes or devices will behave as though NSKeyValueObservingOptionPrior was not specified.
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.1812920Z  48 |  */
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.1913930Z  49 | @interface NSUserDefaults : NSObject {
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.2015330Z     |            `- note: class 'UserDefaults' does not conform to the 'Sendable' protocol
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.2116620Z  50 | @private
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.2217800Z  51 |     id _kvo_;
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.2318710Z 
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.2420230Z Poem of the Day/Services/NotificationService.swift:156:26: warning: non-sendable type 'UserDefaults' of property 'userDefaults' cannot exit nonisolated context; this is an error in the Swift 6 language mode
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.2521740Z 154 |     
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.2623000Z 155 |     nonisolated func getSettings() -> NotificationSettings {
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.2724500Z 156 |         guard let data = userDefaults.data(forKey: "notificationSettings"),
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.2826010Z     |                          `- warning: non-sendable type 'UserDefaults' of property 'userDefaults' cannot exit nonisolated context; this is an error in the Swift 6 language mode
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.2928480Z 157 |               let settings = try? JSONDecoder().decode(NotificationSettings.self, from: data) else {
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.3030120Z 158 |             return .default
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.3130870Z 
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.3232600Z /Applications/Xcode_16.4.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSUserDefaults.h:49:12: note: class 'UserDefaults' does not conform to the 'Sendable' protocol
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.3334600Z  47 |  NSUserDefaults can be observed using Key-Value Observing for any key stored in it. Using NSKeyValueObservingOptionPrior to observe changes from other processes or devices will behave as though NSKeyValueObservingOptionPrior was not specified.
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.3434950Z  48 |  */
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.3536170Z  49 | @interface NSUserDefaults : NSObject {
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.3636920Z     |            `- note: class 'UserDefaults' does not conform to the 'Sendable' protocol
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.3737850Z  50 | @private
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.3838710Z  51 |     id _kvo_;
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.3939900Z 
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.4041380Z Poem of the Day/Services/NotificationService.swift:165:9: warning: non-sendable type 'UserDefaults' of property 'userDefaults' cannot exit nonisolated context; this is an error in the Swift 6 language mode
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.4142980Z 163 |     nonisolated func saveSettings(_ settings: NotificationSettings) {
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.4248720Z 164 |         guard let data = try? JSONEncoder().encode(settings) else { return }
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.4354360Z 165 |         userDefaults.set(data, forKey: "notificationSettings")
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.4455270Z     |         `- warning: non-sendable type 'UserDefaults' of property 'userDefaults' cannot exit nonisolated context; this is an error in the Swift 6 language mode
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.4579110Z 166 |     }
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.4681130Z 167 | }
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.4782200Z 
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.4883730Z /Applications/Xcode_16.4.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSUserDefaults.h:49:12: note: class 'UserDefaults' does not conform to the 'Sendable' protocol
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.4983970Z  47 |  NSUserDefaults can be observed using Key-Value Observing for any key stored in it. Using NSKeyValueObservingOptionPrior to observe changes from other processes or devices will behave as though NSKeyValueObservingOptionPrior was not specified.
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.5084060Z  48 |  */
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.5185200Z  49 | @interface NSUserDefaults : NSObject {
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.5286590Z     |            `- note: class 'UserDefaults' does not conform to the 'Sendable' protocol
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.5386900Z  50 | @private
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.5487810Z  51 |     id _kvo_;
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.5588830Z Poem of the Day/ViewModels/PoemViewModel.swift:80:19: warning: constant 'poemTask' inferred to have type '()', which may be unexpected
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.5688960Z  78 |         await telemetryService.track(appLaunchEvent)
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.5789510Z  79 |         
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.5890670Z  80 |         async let poemTask = loadDailyPoem()
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.5991090Z     |                   |- warning: constant 'poemTask' inferred to have type '()', which may be unexpected
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.6091160Z     |                   `- note: add an explicit type annotation to silence this warning
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.6192920Z  81 |         async let favoritesTask = loadFavorites()
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.6292850Z  82 |         async let aiAvailabilityTask = checkAIAvailability()
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.6392950Z 
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.6494260Z Poem of the Day/ViewModels/PoemViewModel.swift:81:19: warning: constant 'favoritesTask' inferred to have type '()', which may be unexpected
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.6594670Z  79 |         
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.6694980Z  80 |         async let poemTask = loadDailyPoem()
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.6796110Z  81 |         async let favoritesTask = loadFavorites()
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.6896980Z     |                   |- warning: constant 'favoritesTask' inferred to have type '()', which may be unexpected
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.6897690Z     |                   `- note: add an explicit type annotation to silence this warning
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.6898230Z  82 |         async let aiAvailabilityTask = checkAIAvailability()
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.6898930Z  83 |         async let vibeTask = loadDailyVibe()
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.6899160Z 
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.6899820Z Poem of the Day/ViewModels/PoemViewModel.swift:82:19: warning: constant 'aiAvailabilityTask' inferred to have type '()', which may be unexpected
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.7001050Z  80 |         async let poemTask = loadDailyPoem()
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.7101980Z  81 |         async let favoritesTask = loadFavorites()
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.7203790Z  82 |         async let aiAvailabilityTask = checkAIAvailability()
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.7305070Z     |                   |- warning: constant 'aiAvailabilityTask' inferred to have type '()', which may be unexpected
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.7406800Z     |                   `- note: add an explicit type annotation to silence this warning
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.7508010Z  83 |         async let vibeTask = loadDailyVibe()
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.7609000Z  84 |         
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.7709630Z 
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.7810570Z Poem of the Day/ViewModels/PoemViewModel.swift:83:19: warning: constant 'vibeTask' inferred to have type '()', which may be unexpected
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.7911990Z  81 |         async let favoritesTask = loadFavorites()
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.8013160Z  82 |         async let aiAvailabilityTask = checkAIAvailability()
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.8114280Z  83 |         async let vibeTask = loadDailyVibe()
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.8215540Z     |                   |- warning: constant 'vibeTask' inferred to have type '()', which may be unexpected
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.8317150Z     |                   `- note: add an explicit type annotation to silence this warning
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.8418380Z  84 |         
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.8519440Z  85 |         await poemTask
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.8620720Z 
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.8722230Z Poem of the Day/Views/Screens/ContentView.swift:77:39: error: value of type 'PoemViewModel' has no dynamic member 'loadPoem' using key path from root type 'PoemViewModel'
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.8823600Z  75 |                         
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.8924730Z  76 |                         Button(action: {
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.9025850Z  77 |                             viewModel.loadPoem(forceRefresh: true)
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.9127060Z     |                                       `- error: value of type 'PoemViewModel' has no dynamic member 'loadPoem' using key path from root type 'PoemViewModel'
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.9228290Z  78 |                         }) {
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.9329960Z  79 |                             Label("Get a new poem", systemImage: "arrow.clockwise")
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.9434160Z 
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.9535560Z Poem of the Day/Views/Screens/ContentView.swift:77:29: error: referencing subscript 'subscript(dynamicMember:)' requires wrapper 'ObservedObject<PoemViewModel>.Wrapper'
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.9636940Z  75 |                         
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.9738250Z  76 |                         Button(action: {
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.9839430Z  77 |                             viewModel.loadPoem(forceRefresh: true)
+Build and Test with Bazel	Build main app	2025-11-29T17:01:45.9940820Z     |                             `- error: referencing subscript 'subscript(dynamicMember:)' requires wrapper 'ObservedObject<PoemViewModel>.Wrapper'
+Build and Test with Bazel	Build main app	2025-11-29T17:01:46.0042030Z  78 |                         }) {
+Build and Test with Bazel	Build main app	2025-11-29T17:01:46.0161460Z  79 |                             Label("Get a new poem", systemImage: "arrow.clockwise")
+Build and Test with Bazel	Build main app	2025-11-29T17:01:46.0161700Z 
+Build and Test with Bazel	Build main app	2025-11-29T17:01:46.0161990Z Poem of the Day/Views/Screens/ContentView.swift:77:39: error: cannot call value of non-function type 'Binding<Subject>'
+Build and Test with Bazel	Build main app	2025-11-29T17:01:46.0163110Z  75 |                         
+Build and Test with Bazel	Build main app	2025-11-29T17:01:46.0163310Z  76 |                         Button(action: {
+Build and Test with Bazel	Build main app	2025-11-29T17:01:46.0163560Z  77 |                             viewModel.loadPoem(forceRefresh: true)
+Build and Test with Bazel	Build main app	2025-11-29T17:01:46.0163900Z     |                                       `- error: cannot call value of non-function type 'Binding<Subject>'
+Build and Test with Bazel	Build main app	2025-11-29T17:01:46.0164160Z  78 |                         }) {
+Build and Test with Bazel	Build main app	2025-11-29T17:01:46.0164440Z  79 |                             Label("Get a new poem", systemImage: "arrow.clockwise")
+Build and Test with Bazel	Build main app	2025-11-29T17:01:46.0164810Z Target //:PoemOfTheDay failed to build
+Build and Test with Bazel	Build main app	2025-11-29T17:01:46.0165040Z INFO: Elapsed time: 112.790s, Critical Path: 77.83s
+Build and Test with Bazel	Build main app	2025-11-29T17:01:46.0165320Z INFO: 69 processes: 39 internal, 29 darwin-sandbox, 1 local.
+Build and Test with Bazel	Build main app	2025-11-29T17:01:46.0165600Z ERROR: Build did NOT complete successfully
+Build and Test with Bazel	Build main app	2025-11-29T17:01:46.0179280Z ##[error]Process completed with exit code 1.
+Build and Test with Bazel	Upload test results	﻿2025-11-29T17:01:46.0324440Z ##[group]Run actions/upload-artifact@v4
+Build and Test with Bazel	Upload test results	2025-11-29T17:01:46.0324680Z with:
+Build and Test with Bazel	Upload test results	2025-11-29T17:01:46.0324820Z   name: test-results
+Build and Test with Bazel	Upload test results	2025-11-29T17:01:46.0325050Z   path: Poem of the Day/bazel-testlogs/
+Build and Test with Bazel	Upload test results	
+Build and Test with Bazel	Upload test results	2025-11-29T17:01:46.0325270Z   if-no-files-found: warn
+Build and Test with Bazel	Upload test results	2025-11-29T17:01:46.0325430Z   compression-level: 6
+Build and Test with Bazel	Upload test results	2025-11-29T17:01:46.0325570Z   overwrite: false
+Build and Test with Bazel	Upload test results	2025-11-29T17:01:46.0325730Z   include-hidden-files: false
+Build and Test with Bazel	Upload test results	2025-11-29T17:01:46.0325890Z ##[endgroup]
+Build and Test with Bazel	Upload test results	2025-11-29T17:01:46.5222830Z ##[warning]No files were found with the provided path: Poem of the Day/bazel-testlogs/. No artifacts will be uploaded.
+Build and Test with Bazel	Post Checkout code	﻿2025-11-29T17:01:46.5364580Z Post job cleanup.
+Build and Test with Bazel	Post Checkout code	2025-11-29T17:01:46.6800100Z [command]/opt/homebrew/bin/git version
+Build and Test with Bazel	Post Checkout code	2025-11-29T17:01:46.6898390Z git version 2.50.1
+Build and Test with Bazel	Post Checkout code	2025-11-29T17:01:46.7403810Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/68a9baf0-5294-4c48-a71b-217810367682/.gitconfig'
+Build and Test with Bazel	Post Checkout code	2025-11-29T17:01:46.7504250Z Temporarily overriding HOME='/Users/runner/work/_temp/68a9baf0-5294-4c48-a71b-217810367682' before making global git config changes
+Build and Test with Bazel	Post Checkout code	2025-11-29T17:01:46.7605930Z Adding repository directory to the temporary git global config as a safe directory
+Build and Test with Bazel	Post Checkout code	2025-11-29T17:01:46.7706220Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/Poem-of-the-Day/Poem-of-the-Day
+Build and Test with Bazel	Post Checkout code	2025-11-29T17:01:46.8009850Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+Build and Test with Bazel	Post Checkout code	2025-11-29T17:01:46.8313550Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Build and Test with Bazel	Post Checkout code	2025-11-29T17:01:46.9018510Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Build and Test with Bazel	Post Checkout code	2025-11-29T17:01:46.9119530Z http.https://github.com/.extraheader
+Build and Test with Bazel	Post Checkout code	2025-11-29T17:01:46.9422200Z [command]/opt/homebrew/bin/git config --local --unset-all http.https://github.com/.extraheader
+Build and Test with Bazel	Post Checkout code	2025-11-29T17:01:46.9714810Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Build and Test with Bazel	Post Checkout code	2025-11-29T17:01:47.0622750Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Build and Test with Bazel	Post Checkout code	2025-11-29T17:01:47.0937320Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Build and Test with Bazel	Complete job	﻿2025-11-29T17:01:47.2441830Z Cleaning up orphan processes
+Build and Test with Bazel	Complete job	2025-11-29T17:01:49.1506220Z Terminate orphan process: pid (1304) (java)
