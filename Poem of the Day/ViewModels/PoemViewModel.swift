@@ -90,8 +90,10 @@ final class PoemViewModel: ObservableObject {
         isLoading = false
     }
     
-    func refreshPoem() async {
-        isLoading = true
+    func refreshPoem(showLoading: Bool = true) async {
+        if showLoading {
+            isLoading = true
+        }
         errorMessage = nil // Clear previous error
         
         do {
@@ -100,7 +102,9 @@ final class PoemViewModel: ObservableObject {
             await handleError(error)
         }
         
-        isLoading = false
+        if showLoading {
+            isLoading = false
+        }
     }
     
     func loadFavorites() async {

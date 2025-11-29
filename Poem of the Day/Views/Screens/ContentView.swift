@@ -57,8 +57,8 @@ struct ContentView: View {
                     .padding()
                 }
                 .refreshable {
-                    // Don't set isPoemLoading here as it hides the ScrollView
-                    await viewModel.refreshPoem()
+                    // Don't show full screen loading for pull to refresh
+                    await viewModel.refreshPoem(showLoading: false)
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
