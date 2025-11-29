@@ -64,37 +64,25 @@ struct ContentView: View {
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
-                        Button {
-                            showHistory = true
-                        } label: {
-                            Label("History", systemImage: "clock.arrow.circlepath")
+                        Button(action: {
+                            showFavorites = true
+                        }) {
+                            Label("Favorite Poems", systemImage: "star")
                         }
+                        .accessibilityIdentifier("favorites_button")
                         
-                        Button {
-                            showSettings = true
-                        } label: {
-                            Label("Settings", systemImage: "gearshape")
+                        Button(action: {
+                            viewModel.loadPoem(forceRefresh: true)
+                        }) {
+                            Label("Get a new poem", systemImage: "arrow.clockwise")
                         }
+                        .accessibilityIdentifier("refresh_button")
                     } label: {
-                        Image(systemName: "line.3.horizontal")
-                            .accessibilityLabel("Menu")
-                            .accessibilityHint("Opens menu with history and settings options")
+                        Label("Menu", systemImage: "line.3.horizontal")
                     }
                     .accessibilityIdentifier("menu_button")
-                }
-                
-                ToolbarItem(placement: toolbarPlacement) {
-                    Button(action: {
-                        showFavorites = true
-                    }) {
-                        Label("Favorites", systemImage: "heart.fill")
-                            .foregroundColor(.red)
-                    }
-                    .accessibilityLabel("Favorite Poems")
-                    .accessibilityHint("View your saved favorite poems")
-                    .accessibilityIdentifier("favorites_button")
                 }
             }
             .sheet(isPresented: $showFavorites) {

@@ -590,7 +590,11 @@ class HistoryPage: BasePage {
     }
     
     var menuButton: XCUIElement {
-        app.buttons["history_menu_button"]
+        app.buttons["menu_button"]
+    }
+    
+    var favoritesButton: XCUIElement {
+        app.buttons["favorites_button"]
     }
     
     var clearHistoryButton: XCUIElement {

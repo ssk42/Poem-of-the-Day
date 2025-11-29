@@ -188,6 +188,14 @@ final class PoemUITests: XCTestCase {
         // Wait for poem to load
         XCTAssertTrue(mainPage.waitForPoemToLoad())
         
+        // Print debug info
+        if app.staticTexts["debug_args"].waitForExistence(timeout: 5) {
+            print("PoemUITests: Debug Args: \(app.staticTexts["debug_args"].label)")
+            print("PoemUITests: Debug Env: \(app.staticTexts["debug_env"].label)")
+        } else {
+            print("PoemUITests: Debug info labels not found")
+        }
+        
         // Verify isUITesting is active
         if app.buttons["Add (Test)"].waitForExistence(timeout: 5) {
             print("PoemUITests: isUITesting is ACTIVE")
