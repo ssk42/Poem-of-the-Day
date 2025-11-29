@@ -98,6 +98,7 @@ enum AppConfiguration {
             let args = processInfo.arguments
             let env = processInfo.environment
             return args.contains("--ui-testing")
+                || args.contains("-UITESTING")
                 || env["UITESTING"] == "1"
                 || UserDefaults.standard.bool(forKey: "UITESTING")
                 || env["XCTestConfigurationFilePath"] != nil
