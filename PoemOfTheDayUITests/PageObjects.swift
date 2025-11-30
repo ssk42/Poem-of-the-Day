@@ -117,14 +117,17 @@ class MainContentPage: BasePage {
     }
     
     func tapFavoritesButton() -> FavoritesPage {
-        // Use label for Menu item as it's more reliable
-        let menuButton = app.buttons["Favorite Poems"]
-        if menuButton.waitForExistence(timeout: 5) {
-            print("PageObjects: Tapping 'Favorite Poems' by label (force tap)")
-            menuButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        // First, tap the menu button to open the menu
+        _ = tapMenuButton()
+        
+        // Wait for menu to appear and tap "Favorite Poems" menu item
+        let favoritesMenuItem = app.buttons["Favorite Poems"]
+        if favoritesMenuItem.waitForExistence(timeout: 5) {
+            print("PageObjects: Tapping 'Favorite Poems' menu item")
+            favoritesMenuItem.tap()
         } else {
-            // Fallback to identifier
-            print("PageObjects: Tapping 'favorites_button' by identifier")
+            // Fallback: try by identifier (if it's ever moved out of menu)
+            print("PageObjects: Fallback to tapping 'favorites_button' by identifier")
             favoritesButton.tap()
         }
         return FavoritesPage(app: app)
