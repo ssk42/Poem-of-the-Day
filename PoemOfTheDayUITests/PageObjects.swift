@@ -56,7 +56,7 @@ class BasePage {
     }
     
     func forceTap(_ element: XCUIElement) {
-        print("PageObjects: Force tapping element: \(element)")
+        print("PageObjects: Force tapping element: \(element.label) (\(element))")
         if element.isHittable {
             element.tap()
         } else {
@@ -669,8 +669,10 @@ class FavoriteDetailPage: BasePage {
     }
     
     var backButton: XCUIElement {
-        // The back button is usually the first button in the navigation bar
-        return app.navigationBars.buttons.firstMatch
+        // The back button is usually the first button in the navigation bar,
+        // but we must ensure we don't pick the "Done" button if it's visible.
+        let predicate = NSPredicate(format: "label != 'Done'")
+        return app.navigationBars.buttons.matching(predicate).firstMatch
     }
     
     // MARK: - Actions
