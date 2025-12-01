@@ -246,7 +246,7 @@ final class PoemUITests: XCTestCase {
         XCTAssertTrue(mainPage.waitForFavoriteButtonState(isFavorite: true))
         
         // Verify favorites count
-        let favoritesPage = mainPage.tapMenuButton().tapFavoritesButton()
+        let favoritesPage = mainPage.tapFavoritesButton()
         XCTAssertTrue(favoritesPage.waitForPageToLoad())
         XCTAssertTrue(favoritesPage.getFavoritePoemsCount() >= 2)
         
