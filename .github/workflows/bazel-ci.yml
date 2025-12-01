@@ -36,7 +36,7 @@ jobs:
     - name: Build main app
       run: |
         cd "Poem of the Day"
-        bazelisk build //:PoemOfTheDay
+        bazelisk build //:PoemOfTheDay.ipa
     
     - name: Build widget extension
       run: |
@@ -119,7 +119,7 @@ jobs:
     - name: Build Release IPA
       run: |
         # Build with the 'release' config defined in .bazelrc
-        bazelisk build --config=release //:PoemOfTheDay
+        bazelisk build --config=release //:PoemOfTheDay.ipa
 
     - name: Upload to App Store Connect
       env:
