@@ -55,7 +55,7 @@ struct ContentView: View {
                 }
                 .refreshable {
                     // Don't show full screen loading for pull to refresh
-                    await viewModel.refreshPoem(showLoading: true)
+                    await viewModel.refreshPoem(showLoading: false)
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
