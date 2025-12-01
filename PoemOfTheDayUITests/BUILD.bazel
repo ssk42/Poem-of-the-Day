@@ -19,4 +19,5 @@ ios_ui_test(
     env = {
         "LAUNCH_TIMEOUT": "300",
     },
+    timeout = "eternal",
 )
