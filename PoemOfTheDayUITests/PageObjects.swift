@@ -54,6 +54,14 @@ class BasePage {
         let result = XCTWaiter.wait(for: [expectation], timeout: timeout)
         return result == .completed
     }
+    
+    func forceTap(_ element: XCUIElement) {
+        if element.isHittable {
+            element.tap()
+        } else {
+            element.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        }
+    }
 }
 
 // MARK: - Main Content Page
@@ -118,7 +126,8 @@ class MainContentPage: BasePage {
     
     func tapFavoritesButton() -> FavoritesPage {
         _ = waitForElementToAppear(favoritesButton)
-        favoritesButton.tap()
+        // Use forceTap to avoid "Failed to scroll to visible" error
+        forceTap(favoritesButton)
         return FavoritesPage(app: app)
     }
     
@@ -136,12 +145,8 @@ class MainContentPage: BasePage {
     
     func tapMenuButton() -> MainContentPage {
         if waitForElementToAppear(menuButton) {
-            if menuButton.isHittable {
-                menuButton.tap()
-            } else {
-                // Fallback to coordinate tap if not hittable (e.g. XCTest thinks it's off screen)
-                menuButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
-            }
+            // Use forceTap to ensure we hit it even if XCTest thinks it's off-screen
+            forceTap(menuButton)
         }
         return self
     }
@@ -682,7 +687,8 @@ class FavoriteDetailPage: BasePage {
     }
     
     func tapBackButton() -> FavoritesPage {
-        backButton.tap()
+        // Use forceTap for navigation bar buttons
+        forceTap(backButton)
         return FavoritesPage(app: app)
     }
     
