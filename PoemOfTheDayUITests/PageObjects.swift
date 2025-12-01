@@ -671,15 +671,27 @@ class FavoriteDetailPage: BasePage {
     var backButton: XCUIElement {
         // The back button is usually the first button in the navigation bar,
         // but we must ensure we don't pick the "Done" button or buttons from the main screen (favorites, menu).
-        let predicate = NSPredicate(format: "label != 'Done' AND identifier != 'favorites_button' AND identifier != 'menu_button'")
-        return app.navigationBars.buttons.matching(predicate).firstMatch
+        // Since app.navigationBars.buttons seems to miss the sheet's nav bar, we search globally but exclude known IDs.
+        let predicate = NSPredicate(format: "label == 'Favorite Poems' AND identifier != 'favorites_button'")
+        return app.buttons.matching(predicate).firstMatch
     }
     
     func debugNavButtons() {
         print("PageObjects: Debugging Navigation Buttons:")
-        let buttons = app.navigationBars.buttons.allElementsBoundByIndex
+        print("  - All Navigation Bars: \(app.navigationBars.count)")
+        for (index, bar) in app.navigationBars.allElementsBoundByIndex.enumerated() {
+            print("    Bar \(index): \(bar.frame)")
+        }
+        
+        print("  - Searching for 'Favorite Poems' buttons:")
+        let buttons = app.buttons.matching(identifier: "Favorite Poems").allElementsBoundByIndex
         for button in buttons {
-            print("  - Label: '\(button.label)', ID: '\(button.identifier)', Frame: \(button.frame)")
+             print("    Button: Label='\(button.label)', ID='\(button.identifier)', Frame=\(button.frame), Exists=\(button.exists), Hittable=\(button.isHittable)")
+        }
+        
+        let labeledButtons = app.buttons.matching(NSPredicate(format: "label == 'Favorite Poems'")).allElementsBoundByIndex
+        for button in labeledButtons {
+             print("    Labeled Button: Label='\(button.label)', ID='\(button.identifier)', Frame=\(button.frame), Exists=\(button.exists), Hittable=\(button.isHittable)")
         }
     }
     
