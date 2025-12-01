@@ -695,6 +695,7 @@ struct FavoritesView: View {
                             )
                         }
                     }
+                    .accessibilityIdentifier("favorites_list")
                     .listStyle(InsetGroupedListStyle())
                     .scrollContentBackground(.hidden)
                 }

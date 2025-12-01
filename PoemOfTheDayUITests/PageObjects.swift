@@ -445,7 +445,15 @@ class FavoritesPage: BasePage {
     // MARK: - Getters
     
     func getFavoritePoemsCount() -> Int {
-        return favoritesTable.cells.count
+        // Wait for the list to appear
+        _ = waitForElementToAppear(favoritesTable, timeout: 5)
+        
+        // Give list cells time to populate
+        sleep(1)
+        
+        let count = favoritesTable.cells.count
+        print("PageObjects: Favorites count: \(count)")
+        return count
     }
     
     func isEmptyStateVisible() -> Bool {
