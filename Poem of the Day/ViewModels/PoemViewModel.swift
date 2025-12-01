@@ -95,8 +95,30 @@ final class PoemViewModel: ObservableObject {
         }
         errorMessage = nil // Clear previous error
         
+        // Use a detached task to ensure the fetch completes even if the UI cancels the refresh
+        let repository = self.repository
+        let fetchTask = Task.detached {
+            return try await repository.refreshDailyPoem()
+        }
+        
         do {
-            poemOfTheDay = try await repository.refreshDailyPoem()
+            // Wait for the detached task. If this 'await' is cancelled (by UI),
+            // the detached task continues running in the background.
+            let poem = try await fetchTask.value
+            poemOfTheDay = poem
+        } catch is CancellationError {
+            NSLog("PoemViewModel: Refresh cancelled by UI, waiting for background task...")
+            // UI cancelled, but background task is still running.
+            // Spawn a new unstructured task to wait for it and update UI when done.
+            Task { [weak self] in
+                do {
+                    let poem = try await fetchTask.value
+                    self?.poemOfTheDay = poem
+                    NSLog("PoemViewModel: Background refresh completed and UI updated")
+                } catch {
+                    await self?.handleError(error)
+                }
+            }
         } catch {
             await handleError(error)
         }
@@ -195,7 +217,14 @@ final class PoemViewModel: ObservableObject {
     
     
     private func handleError(_ error: Error) async {
-        NSLog("PoemViewModel: Handling error: \(error), Type: \(type(of: error))")
+        // Ignore cancellation errors
+        if error is CancellationError {
+            return
+        }
+        if let urlError = error as? URLError, urlError.code == .cancelled {
+            return
+        }
+        
         if let poemError = error as? PoemError {
             errorMessage = poemError.localizedDescription
         } else if let generationError = error as? PoemGenerationError {

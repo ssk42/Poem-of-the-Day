@@ -18,9 +18,6 @@ actor NetworkService: NetworkServiceProtocol {
     
     func fetchRandomPoem() async throws -> Poem {
         // Check for simulated error (for UI testing)
-        // Log arguments for debugging
-        NSLog("NetworkService: Arguments: \(ProcessInfo.processInfo.arguments)")
-        
         if ProcessInfo.processInfo.environment["SIMULATE_NETWORK_ERROR"] == "true" || 
            ProcessInfo.processInfo.arguments.contains("-SimulateNetworkError") {
             NSLog("NetworkService: Simulating network error")
@@ -65,7 +62,14 @@ actor NetworkService: NetworkServiceProtocol {
         } catch let error as PoemError {
             throw error
         } catch {
-            NSLog("NetworkService: Caught error: \(error)")
+            // Rethrow cancellation errors so they can be ignored by the caller
+            if let urlError = error as? URLError, urlError.code == .cancelled {
+                throw error
+            }
+            if error is CancellationError {
+                throw error
+            }
+            
             if error.isNetworkError {
                 throw PoemError.networkUnavailable
             } else {
