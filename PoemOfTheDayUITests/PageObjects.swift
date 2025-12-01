@@ -56,6 +56,7 @@ class BasePage {
     }
     
     func forceTap(_ element: XCUIElement) {
+        print("PageObjects: Force tapping element: \(element)")
         if element.isHittable {
             element.tap()
         } else {
@@ -668,16 +669,8 @@ class FavoriteDetailPage: BasePage {
     }
     
     var backButton: XCUIElement {
-        // Try to find the back button by label (usually previous screen title)
-        if app.navigationBars.buttons["BackButton"].exists {
-            return app.navigationBars.buttons["BackButton"]
-        }
-        // Fallback to label if identifier not found (though log showed identifier exists)
-        if app.navigationBars.buttons["Favorite Poems"].exists {
-             // This is ambiguous, so we prefer BackButton. 
-             // But if BackButton fails, we might need to be more specific (e.g. boundBy index in navigation bar)
-        }
-        return app.navigationBars.buttons.element(boundBy: 0) // Fallback
+        // The back button is usually the first button in the navigation bar
+        return app.navigationBars.buttons.firstMatch
     }
     
     // MARK: - Actions
