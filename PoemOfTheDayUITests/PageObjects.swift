@@ -412,7 +412,17 @@ class FavoritesPage: BasePage {
     }
     
     var favoritesTable: XCUIElement {
-        app.tables.firstMatch
+        if app.tables["favorites_list"].exists {
+            return app.tables["favorites_list"]
+        }
+        if app.collectionViews["favorites_list"].exists {
+            return app.collectionViews["favorites_list"]
+        }
+        // Fallback to first match if identifier not found (legacy support)
+        if app.tables.firstMatch.exists {
+            return app.tables.firstMatch
+        }
+        return app.collectionViews.firstMatch
     }
     
     var favoritesList: XCUIElement {
