@@ -670,8 +670,8 @@ class FavoriteDetailPage: BasePage {
     
     var backButton: XCUIElement {
         // The back button is usually the first button in the navigation bar,
-        // but we must ensure we don't pick the "Done" button or the "favorites_button" from the main screen.
-        let predicate = NSPredicate(format: "label != 'Done' AND identifier != 'favorites_button'")
+        // but we must ensure we don't pick the "Done" button or buttons from the main screen (favorites, menu).
+        let predicate = NSPredicate(format: "label != 'Done' AND identifier != 'favorites_button' AND identifier != 'menu_button'")
         return app.navigationBars.buttons.matching(predicate).firstMatch
     }
     
