@@ -444,12 +444,12 @@ class FavoritesPage: BasePage {
         return MainContentPage(app: app)
     }
     
-    func tapFavoritePoem(at index: Int) -> FavoritesPage {
+    func tapFavoritePoem(at index: Int) -> FavoriteDetailPage {
         let cells = favoritesTable.cells
         if cells.count > index {
             cells.element(boundBy: index).tap()
         }
-        return self
+        return FavoriteDetailPage(app: app)
     }
     
     // MARK: - Getters
@@ -649,5 +649,50 @@ class HistoryPage: BasePage {
     
     func verifyEmptyState() -> Bool {
         return waitForElementToAppear(emptyStateMessage)
+    }
+}
+
+// MARK: - Favorite Detail Page
+
+class FavoriteDetailPage: BasePage {
+    
+    // MARK: - UI Elements
+    
+    var poemContent: XCUIElement {
+        app.scrollViews.staticTexts.matching(identifier: "poem_content").firstMatch
+    }
+    
+    var backButton: XCUIElement {
+        // Try to find the back button by label (usually previous screen title)
+        if app.navigationBars.buttons["BackButton"].exists {
+            return app.navigationBars.buttons["BackButton"]
+        }
+        // Fallback to label if identifier not found (though log showed identifier exists)
+        if app.navigationBars.buttons["Favorite Poems"].exists {
+             // This is ambiguous, so we prefer BackButton. 
+             // But if BackButton fails, we might need to be more specific (e.g. boundBy index in navigation bar)
+        }
+        return app.navigationBars.buttons.element(boundBy: 0) // Fallback
+    }
+    
+    // MARK: - Actions
+    
+    func waitForPageToLoad() -> Bool {
+        return waitForElementToAppear(poemContent)
+    }
+    
+    func tapBackButton() -> FavoritesPage {
+        backButton.tap()
+        return FavoritesPage(app: app)
+    }
+    
+    // MARK: - Verifications
+    
+    func verifyPoemDisplayed() -> Bool {
+        return poemContent.exists
+    }
+    
+    func getPoemContent() -> String {
+        return poemContent.label
     }
 }

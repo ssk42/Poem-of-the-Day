@@ -323,6 +323,32 @@ final class PoemUITests: XCTestCase {
         // Verify app is still functional (header still exists)
         XCTAssertTrue(mainPage.waitForElementToAppear(mainPage.headerTitle))
     }
+    func testFavoriteDetailNavigation() {
+        let mainPage = PageFactory.mainContentPage(app: app)
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
+        
+        // Favorite the poem
+        _ = mainPage.tapFavoriteButton()
+        XCTAssertTrue(mainPage.waitForFavoriteButtonState(isFavorite: true))
+        
+        // Open favorites
+        let favoritesPage = mainPage.tapFavoritesButton()
+        XCTAssertTrue(favoritesPage.waitForPageToLoad())
+        
+        // Tap first favorite
+        let detailPage = favoritesPage.tapFavoritePoem(at: 0)
+        XCTAssertTrue(detailPage.waitForPageToLoad())
+        XCTAssertTrue(detailPage.verifyPoemDisplayed())
+        
+        // Go back
+        let favoritesPageAfterBack = detailPage.tapBackButton()
+        XCTAssertTrue(favoritesPageAfterBack.waitForPageToLoad())
+        
+        // Close favorites
+        _ = favoritesPageAfterBack.tapDoneButton()
+    }
+    
+
 }
 
 extension XCUIElement {

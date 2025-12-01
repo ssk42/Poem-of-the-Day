@@ -89,6 +89,7 @@ final class PoemViewModel: ObservableObject {
     }
     
     func refreshPoem(showLoading: Bool = true) async {
+        NSLog("PoemViewModel: refreshPoem called with showLoading=\(showLoading)")
         if showLoading {
             isLoading = true
         }

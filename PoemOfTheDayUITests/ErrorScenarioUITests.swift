@@ -14,17 +14,30 @@ final class ErrorScenarioUITests: XCTestCase {
     }
 
     /*
-    func testServerErrorAlert() {
-        app.launchEnvironment = ["SIMULATE_SERVER_ERROR": "true"]
+    func testPullToRefreshError() {
+        app.launchArguments.append("-SimulateNetworkError")
         app.launch()
-
-        let refresh = app.buttons["refresh_button"].firstMatch
-        XCTAssertTrue(refresh.waitForExistence(timeout: 5))
-        refresh.tap()
-
-        let alert = app.alerts.firstMatch
-        XCTAssertTrue(alert.waitForExistence(timeout: 8))
-        alert.buttons["OK"].firstMatch.tap()
+        
+        let mainPage = PageFactory.mainContentPage(app: app)
+        XCTAssertTrue(mainPage.waitForPoemToLoad())
+        
+        // Perform pull to refresh
+        let poemContent = app.scrollViews.firstMatch
+        poemContent.swipeDown()
+        
+        // Should show error alert
+        let errorAlert = app.alerts.firstMatch
+        if errorAlert.waitForExistence(timeout: 10) {
+            XCTAssertTrue(errorAlert.exists, "Should show error alert for network issues during pull-to-refresh")
+            
+            // Dismiss alert
+            let okButton = errorAlert.buttons["OK"]
+            if okButton.exists {
+                okButton.tap()
+            }
+        } else {
+             XCTFail("Error alert did not appear")
+        }
     }
     */
 }

@@ -17,6 +17,14 @@ actor NetworkService: NetworkServiceProtocol {
     }
     
     func fetchRandomPoem() async throws -> Poem {
+        // Check for simulated error (for UI testing)
+        if ProcessInfo.processInfo.environment["SIMULATE_NETWORK_ERROR"] == "true" || 
+           ProcessInfo.processInfo.arguments.contains("-SimulateNetworkError") {
+            NSLog("NetworkService: Simulating network error")
+            throw PoemError.networkUnavailable
+        }
+
+        NSLog("NetworkService: Fetching random poem")
         guard let url = URL(string: "https://poetrydb.org/random") else {
             throw PoemError.invalidResponse
         }
