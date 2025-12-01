@@ -65,6 +65,7 @@ actor NetworkService: NetworkServiceProtocol {
         } catch let error as PoemError {
             throw error
         } catch {
+            NSLog("NetworkService: Caught error: \(error)")
             if error.isNetworkError {
                 throw PoemError.networkUnavailable
             } else {
@@ -78,7 +79,9 @@ private extension Error {
     var isNetworkError: Bool {
         if let urlError = self as? URLError {
             switch urlError.code {
-            case .notConnectedToInternet, .networkConnectionLost, .timedOut:
+            case .notConnectedToInternet, .networkConnectionLost, .timedOut,
+                 .cannotFindHost, .cannotConnectToHost, .dnsLookupFailed,
+                 .dataNotAllowed, .internationalRoamingOff:
                 return true
             default:
                 return false

@@ -195,6 +195,7 @@ final class PoemViewModel: ObservableObject {
     
     
     private func handleError(_ error: Error) async {
+        NSLog("PoemViewModel: Handling error: \(error), Type: \(type(of: error))")
         if let poemError = error as? PoemError {
             errorMessage = poemError.localizedDescription
         } else if let generationError = error as? PoemGenerationError {
