@@ -60,7 +60,7 @@ struct ContentView: View {
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .navigationBarLeading) {
                     Menu {
                         Button(action: {
                             showHistory = true
@@ -75,13 +75,6 @@ struct ContentView: View {
                         }
                         
                         Button(action: {
-                            showFavorites = true
-                        }) {
-                            Label("Favorite Poems", systemImage: "star")
-                        }
-                        .accessibilityIdentifier("favorites_button")
-                        
-                        Button(action: {
                             Task {
                                 await viewModel.refreshPoem(showLoading: true)
                             }
@@ -94,6 +87,18 @@ struct ContentView: View {
                             .imageScale(.large)
                     }
                     .accessibilityIdentifier("menu_button")
+                }
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        showFavorites = true
+                    }) {
+                        Label("Favorites", systemImage: "heart.fill")
+                            .foregroundColor(.red)
+                    }
+                    .accessibilityLabel("Favorite Poems")
+                    .accessibilityHint("View your saved favorite poems")
+                    .accessibilityIdentifier("favorites_button")
                 }
             }
             .sheet(isPresented: $showFavorites) {
