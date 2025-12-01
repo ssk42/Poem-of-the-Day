@@ -670,9 +670,17 @@ class FavoriteDetailPage: BasePage {
     
     var backButton: XCUIElement {
         // The back button is usually the first button in the navigation bar,
-        // but we must ensure we don't pick the "Done" button if it's visible.
-        let predicate = NSPredicate(format: "label != 'Done'")
+        // but we must ensure we don't pick the "Done" button or the "favorites_button" from the main screen.
+        let predicate = NSPredicate(format: "label != 'Done' AND identifier != 'favorites_button'")
         return app.navigationBars.buttons.matching(predicate).firstMatch
+    }
+    
+    func debugNavButtons() {
+        print("PageObjects: Debugging Navigation Buttons:")
+        let buttons = app.navigationBars.buttons.allElementsBoundByIndex
+        for button in buttons {
+            print("  - Label: '\(button.label)', ID: '\(button.identifier)', Frame: \(button.frame)")
+        }
     }
     
     // MARK: - Actions
@@ -682,6 +690,7 @@ class FavoriteDetailPage: BasePage {
     }
     
     func tapBackButton() -> FavoritesPage {
+        debugNavButtons()
         // Use forceTap for navigation bar buttons
         forceTap(backButton)
         return FavoritesPage(app: app)
