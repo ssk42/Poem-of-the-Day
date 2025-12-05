@@ -17,9 +17,8 @@ actor AIPoemGenerator {
     // MARK: - Properties
     
     #if canImport(FoundationModels)
-    private var languageModel: AnyObject? // Will be SystemLanguageModel when available
-    private var modelSession: AnyObject? // Will be LanguageModelSession when available
-    private var adapter: Any? // Will be SystemLanguageModel.Adapter when available
+    private var languageModel: SystemLanguageModel?
+    private var modelSession: LanguageModelSession?
     #endif
     
     // MARK: - Initialization
@@ -107,15 +106,14 @@ actor AIPoemGenerator {
         #if canImport(FoundationModels)
         if #available(iOS 26, *) {
             do {
-                let poetryAdapter = try SystemLanguageModel.Adapter(name: "poetry_generation")
-                self.adapter = poetryAdapter
-                self.languageModel = SystemLanguageModel(adapter: poetryAdapter)
-            } catch {
-                self.languageModel = SystemLanguageModel()
-            }
-            
-            if let model = languageModel as? SystemLanguageModel {
+                // Use the default system language model without custom adapters for stability
+                let model = SystemLanguageModel.default
+                self.languageModel = model
                 self.modelSession = LanguageModelSession(model: model)
+                AppLogger.shared.info("FoundationModels initialized successfully", category: .ai)
+            } catch {
+                AppLogger.shared.error("Failed to initialize FoundationModels: \(error)", category: .ai)
+                // Leave properties nil - checkAvailability will still work via SystemLanguageModel.default
             }
         }
         #endif
@@ -124,7 +122,7 @@ actor AIPoemGenerator {
     #if canImport(FoundationModels)
     @available(iOS 26, *)
     private func generateWithFoundationModels(prompt: String) async throws -> GeneratedPoem {
-        guard let session = modelSession as? LanguageModelSession else {
+        guard let session = modelSession else {
             AppLogger.shared.error("Model session is not available", category: .ai)
             throw PoemGenerationError.modelUnavailable
         }
