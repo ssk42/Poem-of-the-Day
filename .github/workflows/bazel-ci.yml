@@ -111,13 +111,15 @@ jobs:
     - name: Install Provisioning Profile
       env:
         BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
+        BUILD_WIDGET_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_WIDGET_PROVISION_PROFILE_BASE64 }}
       run: |
         # Decode profile to BOTH locations to avoid cross-package visibility issues in CI sandbox
         # 1. Workspace Root (for Main App) - "release.mobileprovision" at repo root
         echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o "release.mobileprovision"
         
         # 2. Widget Package Directory (for Widget Extension)
-        echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o "Poem of the Day Widget/release.mobileprovision"
+        # Uses the separate Widget Profile Secret
+        echo -n "$BUILD_WIDGET_PROVISION_PROFILE_BASE64" | base64 --decode -o "Poem of the Day Widget/release.mobileprovision"
 
 
         
