@@ -124,7 +124,6 @@ jobs:
       run: |
         # Build with the 'release' config defined in .bazelrc
         cd "Poem of the Day"
-        ls -l release.mobileprovision || echo "File MISSING in build dir"
         bazelisk build --config=release //:PoemOfTheDay.ipa
 
     - name: Upload to App Store Connect
