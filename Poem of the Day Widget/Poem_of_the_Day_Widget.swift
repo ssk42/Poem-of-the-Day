@@ -25,7 +25,8 @@ struct Provider: TimelineProvider {
         if let title = sharedDefaults?.string(forKey: "poemTitle"),
            let content = sharedDefaults?.string(forKey: "poemContent") {
             let author = sharedDefaults?.string(forKey: "poemAuthor")
-            poem = WidgetPoem(id: UUID(), title: title, lines: content.components(separatedBy: "\n"), author: author)
+            let vibe = sharedDefaults?.string(forKey: "poemVibe")
+            poem = WidgetPoem(id: UUID(), title: title, lines: content.components(separatedBy: "\n"), author: author, vibe: vibe)
         }
         
         // Check if we should fetch a new poem based on date
@@ -56,6 +57,8 @@ struct Provider: TimelineProvider {
                 sharedDefaults?.set(finalPoem.title, forKey: "poemTitle")
                 sharedDefaults?.set(finalPoem.content, forKey: "poemContent")
                 sharedDefaults?.set(finalPoem.author ?? "", forKey: "poemAuthor")
+                // Note: We don't have vibe data when fetching randomly from PoetryDB in the widget
+                // In a real scenario, the main app should push the vibe-checked poem
                 
                 // Save current date as fetch date
                 sharedDefaults?.set(Date(), forKey: "lastPoemFetchDate")
@@ -118,14 +121,18 @@ struct Poem_Of_The_Day_WidgetView: View {
     var body: some View {
         ZStack {
             // Background gradient
-            LinearGradient(
-                gradient: Gradient(colors: [
-                    colorScheme == .dark ? Color(red: 0.1, green: 0.1, blue: 0.2) : Color(red: 0.9, green: 0.95, blue: 1.0),
-                    colorScheme == .dark ? Color(red: 0.2, green: 0.2, blue: 0.3) : Color(red: 0.8, green: 0.9, blue: 1.0)
-                ]),
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
+            if let vibeRaw = entry.poem.vibe, let vibe = DailyVibe(rawValue: vibeRaw) {
+                vibe.backgroundGradient(for: colorScheme)
+            } else {
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        colorScheme == .dark ? Color(red: 0.1, green: 0.1, blue: 0.2) : Color(red: 0.9, green: 0.95, blue: 1.0),
+                        colorScheme == .dark ? Color(red: 0.2, green: 0.2, blue: 0.3) : Color(red: 0.8, green: 0.9, blue: 1.0)
+                    ]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            }
             
             VStack(alignment: .leading, spacing: 8) {
                 Text(entry.poem.title)
@@ -174,13 +181,15 @@ struct WidgetPoem: Identifiable, Codable {
     let title: String
     let content: String
     let author: String?
+    let vibe: String?
     let vibeEmoji: String?
 
-    init(id: UUID = UUID(), title: String, lines: [String], author: String? = nil, vibeEmoji: String? = nil) {
+    init(id: UUID = UUID(), title: String, lines: [String], author: String? = nil, vibe: String? = nil, vibeEmoji: String? = nil) {
         self.id = id
         self.title = title
         self.content = lines.joined(separator: "\n")
         self.author = author?.isEmpty == true ? nil : author
+        self.vibe = vibe
         self.vibeEmoji = vibeEmoji
     }
 }
@@ -191,6 +200,7 @@ struct WidgetPoemResponse: Codable {
     let author: String
     
     func toPoem() -> WidgetPoem {
+        // Random poems from PoetryDB don't have vibes
         return WidgetPoem(id: UUID(), title: title, lines: lines, author: author)
     }
 }

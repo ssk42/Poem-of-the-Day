@@ -237,6 +237,16 @@ actor PoemRepository: PoemRepositoryProtocol {
         return await aiService.isAvailable()
     }
     
+    func getAIAvailabilityStatus() async -> AIAvailabilityStatus {
+        // Check for UI Testing mode
+        if UserDefaults.standard.bool(forKey: "UITESTING") || ProcessInfo.processInfo.environment["UITESTING"] == "1" {
+            return .available
+        }
+        
+        guard let aiService = aiService else { return .notEligible } // If service is nil, device likely doesn't support iOS 18 (unlikely given deployment target) or failed init
+        return await aiService.checkAvailability()
+    }
+    
     // MARK: - Favorites
     
     func getFavorites() async -> [Poem] {

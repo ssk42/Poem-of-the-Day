@@ -54,11 +54,31 @@ enum SharedConstants {
         static let notificationSettings = "notificationSettings"
     }
     
-    /// Notification identifiers
     enum NotificationIdentifiers {
         static let dailyPoem = "daily_poem_notification"
         static let poemReminder = "poem_reminder"
         static let category = "DAILY_POEM"
+    }
+}
+
+/// Unified availability status for AI features
+public enum AIAvailabilityStatus: String, Codable {
+    case available
+    case notEligible
+    case notEnabled
+    case loading
+    case unavailable
+    
+    public var isAvailable: Bool { self == .available }
+    
+    public var userMessage: String {
+        switch self {
+        case .available: return "Available"
+        case .notEligible: return "Not supported on this device"
+        case .notEnabled: return "Enable in Settings > Apple Intelligence"
+        case .loading: return "Downloading AI models..."
+        case .unavailable: return "Unavailable"
+        }
     }
 }
 

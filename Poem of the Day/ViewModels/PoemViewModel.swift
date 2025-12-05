@@ -16,6 +16,7 @@ final class PoemViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var showErrorAlert = false
     @Published var isAIGenerationAvailable = false
+    @Published var aiAvailabilityStatus: AIAvailabilityStatus = .unavailable
     @Published var currentVibe: VibeAnalysis?
     @Published var showVibeGeneration = false
     @Published var showCustomPrompt = false
@@ -203,6 +204,9 @@ final class PoemViewModel: ObservableObject {
     
     private func checkAIAvailability() async {
         isAIGenerationAvailable = await repository.isAIGenerationAvailable()
+        aiAvailabilityStatus = await repository.getAIAvailabilityStatus()
+        
+        AppLogger.shared.info("AI Availability Status: \(aiAvailabilityStatus)", category: .ai)
     }
     
     private func loadDailyVibe() async {

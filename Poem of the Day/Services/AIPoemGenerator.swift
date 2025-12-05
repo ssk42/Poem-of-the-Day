@@ -32,14 +32,30 @@ actor AIPoemGenerator {
     
     // MARK: - Public Methods
     
-    func isAvailable() async -> Bool {
+    func checkAvailability() async -> AIAvailabilityStatus {
         #if canImport(FoundationModels)
         if #available(iOS 26, *) {
             let model = SystemLanguageModel.default
-            return model.availability == .available
+            switch model.availability {
+            case .available:
+                return .available
+            case .unavailable(.deviceNotEligible):
+                return .notEligible
+            case .unavailable(.appleIntelligenceNotEnabled):
+                return .notEnabled
+            case .unavailable(.modelNotReady):
+                return .loading
+            @unknown default:
+                return .unavailable
+            }
         }
         #endif
-        return false
+        return .unavailable
+    }
+    
+    // Deprecated, use checkAvailability()
+    func isAvailable() async -> Bool {
+        return await checkAvailability().isAvailable
     }
     
     func generatePoem(from vibeAnalysis: VibeAnalysis) async throws -> Poem {

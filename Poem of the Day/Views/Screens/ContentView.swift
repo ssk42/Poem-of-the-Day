@@ -283,6 +283,25 @@ struct ContentView: View {
                     .accessibilityIdentifier("top_custom_poem_button")
                 }
                 .padding(.top, 4)
+            } else if viewModel.aiAvailabilityStatus == .loading {
+                HStack(spacing: 6) {
+                    ProgressView()
+                        .scaleEffect(0.7)
+                    Text("Downloading AI...")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .padding(.top, 4)
+            } else if viewModel.aiAvailabilityStatus == .notEnabled {
+                HStack(spacing: 6) {
+                    Image(systemName: "exclamationmark.triangle")
+                        .font(.caption)
+                        .foregroundColor(.orange)
+                    Text("Enable Apple Intelligence to see Vibe")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .padding(.top, 4)
             }
             
             // Show vibe analysis info if available
@@ -527,6 +546,12 @@ struct ContentView: View {
                     .accessibilityHint("Double tap to write your own prompt for an AI-generated poem")
                     .accessibilityIdentifier("custom_poem_button")
                 }
+            } else if viewModel.aiAvailabilityStatus != .available && viewModel.aiAvailabilityStatus != .notEligible {
+                // Show status message for recoverable states
+                Text(viewModel.aiAvailabilityStatus.userMessage)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.top, 8)
             }
             
         }

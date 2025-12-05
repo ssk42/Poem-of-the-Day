@@ -30,6 +30,7 @@ protocol PoemGenerationServiceProtocol: Sendable {
     func generatePoemFromVibe(_ vibeAnalysis: VibeAnalysis) async throws -> Poem
     func generatePoemWithCustomPrompt(_ prompt: String) async throws -> Poem
     func isAvailable() async -> Bool
+    func checkAvailability() async -> AIAvailabilityStatus
 }
 
 /// Protocol for poem repository
@@ -40,6 +41,7 @@ protocol PoemRepositoryProtocol: Sendable {
     func generateCustomPoem(prompt: String) async throws -> Poem
     func getVibeOfTheDay() async throws -> VibeAnalysis
     func isAIGenerationAvailable() async -> Bool
+    func getAIAvailabilityStatus() async -> AIAvailabilityStatus
     func getFavorites() async -> [Poem]
     func addToFavorites(_ poem: Poem) async
     func removeFromFavorites(_ poem: Poem) async

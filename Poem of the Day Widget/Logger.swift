@@ -62,14 +62,19 @@ final class AppLogger {
     
     // MARK: - Public Methods
     
-    func log(_ message: String, 
-             level: Level = .info, 
-             category: Category = .general, 
-             file: String = #file, 
-             function: String = #function, 
+    func log(_ message: String,
+             level: Level = .info,
+             category: Category = .general,
+             file: String = #file,
+             function: String = #function,
              line: Int = #line) {
         
-        guard AppConfiguration.Debug.enableLogging else { return }
+        #if canImport(AppConfiguration)
+            guard AppConfiguration.Debug.enableLogging else { return }
+        #else
+            // Fallback: Disable logging if AppConfiguration not available (e.g. in Widget target)
+            return
+        #endif
         
         let fileName = URL(fileURLWithPath: file).lastPathComponent
         let formattedMessage = "[\(fileName):\(line)] \(function) - \(message)"
@@ -107,8 +112,8 @@ final class AppLogger {
         let result = try block()
         let timeElapsed = CFAbsoluteTimeGetCurrent() - startTime
         
-        log("⏱️ \(operation) completed in \(String(format: "%.3f", timeElapsed))s", 
-            level: .info, 
+        log("⏱️ \(operation) completed in \(String(format: "%.3f", timeElapsed))s",
+            level: .info,
             category: category)
         
         return result
@@ -119,8 +124,8 @@ final class AppLogger {
         let result = try await block()
         let timeElapsed = CFAbsoluteTimeGetCurrent() - startTime
         
-        log("⏱️ \(operation) completed in \(String(format: "%.3f", timeElapsed))s", 
-            level: .info, 
+        log("⏱️ \(operation) completed in \(String(format: "%.3f", timeElapsed))s",
+            level: .info,
             category: category)
         
         return result

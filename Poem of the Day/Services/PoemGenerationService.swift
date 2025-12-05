@@ -162,6 +162,14 @@ actor PoemGenerationService: PoemGenerationServiceProtocol {
             return AppConfiguration.Testing.isAIAvailable
         }
         
-        return await aiGenerator.isAvailable()
+        return await checkAvailability() == .available
+    }
+    
+    func checkAvailability() async -> AIAvailabilityStatus {
+        if AppConfiguration.Testing.isUITesting {
+            return AppConfiguration.Testing.isAIAvailable ? .available : .unavailable
+        }
+        
+        return await aiGenerator.checkAvailability()
     }
 }

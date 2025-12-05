@@ -188,12 +188,12 @@ struct SettingsView: View {
                     Text("AI Generation")
                         .foregroundColor(colorScheme == .dark ? .white : .black)
                     
-                    if #available(iOS 26, *) {
-                        Text("Available (iOS 26+)")
+                    if #available(iOS 18, *) {
+                        Text("Available (iOS 18+)")
                             .font(.caption)
                             .foregroundColor(.green)
                     } else {
-                        Text("Requires iOS 26+")
+                        Text("Requires iOS 18+")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
