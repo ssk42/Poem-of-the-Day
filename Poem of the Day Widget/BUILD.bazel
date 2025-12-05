@@ -13,7 +13,7 @@ swift_library(
 # Widget extension
 ios_extension(
     name = "PoemOfTheDayWidget",
-    bundle_id = "Stevereitz.Poem-of-the-Day.Widget",
+    bundle_id = "Stevereitz.Poem-of-the-Day.Poem-of-the-Day-Widget",
     families = [
         "iphone",
         "ipad",
