@@ -144,8 +144,6 @@ jobs:
         mkdir -p ~/.appstoreconnect/private_keys
         echo -n "$APP_STORE_CONNECT_API_KEY_BASE64" | base64 --decode -o ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_CONNECT_KEY_ID }}.p8
 
-        cd "Poem of the Day"
-        
         # Find the IPA
         IPA_PATH="bazel-bin/PoemOfTheDay.ipa"
         
