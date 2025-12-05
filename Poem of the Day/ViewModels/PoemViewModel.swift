@@ -91,7 +91,7 @@ final class PoemViewModel: ObservableObject {
     }
     
     func refreshPoem(showLoading: Bool = true) async {
-        NSLog("PoemViewModel: refreshPoem called with showLoading=\(showLoading)")
+        AppLogger.shared.info("refreshPoem called with showLoading=\(showLoading)", category: .ui)
         if showLoading {
             isLoading = true
         }
@@ -109,14 +109,14 @@ final class PoemViewModel: ObservableObject {
             let poem = try await fetchTask.value
             poemOfTheDay = poem
         } catch is CancellationError {
-            NSLog("PoemViewModel: Refresh cancelled by UI, waiting for background task...")
+            AppLogger.shared.info("Refresh cancelled by UI, waiting for background task...", category: .ui)
             // UI cancelled, but background task is still running.
             // Spawn a new unstructured task to wait for it and update UI when done.
             Task { [weak self] in
                 do {
                     let poem = try await fetchTask.value
                     self?.poemOfTheDay = poem
-                    NSLog("PoemViewModel: Background refresh completed and UI updated")
+                    AppLogger.shared.info("Background refresh completed and UI updated", category: .ui)
                 } catch {
                     await self?.handleError(error)
                 }
@@ -131,20 +131,20 @@ final class PoemViewModel: ObservableObject {
     }
     
     func loadFavorites() async {
-        NSLog("PoemViewModel: loadFavorites called")
+        AppLogger.shared.info("loadFavorites called", category: .ui)
         self.favorites = await repository.getFavorites()
-        NSLog("PoemViewModel: Favorites loaded. Count: \(self.favorites.count)")
+        AppLogger.shared.debug("Favorites loaded. Count: \(self.favorites.count)", category: .ui)
     }
     
     func toggleFavorite(poem: Poem) async {
-        NSLog("PoemViewModel: toggleFavorite called for poem: \(poem.title)")
+        AppLogger.shared.info("toggleFavorite called for poem: \(poem.title)", category: .ui)
         let isFavorite = await repository.isFavorite(poem)
         
         if isFavorite {
-            NSLog("PoemViewModel: Poem is favorite. Removing.")
+            AppLogger.shared.info("Poem is favorite. Removing.", category: .ui)
             await repository.removeFromFavorites(poem)
         } else {
-            NSLog("PoemViewModel: Poem is NOT favorite. Adding.")
+            AppLogger.shared.info("Poem is NOT favorite. Adding.", category: .ui)
             await repository.addToFavorites(poem)
         }
         
@@ -213,7 +213,7 @@ final class PoemViewModel: ObservableObject {
             }
         } catch {
             // Don't show error for vibe loading failure
-            print("Failed to load daily vibe: \(error)")
+            AppLogger.shared.error("Failed to load daily vibe: \(error)", category: .ui)
         }
     }
     

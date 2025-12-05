@@ -27,7 +27,9 @@ struct PoemHistoryView: View {
                 }
             }
             .navigationTitle("Poem History")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
             .toolbar {
                 #if os(visionOS)
                 ToolbarItem(placement: .topBarTrailing) {
@@ -35,7 +37,7 @@ struct PoemHistoryView: View {
                         dismiss()
                     }
                 }
-                #else
+                #elseif os(iOS)
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") {
                         dismiss()
@@ -43,6 +45,7 @@ struct PoemHistoryView: View {
                 }
                 #endif
                 
+                #if os(iOS)
                 ToolbarItem(placement: .navigationBarLeading) {
                     Menu {
                         Button(role: .destructive) {
@@ -56,6 +59,7 @@ struct PoemHistoryView: View {
                     .disabled(viewModel.groupedHistory.isEmpty)
                     .accessibilityIdentifier("history_menu_button")
                 }
+                #endif
             }
             .alert("Clear History", isPresented: $viewModel.showClearConfirmation) {
                 Button("Cancel", role: .cancel) { }
@@ -91,7 +95,9 @@ struct PoemHistoryView: View {
     private var loadingView: some View {
         VStack(spacing: 16) {
             ProgressView()
+            #if !os(macOS)
                 .scaleEffect(1.2)
+            #endif
             Text("Loading history...")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
@@ -167,7 +173,9 @@ struct PoemHistoryView: View {
                     }
                 }
             }
+            #if os(iOS)
             .listStyle(InsetGroupedListStyle())
+            #endif
             .scrollContentBackground(.hidden)
         }
     }
@@ -216,7 +224,7 @@ struct PoemHistoryView: View {
         VStack(spacing: 4) {
             HStack(spacing: 4) {
                 Image(systemName: icon)
-                    .foregroundColor(color)
+                .foregroundColor(color)
                 Text(value)
                     .font(.title2)
                     .fontWeight(.bold)
@@ -287,6 +295,14 @@ struct HistoryEntryRow: View {
                     Text(entry.source.displayName)
                         .font(.caption)
                         .foregroundColor(.secondary)
+                    
+                    // Add debug info for UI tests
+                    if AppConfiguration.Testing.isUITesting {
+                        Text(entry.id.uuidString.prefix(4))
+                            .font(.caption2)
+                            .foregroundColor(.gray)
+                            .accessibilityIdentifier("entry_id_\(entry.id.uuidString)")
+                    }
                 }
                 
                 Text(entry.poem.content)
@@ -359,6 +375,7 @@ struct HistoryPoemDetailView: View {
                 // Poem content
                 Text(entry.poem.title)
                     .font(.system(size: 28, weight: .bold, design: .serif))
+                    .accessibilityIdentifier("poem_title")
                 
                 if let author = entry.poem.author {
                     Text("by \(author)")
@@ -372,6 +389,7 @@ struct HistoryPoemDetailView: View {
                     .font(.system(size: 18, weight: .regular, design: .serif))
                     .lineSpacing(8)
                     .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("poem_content")
             }
             .padding()
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -387,7 +405,9 @@ struct HistoryPoemDetailView: View {
             )
             .ignoresSafeArea()
         )
+        #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
+        #endif
     }
 }
 

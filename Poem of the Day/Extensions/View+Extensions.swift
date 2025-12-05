@@ -53,7 +53,11 @@ extension View {
     ) -> some View {
         background(
             RoundedRectangle(cornerRadius: cornerRadius)
+                #if canImport(UIKit)
                 .fill(Color(uiColor: .systemBackground))
+                #else
+                .fill(Color.white) // Fallback for macOS
+                #endif
                 .shadow(color: Color.black.opacity(shadowOpacity), radius: shadowRadius, x: 0, y: 5)
         )
     }
@@ -193,10 +197,17 @@ extension Color {
     static let appError = Color.red
     
     /// Dynamic colors that adapt to light/dark mode
+    #if canImport(UIKit)
     static let cardBackground = Color(uiColor: .systemBackground)
     static let cardSecondaryBackground = Color(uiColor: .secondarySystemBackground)
     static let primaryText = Color(uiColor: .label)
     static let secondaryText = Color(uiColor: .secondaryLabel)
+    #else
+    static let cardBackground = Color.white
+    static let cardSecondaryBackground = Color.gray.opacity(0.1)
+    static let primaryText = Color.primary
+    static let secondaryText = Color.secondary
+    #endif
     
     /// Vibe-specific colors
     static func vibeColor(for vibe: DailyVibe) -> Color {

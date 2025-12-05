@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import os.log
+import os
 
 /// Centralized logging system for the app
 final class AppLogger {
@@ -17,7 +17,7 @@ final class AppLogger {
     
     // MARK: - Properties
     
-    private let osLog: OSLog
+    private let logger: Logger
     private let subsystem = Bundle.main.bundleIdentifier ?? "com.stevereitz.poemoftheday"
     
     // MARK: - Categories
@@ -42,22 +42,12 @@ final class AppLogger {
         case warning
         case error
         case fault
-        
-        var osLogType: OSLogType {
-            switch self {
-            case .debug: return .debug
-            case .info: return .info
-            case .warning: return .default
-            case .error: return .error
-            case .fault: return .fault
-            }
-        }
     }
     
     // MARK: - Initialization
     
     private init() {
-        self.osLog = OSLog(subsystem: subsystem, category: Category.general.rawValue)
+        self.logger = Logger(subsystem: subsystem, category: "App")
     }
     
     // MARK: - Public Methods
@@ -72,10 +62,20 @@ final class AppLogger {
         guard AppConfiguration.Debug.enableLogging else { return }
         
         let fileName = URL(fileURLWithPath: file).lastPathComponent
-        let formattedMessage = "[\(fileName):\(line)] \(function) - \(message)"
+        let formattedMessage = "[\(category.rawValue)] [\(fileName):\(line)] \(function) - \(message)"
         
-        let categoryLog = OSLog(subsystem: subsystem, category: category.rawValue)
-        os_log("%{public}@", log: categoryLog, type: level.osLogType, formattedMessage)
+        switch level {
+        case .debug:
+            logger.debug("\(formattedMessage, privacy: .public)")
+        case .info:
+            logger.info("\(formattedMessage, privacy: .public)")
+        case .warning:
+            logger.warning("\(formattedMessage, privacy: .public)")
+        case .error:
+            logger.error("\(formattedMessage, privacy: .public)")
+        case .fault:
+            logger.fault("\(formattedMessage, privacy: .public)")
+        }
     }
     
     // MARK: - Convenience Methods

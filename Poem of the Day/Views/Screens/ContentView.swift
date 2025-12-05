@@ -67,8 +67,11 @@ struct ContentView: View {
                     await viewModel.refreshPoem(showLoading: false)
                 }
             }
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
             .toolbar {
+                #if os(iOS)
                 ToolbarItem(placement: .navigationBarLeading) {
                     Menu {
                         Button(action: {
@@ -98,6 +101,9 @@ struct ContentView: View {
                     .accessibilityIdentifier("menu_button")
                 }
                 
+                #endif
+                
+                #if os(iOS)
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
                         showFavorites = true
@@ -109,6 +115,7 @@ struct ContentView: View {
                     .accessibilityHint("View your saved favorite poems")
                     .accessibilityIdentifier("favorites_button")
                 }
+                #endif
             }
             .sheet(isPresented: $showFavorites) {
                 FavoritesView(favorites: viewModel.favorites)

@@ -24,9 +24,9 @@ actor VibeAnalyzer: VibeAnalyzerProtocol {
         self.embedding = NLEmbedding.sentenceEmbedding(for: .english)
         
         if self.embedding == nil {
-            print("VibeAnalyzer: ⚠️ NLEmbedding is NIL. Semantic analysis will be disabled.")
+            AppLogger.shared.warning("NLEmbedding is NIL. Semantic analysis will be disabled.", category: .vibe)
         } else {
-            print("VibeAnalyzer: ✅ NLEmbedding loaded successfully.")
+            AppLogger.shared.info("NLEmbedding loaded successfully.", category: .vibe)
         }
         
         // Pre-compute vibe vectors
@@ -172,14 +172,14 @@ actor VibeAnalyzer: VibeAnalyzerProtocol {
         if #available(iOS 26, *) {
             if let analyzer = aiAnalyzer as? AIVibeAnalyzer, await analyzer.isAvailable {
                 if let aiResult = try? await analyzer.analyzeVibe(from: articles) {
-                    print("VibeAnalyzer: 🤖 AI Analysis successful: \(aiResult.vibe.displayName)")
+                    AppLogger.shared.info("AI Analysis successful: \(aiResult.vibe.displayName)", category: .vibe)
                     return aiResult
                 }
             }
         }
         
         // 2. Fallback to existing logic
-        print("VibeAnalyzer: 🔄 Using standard analysis (Keyword/Semantic)")
+        AppLogger.shared.info("Using standard analysis (Keyword/Semantic)", category: .vibe)
         
         guard !articles.isEmpty else {
             return VibeAnalysis(vibe: .contemplative, confidence: 0.0, reasoning: "No articles provided for analysis.", keywords: [], sentiment: .neutral, backgroundColorIntensity: 0.0)
@@ -231,7 +231,7 @@ actor VibeAnalyzer: VibeAnalyzerProtocol {
                 }
             }
             
-            print("VibeAnalyzer: Analyzed \(articleCount) articles.")
+            AppLogger.shared.debug("Analyzed \(articleCount) articles.", category: .vibe)
             
             for vibe in DailyVibe.allCases {
                 // Hybrid Score: 30% Keyword Density + 70% Semantic Similarity
@@ -243,12 +243,12 @@ actor VibeAnalyzer: VibeAnalyzerProtocol {
                 // We map 0.05...0.30 to roughly 0.0...1.0
                 let normalizedSemantic = max(0.0, min(1.0, (semanticScore - 0.05) * 4.0))
                 
-                print("VibeAnalyzer: \(vibe.rawValue) - Raw Semantic: \(semanticScore), Normalized: \(normalizedSemantic), Keyword: \(keywordScore)")
+                AppLogger.shared.debug("\(vibe.rawValue) - Raw Semantic: \(semanticScore), Normalized: \(normalizedSemantic), Keyword: \(keywordScore)", category: .vibe)
                 
                 vibeScores[vibe] = (keywordScore * 0.3) + (normalizedSemantic * 0.7)
             }
         } else {
-            print("VibeAnalyzer: ⚠️ Using fallback keyword logic (No embedding or vectors).")
+            AppLogger.shared.warning("Using fallback keyword logic (No embedding or vectors).", category: .vibe)
             // Fallback to original keyword-only logic
             for vibe in DailyVibe.allCases {
                 let score = calculateVibeScore(for: vibe, in: weightedWords)

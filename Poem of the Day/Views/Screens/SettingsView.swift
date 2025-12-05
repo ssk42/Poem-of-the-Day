@@ -32,7 +32,9 @@ struct SettingsView: View {
                 .scrollContentBackground(.hidden)
             }
             .navigationTitle("Settings")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
             .toolbar {
                 #if os(visionOS)
                 ToolbarItem(placement: .topBarTrailing) {
@@ -40,7 +42,7 @@ struct SettingsView: View {
                         dismiss()
                     }
                 }
-                #else
+                #elseif os(iOS)
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") {
                         dismiss()

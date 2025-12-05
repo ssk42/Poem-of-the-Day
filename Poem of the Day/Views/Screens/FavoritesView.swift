@@ -60,12 +60,16 @@ struct FavoritesView: View {
                         }
                     }
                     .accessibilityIdentifier("favorites_list")
+                    #if os(iOS)
                     .listStyle(InsetGroupedListStyle())
+                    #endif
                     .scrollContentBackground(.hidden)
                 }
             }
             .navigationTitle("Favorite Poems")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
             .toolbar {
                 #if os(visionOS)
                 ToolbarItem(placement: .topBarTrailing) {
@@ -73,7 +77,7 @@ struct FavoritesView: View {
                         dismiss()
                     }
                 }
-                #else
+                #elseif os(iOS)
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") {
                         dismiss()
@@ -152,6 +156,8 @@ struct FavoritePoemDetailView: View {
             )
             .ignoresSafeArea()
         )
+        #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
+        #endif
     }
 }

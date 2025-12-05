@@ -28,7 +28,7 @@ struct TelemetryDebugView: View {
                         exportTelemetryData()
                     }
                 }
-                #else
+                #elseif os(iOS)
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Export") {
                         exportTelemetryData()
@@ -40,7 +40,11 @@ struct TelemetryDebugView: View {
                 await loadTelemetryData()
             }
             .sheet(isPresented: $showShareSheet) {
+                #if canImport(UIKit)
                 ShareSheet(items: [exportData])
+                #else
+                Text("Sharing not supported on this platform")
+                #endif
             }
         }
         .task {

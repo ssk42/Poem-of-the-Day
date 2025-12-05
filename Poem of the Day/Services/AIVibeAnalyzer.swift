@@ -54,9 +54,9 @@ actor AIVibeAnalyzer {
             // Use the default system model for general text analysis
             let model = SystemLanguageModel.default
             self.modelSession = LanguageModelSession(model: model)
-            print("AIVibeAnalyzer: ✅ Model session initialized")
+            AppLogger.shared.info("Model session initialized", category: .ai)
         } catch {
-            print("AIVibeAnalyzer: ❌ Failed to initialize model session: \(error)")
+            AppLogger.shared.error("Failed to initialize model session: \(error)", category: .ai)
         }
         #endif
     }
@@ -68,7 +68,7 @@ actor AIVibeAnalyzer {
         #if canImport(FoundationModels)
         guard !articles.isEmpty else { return nil }
         guard let session = modelSession else {
-            print("AIVibeAnalyzer: ⚠️ Model session not available")
+            AppLogger.shared.warning("Model session not available", category: .ai)
             return nil
         }
         
@@ -83,22 +83,22 @@ actor AIVibeAnalyzer {
         hopeful, contemplative, energetic, peaceful, melancholic, inspiring, uncertain, celebratory, reflective, determined, nostalgic, adventurous, whimsical, urgent, triumphant, solemn, playful, mysterious, rebellious, compassionate.
         """
         
-        print("AIVibeAnalyzer: 🚀 Starting analysis of \(articles.count) articles")
+        AppLogger.shared.info("Starting analysis of \(articles.count) articles", category: .ai)
         
         do {
             // Use guided generation to get structured output
             let response = try await session.respond(to: prompt, generating: AIVibeResult.self)
             let result = response.content
             
-            print("AIVibeAnalyzer: ✅ Analysis complete")
-            print("  - Vibe: \(result.vibe)")
-            print("  - Confidence: \(result.confidence)")
-            print("  - Reasoning: \(result.reasoning)")
+            AppLogger.shared.info("Analysis complete", category: .ai)
+            AppLogger.shared.debug("Vibe: \(result.vibe)", category: .ai)
+            AppLogger.shared.debug("Confidence: \(result.confidence)", category: .ai)
+            AppLogger.shared.debug("Reasoning: \(result.reasoning)", category: .ai)
             
             // Map string vibe to DailyVibe enum
             guard let dailyVibe = DailyVibe(rawValue: result.vibe.lowercased()) ?? 
                                   DailyVibe(rawValue: result.vibe.lowercased().trimmingCharacters(in: .whitespaces)) else {
-                print("AIVibeAnalyzer: ⚠️ Could not map '\(result.vibe)' to DailyVibe enum")
+                AppLogger.shared.warning("Could not map '\(result.vibe)' to DailyVibe enum", category: .ai)
                 return nil
             }
             
@@ -119,7 +119,7 @@ actor AIVibeAnalyzer {
             )
             
         } catch {
-            print("AIVibeAnalyzer: ❌ Analysis failed: \(error)")
+            AppLogger.shared.error("Analysis failed: \(error)", category: .ai)
             return nil
         }
         #else

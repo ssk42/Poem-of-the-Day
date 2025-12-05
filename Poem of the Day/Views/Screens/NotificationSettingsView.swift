@@ -32,7 +32,9 @@ struct NotificationSettingsView: View {
                 .scrollContentBackground(.hidden)
             }
             .navigationTitle("Notifications")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
             .toolbar {
                 #if os(visionOS)
                 ToolbarItem(placement: .topBarTrailing) {
@@ -40,7 +42,7 @@ struct NotificationSettingsView: View {
                         dismiss()
                     }
                 }
-                #else
+                #elseif os(iOS)
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") {
                         dismiss()
@@ -262,9 +264,11 @@ class NotificationSettingsViewModel: ObservableObject {
     }
     
     func openSettings() {
+        #if canImport(UIKit)
         if let url = URL(string: UIApplication.openSettingsURLString) {
             UIApplication.shared.open(url)
         }
+        #endif
     }
 }
 

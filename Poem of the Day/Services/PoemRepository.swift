@@ -89,44 +89,45 @@ actor PoemRepository: PoemRepositoryProtocol {
         var errorType: String?
         var vibeScore: Double?
         
-        print("🎬 Starting vibe-based poem generation...")
+        AppLogger.shared.info("Starting vibe-based poem generation...", category: .repository)
         
         do {
             guard let aiService = aiService else {
-                print("❌ AI service not available")
+                AppLogger.shared.error("AI service not available", category: .repository)
                 throw PoemError.unsupportedOperation
             }
             
-            print("✅ AI service available, checking availability...")
+            AppLogger.shared.info("AI service available, checking availability...", category: .repository)
             let isAvailable = await aiService.isAvailable()
-            print("   AI Available: \(isAvailable)")
+            AppLogger.shared.debug("AI Available: \(isAvailable)", category: .repository)
             
             // Use cached vibe if available, otherwise refresh
-            print("🔄 Getting vibe analysis...")
+            // Use cached vibe if available, otherwise refresh
+            AppLogger.shared.info("Getting vibe analysis...", category: .repository)
             let vibeAnalysis = try await getVibeOfTheDayInternal(forceRefresh: false)
-            print("✅ Vibe analysis complete: \(vibeAnalysis.vibe.displayName)")
-            print("   Sentiment: positivity=\(vibeAnalysis.sentiment.positivity), energy=\(vibeAnalysis.sentiment.energy)")
-            print("   Keywords: \(vibeAnalysis.keywords.joined(separator: ", "))")
+            AppLogger.shared.info("Vibe analysis complete: \(vibeAnalysis.vibe.displayName)", category: .repository)
+            AppLogger.shared.debug("Sentiment: positivity=\(vibeAnalysis.sentiment.positivity), energy=\(vibeAnalysis.sentiment.energy)", category: .repository)
+            AppLogger.shared.debug("Keywords: \(vibeAnalysis.keywords.joined(separator: ", "))", category: .repository)
             
             vibeScore = vibeAnalysis.confidence
             
-            print("🤖 Generating poem from AI service...")
+            AppLogger.shared.info("Generating poem from AI service...", category: .repository)
             let poem = try await aiService.generatePoemFromVibe(vibeAnalysis)
             
             // Validate that we actually got content
             guard !poem.title.isEmpty, !poem.content.isEmpty else {
-                print("❌ ERROR: Generated poem has empty title or content!")
-                print("   Title: '\(poem.title)'")
-                print("   Content length: \(poem.content.count)")
+                AppLogger.shared.error("Generated poem has empty title or content!", category: .repository)
+                AppLogger.shared.debug("Title: '\(poem.title)'", category: .repository)
+                AppLogger.shared.debug("Content length: \(poem.content.count)", category: .repository)
                 throw PoemError.localGenerationFailed
             }
             
             // Check if we got a fallback poem
             if poem.source == .localFallback {
-                print("⚠️ Received fallback poem instead of AI-generated content")
+                AppLogger.shared.warning("Received fallback poem instead of AI-generated content", category: .repository)
                 logWarning("AI generation returned fallback poem", category: .ai)
             } else {
-                print("✅ Poem generated successfully!")
+                AppLogger.shared.info("Poem generated successfully!", category: .repository)
             }
             
             print("📄 Generated Poem Details:")
