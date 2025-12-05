@@ -6,6 +6,12 @@ exports_files([
     "Poem of the Day/Core/AppConfiguration.swift",
 ])
 
+filegroup(
+    name = "release_profile",
+    srcs = ["release.mobileprovision"],
+    visibility = ["//visibility:public"],
+)
+
 # Main app Swift library
 swift_library(
     name = "PoemOfTheDayLib",
