@@ -17,8 +17,8 @@ actor AIPoemGenerator {
     // MARK: - Properties
     
     #if canImport(FoundationModels)
-    private var languageModel: SystemLanguageModel?
-    private var modelSession: LanguageModelSession?
+    private var languageModel: AnyObject?
+    private var modelSession: AnyObject?
     #endif
     
     // MARK: - Initialization
@@ -105,16 +105,11 @@ actor AIPoemGenerator {
     private func initializeFoundationModel() async {
         #if canImport(FoundationModels)
         if #available(iOS 26, *) {
-            do {
-                // Use the default system language model without custom adapters for stability
-                let model = SystemLanguageModel.default
-                self.languageModel = model
-                self.modelSession = LanguageModelSession(model: model)
-                AppLogger.shared.info("FoundationModels initialized successfully", category: .ai)
-            } catch {
-                AppLogger.shared.error("Failed to initialize FoundationModels: \(error)", category: .ai)
-                // Leave properties nil - checkAvailability will still work via SystemLanguageModel.default
-            }
+            // Use the default system language model without custom adapters for stability
+            let model = SystemLanguageModel.default
+            self.languageModel = model
+            self.modelSession = LanguageModelSession(model: model)
+            AppLogger.shared.info("FoundationModels initialized successfully", category: .ai)
         }
         #endif
     }
@@ -122,7 +117,7 @@ actor AIPoemGenerator {
     #if canImport(FoundationModels)
     @available(iOS 26, *)
     private func generateWithFoundationModels(prompt: String) async throws -> GeneratedPoem {
-        guard let session = modelSession else {
+        guard let session = modelSession as? LanguageModelSession else {
             AppLogger.shared.error("Model session is not available", category: .ai)
             throw PoemGenerationError.modelUnavailable
         }
