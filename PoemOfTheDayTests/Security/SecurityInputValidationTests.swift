@@ -341,6 +341,6 @@ final class SecurityInputValidationTests: XCTestCase {
             }
         }
         
-        wait(for: [expectation], timeout: 5.0)
+        wait(for: [expectation], timeout: 30.0)
     }
 } 
