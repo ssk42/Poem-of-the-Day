@@ -8,39 +8,39 @@
 import Foundation
 
 /// Centralized configuration for the app
-enum AppConfiguration {
+public enum AppConfiguration {
     
     // MARK: - App Information
     
-    static let appName = "Poem of the Day"
-    static let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
-    static let buildNumber = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
+    public static let appName = "Poem of the Day"
+    public static let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
+    public static let buildNumber = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
     
     // MARK: - Feature Flags
     
-    enum FeatureFlags {
-        static let aiPoemGeneration = true
-        static let vibeAnalysis = true
-        static let newsIntegration = true
-        static let widgetSupport = true
+    public enum FeatureFlags {
+        public static let aiPoemGeneration = true
+        public static let vibeAnalysis = true
+        public static let newsIntegration = true
+        public static let widgetSupport = true
     }
     
     // MARK: - AI Configuration
     
-    enum AI {
-        static let maxDailyGenerations = 10
-        static let quotaResetInterval: TimeInterval = 24 * 60 * 60 // 24 hours
-        static let minimumIOSVersion = "18.1"
-        static let defaultTemperature = 0.8
+    public enum AI {
+        public static let maxDailyGenerations = 10
+        public static let quotaResetInterval: TimeInterval = 24 * 60 * 60 // 24 hours
+        public static let minimumIOSVersion = "18.1"
+        public static let defaultTemperature = 0.8
     }
     
     // MARK: - News Configuration
     
-    enum News {
-        static let maxArticlesPerSource = 5
-        static let totalArticleLimit = 20
-        static let cacheExpirationTime: TimeInterval = 3 * 60 * 60 // 3 hours
-        static let rssSources = [
+    public enum News {
+        public static let maxArticlesPerSource = 5
+        public static let totalArticleLimit = 20
+        public static let cacheExpirationTime: TimeInterval = 3 * 60 * 60 // 3 hours
+        public static let rssSources = [
             "https://feeds.bbci.co.uk/news/rss.xml",
             "https://feeds.npr.org/1001/rss.xml",
             "https://feeds.apnews.com/rss/apf-topnews",
@@ -51,49 +51,49 @@ enum AppConfiguration {
     
     // MARK: - Storage Configuration
     
-    enum Storage {
-        static let appGroupIdentifier = "group.com.stevereitz.poemoftheday"
-        static let maxFavoritePoems = 100
-        static let cacheVersionKey = "cacheVersion"
-        static let currentCacheVersion = 2
+    public enum Storage {
+        public static let appGroupIdentifier = "group.com.stevereitz.poemoftheday"
+        public static let maxFavoritePoems = 100
+        public static let cacheVersionKey = "cacheVersion"
+        public static let currentCacheVersion = 2
     }
     
     // MARK: - UI Configuration
     
-    enum UI {
-        static let animationDuration = 0.3
-        static let hapticFeedbackEnabled = true
-        static let maxPoemDisplayLines = 20
-        static let cardCornerRadius: CGFloat = 16
-        static let buttonCornerRadius: CGFloat = 12
+    public enum UI {
+        public static let animationDuration = 0.3
+        public static let hapticFeedbackEnabled = true
+        public static let maxPoemDisplayLines = 20
+        public static let cardCornerRadius: CGFloat = 16
+        public static let buttonCornerRadius: CGFloat = 12
     }
     
     // MARK: - Network Configuration
     
-    enum Network {
-        static let requestTimeout: TimeInterval = 30
-        static let maxRetryAttempts = 3
-        static let retryDelay: TimeInterval = 1.0
+    public enum Network {
+        public static let requestTimeout: TimeInterval = 30
+        public static let maxRetryAttempts = 3
+        public static let retryDelay: TimeInterval = 1.0
     }
     
     // MARK: - Debug Configuration
     
-    enum Debug {
+    public enum Debug {
         #if DEBUG
-        static let isDebugMode = true
-        static let enableLogging = true
-        static let useSimulatedData = false
+        public static let isDebugMode = true
+        public static let enableLogging = true
+        public static let useSimulatedData = false
         #else
-        static let isDebugMode = false
-        static let enableLogging = false
-        static let useSimulatedData = false
+        public static let isDebugMode = false
+        public static let enableLogging = false
+        public static let useSimulatedData = false
         #endif
     }
     
     // MARK: - Testing Configuration
     
-    enum Testing {
-        static var isUITesting: Bool {
+    public enum Testing {
+        public static var isUITesting: Bool {
             let processInfo = ProcessInfo.processInfo
             let args = processInfo.arguments
             let env = processInfo.environment
@@ -104,26 +104,26 @@ enum AppConfiguration {
                 || env["XCTestConfigurationFilePath"] != nil
         }
         
-        static var isAIAvailable: Bool {
+        public static var isAIAvailable: Bool {
             if isUITesting {
                 return ProcessInfo.processInfo.environment["AI_AVAILABLE"] != "false"
             }
             return FeatureFlags.aiPoemGeneration
         }
         
-        static var shouldMockAIResponses: Bool {
+        public static var shouldMockAIResponses: Bool {
             isUITesting && ProcessInfo.processInfo.environment["MOCK_AI_RESPONSES"] == "true"
         }
         
-        static var shouldSimulateNetworkError: Bool {
+        public static var shouldSimulateNetworkError: Bool {
             isUITesting && ProcessInfo.processInfo.environment["SIMULATE_NETWORK_ERROR"] == "true"
         }
         
-        static var shouldMockAIError: Bool {
+        public static var shouldMockAIError: Bool {
             isUITesting && ProcessInfo.processInfo.environment["MOCK_AI_ERROR"] == "true"
         }
         
-        static var enableTelemetryTesting: Bool {
+        public static var enableTelemetryTesting: Bool {
             isUITesting && ProcessInfo.processInfo.environment["ENABLE_TELEMETRY"] == "true"
         }
     }
@@ -133,7 +133,7 @@ enum AppConfiguration {
 
 extension AppConfiguration {
     
-    static var isSimulator: Bool {
+    public static var isSimulator: Bool {
         #if targetEnvironment(simulator)
         return true
         #else
@@ -141,15 +141,15 @@ extension AppConfiguration {
         #endif
     }
     
-    static var isPreview: Bool {
+    public static var isPreview: Bool {
         ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1"
     }
     
-    static var isTestEnvironment: Bool {
+    public static var isTestEnvironment: Bool {
         NSClassFromString("XCTestCase") != nil
     }
     
-    static var isUITestEnvironment: Bool {
+    public static var isUITestEnvironment: Bool {
         Testing.isUITesting
     }
 }
