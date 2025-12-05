@@ -34,7 +34,8 @@ if [ ! -f "$LATEST_PROFILE" ]; then
 fi
 
 echo "🔄 Converting to Base64..."
-BASE64_STR=$(base64 < "$LATEST_PROFILE")
+# Strip newlines to ensure clean secret
+BASE64_STR=$(base64 < "$LATEST_PROFILE" | tr -d '\n')
 
 # Copy to clipboard
 echo "$BASE64_STR" | pbcopy
