@@ -96,7 +96,7 @@ protocol PoemHistoryServiceProtocol: Sendable {
 
 // MARK: - Streak Info
 
-struct StreakInfo: Codable {
+struct StreakInfo: Codable, Equatable {
     let currentStreak: Int
     let longestStreak: Int
     let totalDaysWithPoems: Int
@@ -195,7 +195,7 @@ actor PoemHistoryService: PoemHistoryServiceProtocol {
     }
     
     func clearHistory() async {
-        userDefaults.removeObject(forKey: "poemHistory")
+        userDefaults.removeObject(forKey: StorageKeys.poemHistory)
         cache = nil
         logInfo("Cleared poem history", category: .repository)
     }
@@ -281,7 +281,7 @@ actor PoemHistoryService: PoemHistoryServiceProtocol {
     // MARK: - Private Methods
     
     private func loadHistory() async -> [PoemHistoryEntry] {
-        guard let data = userDefaults.data(forKey: "poemHistory"),
+        guard let data = userDefaults.data(forKey: StorageKeys.poemHistory),
               let history = try? JSONDecoder().decode([PoemHistoryEntry].self, from: data) else {
             return []
         }
@@ -293,7 +293,7 @@ actor PoemHistoryService: PoemHistoryServiceProtocol {
             logError("Failed to encode poem history", category: .error)
             return
         }
-        userDefaults.set(data, forKey: "poemHistory")
+        userDefaults.set(data, forKey: StorageKeys.poemHistory)
     }
 }
 

@@ -52,7 +52,7 @@ actor TelemetryService: TelemetryServiceProtocol {
         var allEvents = eventQueue.map { AnyTelemetryEvent($0) }
         
         // Get persisted events
-        if let eventDataArray = userDefaults.array(forKey: "telemetry_events") as? [Data] {
+        if let eventDataArray = userDefaults.array(forKey: StorageKeys.telemetryEvents) as? [Data] {
             let persistedEvents = eventDataArray.compactMap { data in
                 try? JSONDecoder().decode(AnyTelemetryEvent.self, from: data)
             }
@@ -120,14 +120,13 @@ actor TelemetryService: TelemetryServiceProtocol {
             try? JSONEncoder().encode(AnyTelemetryEvent(event))
         }
         
-        var existingEvents = userDefaults.array(forKey: "telemetry_events") as? [Data] ?? []
+        var existingEvents = userDefaults.array(forKey: StorageKeys.telemetryEvents) as? [Data] ?? []
         existingEvents.append(contentsOf: eventData)
-        
-        userDefaults.set(existingEvents, forKey: "telemetry_events")
+        userDefaults.set(existingEvents, forKey: StorageKeys.telemetryEvents)
     }
     
     private func loadPersistedEvents() async {
-        guard let eventDataArray = userDefaults.array(forKey: "telemetry_events") as? [Data] else { return }
+        guard let eventDataArray = userDefaults.array(forKey: StorageKeys.telemetryEvents) as? [Data] else { return }
         
         let events = eventDataArray.compactMap { data in
             try? JSONDecoder().decode(AnyTelemetryEvent.self, from: data)
@@ -139,14 +138,14 @@ actor TelemetryService: TelemetryServiceProtocol {
     private func cleanupOldEvents() async {
         let cutoffDate = Date().addingTimeInterval(-TimeInterval(configuration.retentionDays * 24 * 60 * 60))
         
-        guard let eventDataArray = userDefaults.array(forKey: "telemetry_events") as? [Data] else { return }
+        guard let eventDataArray = userDefaults.array(forKey: StorageKeys.telemetryEvents) as? [Data] else { return }
         
         let filteredEvents = eventDataArray.compactMap { data -> Data? in
             guard let event = try? JSONDecoder().decode(AnyTelemetryEvent.self, from: data) else { return nil }
             return event.timestamp > cutoffDate ? data : nil
         }
         
-        userDefaults.set(filteredEvents, forKey: "telemetry_events")
+        userDefaults.set(filteredEvents, forKey: StorageKeys.telemetryEvents)
         
         let removedCount = eventDataArray.count - filteredEvents.count
         if removedCount > 0 {
@@ -156,7 +155,7 @@ actor TelemetryService: TelemetryServiceProtocol {
     
     private func clearAllEvents() async {
         eventQueue.removeAll()
-        userDefaults.removeObject(forKey: "telemetry_events")
+        userDefaults.removeObject(forKey: StorageKeys.telemetryEvents)
         logger.info("All telemetry events cleared", category: .telemetry)
     }
     

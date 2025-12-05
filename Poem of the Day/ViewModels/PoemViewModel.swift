@@ -77,13 +77,15 @@ final class PoemViewModel: ObservableObject {
         )
         await telemetryService.track(appLaunchEvent)
         
+        // Load vibe first to ensure consistency for poem generation
+        await loadDailyVibe()
+        
         async let _poem: Void = loadDailyPoem()
         async let _favorites: Void = loadFavorites()
         async let _ai: Void = checkAIAvailability()
-        async let _vibe: Void = loadDailyVibe()
         
-        // Await all tasks to complete
-        _ = await (_poem, _favorites, _ai, _vibe)
+        // Await remaining tasks
+        _ = await (_poem, _favorites, _ai)
         
         isLoading = false
     }

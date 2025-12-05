@@ -6,17 +6,46 @@
 //
 
 import Foundation
+import NaturalLanguage
 
 actor VibeAnalyzer: VibeAnalyzerProtocol {
     
     // MARK: - Keyword Dictionaries
     
     private let vibeKeywords: [DailyVibe: [String]]
+    private let embedding: NLEmbedding?
+    private var vibeVectors: [DailyVibe: [Double]] = [:]
+    
+    // AI Analyzer for iOS 26+
+    private var aiAnalyzer: Any? // Holds AIVibeAnalyzer on supported devices
     
     init() {
         self.vibeKeywords = VibeAnalyzer.loadVibeKeywords()
-    }
+        self.embedding = NLEmbedding.sentenceEmbedding(for: .english)
+        
+        if self.embedding == nil {
+            print("VibeAnalyzer: ⚠️ NLEmbedding is NIL. Semantic analysis will be disabled.")
+        } else {
+            print("VibeAnalyzer: ✅ NLEmbedding loaded successfully.")
+        }
+        
+        // Pre-compute vibe vectors
+        if let embedding = self.embedding {
+            for vibe in DailyVibe.allCases {
+                let keywords = self.vibeKeywords[vibe]?.prefix(5).joined(separator: " ") ?? ""
+                let vibeDefinition = "\(vibe.displayName). \(vibe.description). \(keywords)"
+                if let vector = embedding.vector(for: vibeDefinition) {
+                    self.vibeVectors[vibe] = vector
+                }
+            }
+            }
 
+        
+        // Initialize AI analyzer if available
+        if #available(iOS 26, *) {
+            self.aiAnalyzer = AIVibeAnalyzer()
+        }
+    }
     private static func loadVibeKeywords() -> [DailyVibe: [String]] {
         if let url = Bundle.main.url(forResource: "VibeKeywords", withExtension: "json") {
             do {
@@ -139,6 +168,23 @@ actor VibeAnalyzer: VibeAnalyzerProtocol {
     ]
     
     func analyzeVibe(from articles: [NewsArticle]) async -> VibeAnalysis {
+        // 1. Try AI Analysis first (iOS 26+)
+        if #available(iOS 26, *) {
+            if let analyzer = aiAnalyzer as? AIVibeAnalyzer, await analyzer.isAvailable {
+                if let aiResult = try? await analyzer.analyzeVibe(from: articles) {
+                    print("VibeAnalyzer: 🤖 AI Analysis successful: \(aiResult.vibe.displayName)")
+                    return aiResult
+                }
+            }
+        }
+        
+        // 2. Fallback to existing logic
+        print("VibeAnalyzer: 🔄 Using standard analysis (Keyword/Semantic)")
+        
+        guard !articles.isEmpty else {
+            return VibeAnalysis(vibe: .contemplative, confidence: 0.0, reasoning: "No articles provided for analysis.", keywords: [], sentiment: .neutral, backgroundColorIntensity: 0.0)
+        }
+        
         // Weighted words for vibe scoring - titles weighted 3x higher than description/content
         // This ensures headlines (most indicative of tone) have greater influence on vibe detection
         let weightedWords = extractWeightedWords(from: articles, titleWeight: 3, descriptionWeight: 1, contentWeight: 1)
@@ -152,9 +198,62 @@ actor VibeAnalyzer: VibeAnalyzerProtocol {
 
         // Calculate vibe scores for each vibe type
         var vibeScores: [DailyVibe: Double] = [:]
-        for vibe in DailyVibe.allCases {
-            let score = calculateVibeScore(for: vibe, in: weightedWords)
-            vibeScores[vibe] = score
+        
+        // Use semantic analysis if available, otherwise fall back to keyword density
+        // Use semantic analysis if available, otherwise fall back to keyword density
+        if let embedding = self.embedding, !vibeVectors.isEmpty {
+            // Per-Article Semantic Analysis
+            // We analyze each article individually to capture its specific vibe, then aggregate.
+            
+            var semanticScores: [DailyVibe: Double] = [:]
+            var articleCount = 0
+            
+            for article in articles {
+                // Get vector for this article (Title + Description is usually enough and cleaner)
+                let articleText = "\(article.title) \(article.description ?? "")"
+                guard let articleVector = embedding.vector(for: articleText) else { continue }
+                
+                articleCount += 1
+                
+                for vibe in DailyVibe.allCases {
+                    if let vibeVector = vibeVectors[vibe] {
+                        let similarity = cosineSimilarity(articleVector, vibeVector)
+                        // Accumulate similarity (0.0 to 1.0)
+                        semanticScores[vibe, default: 0.0] += max(0.0, similarity)
+                    }
+                }
+            }
+            
+            // Average the scores
+            if articleCount > 0 {
+                for (vibe, totalScore) in semanticScores {
+                    semanticScores[vibe] = totalScore / Double(articleCount)
+                }
+            }
+            
+            print("VibeAnalyzer: Analyzed \(articleCount) articles.")
+            
+            for vibe in DailyVibe.allCases {
+                // Hybrid Score: 30% Keyword Density + 70% Semantic Similarity
+                let keywordScore = calculateVibeScore(for: vibe, in: weightedWords)
+                let semanticScore = semanticScores[vibe] ?? 0.0
+                
+                // Normalize semantic score
+                // Observed raw scores are typically 0.05 - 0.25.
+                // We map 0.05...0.30 to roughly 0.0...1.0
+                let normalizedSemantic = max(0.0, min(1.0, (semanticScore - 0.05) * 4.0))
+                
+                print("VibeAnalyzer: \(vibe.rawValue) - Raw Semantic: \(semanticScore), Normalized: \(normalizedSemantic), Keyword: \(keywordScore)")
+                
+                vibeScores[vibe] = (keywordScore * 0.3) + (normalizedSemantic * 0.7)
+            }
+        } else {
+            print("VibeAnalyzer: ⚠️ Using fallback keyword logic (No embedding or vectors).")
+            // Fallback to original keyword-only logic
+            for vibe in DailyVibe.allCases {
+                let score = calculateVibeScore(for: vibe, in: weightedWords)
+                vibeScores[vibe] = score
+            }
         }
 
         // Find the vibe with the highest score
@@ -283,6 +382,28 @@ actor VibeAnalyzer: VibeAnalyzerProtocol {
         // Simple density-based score - treats all vibes equally regardless of keyword count
         let density = Double(matchCount) / Double(words.count) // 0..1
         return density
+    }
+    
+    /// Calculates cosine similarity between two vectors
+    private func cosineSimilarity(_ vectorA: [Double], _ vectorB: [Double]) -> Double {
+        guard vectorA.count == vectorB.count else { return 0.0 }
+        
+        var dotProduct = 0.0
+        var magnitudeA = 0.0
+        var magnitudeB = 0.0
+        
+        for i in 0..<vectorA.count {
+            dotProduct += vectorA[i] * vectorB[i]
+            magnitudeA += vectorA[i] * vectorA[i]
+            magnitudeB += vectorB[i] * vectorB[i]
+        }
+        
+        magnitudeA = sqrt(magnitudeA)
+        magnitudeB = sqrt(magnitudeB)
+        
+        if magnitudeA == 0 || magnitudeB == 0 { return 0.0 }
+        
+        return dotProduct / (magnitudeA * magnitudeB)
     }
     
     private func generateReasoning(for vibe: DailyVibe, from articles: [NewsArticle], sentiment: SentimentScore) -> String {

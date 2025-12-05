@@ -25,11 +25,6 @@ struct ContentView: View {
         self._viewModel = StateObject(wrappedValue: container.makePoemViewModel())
     }
     
-    private var toolbarPlacement: ToolbarItemPlacement {
-        return .navigationBarTrailing
-
-    }
-    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -44,7 +39,21 @@ struct ContentView: View {
                             loadingView
                                 .accessibilityIdentifier("loading_indicator")
                         } else if let poem = viewModel.poemOfTheDay {
-                            poemCard(poem: poem)
+                            PoemCardView(
+                                poem: poem,
+                                isFavorite: viewModel.isFavorite(poem: poem),
+                                onToggleFavorite: {
+                                    Task {
+                                        await viewModel.toggleFavorite(poem: poem)
+                                    }
+                                },
+                                onShare: {
+                                    Task {
+                                        await viewModel.sharePoem(poem)
+                                    }
+                                    showShareSheet = true
+                                }
+                            )
                         } else if viewModel.errorMessage != nil {
                             errorView
                         }
@@ -358,115 +367,7 @@ struct ContentView: View {
         }
     }
     
-    private func poemCard(poem: Poem) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
-            VStack(alignment: .leading, spacing: 8) {
-                Text(poem.title)
-                    .font(.system(size: scaledFontSize(24), weight: .semibold, design: .serif))
-                    .foregroundColor(colorScheme == .dark ? .white : .black)
-                    .accessibilityAddTraits(.isHeader)
-                    .accessibilityIdentifier("poem_title")
-                
-                HStack {
-                    if let author = poem.author {
-                        Text("by \(author)")
-                            .font(.system(size: scaledFontSize(16), weight: .medium, design: .serif))
-                            .foregroundColor(.secondary)
-                            .accessibilityIdentifier("poem_author")
-                    }
-                    
-                    Spacer()
-                    
-                    // Show vibe indicator if this is an AI-generated poem
-                    if let vibe = poem.vibe {
-                        HStack(spacing: 4) {
-                            Text(vibe.emoji)
-                                .font(.caption)
-                                .accessibilityHidden(true)
-                            Text("Today's \(vibe.displayName) Vibe")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(
-                            Capsule()
-                                .fill(colorScheme == .dark ? Color(red: 0.3, green: 0.3, blue: 0.4) : Color(red: 0.95, green: 0.95, blue: 0.97))
-                        )
-                        .accessibilityLabel("Generated from \(vibe.displayName) vibe")
-                    }
-                }
-            }
-            
-            Divider()
-                .accessibilityHidden(true)
-            
-            Text(poem.content)
-                .font(.system(size: scaledFontSize(16), weight: .regular, design: .serif))
-                .lineSpacing(8)
-                .padding(.vertical, 8)
-                .accessibilityLabel("Poem content: \(poem.content)")
-                .accessibilityIdentifier("poem_content")
-            
-            HStack {
-                Button(action: {
-                    Task {
-                        await viewModel.toggleFavorite(poem: poem)
-                        #if canImport(UIKit)
-                        let generator = UIImpactFeedbackGenerator(style: .medium)
-                        generator.impactOccurred()
-                        #endif
-                    }
-                }) {
-                    Label(
-                        viewModel.isFavorite(poem: poem) ? "Remove from favorites" : (AppConfiguration.Testing.isUITesting ? "Add (Test)" : "Add to favorites"),
-                        systemImage: viewModel.isFavorite(poem: poem) ? "heart.fill" : "heart"
-                    )
-                    .foregroundColor(viewModel.isFavorite(poem: poem) ? .red : .primary)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
-                    .background(
-                        Capsule()
-                            .strokeBorder(viewModel.isFavorite(poem: poem) ? Color.red : Color.primary, lineWidth: 1)
-                    )
-                }
-                .accessibilityLabel(viewModel.isFavorite(poem: poem) ? "Remove from favorites" : "Add to favorites")
-                .accessibilityHint(viewModel.isFavorite(poem: poem) ? "Double tap to remove this poem from your favorites" : "Double tap to add this poem to your favorites")
-                .accessibilityIdentifier("favorite_button")
-                
-                Spacer()
-                
-                Button(action: {
-                    Task {
-                        await viewModel.sharePoem(poem)
-                    }
-                    showShareSheet = true
-                }) {
-                    Label("Share", systemImage: "square.and.arrow.up")
-                        .foregroundColor(.primary)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .background(
-                            Capsule()
-                                .strokeBorder(Color.primary, lineWidth: 1)
-                        )
-                }
-                .accessibilityLabel("Share poem")
-                .accessibilityHint("Double tap to share this poem with others")
-                .accessibilityIdentifier("share_button")
-            }
-            .padding(.top, 8)
-        }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(colorScheme == .dark ? Color(red: 0.2, green: 0.2, blue: 0.3) : Color.white)
-                .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
-        )
-        .transition(.opacity)
-        .accessibilityElement(children: .contain)
-        .accessibilityIdentifier("poem_card")
-    }
+    // PoemCardView is now in Views/Components/PoemCardView.swift
     
     private var loadingView: some View {
         VStack(spacing: 20) {
@@ -643,156 +544,7 @@ struct ShareSheet: UIViewControllerRepresentable {
 }
 #endif
 
-// MARK: - Favorites View
-
-struct FavoritesView: View {
-    let favorites: [Poem]
-    @Environment(\.dismiss) private var dismiss
-    @Environment(\.colorScheme) private var colorScheme
-    
-    var body: some View {
-        NavigationStack {
-            ZStack {
-                LinearGradient(
-                    gradient: Gradient(colors: [
-                        colorScheme == .dark ? Color(red: 0.1, green: 0.1, blue: 0.2) : Color(red: 0.9, green: 0.95, blue: 1.0),
-                        colorScheme == .dark ? Color(red: 0.2, green: 0.2, blue: 0.3) : Color(red: 0.8, green: 0.9, blue: 1.0)
-                    ]),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                .ignoresSafeArea()
-                
-                if favorites.isEmpty {
-                    emptyStateView
-                        .onAppear { NSLog("FavoritesView: Showing empty state view") }
-                } else {
-                    List {
-                        ForEach(favorites) { poem in
-                            NavigationLink(destination: FavoritePoemDetailView(poem: poem)) {
-                                VStack(alignment: .leading, spacing: 8) {
-                                    Text(poem.title)
-                                        .font(.headline)
-                                    
-                                    if let author = poem.author {
-                                        Text("by \(author)")
-                                            .font(.subheadline)
-                                            .foregroundColor(.secondary)
-                                    }
-                                    
-                                    Text(poem.content)
-                                        .font(.body)
-                                        .lineLimit(2)
-                                        .foregroundColor(.secondary)
-                                }
-                                .padding(.vertical, 8)
-                                .accessibilityElement(children: .combine)
-                                .accessibilityLabel("\(poem.title) by \(poem.author ?? "Unknown author")")
-                                .accessibilityHint("Double tap to view full poem")
-                            }
-                            .listRowBackground(
-                                colorScheme == .dark ? Color(red: 0.2, green: 0.2, blue: 0.3) : Color.white
-                            )
-                        }
-                    }
-                    .accessibilityIdentifier("favorites_list")
-                    .listStyle(InsetGroupedListStyle())
-                    .scrollContentBackground(.hidden)
-                }
-            }
-            .navigationTitle("Favorite Poems")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                #if os(visionOS)
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Done") {
-                        dismiss()
-                    }
-                }
-                #else
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
-                        dismiss()
-                    }
-                }
-                #endif
-            }
-        }
-    }
-    
-    private var emptyStateView: some View {
-        VStack(spacing: 20) {
-            Image(systemName: "heart.slash")
-                .font(.system(size: 70))
-                .foregroundColor(.gray)
-                .accessibilityHidden(true)
-            
-            Text("No Favorite Poems Yet")
-                .font(.title2)
-                .fontWeight(.bold)
-            
-            Text("Your favorite poems will appear here.")
-                .foregroundColor(.secondary)
-            
-            Button("Done") {
-                dismiss()
-            }
-            .padding(.horizontal, 24)
-            .padding(.vertical, 12)
-            .background(Capsule().fill(Color.blue))
-            .foregroundColor(.white)
-            .padding(.top, 16)
-        }
-        // .accessibilityElement(children: .combine) - Removed to allow finding inner elements
-        // .accessibilityLabel("No favorite poems yet. Your favorite poems will appear here.")
-        .accessibilityIdentifier("favorites_empty_state")
-    }
-}
-
-// MARK: - Favorite Poem Detail View
-
-struct FavoritePoemDetailView: View {
-    let poem: Poem
-    @Environment(\.colorScheme) private var colorScheme
-    
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                Text(poem.title)
-                    .font(.system(size: 28, weight: .bold, design: .serif))
-                    .accessibilityAddTraits(.isHeader)
-                
-                if let author = poem.author {
-                    Text("by \(author)")
-                        .font(.system(size: 18, weight: .medium, design: .serif))
-                        .foregroundColor(.secondary)
-                }
-                
-                Divider()
-                    .accessibilityHidden(true)
-                
-                Text(poem.content)
-                    .font(.system(size: 18, weight: .regular, design: .serif))
-                    .lineSpacing(8)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            .padding()
-            .frame(maxWidth: .infinity, alignment: .leading)
-        }
-        .background(
-            LinearGradient(
-                gradient: Gradient(colors: [
-                    colorScheme == .dark ? Color(red: 0.1, green: 0.1, blue: 0.2) : Color(red: 0.9, green: 0.95, blue: 1.0),
-                    colorScheme == .dark ? Color(red: 0.2, green: 0.2, blue: 0.3) : Color(red: 0.8, green: 0.9, blue: 1.0)
-                ]),
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
-        )
-        .navigationBarTitleDisplayMode(.inline)
-    }
-}
+// FavoritesView and FavoritePoemDetailView are now in Views/Screens/FavoritesView.swift
 
 // For SwiftUI Preview
 #if DEBUG

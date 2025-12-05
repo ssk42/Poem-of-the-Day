@@ -38,7 +38,7 @@ actor PoemRepository: PoemRepositoryProtocol {
          aiService: PoemGenerationServiceProtocol? = nil,
          telemetryService: TelemetryServiceProtocol = TelemetryService(),
          historyService: PoemHistoryServiceProtocol = PoemHistoryService(),
-         userDefaults: UserDefaults = UserDefaults(suiteName: "group.com.stevereitz.poemoftheday") ?? .standard,
+         userDefaults: UserDefaults = UserDefaults(suiteName: AppConfiguration.Storage.appGroupIdentifier) ?? .standard,
          widgetReloader: WidgetReloaderProtocol = DefaultWidgetReloader()) {
         self.networkService = networkService
         self.newsService = newsService
@@ -58,7 +58,7 @@ actor PoemRepository: PoemRepositoryProtocol {
         // Check for reset flag in UI tests
         if ProcessInfo.processInfo.arguments.contains("-ResetFavorites") {
             NSLog("PoemRepository: ResetFavorites flag detected. Clearing favorites.")
-            self.userDefaults.removeObject(forKey: "favoritePoems")
+            self.userDefaults.removeObject(forKey: StorageKeys.favoritePoems)
             self.cachedFavorites = []
             self.favoritesLoaded = true
             NSLog("PoemRepository: Favorites cleared.")
@@ -101,9 +101,9 @@ actor PoemRepository: PoemRepositoryProtocol {
             let isAvailable = await aiService.isAvailable()
             print("   AI Available: \(isAvailable)")
             
-            // Force refresh vibe analysis to get varied results
-            print("🔄 Getting fresh vibe analysis...")
-            let vibeAnalysis = try await getVibeOfTheDayInternal(forceRefresh: true)
+            // Use cached vibe if available, otherwise refresh
+            print("🔄 Getting vibe analysis...")
+            let vibeAnalysis = try await getVibeOfTheDayInternal(forceRefresh: false)
             print("✅ Vibe analysis complete: \(vibeAnalysis.vibe.displayName)")
             print("   Sentiment: positivity=\(vibeAnalysis.sentiment.positivity), energy=\(vibeAnalysis.sentiment.energy)")
             print("   Keywords: \(vibeAnalysis.keywords.joined(separator: ", "))")
@@ -150,7 +150,6 @@ actor PoemRepository: PoemRepositoryProtocol {
             await historyService.addEntry(poem, source: .aiGenerated, vibe: vibeAnalysis.vibe)
             print("✅ Added to history")
             
-            // Reload widgets to show new poem
             // Reload widgets to show new poem
             print("🔄 Reloading widgets...")
             widgetReloader.reloadAllTimelines()
@@ -316,7 +315,7 @@ actor PoemRepository: PoemRepositoryProtocol {
     // MARK: - Private Methods
     
     private func shouldFetchNewPoem() -> Bool {
-        guard let lastFetchDate = userDefaults.object(forKey: "lastPoemFetchDate") as? Date else {
+        guard let lastFetchDate = userDefaults.object(forKey: StorageKeys.lastPoemFetchDate) as? Date else {
             return true
         }
         
@@ -332,7 +331,7 @@ actor PoemRepository: PoemRepositoryProtocol {
         }
         
         // Check user preference for poem source (default to "api" / PoetryDB)
-        let preferredSource = userDefaults.string(forKey: "preferredPoemSource") ?? "api"
+        let preferredSource = userDefaults.string(forKey: StorageKeys.preferredPoemSource) ?? "api"
         
         // Only use AI if explicitly preferred AND available
         var useAI = false
@@ -365,6 +364,7 @@ actor PoemRepository: PoemRepositoryProtocol {
                     return try await self.networkService.fetchRandomPoem()
                 }
                 group.addTask {
+                    // 10 second timeout for poem fetch (matches test expectations)
                     try await Task.sleep(nanoseconds: 10 * 1_000_000_000)
                     throw PoemError.networkUnavailable
                 }
@@ -412,32 +412,32 @@ actor PoemRepository: PoemRepositoryProtocol {
     }
     
     private func cachePoem(_ poem: Poem) async {
-        userDefaults.set(poem.title, forKey: "poemTitle")
-        userDefaults.set(poem.content, forKey: "poemContent")
-        userDefaults.set(poem.author ?? "", forKey: "poemAuthor")
-        userDefaults.set("api", forKey: "poemSource")
-        userDefaults.removeObject(forKey: "poemVibe") // Clear vibe for API poems
-        userDefaults.set(Date(), forKey: "lastPoemFetchDate")
+        userDefaults.set(poem.title, forKey: StorageKeys.poemTitle)
+        userDefaults.set(poem.content, forKey: StorageKeys.poemContent)
+        userDefaults.set(poem.author ?? "", forKey: StorageKeys.poemAuthor)
+        userDefaults.set("api", forKey: StorageKeys.poemSource)
+        userDefaults.removeObject(forKey: StorageKeys.poemVibe) // Clear vibe for API poems
+        userDefaults.set(Date(), forKey: StorageKeys.lastPoemFetchDate)
     }
     
     private func cachePoemWithVibe(_ poem: Poem) async {
-        userDefaults.set(poem.title, forKey: "poemTitle")
-        userDefaults.set(poem.content, forKey: "poemContent")
-        userDefaults.set(poem.author ?? "", forKey: "poemAuthor")
-        userDefaults.set("ai_generated", forKey: "poemSource")
+        userDefaults.set(poem.title, forKey: StorageKeys.poemTitle)
+        userDefaults.set(poem.content, forKey: StorageKeys.poemContent)
+        userDefaults.set(poem.author ?? "", forKey: StorageKeys.poemAuthor)
+        userDefaults.set("ai_generated", forKey: StorageKeys.poemSource)
         
         // Cache the vibe information if available
         if let vibe = poem.vibe {
-            userDefaults.set(vibe.rawValue, forKey: "poemVibe")
+            userDefaults.set(vibe.rawValue, forKey: StorageKeys.poemVibe)
         }
         
-        userDefaults.set(Date(), forKey: "lastPoemFetchDate")
+        userDefaults.set(Date(), forKey: StorageKeys.lastPoemFetchDate)
     }
     
     private func loadCachedVibeAnalysis() -> VibeAnalysis? {
-        guard let lastVibeDate = userDefaults.object(forKey: "lastVibeAnalysisDate") as? Date,
+        guard let lastVibeDate = userDefaults.object(forKey: StorageKeys.lastVibeAnalysisDate) as? Date,
               Calendar.current.isDate(lastVibeDate, inSameDayAs: Date()),
-              let vibeData = userDefaults.data(forKey: "cachedVibeAnalysis"),
+              let vibeData = userDefaults.data(forKey: StorageKeys.cachedVibeAnalysis),
               let vibeAnalysis = try? JSONDecoder().decode(VibeAnalysis.self, from: vibeData) else {
             return nil
         }
@@ -447,18 +447,18 @@ actor PoemRepository: PoemRepositoryProtocol {
     
     private func cacheVibeAnalysis(_ analysis: VibeAnalysis) async {
         guard let data = try? JSONEncoder().encode(analysis) else { return }
-        userDefaults.set(data, forKey: "cachedVibeAnalysis")
-        userDefaults.set(Date(), forKey: "lastVibeAnalysisDate")
+        userDefaults.set(data, forKey: StorageKeys.cachedVibeAnalysis)
+        userDefaults.set(Date(), forKey: StorageKeys.lastVibeAnalysisDate)
     }
     
     private func loadCachedPoem() -> Poem? {
-        guard let title = userDefaults.string(forKey: "poemTitle"),
-              let content = userDefaults.string(forKey: "poemContent") else {
+        guard let title = userDefaults.string(forKey: StorageKeys.poemTitle),
+              let content = userDefaults.string(forKey: StorageKeys.poemContent) else {
             return nil
         }
         
-        let author = userDefaults.string(forKey: "poemAuthor")
-        let vibeRawValue = userDefaults.string(forKey: "poemVibe")
+        let author = userDefaults.string(forKey: StorageKeys.poemAuthor)
+        let vibeRawValue = userDefaults.string(forKey: StorageKeys.poemVibe)
         let vibe = vibeRawValue.flatMap { DailyVibe(rawValue: $0) }
         
         return Poem(
@@ -471,7 +471,7 @@ actor PoemRepository: PoemRepositoryProtocol {
     
     private func loadFavorites() async {
         NSLog("PoemRepository: loadFavorites called")
-        guard let data = userDefaults.data(forKey: "favoritePoems"),
+        guard let data = userDefaults.data(forKey: StorageKeys.favoritePoems),
               let favorites = try? JSONDecoder().decode([Poem].self, from: data) else {
             NSLog("PoemRepository: No favorites found in UserDefaults or decode failed")
             cachedFavorites = []
@@ -490,7 +490,7 @@ actor PoemRepository: PoemRepositoryProtocol {
             NSLog("PoemRepository: Failed to encode favorites")
             return
         }
-        userDefaults.set(data, forKey: "favoritePoems")
+        userDefaults.set(data, forKey: StorageKeys.favoritePoems)
         userDefaults.synchronize() // Force save
         NSLog("PoemRepository: Favorites saved to UserDefaults")
     }

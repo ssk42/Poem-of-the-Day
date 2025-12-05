@@ -486,6 +486,8 @@ struct SentimentScore: Codable {
         self.energy = max(0.0, min(1.0, energy))
         self.complexity = max(0.0, min(1.0, complexity))
     }
+    
+    static let neutral = SentimentScore(positivity: 0.5, energy: 0.5, complexity: 0.0)
 }
 
 // Note: Poem model with vibe support is defined in Poem.swift

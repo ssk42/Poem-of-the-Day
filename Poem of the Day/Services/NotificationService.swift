@@ -170,7 +170,7 @@ actor NotificationService: NotificationServiceProtocol {
     // MARK: - Settings Persistence
     
     nonisolated func getSettings() -> NotificationSettings {
-        guard let data = userDefaults.data(forKey: "notificationSettings"),
+        guard let data = userDefaults.data(forKey: StorageKeys.notificationSettings),
               let settings = try? JSONDecoder().decode(NotificationSettings.self, from: data) else {
             return .default
         }
@@ -179,7 +179,7 @@ actor NotificationService: NotificationServiceProtocol {
     
     nonisolated func saveSettings(_ settings: NotificationSettings) {
         guard let data = try? JSONEncoder().encode(settings) else { return }
-        userDefaults.set(data, forKey: "notificationSettings")
+        userDefaults.set(data, forKey: StorageKeys.notificationSettings)
     }
 }
 
