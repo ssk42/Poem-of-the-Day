@@ -20,5 +20,6 @@ ios_extension(
     ],
     infoplists = ["Info.plist"],
     minimum_os_version = "17.0",
+    visibility = ["//visibility:public"],
     deps = [":WidgetLib"],
 )

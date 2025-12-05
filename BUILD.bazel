@@ -24,6 +24,9 @@ swift_library(
 ios_application(
     name = "PoemOfTheDay",
     bundle_id = "Stevereitz.Poem-of-the-Day",
+    extensions = [
+        "//Poem of the Day Widget:PoemOfTheDayWidget",
+    ],
     families = [
         "iphone",
         "ipad",
