@@ -25,7 +25,16 @@ struct Provider: TimelineProvider {
         if let title = sharedDefaults?.string(forKey: "poemTitle"),
            let content = sharedDefaults?.string(forKey: "poemContent") {
             let author = sharedDefaults?.string(forKey: "poemAuthor")
-            let vibe = sharedDefaults?.string(forKey: "poemVibe")
+            var vibe = sharedDefaults?.string(forKey: "poemVibe")
+            
+            // Fallback: If no poem-specific vibe, try to load from cached vibe analysis
+            if vibe == nil || vibe?.isEmpty == true {
+                if let vibeData = sharedDefaults?.data(forKey: "cachedVibeAnalysis"),
+                   let vibeAnalysis = try? JSONDecoder().decode(VibeAnalysis.self, from: vibeData) {
+                    vibe = vibeAnalysis.vibe.rawValue
+                }
+            }
+            
             poem = WidgetPoem(id: UUID(), title: title, lines: content.components(separatedBy: "\n"), author: author, vibe: vibe)
         }
         
@@ -117,37 +126,35 @@ struct Provider: TimelineProvider {
 struct Poem_Of_The_Day_WidgetView: View {
     var entry: Provider.Entry
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.widgetFamily) private var widgetFamily
 
     var body: some View {
         ZStack {
-            // Background gradient
-            if let vibeRaw = entry.poem.vibe, let vibe = DailyVibe(rawValue: vibeRaw) {
-                vibe.backgroundGradient(for: colorScheme)
-            } else {
-                LinearGradient(
-                    gradient: Gradient(colors: [
-                        colorScheme == .dark ? Color(red: 0.1, green: 0.1, blue: 0.2) : Color(red: 0.9, green: 0.95, blue: 1.0),
-                        colorScheme == .dark ? Color(red: 0.2, green: 0.2, blue: 0.3) : Color(red: 0.8, green: 0.9, blue: 1.0)
-                    ]),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-            }
+            // Background gradient - always use vibe color if available
+            vibeBackgroundGradient
             
-            VStack(alignment: .leading, spacing: 8) {
-                Text(entry.poem.title)
-                    .font(.headline)
-                    .lineLimit(1)
-                    .padding(.bottom, 2)
+            VStack(alignment: .leading, spacing: widgetSpacing) {
+                // Title with vibe emoji for small widget
+                HStack(spacing: 4) {
+                    if widgetFamily == .systemSmall, let vibeRaw = entry.poem.vibe, let vibe = DailyVibe(rawValue: vibeRaw) {
+                        Text(vibe.emoji)
+                            .font(.caption)
+                    }
+                    Text(entry.poem.title)
+                        .font(titleFont)
+                        .lineLimit(widgetFamily == .systemSmall ? 1 : 2)
+                }
+                .padding(.bottom, widgetFamily == .systemSmall ? 0 : 2)
                 
                 Text(entry.poem.content)
-                    .font(.system(size: 14, weight: .regular, design: .serif))
-                    .lineLimit(6)
-                    .lineSpacing(2)
+                    .font(contentFont)
+                    .lineLimit(contentLineLimit)
+                    .lineSpacing(widgetFamily == .systemSmall ? 1 : 2)
                 
-                Spacer()
+                Spacer(minLength: 0)
                 
-                if let author = entry.poem.author, !author.isEmpty {
+                // Author - hide on small if needed for space
+                if widgetFamily != .systemSmall, let author = entry.poem.author, !author.isEmpty {
                     HStack {
                         Spacer()
                         Text("— \(author)")
@@ -157,7 +164,88 @@ struct Poem_Of_The_Day_WidgetView: View {
                     }
                 }
             }
-            .padding()
+            .padding(widgetPadding)
+        }
+    }
+    
+    // MARK: - Size-Specific Properties
+    
+    private var vibeBackgroundGradient: some View {
+        Group {
+            if let vibeRaw = entry.poem.vibe, let vibe = DailyVibe(rawValue: vibeRaw) {
+                vibe.backgroundGradient(for: colorScheme)
+            } else {
+                // Default gradient when no vibe
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        colorScheme == .dark ? Color(red: 0.1, green: 0.1, blue: 0.2) : Color(red: 0.9, green: 0.95, blue: 1.0),
+                        colorScheme == .dark ? Color(red: 0.2, green: 0.2, blue: 0.3) : Color(red: 0.8, green: 0.9, blue: 1.0)
+                    ]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            }
+        }
+    }
+    
+    private var titleFont: Font {
+        switch widgetFamily {
+        case .systemSmall:
+            return .system(size: 12, weight: .semibold, design: .serif)
+        case .systemMedium:
+            return .system(size: 14, weight: .semibold, design: .serif)
+        case .systemLarge, .systemExtraLarge:
+            return .headline
+        @unknown default:
+            return .headline
+        }
+    }
+    
+    private var contentFont: Font {
+        switch widgetFamily {
+        case .systemSmall:
+            return .system(size: 11, weight: .regular, design: .serif)
+        case .systemMedium:
+            return .system(size: 13, weight: .regular, design: .serif)
+        case .systemLarge, .systemExtraLarge:
+            return .system(size: 15, weight: .regular, design: .serif)
+        @unknown default:
+            return .system(size: 14, weight: .regular, design: .serif)
+        }
+    }
+    
+    private var contentLineLimit: Int {
+        switch widgetFamily {
+        case .systemSmall:
+            return 8  // More lines with smaller text
+        case .systemMedium:
+            return 5
+        case .systemLarge, .systemExtraLarge:
+            return 12
+        @unknown default:
+            return 6
+        }
+    }
+    
+    private var widgetSpacing: CGFloat {
+        switch widgetFamily {
+        case .systemSmall:
+            return 4
+        case .systemMedium:
+            return 6
+        default:
+            return 8
+        }
+    }
+    
+    private var widgetPadding: CGFloat {
+        switch widgetFamily {
+        case .systemSmall:
+            return 10
+        case .systemMedium:
+            return 12
+        default:
+            return 16
         }
     }
 }
