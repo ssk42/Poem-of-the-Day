@@ -10,7 +10,7 @@ on:
 jobs:
   build-and-test:
     name: Build and Test with Bazel
-    runs-on: macos-latest  # macOS with Xcode 15+
+    runs-on: macos-26  # macOS 26 with Xcode 26 for FoundationModels support
     
     steps:
     - name: Checkout code
@@ -71,7 +71,7 @@ jobs:
   release:
     name: Build and Upload Release
     needs: build-and-test
-    runs-on: macos-latest
+    runs-on: macos-26  # macOS 26 with Xcode 26 for FoundationModels support
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
     
     steps:
