@@ -143,6 +143,11 @@ final class MockPoemGenerationService: PoemGenerationServiceProtocol, @unchecked
         return isAvailableValue
     }
     
+    func checkAvailability() async -> AIAvailabilityStatus {
+        isAvailableCallCount += 1
+        return isAvailableValue ? .available : .unavailable
+    }
+    
     func reset() {
         shouldThrowError = false
         errorToThrow = PoemGenerationError.generationFailed
@@ -241,6 +246,11 @@ final class MockPoemRepository: PoemRepositoryProtocol, @unchecked Sendable {
     func isAIGenerationAvailable() async -> Bool {
         isAIGenerationAvailableCallCount += 1
         return isAIAvailable
+    }
+    
+    func getAIAvailabilityStatus() async -> AIAvailabilityStatus {
+        isAIGenerationAvailableCallCount += 1
+        return isAIAvailable ? .available : .unavailable
     }
     
     func getFavorites() async -> [Poem] {
