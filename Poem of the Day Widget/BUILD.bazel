@@ -21,7 +21,7 @@ ios_extension(
     infoplists = ["Info.plist"],
     minimum_os_version = "17.0",
     provisioning_profile = select({
-        "//:release_build": "//:release_profile",
+        "//:release_build": "release.mobileprovision",
         "//conditions:default": None,
     }),
     visibility = ["//visibility:public"],
