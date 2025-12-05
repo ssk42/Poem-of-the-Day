@@ -115,6 +115,10 @@ jobs:
         # Decode the profile from secrets to the location Bazel expects
         # BUILD.bazel expects "release.mobileprovision" in all packages (exported file)
         echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o "Poem of the Day/release.mobileprovision"
+        
+        echo "Verifying profile existence:"
+        ls -l "Poem of the Day/release.mobileprovision" || echo "File not found!"
+
 
     - name: Build Release IPA
       run: |
