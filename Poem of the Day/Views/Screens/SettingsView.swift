@@ -7,13 +7,44 @@
 
 import SwiftUI
 
+/// Represents the user's preferred source for daily poems
+enum PoemSourcePreference: String, CaseIterable {
+    case api = "api"
+    case ai = "ai"
+
+    var displayName: String {
+        switch self {
+        case .api: return "PoetryDB"
+        case .ai: return "Apple Intelligence"
+        }
+    }
+
+    var description: String {
+        switch self {
+        case .api: return "Classic poems from the Poetry Database"
+        case .ai: return "AI-generated poems based on current events"
+        }
+    }
+
+    var iconName: String {
+        switch self {
+        case .api: return "book.closed"
+        case .ai: return "apple.intelligence"
+        }
+    }
+}
+
 struct SettingsView: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dismiss) private var dismiss
     @State private var showNotificationSettings = false
     @State private var showAbout = false
     @State private var showTelemetryDebug = false
-    
+    @State private var poemSourcePreference: PoemSourcePreference = .api
+    @State private var aiAvailabilityStatus: AIAvailabilityStatus = .unavailable
+
+    private let userDefaults = UserDefaults(suiteName: AppConfiguration.Storage.appGroupIdentifier)
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -22,14 +53,19 @@ struct SettingsView: View {
                 
                 List {
                     notificationsSection
+                    poetrySourceSection
                     dataSection
                     aboutSection
-                    
+
                     #if DEBUG
                     developerSection
                     #endif
                 }
                 .scrollContentBackground(.hidden)
+                .onAppear {
+                    loadPoemSourcePreference()
+                    checkAIAvailability()
+                }
             }
             .navigationTitle("Settings")
             #if os(iOS)
@@ -83,7 +119,7 @@ struct SettingsView: View {
                     Image(systemName: "bell.badge")
                         .foregroundColor(.blue)
                         .frame(width: 28)
-                    
+
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Daily Notifications")
                             .foregroundColor(colorScheme == .dark ? .white : .black)
@@ -91,9 +127,9 @@ struct SettingsView: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
-                    
+
                     Spacer()
-                    
+
                     Image(systemName: "chevron.right")
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -102,6 +138,52 @@ struct SettingsView: View {
             .accessibilityIdentifier("notification_settings_button")
         } header: {
             Text("Notifications")
+        }
+        .listRowBackground(colorScheme == .dark ? Color(red: 0.2, green: 0.2, blue: 0.3) : Color.white)
+    }
+
+    private var poetrySourceSection: some View {
+        Section {
+            ForEach(PoemSourcePreference.allCases, id: \.self) { source in
+                Button {
+                    selectPoemSource(source)
+                } label: {
+                    HStack {
+                        Image(systemName: source.iconName)
+                            .foregroundColor(source == .api ? .green : .mint)
+                            .frame(width: 28)
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(source.displayName)
+                                .foregroundColor(colorScheme == .dark ? .white : .black)
+                            Text(source.description)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+
+                            // Show AI availability status for the AI option
+                            if source == .ai && !aiAvailabilityStatus.isAvailable {
+                                Text(aiAvailabilityStatus.userMessage)
+                                    .font(.caption2)
+                                    .foregroundColor(.orange)
+                            }
+                        }
+
+                        Spacer()
+
+                        if poemSourcePreference == source {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(.blue)
+                        }
+                    }
+                }
+                .disabled(source == .ai && !aiAvailabilityStatus.isAvailable)
+                .opacity(source == .ai && !aiAvailabilityStatus.isAvailable ? 0.6 : 1.0)
+                .accessibilityIdentifier("poem_source_\(source.rawValue)")
+            }
+        } header: {
+            Text("Poetry Source")
+        } footer: {
+            Text("Choose where your daily poem comes from. Apple Intelligence creates original poems inspired by current events.")
         }
         .listRowBackground(colorScheme == .dark ? Color(red: 0.2, green: 0.2, blue: 0.3) : Color.white)
     }
@@ -152,51 +234,30 @@ struct SettingsView: View {
                 Image(systemName: "info.circle")
                     .foregroundColor(.purple)
                     .frame(width: 28)
-                
+
                 Text("Version")
                     .foregroundColor(colorScheme == .dark ? .white : .black)
-                
+
                 Spacer()
-                
+
                 Text("\(AppConfiguration.appVersion) (\(AppConfiguration.buildNumber))")
                     .foregroundColor(.secondary)
             }
-            
+
             Link(destination: URL(string: "https://poetrydb.org")!) {
                 HStack {
                     Image(systemName: "book")
                         .foregroundColor(.green)
                         .frame(width: 28)
-                    
+
                     Text("Poetry Database")
                         .foregroundColor(colorScheme == .dark ? .white : .black)
-                    
+
                     Spacer()
-                    
+
                     Image(systemName: "arrow.up.right.square")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                }
-            }
-            
-            HStack {
-                Image(systemName: "cpu")
-                    .foregroundColor(.mint)
-                    .frame(width: 28)
-                
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("AI Generation")
-                        .foregroundColor(colorScheme == .dark ? .white : .black)
-                    
-                    if #available(iOS 18, *) {
-                        Text("Available (iOS 18+)")
-                            .font(.caption)
-                            .foregroundColor(.green)
-                    } else {
-                        Text("Requires iOS 18+")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
                 }
             }
         } header: {
@@ -215,12 +276,12 @@ struct SettingsView: View {
                     Image(systemName: "chart.bar")
                         .foregroundColor(.orange)
                         .frame(width: 28)
-                    
+
                     Text("Telemetry Debug")
                         .foregroundColor(colorScheme == .dark ? .white : .black)
-                    
+
                     Spacer()
-                    
+
                     Image(systemName: "chevron.right")
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -232,6 +293,28 @@ struct SettingsView: View {
         .listRowBackground(colorScheme == .dark ? Color(red: 0.2, green: 0.2, blue: 0.3) : Color.white)
     }
     #endif
+
+    // MARK: - Helper Methods
+
+    private func loadPoemSourcePreference() {
+        let savedValue = userDefaults?.string(forKey: StorageKeys.preferredPoemSource) ?? "api"
+        poemSourcePreference = PoemSourcePreference(rawValue: savedValue) ?? .api
+    }
+
+    private func selectPoemSource(_ source: PoemSourcePreference) {
+        poemSourcePreference = source
+        userDefaults?.set(source.rawValue, forKey: StorageKeys.preferredPoemSource)
+    }
+
+    private func checkAIAvailability() {
+        Task {
+            let repository = DependencyContainer.shared.poemRepository
+            let status = await repository.getAIAvailabilityStatus()
+            await MainActor.run {
+                aiAvailabilityStatus = status
+            }
+        }
+    }
 }
 
 // MARK: - Preview
