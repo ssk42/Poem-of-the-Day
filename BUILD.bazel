@@ -12,7 +12,7 @@ swift_library(
         "Poem of the Day/**/*.swift",
     ]),
     data = glob([
-        "Poem osf the Day/**/*.json",
+        "Poem of the Day/**/*.json",
         "Poem of the Day/Assets.xcassets/**",
     ]),
     module_name = "Poem_of_the_Day",
