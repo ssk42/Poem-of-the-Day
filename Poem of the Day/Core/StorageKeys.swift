@@ -42,7 +42,15 @@ enum StorageKeys {
     static let widgetTelemetryEvents = "widget_telemetry_events"
     
     // MARK: - Notifications
-    
+
     static let notificationSettings = "notificationSettings"
+
+    // MARK: - Review Requests
+
+    static let reviewAppLaunchCount = "review_appLaunchCount"
+    static let reviewFavoritesAddedCount = "review_favoritesAddedCount"
+    static let reviewAIPoemsGeneratedCount = "review_aiPoemsGeneratedCount"
+    static let reviewLastRequestDate = "review_lastRequestDate"
+    static let reviewTotalRequestCount = "review_totalRequestCount"
 }
 

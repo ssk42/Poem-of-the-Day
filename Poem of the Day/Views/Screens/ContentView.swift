@@ -193,6 +193,18 @@ struct ContentView: View {
         .task {
             await viewModel.loadInitialData()
         }
+        .onReceive(NotificationCenter.default.publisher(for: .quickActionTriggered)) { note in
+            guard let type = note.object as? String,
+                  let action = QuickActionType(rawValue: type) else { return }
+            switch action {
+            case .newPoem:
+                Task { await viewModel.refreshPoem(showLoading: true) }
+            case .favorites:
+                showFavorites = true
+            case .vibePoem:
+                viewModel.showVibeGeneration = true
+            }
+        }
     }
     
     private func provideFeedback(success: Bool) {
