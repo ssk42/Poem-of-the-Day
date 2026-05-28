@@ -34,10 +34,8 @@ final class PoemViewModel: ObservableObject {
     }
     
     func loadInitialData() async {
-        ReviewRequestService.shared.recordAppLaunch()
-
         let isUITesting = AppConfiguration.Testing.isUITesting
-
+        
         if isUITesting {
             isLoading = true
             isAIGenerationAvailable = AppConfiguration.Testing.isAIAvailable
@@ -149,36 +147,33 @@ final class PoemViewModel: ObservableObject {
         } else {
             AppLogger.shared.info("Poem is NOT favorite. Adding.", category: .ui)
             await repository.addToFavorites(poem)
-            ReviewRequestService.shared.recordFavoriteAdded()
         }
-
+        
         await loadFavorites()
     }
     
     
     func generateVibeBasedPoem() async {
         isLoading = true
-
+        
         do {
             poemOfTheDay = try await repository.generateVibeBasedPoem()
-            ReviewRequestService.shared.recordAIPoemGenerated()
         } catch {
             await handleError(error)
         }
-
+        
         isLoading = false
     }
-
+    
     func generateCustomPoem(prompt: String) async {
         isLoading = true
-
+        
         do {
             poemOfTheDay = try await repository.generateCustomPoem(prompt: prompt)
-            ReviewRequestService.shared.recordAIPoemGenerated()
         } catch {
             await handleError(error)
         }
-
+        
         isLoading = false
     }
     
