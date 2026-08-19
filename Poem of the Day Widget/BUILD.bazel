@@ -18,7 +18,10 @@ ios_extension(
         "iphone",
         "ipad",
     ],
-    infoplists = ["Info.plist"],
+    infoplists = [
+        "Info.plist",
+        "//:VersionInfoPlist",
+    ],
     minimum_os_version = "17.0",
     provisioning_profile = select({
         "//:release_build": "release.mobileprovision",

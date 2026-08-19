@@ -203,6 +203,28 @@ For detailed Bazel build and test instructions, see [BAZEL_BUILD.md](BAZEL_BUILD
 - **Performance**: Memory usage, launch time, and responsiveness benchmarks
 - **Edge Cases**: Error handling, network failures, and data corruption scenarios
 
+## 🚢 Release Automation
+
+Releases are driven by the [App Store Connect CLI](https://github.com/rorkai/App-Store-Connect-CLI) (`asc`).
+
+```bash
+brew install asc
+
+make asc-check            # verify App Store Connect credentials
+make next-build           # next safe build number
+make upload               # build a stamped IPA and ship it to TestFlight
+make metadata-diff        # preview App Store listing changes
+make release-status       # release pipeline dashboard
+```
+
+App version and build number are Bazel `--define` values in `.bazelrc`; CI
+resolves the build number from `asc builds next-build-number`, so
+`CFBundleVersion` is never hand-edited. App Store listing copy lives in
+`metadata/` and is validated on every pull request.
+
+Full setup, required secrets, and workflow details:
+**[docs/APP_STORE_CONNECT.md](docs/APP_STORE_CONNECT.md)**
+
 ## 📁 Project Structure
 
 ```

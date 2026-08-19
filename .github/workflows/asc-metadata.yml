@@ -1,0 +1,113 @@
+name: App Store Metadata
+
+# Keeps App Store Connect listing copy in sync with the `metadata/` directory.
+# Pull requests get a validation + dry-run diff; pushes to main apply it.
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'metadata/**'
+      - 'AppStoreScreenshots/**'
+      - '.github/workflows/asc-metadata.yml'
+  pull_request:
+    paths:
+      - 'metadata/**'
+      - 'AppStoreScreenshots/**'
+      - '.github/workflows/asc-metadata.yml'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Marketing version to target (defaults to app_version in .bazelrc)'
+        required: false
+        type: string
+      screenshots:
+        description: 'Also upload screenshots'
+        required: false
+        default: false
+        type: boolean
+
+concurrency:
+  group: asc-metadata-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+  APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+  APP_STORE_CONNECT_API_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 }}
+  APP_STORE_CONNECT_APP_ID: ${{ secrets.APP_STORE_CONNECT_APP_ID }}
+
+jobs:
+  metadata:
+    name: Validate and sync metadata
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup App Store Connect CLI
+        uses: rudrankriyam/setup-asc@v1
+        with:
+          version: latest
+
+      - name: Resolve target version
+        id: version
+        run: |
+          VERSION="${{ inputs.version }}"
+          if [ -z "$VERSION" ]; then
+            VERSION=$(python3 -c "import re,pathlib;print(re.search(r'--define=app_version=(\S+)', pathlib.Path('.bazelrc').read_text()).group(1))")
+          fi
+          echo "Targeting version $VERSION"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      # Catches over-length descriptions and malformed locale files before any
+      # network call — this step needs no credentials.
+      - name: Validate metadata files
+        run: asc metadata validate --dir ./metadata --output table
+
+      - name: Preview metadata changes (dry run)
+        if: github.event_name == 'pull_request' && env.APP_STORE_CONNECT_APP_ID != ''
+        run: |
+          source scripts/asc-env.sh
+          asc metadata push \
+            --app "$ASC_APP_ID" \
+            --version "${{ steps.version.outputs.version }}" \
+            --platform IOS \
+            --dir ./metadata \
+            --dry-run \
+            --output markdown | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Push metadata to App Store Connect
+        if: github.event_name != 'pull_request' && env.APP_STORE_CONNECT_APP_ID != ''
+        run: |
+          source scripts/asc-env.sh
+          asc metadata push \
+            --app "$ASC_APP_ID" \
+            --version "${{ steps.version.outputs.version }}" \
+            --platform IOS \
+            --dir ./metadata \
+            --output json
+
+      - name: Upload screenshots
+        if: github.event_name == 'workflow_dispatch' && inputs.screenshots
+        run: |
+          source scripts/asc-env.sh
+          # 1242x2688 -> IPHONE_65, 1206x2622 -> IPHONE_61
+          asc screenshots upload \
+            --app "$ASC_APP_ID" \
+            --version "${{ steps.version.outputs.version }}" \
+            --path ./AppStoreScreenshots/iPhone_6.5 \
+            --device-type IPHONE_65 \
+            --max-screenshots 10 \
+            --replace \
+            --output json
+          asc screenshots upload \
+            --app "$ASC_APP_ID" \
+            --version "${{ steps.version.outputs.version }}" \
+            --path ./AppStoreScreenshots/iPhone_6.3 \
+            --device-type IPHONE_61 \
+            --max-screenshots 10 \
+            --replace \
+            --output json

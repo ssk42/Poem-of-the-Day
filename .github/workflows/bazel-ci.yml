@@ -59,20 +59,26 @@ jobs:
       with:
         name: test-results
         path: |
-          Poem of the Day/bazel-testlogs/
+          bazel-testlogs/
     
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
         name: app-bundle
         path: |
-          Poem of the Day/bazel-bin/PoemOfTheDay.ipa
+          bazel-bin/PoemOfTheDay.ipa
 
   release:
     name: Build and Upload Release
     needs: build-and-test
     runs-on: macos-26  # macOS 26 with Xcode 26 for FoundationModels support
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
+
+    env:
+      APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+      APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+      APP_STORE_CONNECT_API_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 }}
+      APP_STORE_CONNECT_APP_ID: ${{ secrets.APP_STORE_CONNECT_APP_ID }}
     
     steps:
     - name: Checkout code
@@ -83,85 +89,94 @@ jobs:
         brew install bazelisk
         bazelisk version
 
-    - name: Import Signing Certificate
-      env:
-        BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
-        P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
-        KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+    - name: Setup App Store Connect CLI
+      uses: rudrankriyam/setup-asc@v1
+      with:
+        version: latest
+
+    - name: Verify App Store Connect credentials
       run: |
-        # create variables
-        CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
-        KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+        source scripts/asc-env.sh
+        asc auth status --validate --output json
 
-        # import certificate and provisioning profile from secrets
-        echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
+    - name: Setup iOS signing
+      uses: ./.github/actions/ios-signing
+      with:
+        certificate-base64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+        p12-password: ${{ secrets.P12_PASSWORD }}
+        keychain-password: ${{ secrets.KEYCHAIN_PASSWORD }}
+        provision-profile-base64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
+        widget-provision-profile-base64: ${{ secrets.BUILD_WIDGET_PROVISION_PROFILE_BASE64 }}
 
-        # create temporary keychain
-        security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-        security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
-        security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-
-        # import certificate to keychain
-        security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t agg -k $KEYCHAIN_PATH
-        security list-keychain -d user -s $KEYCHAIN_PATH
-        
-        # Debug: List identities
-        security find-identity -v -p codesigning
-
-    - name: Install Provisioning Profile
-      env:
-        BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
-        BUILD_WIDGET_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_WIDGET_PROVISION_PROFILE_BASE64 }}
+    - name: Resolve next build number
+      id: build_number
       run: |
-        # Decode profile to BOTH locations to avoid cross-package visibility issues in CI sandbox
-        # 1. Workspace Root (for Main App) - "release.mobileprovision" at repo root
-        echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o "release.mobileprovision"
-        
-        # 2. Widget Package Directory (for Widget Extension)
-        # Uses the separate Widget Profile Secret
-        echo -n "$BUILD_WIDGET_PROVISION_PROFILE_BASE64" | base64 --decode -o "Poem of the Day Widget/release.mobileprovision"
-
-
-        
-        echo "Verifying profile existence:"
-        ls -l "release.mobileprovision" || echo "Root file not found!"
-        ls -l "Poem of the Day Widget/release.mobileprovision" || echo "Widget file not found!"
-
+        source scripts/asc-env.sh
+        APP_VERSION=$(python3 -c "import re,pathlib;print(re.search(r'--define=app_version=(\S+)', pathlib.Path('.bazelrc').read_text()).group(1))")
+        NEXT=$(asc builds next-build-number \
+          --app "$ASC_APP_ID" \
+          --version "$APP_VERSION" \
+          --platform IOS \
+          --initial-build-number 1 \
+          --output json | python3 -c "import json,sys;print(json.load(sys.stdin)['nextBuildNumber'])")
+        echo "Marketing version $APP_VERSION, next build number $NEXT"
+        echo "app_version=$APP_VERSION" >> "$GITHUB_OUTPUT"
+        echo "build_number=$NEXT" >> "$GITHUB_OUTPUT"
 
     - name: Build Release IPA
       run: |
-        # Build with the 'release' config defined in .bazelrc
+        # Build with the 'release' config defined in .bazelrc, stamping the
+        # build number resolved from App Store Connect.
         cd "Poem of the Day"
-        bazelisk build --config=release //:PoemOfTheDay
+        bazelisk build --config=release \
+          --define=app_version="${{ steps.build_number.outputs.app_version }}" \
+          --define=build_number="${{ steps.build_number.outputs.build_number }}" \
+          //:PoemOfTheDay
 
-    - name: Upload to App Store Connect
+    - name: Upload to TestFlight
       env:
-        APP_STORE_CONNECT_API_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 }}
-        APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
-        APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+        TESTFLIGHT_GROUP: ${{ vars.TESTFLIGHT_GROUP }}
       run: |
-        # Setup API Key
-        mkdir -p ~/.appstoreconnect/private_keys
-        echo -n "$APP_STORE_CONNECT_API_KEY_BASE64" | base64 --decode -o ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_CONNECT_KEY_ID }}.p8
+        source scripts/asc-env.sh
 
-        # Find the IPA
-        IPA_PATH="bazel-bin/PoemOfTheDay.ipa"
-        
+        # Bazel writes its convenience symlinks at the workspace root, so the
+        # IPA lands in ./bazel-bin regardless of where the build step ran.
+        IPA_PATH=$(bazelisk cquery --config=release --output=files //:PoemOfTheDay 2>/dev/null | grep '\.ipa$' | head -1)
+        if [ -z "$IPA_PATH" ] || [ ! -f "$IPA_PATH" ]; then
+          IPA_PATH="bazel-bin/PoemOfTheDay.ipa"
+        fi
         if [ ! -f "$IPA_PATH" ]; then
           echo "Error: IPA not found at $IPA_PATH"
           find . -name "*.ipa"
           exit 1
         fi
 
-        echo "Uploading $IPA_PATH..."
-        
-        # Upload using xcrun altool
-        xcrun altool --upload-app \
-          --type ios \
-          --file "$IPA_PATH" \
-          --apiKey "${{ secrets.APP_STORE_CONNECT_KEY_ID }}" \
-          --apiIssuer "${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}"
-          
+        echo "Uploading $IPA_PATH to App Store Connect..."
+        if [ -n "$TESTFLIGHT_GROUP" ]; then
+          # Upload, wait for processing, and hand the build to the beta group.
+          asc publish testflight \
+            --app "$ASC_APP_ID" \
+            --ipa "$IPA_PATH" \
+            --group "$TESTFLIGHT_GROUP" \
+            --wait \
+            --poll-interval 15s \
+            --output json
+        else
+          # No beta group configured: upload and wait for processing only.
+          asc builds upload \
+            --app "$ASC_APP_ID" \
+            --ipa "$IPA_PATH" \
+            --wait \
+            --poll-interval 15s \
+            --output json
+        fi
+
+    - name: Release status summary
+      if: always()
+      run: |
+        source scripts/asc-env.sh
+        asc status --app "$ASC_APP_ID" --output markdown >> "$GITHUB_STEP_SUMMARY" || true
+
     - name: Clean up keychain
       if: always()
       run: |

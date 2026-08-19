@@ -13,6 +13,12 @@ build:release --compilation_mode=opt
 build:release --strip=always
 build:release --define=release=true
 
+# App version stamping
+# Defaults used for local/dev builds. CI overrides build_number with the value
+# from `asc builds next-build-number` so build numbers are never hand-bumped.
+build --define=app_version=1.6
+build --define=build_number=436
+
 # Output
 build --symlink_prefix=bazel-
 

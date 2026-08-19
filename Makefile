@@ -1,4 +1,7 @@
-.PHONY: help build test unit-test ui-test coverage clean deep-clean install ci
+.PHONY: help build build-release test unit-test ui-test coverage clean deep-clean install ci \
+        asc-check next-build build-release-stamped upload testflight \
+        metadata-validate metadata-pull metadata-diff metadata-push \
+        screenshots-upload release-status release-check testflight-feedback
 
 # Colors
 BLUE := \033[0;34m
@@ -144,21 +147,66 @@ info: ## Show Bazel info
 
 .DEFAULT_GOAL := help
 
-upload: ## Upload build to TestFlight/XCloud
-	@echo "$(BLUE)Uploading to TestFlight...$(NC)"
-	@IPA_PATH=$$(bazelisk cquery --output=files //:PoemOfTheDay 2>&1 | grep "\.ipa" | head -1); \
-	if [ -z "$$IPA_PATH" ] || [ ! -f "$$IPA_PATH" ]; then \
-		echo "$(YELLOW)No IPA found. Building first...$(NC)"; \
-		make build-release; \
-		IPA_PATH=$$(bazelisk cquery --output=files //:PoemOfTheDay 2>&1 | grep "\.ipa" | head -1); \
-	fi; \
-	echo "$(BLUE)Uploading $$IPA_PATH...$(NC)"; \
-	xcrun altool --upload-app -f "$$IPA_PATH" --type ios \
-		--apiKey $(API_KEY) --apiIssuer $(API_ISSUER)
+# --- App Store Connect (asc) ------------------------------------------------
+# All targets read credentials via scripts/asc-env.sh, which maps this repo's
+# existing APP_STORE_CONNECT_* variables onto the ASC_* names the CLI expects.
+# See docs/APP_STORE_CONNECT.md.
+
+ASC_ENV := source scripts/asc-env.sh
+APP_VERSION := $(shell sed -n 's/^build --define=app_version=//p' .bazelrc)
+
+asc-check: ## Verify asc is installed and credentials work
+	@echo "$(BLUE)Checking App Store Connect access...$(NC)"
+	@command -v asc >/dev/null 2>&1 || { echo "$(YELLOW)asc not found. Install: brew install asc$(NC)"; exit 1; }
+	@$(ASC_ENV) && asc auth status --output table
+	@echo "$(GREEN)✓ App Store Connect reachable$(NC)"
+
+next-build: ## Show the next safe build number from App Store Connect
+	@$(ASC_ENV) && asc builds next-build-number 		--app "$$ASC_APP_ID" 		--version "$(APP_VERSION)" 		--platform IOS 		--initial-build-number 1 		--output table
+
+build-release-stamped: ## Build release IPA stamped with the next build number
+	@echo "$(BLUE)Resolving next build number...$(NC)"
+	@$(ASC_ENV) && NEXT=$$(asc builds next-build-number 		--app "$$ASC_APP_ID" --version "$(APP_VERSION)" --platform IOS 		--initial-build-number 1 --output json | python3 -c "import json,sys;print(json.load(sys.stdin)['nextBuildNumber'])"); 	echo "$(BLUE)Building $(APP_VERSION) ($$NEXT)...$(NC)"; 	bazelisk build --config=release 		--define=app_version="$(APP_VERSION)" 		--define=build_number="$$NEXT" 		//:PoemOfTheDay
+	@echo "$(GREEN)✓ Release build stamped and complete$(NC)"
+
+upload: build-release-stamped ## Build a stamped IPA and upload it to TestFlight
+	@$(ASC_ENV) && IPA_PATH=$$(bazelisk cquery --config=release --output=files //:PoemOfTheDay 2>/dev/null | grep '\.ipa$$' | head -1); 	if [ -z "$$IPA_PATH" ] || [ ! -f "$$IPA_PATH" ]; then IPA_PATH="bazel-bin/PoemOfTheDay.ipa"; fi; 	echo "$(BLUE)Uploading $$IPA_PATH...$(NC)"; 	asc builds upload --app "$$ASC_APP_ID" --ipa "$$IPA_PATH" --wait --poll-interval 15s --output table
 	@echo "$(GREEN)✓ Upload complete$(NC)"
 
-build-and-upload: ## Build, test, and upload
-	@echo "$(BLUE)Running full build and upload pipeline...$(NC)"
-	@make build-release
-	@make upload
-	@echo "$(GREEN)✓ Build and upload complete$(NC)"
+testflight: ## Build, upload, and distribute to a TestFlight group (GROUP=...)
+	@if [ -z "$(GROUP)" ]; then echo "$(YELLOW)Usage: make testflight GROUP=\"Internal Testers\"$(NC)"; exit 1; fi
+	@$(ASC_ENV) && asc workflow run testflight_beta 		VERSION:$(APP_VERSION) TESTFLIGHT_GROUP:"$(GROUP)"
+	@echo "$(GREEN)✓ Distributed to $(GROUP)$(NC)"
+
+metadata-validate: ## Validate App Store metadata files (no credentials needed)
+	@echo "$(BLUE)Validating metadata...$(NC)"
+	@asc metadata validate --dir ./metadata --output table
+	@echo "$(GREEN)✓ Metadata valid$(NC)"
+
+metadata-pull: ## Pull live App Store metadata into ./metadata (overwrites)
+	@$(ASC_ENV) && asc metadata pull 		--app "$$ASC_APP_ID" --version "$(APP_VERSION)" --platform IOS 		--dir ./metadata --force --output table
+	@echo "$(GREEN)✓ Metadata pulled$(NC)"
+
+metadata-diff: metadata-validate ## Preview metadata changes without applying them
+	@$(ASC_ENV) && asc metadata push 		--app "$$ASC_APP_ID" --version "$(APP_VERSION)" --platform IOS 		--dir ./metadata --dry-run --output table
+
+metadata-push: metadata-validate ## Push ./metadata to App Store Connect
+	@$(ASC_ENV) && asc metadata push 		--app "$$ASC_APP_ID" --version "$(APP_VERSION)" --platform IOS 		--dir ./metadata --output table
+	@echo "$(GREEN)✓ Metadata pushed$(NC)"
+
+screenshots-upload: ## Upload App Store screenshots for all device sizes
+	@echo "$(BLUE)Uploading screenshots...$(NC)"
+	@$(ASC_ENV) && asc screenshots upload 		--app "$$ASC_APP_ID" --version "$(APP_VERSION)" 		--path ./AppStoreScreenshots/iPhone_6.5 --device-type IPHONE_65 		--max-screenshots 10 --replace --output table
+	@$(ASC_ENV) && asc screenshots upload 		--app "$$ASC_APP_ID" --version "$(APP_VERSION)" 		--path ./AppStoreScreenshots/iPhone_6.3 --device-type IPHONE_61 		--max-screenshots 10 --replace --output table
+	@echo "$(GREEN)✓ Screenshots uploaded$(NC)"
+
+release-status: ## Show the App Store release pipeline dashboard
+	@$(ASC_ENV) && asc status --app "$$ASC_APP_ID" --output table
+
+release-check: ## Run App Store submission readiness checks
+	@$(ASC_ENV) && asc validate --app "$$ASC_APP_ID" --version "$(APP_VERSION)" --output table
+
+testflight-feedback: ## Show recent TestFlight feedback and crashes
+	@$(ASC_ENV) && asc testflight feedback list --app "$$ASC_APP_ID" --output table
+	@$(ASC_ENV) && asc testflight crashes list --app "$$ASC_APP_ID" --sort -createdDate --limit 10 --output table
+

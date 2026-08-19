@@ -1,0 +1,95 @@
+{
+  "env": {
+    "APP_ID": "",
+    "VERSION": "1.6",
+    "PLATFORM": "IOS",
+    "TESTFLIGHT_GROUP": "Internal Testers",
+    "IPA_PATH": "bazel-bin/PoemOfTheDay.ipa",
+    "METADATA_DIR": "./metadata",
+    "SCREENSHOTS_DIR": "./AppStoreScreenshots"
+  },
+  "workflows": {
+    "testflight_beta": {
+      "description": "Resolve the next build number, build a signed IPA with Bazel, upload it, and distribute to a TestFlight group.",
+      "steps": [
+        {
+          "name": "require_app_id",
+          "run": "if [ -z \"$APP_ID\" ] && [ -z \"$ASC_APP_ID\" ]; then echo \"APP_ID (or ASC_APP_ID) is required\" >&2; exit 1; fi"
+        },
+        {
+          "name": "resolve_next_build",
+          "run": "asc builds next-build-number --app \"${APP_ID:-$ASC_APP_ID}\" --version \"$VERSION\" --platform \"$PLATFORM\" --initial-build-number 1 --output json",
+          "outputs": {
+            "BUILD_NUMBER": "$.nextBuildNumber"
+          },
+          "retry": { "max_attempts": 3, "delay": "10s" },
+          "timeout": "2m"
+        },
+        {
+          "name": "build_ipa",
+          "run": "bazelisk build --config=release --define=app_version=\"$VERSION\" --define=build_number=${steps.resolve_next_build.BUILD_NUMBER} //:PoemOfTheDay",
+          "timeout": "45m"
+        },
+        {
+          "name": "publish",
+          "run": "asc publish testflight --app \"${APP_ID:-$ASC_APP_ID}\" --ipa \"$IPA_PATH\" --group \"$TESTFLIGHT_GROUP\" --wait --poll-interval 15s --output json",
+          "outputs": {
+            "BUILD_ID": "$.buildId",
+            "BUILD_NUMBER": "$.buildNumber"
+          },
+          "retry": { "max_attempts": 3, "delay": "30s" },
+          "timeout": "45m"
+        }
+      ]
+    },
+    "metadata_sync": {
+      "description": "Validate committed App Store metadata, preview the diff, then push it to App Store Connect.",
+      "steps": [
+        {
+          "name": "validate",
+          "run": "asc metadata validate --dir \"$METADATA_DIR\" --output json"
+        },
+        {
+          "name": "preview",
+          "run": "asc metadata push --app \"${APP_ID:-$ASC_APP_ID}\" --version \"$VERSION\" --platform \"$PLATFORM\" --dir \"$METADATA_DIR\" --dry-run --output json"
+        },
+        {
+          "name": "push",
+          "run": "asc metadata push --app \"${APP_ID:-$ASC_APP_ID}\" --version \"$VERSION\" --platform \"$PLATFORM\" --dir \"$METADATA_DIR\" --output json",
+          "retry": { "max_attempts": 3, "delay": "10s" },
+          "timeout": "5m"
+        }
+      ]
+    },
+    "appstore_release": {
+      "description": "Push metadata and screenshots, check submission readiness, then publish the App Store version.",
+      "steps": [
+        {
+          "name": "push_metadata",
+          "run": "asc metadata push --app \"${APP_ID:-$ASC_APP_ID}\" --version \"$VERSION\" --platform \"$PLATFORM\" --dir \"$METADATA_DIR\" --output json"
+        },
+        {
+          "name": "upload_screenshots_65",
+          "run": "asc screenshots upload --app \"${APP_ID:-$ASC_APP_ID}\" --version \"$VERSION\" --path \"$SCREENSHOTS_DIR/iPhone_6.5\" --device-type IPHONE_65 --max-screenshots 10 --replace --output json",
+          "retry": { "max_attempts": 3, "delay": "15s" },
+          "timeout": "15m"
+        },
+        {
+          "name": "upload_screenshots_61",
+          "run": "asc screenshots upload --app \"${APP_ID:-$ASC_APP_ID}\" --version \"$VERSION\" --path \"$SCREENSHOTS_DIR/iPhone_6.3\" --device-type IPHONE_61 --max-screenshots 10 --replace --output json",
+          "retry": { "max_attempts": 3, "delay": "15s" },
+          "timeout": "15m"
+        },
+        {
+          "name": "readiness",
+          "run": "asc validate --app \"${APP_ID:-$ASC_APP_ID}\" --version \"$VERSION\" --output json"
+        },
+        {
+          "name": "publish",
+          "run": "asc publish appstore --app \"${APP_ID:-$ASC_APP_ID}\" --ipa \"$IPA_PATH\" --version \"$VERSION\" --output json",
+          "timeout": "45m"
+        }
+      ]
+    }
+  }
+}

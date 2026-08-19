@@ -1,0 +1,66 @@
+name: 'iOS Signing Setup'
+description: 'Imports the distribution certificate into a temporary keychain and installs the app and widget provisioning profiles.'
+
+inputs:
+  certificate-base64:
+    description: 'Base64-encoded .p12 distribution certificate'
+    required: true
+  p12-password:
+    description: 'Password for the .p12 certificate'
+    required: true
+  keychain-password:
+    description: 'Password for the temporary CI keychain'
+    required: true
+  provision-profile-base64:
+    description: 'Base64-encoded provisioning profile for the main app'
+    required: true
+  widget-provision-profile-base64:
+    description: 'Base64-encoded provisioning profile for the widget extension'
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Import Signing Certificate
+      shell: bash
+      env:
+        BUILD_CERTIFICATE_BASE64: ${{ inputs.certificate-base64 }}
+        P12_PASSWORD: ${{ inputs.p12-password }}
+        KEYCHAIN_PASSWORD: ${{ inputs.keychain-password }}
+      run: |
+        # create variables
+        CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+        KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+
+        # import certificate and provisioning profile from secrets
+        echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
+
+        # create temporary keychain
+        security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+        security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+        security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+        # import certificate to keychain
+        security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t agg -k $KEYCHAIN_PATH
+        security list-keychain -d user -s $KEYCHAIN_PATH
+
+        # Debug: List identities
+        security find-identity -v -p codesigning
+
+    - name: Install Provisioning Profile
+      shell: bash
+      env:
+        BUILD_PROVISION_PROFILE_BASE64: ${{ inputs.provision-profile-base64 }}
+        BUILD_WIDGET_PROVISION_PROFILE_BASE64: ${{ inputs.widget-provision-profile-base64 }}
+      run: |
+        # Decode profile to BOTH locations to avoid cross-package visibility issues in CI sandbox
+        # 1. Workspace Root (for Main App) - "release.mobileprovision" at repo root
+        echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o "release.mobileprovision"
+
+        # 2. Widget Package Directory (for Widget Extension)
+        # Uses the separate Widget Profile Secret
+        echo -n "$BUILD_WIDGET_PROVISION_PROFILE_BASE64" | base64 --decode -o "Poem of the Day Widget/release.mobileprovision"
+
+        echo "Verifying profile existence:"
+        ls -l "release.mobileprovision" || echo "Root file not found!"
+        ls -l "Poem of the Day Widget/release.mobileprovision" || echo "Widget file not found!"

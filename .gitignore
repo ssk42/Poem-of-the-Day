@@ -16,3 +16,12 @@ DerivedData/
 # macOS Finder and other system files
 .DS_Store
 test-results/
+
+# App Store Connect CLI (asc)
+# Credentials and run state stay local; only .asc/workflow.json is committed.
+.asc/config.json
+.asc/artifacts/
+.asc/reports/
+.asc/distribution/
+*.p8
+*.mobileprovision

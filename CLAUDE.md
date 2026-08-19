@@ -50,6 +50,28 @@ xcodebuild -project "Poem of the Day.xcodeproj" -scheme "Poem of the Day" -confi
 xcodebuild -project "Poem of the Day.xcodeproj" -scheme "Poem of the Day WidgetExtension" -configuration Debug build
 ```
 
+### Release and App Store Connect
+```bash
+# Verify App Store Connect credentials
+make asc-check
+
+# Build a release IPA stamped with the next build number from App Store Connect
+make build-release-stamped
+
+# Build and upload to TestFlight
+make upload
+
+# App Store listing metadata (lives in metadata/, validated in CI)
+make metadata-validate
+make metadata-diff
+make metadata-push
+```
+
+Release automation uses the `asc` CLI (App Store Connect CLI). Version and
+build number are Bazel `--define` values in `.bazelrc`, not hardcoded in
+`BUILD.bazel` — CI resolves the build number from `asc builds next-build-number`.
+Never hand-edit `CFBundleVersion`. See `docs/APP_STORE_CONNECT.md`.
+
 ### Testing
 ```bash
 # Run unit tests
